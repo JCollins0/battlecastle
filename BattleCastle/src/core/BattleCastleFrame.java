@@ -33,18 +33,21 @@ public class BattleCastleFrame extends JFrame {
 		setMaximumSize(GAME_SIZE);
 		setSize(GAME_SIZE);
 		setLocationRelativeTo(null);
-		
+		setFocusable(false);
 		init();
-		
+		setResizable(false);
 		setVisible(true);
 	}
 	
 	private void init()
 	{
 		game_canvas = new BattleCastleCanvas();
-		
+		game_canvas.requestFocus();
 		add(game_canvas);
 		pack();
+		
+		Thread gameThread = new Thread(game_canvas);
+		gameThread.start();
 	}
 
 }

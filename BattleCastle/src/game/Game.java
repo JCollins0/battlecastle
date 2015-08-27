@@ -8,15 +8,10 @@ import java.net.SocketException;
 import java.util.TreeMap;
 
 import core.BattleCastleCanvas;
+import core.HostType;
 
 public class Game {
 
-	private enum HOST_TYPE
-	{
-		CLIENT,
-		SERVER;
-	}
-	
 	private static final int PORT = 25565;
 	
 	private BattleCastleCanvas canvasRef;
@@ -24,32 +19,25 @@ public class Game {
 	private ServerThread serverThread;
 	private ClientThread clientThread;
 	
-	public Game(BattleCastleCanvas canvasRef, HOST_TYPE type)
+	public Game(BattleCastleCanvas canvasRef, HostType type)
 	{
 		this.canvasRef = canvasRef;
 		
 		/*
 		 * Server specific stuff
 		 */
-		if (type == HOST_TYPE.SERVER)
+		if (type == HostType.SERVER)
 		{
 			try {
 				serverSocket = new DatagramSocket(PORT);
-				playerMap = new TreeMap<String, Player>();
 			} catch (SocketException e) {
 				e.printStackTrace();
 			}
-			serverThread = new ServerThread();
 			
-			//get local ip address
-			try{
-				InetAddress address = InetAddress.getLocalHost();
-			//	setTitle(String.format("%s hosted at (%s)",GAME_TITLE,address.toString()));
-			//	serverAddress = address.getHostAddress() + ":" + PORT;
-			}catch(Exception e){
-				e.printStackTrace();
-				System.exit(1);
-			}
+			playerMap = new TreeMap<String, Player>();
+			serverThread = new ServerThread();
+			Thread serverTask = new Thread(serverThread);
+			serverTask.start();
 		}
 				
 		/*
@@ -62,7 +50,14 @@ public class Game {
 		}
 		
 		clientThread = new ClientThread();
+		Thread clientTask = new Thread(clientThread);
+		clientTask.start();
 		
+	}
+	
+	public BattleCastleCanvas getCanvas()
+	{
+		return canvasRef;
 	}
 	
 	public void render(Graphics g)
@@ -72,12 +67,12 @@ public class Game {
 	
 	public void processServerPacket()
 	{
-		
+//		System.out.println("ProcessServer");
 	}
 	
 	public void processClientPacket()
 	{
-		
+//		System.out.println("ProcessClient");
 	}
 	
 	public void sendPacketToClients(DatagramPacket send)
@@ -97,6 +92,7 @@ public class Game {
 			
 			while(true)
 			{
+				System.out.println("ServerRunning?");
 				try{
 					//create array to store data
 					byte[] data = new byte[100];
@@ -123,6 +119,7 @@ public class Game {
 		public void run() {
 			while(true)
 			{
+				System.out.println("ClientRunning?");
 				try
 				{
 					byte[] data = new byte[100];
