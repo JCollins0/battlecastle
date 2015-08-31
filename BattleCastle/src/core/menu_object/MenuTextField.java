@@ -10,11 +10,13 @@ public class MenuTextField {
 	private String allowablecharacters = "";
 	private String text;
 	private boolean selected;
+	private MenuTextFieldType id;
 	
-	public MenuTextField(int x, int y, int width, int height)
+	public MenuTextField(int x, int y, int width, int height, MenuTextFieldType id)
 	{
 		text = "";
 		bounds = new Rectangle(x,y,width,height);
+		this.id = id;
 	}
 	
 	public void backspace()
@@ -41,6 +43,21 @@ public class MenuTextField {
 		allowablecharacters = characters;
 	}
 	
+	public boolean isSelected()
+	{
+		return selected;
+	}
+	
+	public void setSelected(boolean selected)
+	{
+		this.selected = selected;
+	}
+	
+	public Rectangle getBounds()
+	{
+		return bounds;
+	}
+	
 	public String getText()
 	{
 		return text;
@@ -52,5 +69,9 @@ public class MenuTextField {
 		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 		g.setColor(Color.white);
 		g.drawString(text,bounds.x + bounds.width/3, bounds.y + bounds.height/2);
+	}
+
+	public MenuTextFieldType getID() {
+		return id;
 	}
 }

@@ -1,19 +1,18 @@
 package core;
 
-import game.Game;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 
 import core.menu_object.MenuTextField;
 
 public class KeyHandler implements KeyListener {
 
-	private Game gameref;
+	private BattleCastleCanvas canvasref;
 	
-	public KeyHandler(Game gameref)
+	public KeyHandler(BattleCastleCanvas canvasref)
 	{
-		this.gameref = gameref;
+		this.canvasref = canvasref;
 	}
 	
 	
@@ -24,23 +23,28 @@ public class KeyHandler implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		switch(gameref.getCanvas().getCurrentState())
+		switch(canvasref.getCurrentState())
 		{
-		case MAIN_MENU:
-			
-			MenuTextField text = gameref.getCanvas().getMenuText();
-			switch(e.getKeyCode())
-			{
-			case KeyEvent.VK_BACK_SPACE:
-				text.backspace();
-				break;
-			case KeyEvent.VK_SPACE:
-				text.space();
-			default:
-				text.addCharacter(e.getKeyChar());
-			}
+		case MAIN_MENU:	
 			break;
 		case JOIN_SERVER:
+			
+			MenuTextField selected = canvasref.getSelectedMenuTextField();
+			
+			if (selected != null)
+			{
+				switch(e.getKeyCode())
+				{
+				case KeyEvent.VK_BACK_SPACE:
+					selected.backspace();
+					break;
+				case KeyEvent.VK_SPACE:
+					selected.space();
+				default:
+					selected.addCharacter(e.getKeyChar());
+				}
+			}
+			
 			break;
 		case GAMEPLAY:
 			break;

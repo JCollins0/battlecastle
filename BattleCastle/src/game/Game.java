@@ -1,10 +1,12 @@
 package game;
 
 import java.awt.Graphics;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.TreeMap;
 
 import core.BattleCastleCanvas;
@@ -80,9 +82,15 @@ public class Game {
 		
 	}
 	
-	public void sendPacketToServer(DatagramPacket send)
+	public void sendPacketToServer(DatagramPacket send2)
 	{
-		
+			String send = "Test Packet";
+			sendPacket = new DatagramPacket(send.getBytes(), send.length(), serverIP, PORT );
+			try {
+				clientSocket.send(sendPacket);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 	}
 	
 	private class ServerThread implements Runnable{
@@ -106,7 +114,6 @@ public class Game {
 				}catch(Exception e)
 				{
 					e.printStackTrace();
-					System.exit(1);
 				}
 			}
 			
@@ -129,9 +136,17 @@ public class Game {
 					
 				}catch(Exception e){
 					e.printStackTrace();
-					System.exit(1);
 				}
 			}
+		}
+	}
+	
+	public void setServerIP(String ip)
+	{
+		try {
+			serverIP = InetAddress.getByName(ip);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -140,4 +155,5 @@ public class Game {
 	private DatagramSocket serverSocket;
 	private DatagramSocket clientSocket;
 	private DatagramPacket sendPacket;
+	private InetAddress serverIP;
 }
