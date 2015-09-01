@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import core.GameState;
+
 public class MenuButton{
 
 	/**
@@ -12,11 +14,13 @@ public class MenuButton{
 	private static final long serialVersionUID = 4897853488646672224L;
 	private Rectangle bounds;
 	private MenuButtonType buttonType;
+	private GameState visibleState;
 	
-	public MenuButton(int x, int y, int width, int height, MenuButtonType buttonType)
+	public MenuButton(int x, int y, int width, int height, MenuButtonType buttonType, GameState visibleState)
 	{
 		bounds = new Rectangle(x,y,width,height);
 		this.buttonType = buttonType;
+		this.visibleState = visibleState;
 	}
 	
 	public void render(Graphics g)
@@ -30,6 +34,11 @@ public class MenuButton{
 		
 	}
 
+	public GameState getVisibleState()
+	{
+		return visibleState;
+	}
+	
 	public MenuButtonType getButtonType() {
 		return buttonType;
 	}

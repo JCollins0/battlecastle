@@ -1,5 +1,7 @@
 package core;
 
+import game.Game;
+
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
@@ -10,7 +12,6 @@ import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
-import game.Game;
 
 public class BattleCastleCanvas extends Canvas implements Runnable{
 
@@ -46,9 +47,10 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		serverIPField.setAllowableCharacters("0123456789.");
 		menuTextFieldList.add(serverIPField);
 		menuButtonList = new ArrayList<MenuButton>();
-		hostGame = new MenuButton(500,400,200,50,MenuButtonType.HOST_GAME);
-		joinGame = new MenuButton(500,500,200,50,MenuButtonType.JOIN_GAME);
-		connectToServer = new MenuButton(200,300,100,50,MenuButtonType.CONNECT_TO_IP);
+		hostGame = new MenuButton(500,400,200,50,MenuButtonType.HOST_GAME, GameState.MAIN_MENU);
+		joinGame = new MenuButton(500,500,200,50,MenuButtonType.JOIN_GAME, GameState.MAIN_MENU);
+		connectToServer = new MenuButton(200,300,100,50,MenuButtonType.CONNECT_TO_IP, GameState.JOIN_SERVER);
+		menuButtonList.add(connectToServer);
 		menuButtonList.add(hostGame);
 		menuButtonList.add(joinGame);
 		running = true;
@@ -81,13 +83,18 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		case MAIN_MENU:
 			
 			for(MenuButton menuButton : menuButtonList)
-				menuButton.render(b);
+				if (menuButton.getVisibleState() == currentState)
+					menuButton.render(b);
 			
 			break;
 		case JOIN_SERVER:
 			
 			if (serverIPField != null)
 				serverIPField.render(b);
+			
+			for(MenuButton menuButton : menuButtonList)
+				if (menuButton.getVisibleState() == currentState)
+					menuButton.render(b);
 			
 			break;
 		case GAMEPLAY:
@@ -183,9 +190,3 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	}
 }
 
-enum GameState
-{
-	MAIN_MENU,
-	JOIN_SERVER,
-	GAMEPLAY;
-}

@@ -70,11 +70,21 @@ public class Game {
 	public void processServerPacket()
 	{
 //		System.out.println("ProcessServer");
+		byte[] data = serverReceivePacket.getData();
+		int length = serverReceivePacket.getLength();
+		
+		String output = new String(data,0,length);
+		System.out.println(output);
 	}
 	
 	public void processClientPacket()
 	{
 //		System.out.println("ProcessClient");
+		byte[] data = clientReceivePacket.getData();
+		int length = clientReceivePacket.getLength();
+		
+		String output = new String(data,0,length);
+		System.out.println(output);
 	}
 	
 	public void sendPacketToClients(DatagramPacket send)
@@ -86,6 +96,7 @@ public class Game {
 	{
 			String send = "Test Packet";
 			sendPacket = new DatagramPacket(send.getBytes(), send.length(), serverIP, PORT );
+			System.out.println(serverIP.toString()  + " " + PORT + " send: " + send );
 			try {
 				clientSocket.send(sendPacket);
 			} catch (IOException e) {
@@ -105,9 +116,9 @@ public class Game {
 					//create array to store data
 					byte[] data = new byte[100];
 					//create receive packet
-					receivePacket = new DatagramPacket( data, data.length );
+					serverReceivePacket = new DatagramPacket( data, data.length );
 					//receive packet from socket
-					serverSocket.receive(receivePacket);
+					serverSocket.receive(serverReceivePacket);
 					//process packet
 					processServerPacket();
 
@@ -130,8 +141,8 @@ public class Game {
 				try
 				{
 					byte[] data = new byte[100];
-					receivePacket = new DatagramPacket(data,data.length);
-					clientSocket.receive(receivePacket);
+					clientReceivePacket = new DatagramPacket(data,data.length);
+					clientSocket.receive(clientReceivePacket);
 					processClientPacket();
 					
 				}catch(Exception e){
@@ -151,7 +162,8 @@ public class Game {
 	}
 	
 	private TreeMap<String, Player> playerMap;
-	private DatagramPacket receivePacket;
+	private DatagramPacket clientReceivePacket;
+	private DatagramPacket serverReceivePacket;
 	private DatagramSocket serverSocket;
 	private DatagramSocket clientSocket;
 	private DatagramPacket sendPacket;
