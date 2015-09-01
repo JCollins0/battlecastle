@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import core.GameState;
+
 public class MenuTextField {
 	
 	private Rectangle bounds;
@@ -11,12 +13,14 @@ public class MenuTextField {
 	private String text;
 	private boolean selected;
 	private MenuTextFieldType id;
+	private GameState visibleState;
 	
-	public MenuTextField(int x, int y, int width, int height, MenuTextFieldType id)
+	public MenuTextField(int x, int y, int width, int height, MenuTextFieldType id, GameState visibleState)
 	{
 		text = "";
 		bounds = new Rectangle(x,y,width,height);
 		this.id = id;
+		this.visibleState = visibleState;
 	}
 	
 	public void backspace()
@@ -61,6 +65,11 @@ public class MenuTextField {
 	public String getText()
 	{
 		return text;
+	}
+	
+	public GameState getVisibleState()
+	{
+		return visibleState;
 	}
 	
 	public void render(Graphics g)

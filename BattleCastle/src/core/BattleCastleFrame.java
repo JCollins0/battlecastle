@@ -1,12 +1,7 @@
 package core;
 
 import java.awt.Dimension;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-
 import javax.swing.JFrame;
-
-import game.Player;
 
 public class BattleCastleFrame extends JFrame {
 

@@ -11,6 +11,8 @@ import java.util.TreeMap;
 
 import core.BattleCastleCanvas;
 import core.HostType;
+import game.player.BattleCastleUser;
+import game.player.Player;
 
 public class Game {
 
@@ -20,6 +22,9 @@ public class Game {
 	
 	private ServerThread serverThread;
 	private ClientThread clientThread;
+	
+	
+	private Player player;
 	
 	public Game(BattleCastleCanvas canvasRef, HostType type)
 	{
@@ -36,7 +41,7 @@ public class Game {
 				e.printStackTrace();
 			}
 			
-			playerMap = new TreeMap<String, Player>();
+			playerMap = new TreeMap<String, BattleCastleUser>();
 			serverThread = new ServerThread();
 			Thread serverTask = new Thread(serverThread);
 			serverTask.start();
@@ -54,7 +59,6 @@ public class Game {
 		clientThread = new ClientThread();
 		Thread clientTask = new Thread(clientThread);
 		clientTask.start();
-		
 	}
 	
 	public BattleCastleCanvas getCanvas()
@@ -63,6 +67,16 @@ public class Game {
 	}
 	
 	public void render(Graphics g)
+	{
+		
+	}
+	
+	public void tick()
+	{
+		
+	}
+	
+	public void reset()
 	{
 		
 	}
@@ -161,7 +175,25 @@ public class Game {
 		}
 	}
 	
-	private TreeMap<String, Player> playerMap;
+	public void sendUserData(BattleCastleUser user)
+	{
+		playerMap.put(user.getUUID(), user);
+		
+		try
+		{
+			String data = user.toString();
+			sendPacket = new DatagramPacket(data.getBytes(),
+											data.length(),
+											serverIP,
+											PORT);
+			clientSocket.send(sendPacket);
+		}catch(Exception e)
+		{
+			
+		}
+	}
+	
+	private TreeMap<String, BattleCastleUser> playerMap;
 	private DatagramPacket clientReceivePacket;
 	private DatagramPacket serverReceivePacket;
 	private DatagramSocket serverSocket;

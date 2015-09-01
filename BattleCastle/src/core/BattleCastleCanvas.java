@@ -43,8 +43,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		addKeyListener(keyHandler);
 		
 		menuTextFieldList = new ArrayList<MenuTextField>();
-		serverIPField = new MenuTextField(100, 100, 300, 50, MenuTextFieldType.SERVER_IP_FIELD);
+		serverIPField = new MenuTextField(100, 100, 300, 50, MenuTextFieldType.SERVER_IP_FIELD, GameState.JOIN_SERVER);
 		serverIPField.setAllowableCharacters("0123456789.");
+		userNameField = new MenuTextField(100, 600, 100, 50, MenuTextFieldType.USERNAME_FIELD, GameState.JOIN_SERVER);
+		userNameField.setAllowableCharacters("abcdefghijklmnopqrstuvwxyz0123456789");
+		menuTextFieldList.add(userNameField);
 		menuTextFieldList.add(serverIPField);
 		menuButtonList = new ArrayList<MenuButton>();
 		hostGame = new MenuButton(500,400,200,50,MenuButtonType.HOST_GAME, GameState.MAIN_MENU);
@@ -62,6 +65,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private MenuButton hostGame;
 	private MenuButton joinGame;
 	private MenuButton connectToServer;
+	private MenuTextField userNameField;
 	
 	public void render()
 	{
@@ -81,16 +85,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		switch (currentState)
 		{
 		case MAIN_MENU:
-			
-			for(MenuButton menuButton : menuButtonList)
-				if (menuButton.getVisibleState() == currentState)
-					menuButton.render(b);
-			
-			break;
 		case JOIN_SERVER:
 			
-			if (serverIPField != null)
-				serverIPField.render(b);
+			for(MenuTextField menuTextField : menuTextFieldList)
+				if(menuTextField.getVisibleState() == currentState)
+					menuTextField.render(b);
 			
 			for(MenuButton menuButton : menuButtonList)
 				if (menuButton.getVisibleState() == currentState)
@@ -120,7 +119,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	
 	public void tick()
 	{
-		
+		if(game != null)
+			game.tick();
 	}
 	
 	@Override

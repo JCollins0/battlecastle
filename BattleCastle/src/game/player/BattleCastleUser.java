@@ -1,16 +1,16 @@
-package game;
+package game.player;
 
 import java.net.InetAddress;
 import java.util.Arrays;
 
-public class Player {
+public class BattleCastleUser {
 	
 	private String playerName;
 	private InetAddress address;
 	private int port;
 	private String uniqueID;
 	
-	public Player(String name, InetAddress address, int port)
+	public BattleCastleUser(String name, InetAddress address, int port)
 	{
 		this.playerName = name;
 		this.address = address;
@@ -34,9 +34,9 @@ public class Player {
 
 	@Override
 	public boolean equals(Object obj) {
-		if(obj instanceof Player)
+		if(obj instanceof BattleCastleUser)
 		{
-			return address.equals( ((Player)obj).address );
+			return address.equals( ((BattleCastleUser)obj).address );
 		}
 		return false;
 	}

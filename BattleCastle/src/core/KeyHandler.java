@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import core.constants.Keys;
 import core.menu_object.MenuTextField;
 
 public class KeyHandler implements KeyListener {
@@ -47,6 +48,21 @@ public class KeyHandler implements KeyListener {
 			
 			break;
 		case GAMEPLAY:
+			
+			//handle player input
+			int keyCode = e.getKeyCode();
+			
+			switch(keyCode)
+			{
+			case Keys.UP:
+				break;
+			case Keys.DOWN:
+				break;
+			case Keys.LEFT:
+				break;
+			case Keys.RIGHT:
+			}
+			
 			break;
 		}
 	}
@@ -55,5 +71,4 @@ public class KeyHandler implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 
 	}
-
 }

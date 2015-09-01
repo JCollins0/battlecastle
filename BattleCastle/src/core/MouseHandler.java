@@ -91,6 +91,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 			break;
 		case GAMEPLAY:
 			
+			//handle player mouse clicks
 			
 			
 			break;
