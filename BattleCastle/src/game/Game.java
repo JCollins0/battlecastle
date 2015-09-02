@@ -16,15 +16,12 @@ import game.player.Player;
 
 public class Game {
 
-	private static final int PORT = 25565;
+	public static final int PORT = 25565;
 	
 	private BattleCastleCanvas canvasRef;
 	
 	private ServerThread serverThread;
 	private ClientThread clientThread;
-	
-	
-	private Player player;
 	
 	public Game(BattleCastleCanvas canvasRef, HostType type)
 	{
@@ -41,7 +38,7 @@ public class Game {
 				e.printStackTrace();
 			}
 			
-			playerMap = new TreeMap<String, BattleCastleUser>();
+			
 			serverThread = new ServerThread();
 			Thread serverTask = new Thread(serverThread);
 			serverTask.start();
@@ -59,6 +56,8 @@ public class Game {
 		clientThread = new ClientThread();
 		Thread clientTask = new Thread(clientThread);
 		clientTask.start();
+		
+		playerMap = new TreeMap<String, BattleCastleUser>();
 	}
 	
 	public BattleCastleCanvas getCanvas()
@@ -87,8 +86,65 @@ public class Game {
 		byte[] data = serverReceivePacket.getData();
 		int length = serverReceivePacket.getLength();
 		
-		String output = new String(data,0,length);
-		System.out.println(output);
+		byte code = data[0];
+		System.out.println("CODE: " + code);
+		System.out.println("ORDINAL: " + ServerOption.LOGIN_USER.ordinal());
+		ServerOption sOption = ServerOption.values()[code];
+		
+		switch(sOption)
+		{
+		case LOGIN_USER:
+			
+			String userData = new String(data, 1, length - 1);
+			String name = userData.substring(userData.indexOf("name=")+5,userData.indexOf(",uuid")).trim();
+			String uuid = userData.substring(userData.indexOf("uuid=")+5,userData.length()-1).trim();
+		
+			BattleCastleUser user = new BattleCastleUser(name,serverReceivePacket.getAddress(),serverReceivePacket.getPort());
+			playerMap.put(uuid, user);
+			
+			//send data to other players
+			for(String id : playerMap.keySet())
+				try
+				{
+					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
+					
+					sendPacket = new DatagramPacket(
+								sendData.getBytes(),
+								sendData.length(),
+								playerMap.get(id).getAddress(),
+								playerMap.get(id).getPort());
+					
+					serverSocket.send(sendPacket);
+				}catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+			
+			break;
+		case LOGOUT_USER:
+			
+			userData = new String(data, 1, length - 1);
+			uuid = userData.substring(userData.indexOf("uuid=")+5,userData.length()-1);
+			playerMap.remove(uuid);
+			for(String id : playerMap.keySet())
+			{
+				try
+				{
+					String removeData = (char)ClientOption.REMOVE_USER.ordinal() + " " + uuid;
+					sendPacket = new DatagramPacket(removeData.getBytes(),
+													removeData.length(),
+													playerMap.get(id).getAddress(),
+													playerMap.get(id).getPort());
+					clientSocket.send(sendPacket);
+				}catch(Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+			
+			break;
+		}		
+		
 	}
 	
 	public void processClientPacket()
@@ -97,26 +153,43 @@ public class Game {
 		byte[] data = clientReceivePacket.getData();
 		int length = clientReceivePacket.getLength();
 		
-		String output = new String(data,0,length);
-		System.out.println(output);
-	}
-	
-	public void sendPacketToClients(DatagramPacket send)
-	{
+		byte code = data[0];
+		ClientOption sOption = ClientOption.values()[code];
 		
+		switch(sOption)
+		{
+		case REGISTER_USERS:
+			
+			String userData = new String(data, 1, length - 1);
+			String name = userData.substring(userData.indexOf("name=")+5,userData.indexOf(",uuid")).trim();
+			String uuid = userData.substring(userData.indexOf("uuid=")+5,userData.length()-1).trim();
+		
+			BattleCastleUser user = new BattleCastleUser(name,clientReceivePacket.getAddress(),clientReceivePacket.getPort());
+			playerMap.put(uuid, user);
+			System.out.println("CLIENT RECIEVED DATA: " + user.toString());
+			break;
+		case REMOVE_USER:
+			
+			userData = new String(data, 1, length - 1);
+			uuid = userData.substring(userData.indexOf("uuid=")+5,userData.length()-1);
+			playerMap.remove(uuid);
+			
+			System.out.println("REMOVED USER");
+			break;
+		default:
+			break;
+		}
 	}
 	
-	public void sendPacketToServer(DatagramPacket send2)
-	{
-			String send = "Test Packet";
-			sendPacket = new DatagramPacket(send.getBytes(), send.length(), serverIP, PORT );
-			System.out.println(serverIP.toString()  + " " + PORT + " send: " + send );
-			try {
-				clientSocket.send(sendPacket);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-	}
+//	public void sendPacketToClients(DatagramPacket send)
+//	{
+//		
+//	}
+//	
+//	public void sendPacketToServer(DatagramPacket send2)
+//	{
+//
+//	}
 	
 	private class ServerThread implements Runnable{
 				
@@ -177,11 +250,12 @@ public class Game {
 	
 	public void sendUserData(BattleCastleUser user)
 	{
+		myUUID = user.getUUID();
 		playerMap.put(user.getUUID(), user);
 		
 		try
 		{
-			String data = user.toString();
+			String data = (char)ServerOption.LOGIN_USER.ordinal() + " " + user.toString();
 			sendPacket = new DatagramPacket(data.getBytes(),
 											data.length(),
 											serverIP,
@@ -189,7 +263,23 @@ public class Game {
 			clientSocket.send(sendPacket);
 		}catch(Exception e)
 		{
-			
+			e.printStackTrace();
+		}
+	}
+	
+	public void sendRemoveUserData()
+	{
+		try
+		{
+			String data = (char)ServerOption.LOGOUT_USER.ordinal() + " " + playerMap.get(myUUID).toString();
+			sendPacket = new DatagramPacket(data.getBytes(),
+											data.length(),
+											serverIP,
+											PORT);
+			clientSocket.send(sendPacket);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 	
@@ -200,4 +290,6 @@ public class Game {
 	private DatagramSocket clientSocket;
 	private DatagramPacket sendPacket;
 	private InetAddress serverIP;
+	private String myUUID;
+	
 }

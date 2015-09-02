@@ -48,6 +48,6 @@ public class BattleCastleUser {
 	
 	@Override
 	public String toString() {
-		return "BattleCastlePlayer [address=" + address + ":" + port + "]";
+		return "BattleCastlePlayer[name=" + playerName + ",uuid=" + getUUID() + "]";
 	}
 }

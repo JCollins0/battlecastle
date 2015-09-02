@@ -1,19 +1,19 @@
 package core;
 
 import java.awt.Point;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
-
-import javax.swing.Timer;
 
 import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
+import game.Game;
+import game.player.BattleCastleUser;
 
 public class MouseHandler implements MouseMotionListener, MouseListener {
 
@@ -83,7 +83,14 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 						canvasref.setCurrentState(GameState.GAMEPLAY);
 						MenuTextField field = canvasref.getTextFieldByID(MenuTextFieldType.SERVER_IP_FIELD);
 						canvasref.getGame().setServerIP(field.getText());
-						canvasref.getGame().sendPacketToServer(null);
+						MenuTextField name = canvasref.getTextFieldByID(MenuTextFieldType.USERNAME_FIELD);
+						
+						try {
+							BattleCastleUser user = new BattleCastleUser(name.getText(),InetAddress.getLocalHost(),Game.PORT);
+							canvasref.getGame().sendUserData(user);
+						} catch (UnknownHostException e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 			}
