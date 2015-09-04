@@ -3,6 +3,7 @@ package core.menu_object;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 import core.GameState;
 
@@ -13,14 +14,21 @@ public class MenuTextField {
 	private String text;
 	private boolean selected;
 	private MenuTextFieldType id;
-	private GameState visibleState;
+	private ArrayList<GameState> visibleStates;
 	
 	public MenuTextField(int x, int y, int width, int height, MenuTextFieldType id, GameState visibleState)
+	{
+		this(x,y,width,height,id,new GameState[]{visibleState});
+	}
+	
+	public MenuTextField(int x, int y, int width, int height, MenuTextFieldType id, GameState... visibleStatesList)
 	{
 		text = "";
 		bounds = new Rectangle(x,y,width,height);
 		this.id = id;
-		this.visibleState = visibleState;
+		visibleStates = new ArrayList<GameState>();
+		for(int i = 0; i < visibleStatesList.length; i++)
+			visibleStates.add(visibleStatesList[i]);
 	}
 	
 	public void backspace()
@@ -67,9 +75,14 @@ public class MenuTextField {
 		return text;
 	}
 	
-	public GameState getVisibleState()
+	public boolean isVisibleAtState(GameState state)
 	{
-		return visibleState;
+		for(GameState s : visibleStates)
+		{
+			if (s.equals(state))
+				return true;
+		}
+		return false;
 	}
 	
 	public void render(Graphics g)

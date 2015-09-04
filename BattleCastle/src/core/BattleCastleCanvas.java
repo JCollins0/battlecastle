@@ -45,7 +45,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuTextFieldList = new ArrayList<MenuTextField>();
 		serverIPField = new MenuTextField(100, 100, 300, 50, MenuTextFieldType.SERVER_IP_FIELD, GameState.JOIN_SERVER);
 		serverIPField.setAllowableCharacters("0123456789.");
-		userNameField = new MenuTextField(100, 600, 100, 50, MenuTextFieldType.USERNAME_FIELD, GameState.JOIN_SERVER);
+		userNameField = new MenuTextField(100, 600, 100, 50, MenuTextFieldType.USERNAME_FIELD, GameState.JOIN_SERVER, GameState.INPUT_USER_NAME);
 		userNameField.setAllowableCharacters("abcdefghijklmnopqrstuvwxyz0123456789");
 		menuTextFieldList.add(userNameField);
 		menuTextFieldList.add(serverIPField);
@@ -53,9 +53,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		hostGame = new MenuButton(500,400,200,50,MenuButtonType.HOST_GAME, GameState.MAIN_MENU);
 		joinGame = new MenuButton(500,500,200,50,MenuButtonType.JOIN_GAME, GameState.MAIN_MENU);
 		connectToServer = new MenuButton(200,300,100,50,MenuButtonType.CONNECT_TO_IP, GameState.JOIN_SERVER);
+		continueToGame = new MenuButton(200,300,100,50,MenuButtonType.CONTINUE_TO_GAME, GameState.INPUT_USER_NAME);
 		menuButtonList.add(connectToServer);
 		menuButtonList.add(hostGame);
 		menuButtonList.add(joinGame);
+		menuButtonList.add(continueToGame);
 		running = true;
 	}
 	
@@ -65,6 +67,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private MenuButton hostGame;
 	private MenuButton joinGame;
 	private MenuButton connectToServer;
+	private MenuButton continueToGame;
 	private MenuTextField userNameField;
 	
 	public void render()
@@ -86,13 +89,14 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		{
 		case MAIN_MENU:
 		case JOIN_SERVER:
+		case INPUT_USER_NAME:
 			
 			for(MenuTextField menuTextField : menuTextFieldList)
-				if(menuTextField.getVisibleState() == currentState)
+				if(menuTextField.isVisibleAtState(currentState) )
 					menuTextField.render(b);
 			
 			for(MenuButton menuButton : menuButtonList)
-				if (menuButton.getVisibleState() == currentState)
+				if(menuButton.isVisibleAtState(currentState) )
 					menuButton.render(b);
 			
 			break;
@@ -104,7 +108,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			}
 			
 			break;
-		
+				
 		}
 		
 		

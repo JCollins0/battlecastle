@@ -29,6 +29,7 @@ public class KeyHandler implements KeyListener {
 		case MAIN_MENU:	
 			break;
 		case JOIN_SERVER:
+		case INPUT_USER_NAME:
 			
 			MenuTextField selected = canvasref.getSelectedMenuTextField();
 			

@@ -16,7 +16,8 @@ import game.player.Player;
 
 public class Game {
 
-	public static final int PORT = 25565;
+	public static final int SERVER_PORT = 25565;
+	public static final int CLIENT_PORT = 25566;
 	
 	private BattleCastleCanvas canvasRef;
 	
@@ -33,7 +34,7 @@ public class Game {
 		if (type == HostType.SERVER)
 		{
 			try {
-				serverSocket = new DatagramSocket(PORT);
+				serverSocket = new DatagramSocket(SERVER_PORT);
 			} catch (SocketException e) {
 				e.printStackTrace();
 			}
@@ -101,7 +102,6 @@ public class Game {
 		
 			BattleCastleUser user = new BattleCastleUser(name,serverReceivePacket.getAddress(),serverReceivePacket.getPort());
 			playerMap.put(uuid, user);
-			
 			//send data to other players
 			for(String id : playerMap.keySet())
 				try
@@ -163,7 +163,9 @@ public class Game {
 			String userData = new String(data, 1, length - 1);
 			String name = userData.substring(userData.indexOf("name=")+5,userData.indexOf(",uuid")).trim();
 			String uuid = userData.substring(userData.indexOf("uuid=")+5,userData.length()-1).trim();
-		
+			/**
+			 * TODO client receive packet is server address... CHANGE USER TO SEND THIER IP  
+			 */
 			BattleCastleUser user = new BattleCastleUser(name,clientReceivePacket.getAddress(),clientReceivePacket.getPort());
 			playerMap.put(uuid, user);
 			System.out.println("CLIENT RECIEVED DATA: " + user.toString());
@@ -248,6 +250,11 @@ public class Game {
 		}
 	}
 	
+	public void setServerIP(InetAddress address)
+	{
+		serverIP = address;
+	}
+	
 	public void sendUserData(BattleCastleUser user)
 	{
 		myUUID = user.getUUID();
@@ -259,7 +266,7 @@ public class Game {
 			sendPacket = new DatagramPacket(data.getBytes(),
 											data.length(),
 											serverIP,
-											PORT);
+											SERVER_PORT);
 			clientSocket.send(sendPacket);
 		}catch(Exception e)
 		{
@@ -275,7 +282,7 @@ public class Game {
 			sendPacket = new DatagramPacket(data.getBytes(),
 											data.length(),
 											serverIP,
-											PORT);
+											SERVER_PORT);
 			clientSocket.send(sendPacket);
 		}catch(Exception e)
 		{

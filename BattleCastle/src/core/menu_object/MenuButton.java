@@ -3,6 +3,7 @@ package core.menu_object;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
 import core.GameState;
 
@@ -14,15 +15,22 @@ public class MenuButton{
 	private static final long serialVersionUID = 4897853488646672224L;
 	private Rectangle bounds;
 	private MenuButtonType buttonType;
-	private GameState visibleState;
+	private ArrayList<GameState> visibleStates;
 	
 	public MenuButton(int x, int y, int width, int height, MenuButtonType buttonType, GameState visibleState)
 	{
-		bounds = new Rectangle(x,y,width,height);
-		this.buttonType = buttonType;
-		this.visibleState = visibleState;
+		this(x,y,width,height,buttonType,new GameState[]{ visibleState } );
 	}
 	
+	public MenuButton(int x, int y, int width, int height, MenuButtonType buttonType, GameState... visibleStatesList)
+	{
+		bounds = new Rectangle(x,y,width,height);
+		this.buttonType = buttonType;
+		visibleStates = new ArrayList<GameState>();
+		for(int i = 0; i < visibleStatesList.length; i++)
+			visibleStates.add(visibleStatesList[i]);
+	}
+		
 	public void render(Graphics g)
 	{
 		g.setColor(Color.blue);
@@ -34,9 +42,14 @@ public class MenuButton{
 		
 	}
 
-	public GameState getVisibleState()
+	public boolean isVisibleAtState(GameState state)
 	{
-		return visibleState;
+		for(GameState s : visibleStates)
+		{
+			if (s.equals(state))
+				return true;
+		}
+		return false;
 	}
 	
 	public MenuButtonType getButtonType() {

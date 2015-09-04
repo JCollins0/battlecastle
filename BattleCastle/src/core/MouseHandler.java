@@ -46,7 +46,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 					{
 						canvasref.setGame(true);
 						
-						canvasref.setCurrentState(GameState.GAMEPLAY);
+						canvasref.setCurrentState(GameState.INPUT_USER_NAME);
 						
 					}else if(button.getButtonType() == MenuButtonType.JOIN_GAME)
 					{
@@ -72,9 +72,9 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 					field.setSelected(false);
 			}
 			
-			ArrayList<MenuButton> buttonList1 = canvasref.getMenuButtons();
+			buttonList = canvasref.getMenuButtons();
 			
-			for(MenuButton button : buttonList1)
+			for(MenuButton button : buttonList)
 			{
 				if (button.getBounds().contains(mouse))
 				{
@@ -86,7 +86,43 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 						MenuTextField name = canvasref.getTextFieldByID(MenuTextFieldType.USERNAME_FIELD);
 						
 						try {
-							BattleCastleUser user = new BattleCastleUser(name.getText(),InetAddress.getLocalHost(),Game.PORT);
+							BattleCastleUser user = new BattleCastleUser(name.getText(),InetAddress.getLocalHost(),Game.CLIENT_PORT);
+							System.out.println(user.getAddress());
+							canvasref.getGame().sendUserData(user);
+						} catch (UnknownHostException e1) {
+							e1.printStackTrace();
+						}
+					}
+				}
+			}
+			
+			break;
+		case INPUT_USER_NAME:
+			
+			menuTextFieldList = canvasref.getMenuTextFields();
+			for (MenuTextField field : menuTextFieldList)
+			{
+				if (field.getBounds().contains(mouse))
+				{
+					field.setSelected(true);
+				}else
+					field.setSelected(false);
+			}
+			
+			buttonList = canvasref.getMenuButtons();
+			for(MenuButton button : buttonList)
+			{
+				if (button.getBounds().contains(mouse))
+				{
+					if (button.getButtonType() == MenuButtonType.CONTINUE_TO_GAME)
+					{
+						canvasref.setCurrentState(GameState.GAMEPLAY);
+						MenuTextField name = canvasref.getTextFieldByID(MenuTextFieldType.USERNAME_FIELD);
+						
+						try {
+							BattleCastleUser user = new BattleCastleUser(name.getText(),InetAddress.getLocalHost(),Game.CLIENT_PORT);
+							//System.out.println(user.getAddress());
+							canvasref.getGame().setServerIP(InetAddress.getLocalHost());
 							canvasref.getGame().sendUserData(user);
 						} catch (UnknownHostException e1) {
 							e1.printStackTrace();
