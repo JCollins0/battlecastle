@@ -88,8 +88,8 @@ public class Game {
 		int length = serverReceivePacket.getLength();
 		
 		byte code = data[0];
-		System.out.println("CODE: " + code);
-		System.out.println("ORDINAL: " + ServerOption.LOGIN_USER.ordinal());
+//		System.out.println("CODE: " + code);
+//		System.out.println("ORDINAL: " + ServerOption.LOGIN_USER.ordinal());
 		ServerOption sOption = ServerOption.values()[code];
 		
 		switch(sOption)
@@ -98,7 +98,7 @@ public class Game {
 			
 			String userData = new String(data, 1, length - 1);
 			String name = userData.substring(userData.indexOf("name=")+5,userData.indexOf(",uuid")).trim();
-			String uuid = userData.substring(userData.indexOf("uuid=")+5,userData.length()-1).trim();
+			String uuid = userData.substring(userData.indexOf("uuid=")+5,userData.indexOf(",ip=")).trim();
 		
 			BattleCastleUser user = new BattleCastleUser(name,serverReceivePacket.getAddress(),serverReceivePacket.getPort());
 			playerMap.put(uuid, user);
@@ -162,13 +162,20 @@ public class Game {
 			
 			String userData = new String(data, 1, length - 1);
 			String name = userData.substring(userData.indexOf("name=")+5,userData.indexOf(",uuid")).trim();
-			String uuid = userData.substring(userData.indexOf("uuid=")+5,userData.length()-1).trim();
-			/**
-			 * TODO client receive packet is server address... CHANGE USER TO SEND THIER IP  
-			 */
-			BattleCastleUser user = new BattleCastleUser(name,clientReceivePacket.getAddress(),clientReceivePacket.getPort());
-			playerMap.put(uuid, user);
-			System.out.println("CLIENT RECIEVED DATA: " + user.toString());
+			String uuid = userData.substring(userData.indexOf("uuid=")+5,userData.indexOf(",ip=")).trim();
+			String address = userData.substring(userData.indexOf("ip=")+3,userData.length()-1).trim();
+			
+			try
+			{
+				BattleCastleUser user = new BattleCastleUser(name,InetAddress.getByName(address),CLIENT_PORT);
+				playerMap.put(uuid, user);
+				System.out.println("CLIENT RECIEVED DATA: " + user.toString());
+				
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			
 			break;
 		case REMOVE_USER:
 			

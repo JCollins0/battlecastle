@@ -44,6 +44,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		
 		menuTextFieldList = new ArrayList<MenuTextField>();
 		serverIPField = new MenuTextField(100, 100, 300, 50, MenuTextFieldType.SERVER_IP_FIELD, GameState.JOIN_SERVER);
+		serverIPField.setDefaultText("10.118.40.251");
 		serverIPField.setAllowableCharacters("0123456789.");
 		userNameField = new MenuTextField(100, 600, 100, 50, MenuTextFieldType.USERNAME_FIELD, GameState.JOIN_SERVER, GameState.INPUT_USER_NAME);
 		userNameField.setAllowableCharacters("abcdefghijklmnopqrstuvwxyz0123456789");

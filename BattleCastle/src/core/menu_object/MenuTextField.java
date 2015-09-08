@@ -50,6 +50,11 @@ public class MenuTextField {
 		}
 	}
 	
+	public void setDefaultText(String text)
+	{
+		this.text = text;
+	}
+	
 	public void setAllowableCharacters(String characters)
 	{
 		allowablecharacters = characters;
