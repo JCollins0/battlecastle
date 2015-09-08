@@ -49,7 +49,7 @@ public class Game {
 		 * Client stuff
 		 */
 		try {
-			clientSocket = new DatagramSocket();
+			clientSocket = new DatagramSocket(CLIENT_PORT);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
@@ -99,10 +99,12 @@ public class Game {
 			String userData = new String(data, 1, length - 1);
 			String name = userData.substring(userData.indexOf("name=")+5,userData.indexOf(",uuid")).trim();
 			String uuid = userData.substring(userData.indexOf("uuid=")+5,userData.indexOf(",ip=")).trim();
-		
-			BattleCastleUser user = new BattleCastleUser(name,serverReceivePacket.getAddress(),serverReceivePacket.getPort());
-			playerMap.put(uuid, user);
+
+			BattleCastleUser user = new BattleCastleUser(name,serverReceivePacket.getAddress(), CLIENT_PORT);
+			playerMap.put(user.getUUID(), user);
+			
 			//send data to other players
+			System.out.println("Player Map: " + playerMap.toString());
 			for(String id : playerMap.keySet())
 				try
 				{
@@ -112,7 +114,7 @@ public class Game {
 								sendData.getBytes(),
 								sendData.length(),
 								playerMap.get(id).getAddress(),
-								playerMap.get(id).getPort());
+								CLIENT_PORT);
 					
 					serverSocket.send(sendPacket);
 				}catch(Exception e)
@@ -266,7 +268,7 @@ public class Game {
 	{
 		myUUID = user.getUUID();
 		playerMap.put(user.getUUID(), user);
-		
+		System.out.println("Player Map: " + playerMap.toString());
 		try
 		{
 			String data = (char)ServerOption.LOGIN_USER.ordinal() + " " + user.toString();

@@ -193,5 +193,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				return field;
 		return null;
 	}
+	
+	
 }
 

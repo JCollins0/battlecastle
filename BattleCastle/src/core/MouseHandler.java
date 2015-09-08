@@ -87,7 +87,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 						
 						try {
 							BattleCastleUser user = new BattleCastleUser(name.getText(),InetAddress.getLocalHost(),Game.CLIENT_PORT);
-							System.out.println(user.getAddress());
+						//	System.out.println(user.getAddress());
 							canvasref.getGame().sendUserData(user);
 						} catch (UnknownHostException e1) {
 							e1.printStackTrace();
