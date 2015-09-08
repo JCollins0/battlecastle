@@ -106,9 +106,10 @@ public class Game {
 			//send data to other players
 			System.out.println("Player Map: " + playerMap.toString());
 			for(String id : playerMap.keySet())
+				for(String oid : playerMap.keySet())
 				try
 				{
-					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
+					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(oid).toString();
 					
 					sendPacket = new DatagramPacket(
 								sendData.getBytes(),
