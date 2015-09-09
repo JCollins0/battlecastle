@@ -9,6 +9,7 @@ public class BattleCastleUser {
 	private InetAddress address;
 	private int port;
 	private String uniqueID;
+	private int playerNum;
 	
 	public BattleCastleUser(String name, InetAddress address, int port)
 	{
@@ -46,8 +47,21 @@ public class BattleCastleUser {
 		return uniqueID;
 	}
 	
+	public void setPlayerNumber(int number)
+	{
+		this.playerNum = number;
+	}
+	
+	public int getPlayerNumber()
+	{
+		return playerNum;
+	}
+	
 	@Override
 	public String toString() {
-		return "BattleCastlePlayer[name=" + playerName + ",uuid=" + getUUID() + ",ip=" + address.getHostAddress().toString() + "]";
+		return "BattleCastlePlayer[name=" + playerName + 
+								 ",uuid=" + getUUID() + 
+								 ",ip=" + address.getHostAddress().toString() + 
+								 ",playerNum=" + playerNum + "]";
 	}
 }

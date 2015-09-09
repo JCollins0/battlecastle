@@ -100,7 +100,11 @@ public class Game {
 			String name = userData.substring(userData.indexOf("name=")+5,userData.indexOf(",uuid")).trim();
 			String uuid = userData.substring(userData.indexOf("uuid=")+5,userData.indexOf(",ip=")).trim();
 
+			int playerNum = playerMap.size();
+			
 			BattleCastleUser user = new BattleCastleUser(name,serverReceivePacket.getAddress(), CLIENT_PORT);
+			user.setPlayerNumber(playerNum);
+			
 			playerMap.put(user.getUUID(), user);
 			
 			//send data to other players
@@ -127,7 +131,7 @@ public class Game {
 		case LOGOUT_USER:
 			
 			userData = new String(data, 1, length - 1);
-			uuid = userData.substring(userData.indexOf("uuid=")+5,userData.length()-1);
+			uuid = userData.substring(userData.indexOf("uuid=")+5,userData.indexOf(",ip="));
 			playerMap.remove(uuid);
 			for(String id : playerMap.keySet())
 			{
@@ -166,11 +170,12 @@ public class Game {
 			String userData = new String(data, 1, length - 1);
 			String name = userData.substring(userData.indexOf("name=")+5,userData.indexOf(",uuid")).trim();
 			String uuid = userData.substring(userData.indexOf("uuid=")+5,userData.indexOf(",ip=")).trim();
-			String address = userData.substring(userData.indexOf("ip=")+3,userData.length()-1).trim();
-			
+			String address = userData.substring(userData.indexOf("ip=")+3,userData.indexOf(",playerNum=")).trim();
+			String playerNum = userData.substring(userData.indexOf("playerNum=")+10,userData.length()-1).trim();
 			try
 			{
 				BattleCastleUser user = new BattleCastleUser(name,InetAddress.getByName(address),CLIENT_PORT);
+				user.setPlayerNumber(Integer.parseInt(playerNum));
 				playerMap.put(uuid, user);
 				System.out.println("CLIENT RECIEVED DATA: " + user.toString());
 				
@@ -183,7 +188,7 @@ public class Game {
 		case REMOVE_USER:
 			
 			userData = new String(data, 1, length - 1);
-			uuid = userData.substring(userData.indexOf("uuid=")+5,userData.length()-1);
+			uuid = userData.substring(userData.indexOf("uuid=")+5,userData.indexOf(",ip="));
 			playerMap.remove(uuid);
 			
 			System.out.println("REMOVED USER");
@@ -193,16 +198,6 @@ public class Game {
 		}
 	}
 	
-//	public void sendPacketToClients(DatagramPacket send)
-//	{
-//		
-//	}
-//	
-//	public void sendPacketToServer(DatagramPacket send2)
-//	{
-//
-//	}
-	
 	private class ServerThread implements Runnable{
 				
 		@Override
@@ -210,7 +205,7 @@ public class Game {
 			
 			while(true)
 			{
-				System.out.println("ServerRunning?");
+//				System.out.println("ServerRunning?");
 				try{
 					//create array to store data
 					byte[] data = new byte[100];
@@ -236,7 +231,7 @@ public class Game {
 		public void run() {
 			while(true)
 			{
-				System.out.println("ClientRunning?");
+//				System.out.println("ClientRunning?");
 				try
 				{
 					byte[] data = new byte[100];
@@ -267,9 +262,9 @@ public class Game {
 	
 	public void sendUserData(BattleCastleUser user)
 	{
-		myUUID = user.getUUID();
-		playerMap.put(user.getUUID(), user);
-		System.out.println("Player Map: " + playerMap.toString());
+//		myUUID = user.getUUID();
+//		playerMap.put(user.getUUID(), user);
+//		System.out.println("Player Map: " + playerMap.toString());
 		try
 		{
 			String data = (char)ServerOption.LOGIN_USER.ordinal() + " " + user.toString();
@@ -309,4 +304,5 @@ public class Game {
 	private InetAddress serverIP;
 	private String myUUID;
 	
+	private Player[] playerList;
 }
