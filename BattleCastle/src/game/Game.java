@@ -106,19 +106,20 @@ public class Game {
 			user.setPlayerNumber(playerNum);
 			
 			playerMap.put(user.getUUID(), user);
-			
+			System.out.println("SERVER RECEIVED DATA: " + user.toString());
 			//send data to other players
-			System.out.println("Player Map: " + playerMap.toString());
+//			System.out.println("Player Map: " + playerMap.toString());
 			for(String id : playerMap.keySet())
 				for(String oid : playerMap.keySet())
 				try
 				{
-					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(oid).toString();
+					System.out.println("SENDING  " + playerMap.get(id).toString() + " DATA TO " + playerMap.get(oid).getAddress());
+					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
 					
 					sendPacket = new DatagramPacket(
 								sendData.getBytes(),
 								sendData.length(),
-								playerMap.get(id).getAddress(),
+								playerMap.get(oid).getAddress(),
 								CLIENT_PORT);
 					
 					serverSocket.send(sendPacket);
@@ -177,7 +178,7 @@ public class Game {
 				BattleCastleUser user = new BattleCastleUser(name,InetAddress.getByName(address),CLIENT_PORT);
 				user.setPlayerNumber(Integer.parseInt(playerNum));
 				playerMap.put(uuid, user);
-				System.out.println("CLIENT RECIEVED DATA: " + user.toString());
+//				System.out.println("CLIENT RECIEVED DATA: " + user.toString());
 				
 			}catch(Exception e)
 			{
