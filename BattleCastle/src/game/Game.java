@@ -123,6 +123,8 @@ public class Game {
 								CLIENT_PORT);
 					
 					serverSocket.send(sendPacket);
+					
+					Thread.sleep(1);
 				}catch(Exception e)
 				{
 					e.printStackTrace();
