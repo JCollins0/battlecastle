@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.Graphics;
+import java.awt.Image;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -11,8 +12,10 @@ import java.util.TreeMap;
 
 import core.BattleCastleCanvas;
 import core.HostType;
+import game.object.GameMap;
 import game.player.BattleCastleUser;
 import game.player.Player;
+import utility.Utility;
 
 public class Game {
 
@@ -24,10 +27,17 @@ public class Game {
 	private ServerThread serverThread;
 	private ClientThread clientThread;
 	
+	private GameMap gameMap;
+	private boolean loadedMap;
+	private HostType type;
+	
+	private static final int MIN_PlAYERS = 2;
+	
 	public Game(BattleCastleCanvas canvasRef, HostType type)
 	{
 		this.canvasRef = canvasRef;
-		
+		this.type = type;
+		 
 		/*
 		 * Server specific stuff
 		 */
@@ -59,6 +69,7 @@ public class Game {
 		clientTask.start();
 		
 		playerMap = new TreeMap<String, BattleCastleUser>();
+		playerList = new Player[4];
 	}
 	
 	public BattleCastleCanvas getCanvas()
@@ -69,11 +80,30 @@ public class Game {
 	public void render(Graphics g)
 	{
 		
+		if(playerMap.size() >= MIN_PlAYERS)
+		{
+			
+		}
 	}
 	
 	public void tick()
 	{
-		
+		if(type == HostType.SERVER) //server stuff
+		{
+			if(playerMap.size() >= MIN_PlAYERS )
+			{
+				if(!loadedMap)
+				{
+					//Send map number
+					loadedMap =  true;
+				}
+				
+				//update objects
+				
+			}
+		}
+
+		//client stuff
 	}
 	
 	public void reset()
@@ -104,8 +134,9 @@ public class Game {
 			
 			BattleCastleUser user = new BattleCastleUser(name,serverReceivePacket.getAddress(), CLIENT_PORT);
 			user.setPlayerNumber(playerNum);
-			
 			playerMap.put(user.getUUID(), user);
+			playerList[user.getPlayerNumber()] = new Player();
+			
 			System.out.println("SERVER RECEIVED DATA: " + user.toString());
 			//send data to other players
 //			System.out.println("Player Map: " + playerMap.toString());
@@ -180,6 +211,8 @@ public class Game {
 				BattleCastleUser user = new BattleCastleUser(name,InetAddress.getByName(address),CLIENT_PORT);
 				user.setPlayerNumber(Integer.parseInt(playerNum));
 				playerMap.put(uuid, user);
+				
+				playerList[user.getPlayerNumber()] = new Player();
 //				System.out.println("CLIENT RECIEVED DATA: " + user.toString());
 				
 			}catch(Exception e)

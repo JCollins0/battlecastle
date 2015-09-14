@@ -4,6 +4,7 @@ import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
@@ -15,7 +16,7 @@ public class Utility {
     public static BufferedImage loadImage(String img) {
         try
         {
-      		return ImageIO.read(Utility.class.getResource("resources/" + img));
+      		return ImageIO.read(new File("resources/" + img + ".png"));
 		}
 	    catch(Exception ioexception) {
 	    	JOptionPane.showMessageDialog(null, "Error reading image file!", "Utility", JOptionPane.ERROR_MESSAGE);
