@@ -8,6 +8,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import core.menu_object.MapSelectionObject;
 import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
 import core.menu_object.MenuTextField;
@@ -116,9 +117,8 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 				{
 					if (button.getButtonType() == MenuButtonType.CONTINUE_TO_GAME)
 					{
-						canvasref.setCurrentState(GameState.GAMEPLAY);
 						MenuTextField name = canvasref.getTextFieldByID(MenuTextFieldType.USERNAME_FIELD);
-						
+
 						try {
 							BattleCastleUser user = new BattleCastleUser(name.getText(),InetAddress.getLocalHost(),Game.CLIENT_PORT);
 							//System.out.println(user.getAddress());
@@ -127,6 +127,16 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 						} catch (UnknownHostException e1) {
 							e1.printStackTrace();
 						}
+						
+						if(canvasref.getGame().getHostType() == HostType.SERVER)
+						{
+							canvasref.setCurrentState(GameState.SELECT_MAP);
+						}else
+						{
+							canvasref.setCurrentState(GameState.GAMEPLAY);
+							
+						}
+						
 					}
 				}
 			}
@@ -138,6 +148,27 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 			
 			
 			break;
+		case SELECT_MAP:
+			
+			buttonList = canvasref.getMenuButtons();
+			
+			for(MenuButton button : buttonList)
+			{
+				if (button.getBounds().contains(mouse))
+				{
+					if (button.getButtonType() == MenuButtonType.SELECT_MAP)
+					{
+						MapSelectionObject map = (MapSelectionObject) button;
+						
+						//Send which map 
+						
+						canvasref.setCurrentState(GameState.GAMEPLAY);
+					}
+				}
+			}
+			
+			break;
+		
 		}
 	}
 
