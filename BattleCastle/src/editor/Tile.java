@@ -1,5 +1,6 @@
 package editor;
 
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
 
@@ -8,12 +9,19 @@ import utility.Utility;
 public class Tile extends Rectangle
 {
 	
-	private int x,y,width,height;
 	private Image[] pics;
+	private int animation;
+	
+	private static Image check;
+	
+	static
+	{
+		check=Utility.loadImage("check");
+	}
 
 	public Tile(int x,int y,int width,int height)
 	{
-		this(x,y,width,height,null);
+		this(x,y,width,height,check);
 	}
 	
 	public Tile(int x,int y,int width,int height,Image[] pics)
@@ -22,12 +30,19 @@ public class Tile extends Rectangle
 		this.y=y;
 		this.width=width;
 		this.height=height;
-		if(pics!=null)
-			this.pics=pics;
-		else
-		{
-			this.pics=new Image[]{Utility.loadImage("resources/check.png")};
-		}
+		this.pics=pics;
+	}
+	
+	public Tile(int x,int y,int width,int height,Image pic)
+	{
+		this(x,y,width,height,new Image[]{pic});
+	}
+	
+	public void draw(Graphics g)
+	{
+		g.drawImage(pics[animation++], x, y, width, height, null);
+		if(animation==pics.length)
+			animation=0;
 	}
 
 }
