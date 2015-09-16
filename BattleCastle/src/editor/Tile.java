@@ -6,11 +6,10 @@ import java.awt.Rectangle;
 
 import utility.Utility;
 
-public class Tile extends Rectangle
+public abstract class Tile extends Rectangle
 {
 	
-	private Image[] pics;
-	private int animation;
+	protected Image[] pics;
 	
 	private static Image check;
 	
@@ -38,11 +37,8 @@ public class Tile extends Rectangle
 		this(x,y,width,height,new Image[]{pic});
 	}
 	
-	public void draw(Graphics g)
-	{
-		g.drawImage(pics[animation++], x, y, width, height, null);
-		if(animation==pics.length)
-			animation=0;
-	}
+	public abstract void draw(Graphics g);
+	
+	public abstract void tick();
 
 }
