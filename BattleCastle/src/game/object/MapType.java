@@ -1,9 +1,9 @@
 package game.object;
 
 public enum MapType {
-	ONE("First"),
-	TWO("Second"),
-	THREE("Third");
+	ONE("map1"),
+	TWO("map2"),
+	THREE("map3");
 	
 	MapType(String s)
 	{

@@ -53,8 +53,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuTextFieldList.add(serverIPField);
 		menuButtonList = new ArrayList<MenuButton>();
 		map1 = new MapSelectionObject(200, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.ONE, GameState.SELECT_MAP);
-		map2 = new MapSelectionObject(200, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.TWO, GameState.SELECT_MAP);
-		map3 = new MapSelectionObject(200, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.THREE, GameState.SELECT_MAP);
+		map2 = new MapSelectionObject(500, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.TWO, GameState.SELECT_MAP);
+		map3 = new MapSelectionObject(800, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.THREE, GameState.SELECT_MAP);
 		menuButtonList.add(map1);
 		menuButtonList.add(map2);
 		menuButtonList.add(map3);

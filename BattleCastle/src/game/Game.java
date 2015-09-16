@@ -77,10 +77,13 @@ public class Game {
 	
 	public void render(Graphics g)
 	{
-		
+	
 		if(playerMap.size() >= MIN_PlAYERS)
 		{
-			
+			if (gameMap != null)
+			{
+				gameMap.render(g);
+			}
 		}
 	}
 	
@@ -185,7 +188,7 @@ public class Game {
 		case MAP_SELECTION:
 			
 			
-			
+			//Not Sure if this needs to be used because server will be the one choosing
 			
 			break;
 		default:
@@ -236,6 +239,13 @@ public class Game {
 			System.out.println("REMOVED USER");
 			break;
 		case LOAD_MAP:
+			
+			if (getHostType() != HostType.SERVER)
+			{
+				String mapData = new String(data, 1, length - 1);
+				gameMap = new GameMap(mapData.trim());
+			}
+			
 			break;
 		default:
 			break;
@@ -343,10 +353,18 @@ public class Game {
 	public void sendMapChoice(MapType type)
 	{
 		try {
+			gameMap = new GameMap(type.getText());
 			String mapName = type.getText();
-			
 			String data = (char)ServerOption.MAP_SELECTION.ordinal() + " " + mapName;
-			
+			for(String id : playerMap.keySet())
+			{	
+				sendPacket = new DatagramPacket(data.getBytes(),
+						data.length(),
+						playerMap.get(id).getAddress(),
+						playerMap.get(id).getPort());
+				serverSocket.send(sendPacket);
+				Thread.sleep(1);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

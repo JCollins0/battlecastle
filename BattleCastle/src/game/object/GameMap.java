@@ -9,9 +9,9 @@ public class GameMap {
 	
 	private BufferedImage background;
 	
-	public GameMap()
+	public GameMap(String imageName)
 	{
-		background = Utility.loadImage("background");
+		background = Utility.loadImage(imageName);
 	}
 	
 	public void render(Graphics g)

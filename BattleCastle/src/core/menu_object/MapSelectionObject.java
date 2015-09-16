@@ -13,11 +13,13 @@ public class MapSelectionObject extends MenuButton {
 	public MapSelectionObject(int x, int y, int width, int height, MenuButtonType buttonType,
 			MapType mapType, GameState visibleState) {
 		super(x, y, width, height, buttonType, visibleState);
+		map = mapType;
 	}
 
 	public MapSelectionObject(int x, int y, int width, int height, MenuButtonType buttonType,
 			MapType mapType, GameState[] visibleStatesList) {
 		super(x, y, width, height, buttonType, visibleStatesList);
+		map = mapType;
 	}
 	
 	public void render(Graphics g)
