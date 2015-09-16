@@ -1,17 +1,18 @@
 package core;
 
-import game.Game;
-
 import java.awt.Canvas;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import core.menu_object.MapSelectionObject;
 import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
+import game.Game;
+import game.object.MapType;
 
 public class BattleCastleCanvas extends Canvas implements Runnable{
 
@@ -51,6 +52,12 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuTextFieldList.add(userNameField);
 		menuTextFieldList.add(serverIPField);
 		menuButtonList = new ArrayList<MenuButton>();
+		map1 = new MapSelectionObject(200, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.ONE, GameState.SELECT_MAP);
+		map2 = new MapSelectionObject(200, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.TWO, GameState.SELECT_MAP);
+		map3 = new MapSelectionObject(200, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.THREE, GameState.SELECT_MAP);
+		menuButtonList.add(map1);
+		menuButtonList.add(map2);
+		menuButtonList.add(map3);
 		hostGame = new MenuButton(500,400,200,50,MenuButtonType.HOST_GAME, GameState.MAIN_MENU);
 		joinGame = new MenuButton(500,500,200,50,MenuButtonType.JOIN_GAME, GameState.MAIN_MENU);
 		connectToServer = new MenuButton(200,300,100,50,MenuButtonType.CONNECT_TO_IP, GameState.JOIN_SERVER);
@@ -69,6 +76,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private MenuButton joinGame;
 	private MenuButton connectToServer;
 	private MenuButton continueToGame;
+	private MapSelectionObject map1,map2,map3;
 	private MenuTextField userNameField;
 	
 	public void render()
@@ -91,6 +99,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		case MAIN_MENU:
 		case JOIN_SERVER:
 		case INPUT_USER_NAME:
+		case SELECT_MAP:
 			
 			for(MenuTextField menuTextField : menuTextFieldList)
 				if(menuTextField.isVisibleAtState(currentState) )
@@ -108,6 +117,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				game.render(b);
 			}
 			
+			break;
+		
+		default:
 			break;
 				
 		}

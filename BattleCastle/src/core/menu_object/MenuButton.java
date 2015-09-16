@@ -13,7 +13,7 @@ public class MenuButton{
 	 * 
 	 */
 	private static final long serialVersionUID = 4897853488646672224L;
-	private Rectangle bounds;
+	protected Rectangle bounds;
 	private MenuButtonType buttonType;
 	private ArrayList<GameState> visibleStates;
 	

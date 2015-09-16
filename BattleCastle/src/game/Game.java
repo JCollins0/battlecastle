@@ -1,8 +1,6 @@
 package game;
 
 import java.awt.Graphics;
-import java.awt.Image;
-import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -13,9 +11,9 @@ import java.util.TreeMap;
 import core.BattleCastleCanvas;
 import core.HostType;
 import game.object.GameMap;
+import game.object.MapType;
 import game.player.BattleCastleUser;
 import game.player.Player;
-import utility.Utility;
 
 public class Game {
 
@@ -184,6 +182,14 @@ public class Game {
 			}
 			
 			break;
+		case MAP_SELECTION:
+			
+			
+			
+			
+			break;
+		default:
+			break;
 		}		
 		
 	}
@@ -195,9 +201,9 @@ public class Game {
 		int length = clientReceivePacket.getLength();
 		
 		byte code = data[0];
-		ClientOption sOption = ClientOption.values()[code];
+		ClientOption cOption = ClientOption.values()[code];
 		
-		switch(sOption)
+		switch(cOption)
 		{
 		case REGISTER_USERS:
 			
@@ -229,8 +235,11 @@ public class Game {
 			
 			System.out.println("REMOVED USER");
 			break;
+		case LOAD_MAP:
+			break;
 		default:
 			break;
+		
 		}
 	}
 	
@@ -329,6 +338,23 @@ public class Game {
 		{
 			e.printStackTrace();
 		}
+	}
+	
+	public void sendMapChoice(MapType type)
+	{
+		try {
+			String mapName = type.getText();
+			
+			String data = (char)ServerOption.MAP_SELECTION.ordinal() + " " + mapName;
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public HostType getHostType()
+	{
+		return type;
 	}
 	
 	private TreeMap<String, BattleCastleUser> playerMap;

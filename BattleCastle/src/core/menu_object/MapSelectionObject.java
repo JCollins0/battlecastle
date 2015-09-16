@@ -1,5 +1,8 @@
 package core.menu_object;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 import core.GameState;
 import game.object.MapType;
 
@@ -8,13 +11,22 @@ public class MapSelectionObject extends MenuButton {
 	private MapType map;
 	
 	public MapSelectionObject(int x, int y, int width, int height, MenuButtonType buttonType,
-			GameState visibleState) {
+			MapType mapType, GameState visibleState) {
 		super(x, y, width, height, buttonType, visibleState);
 	}
 
 	public MapSelectionObject(int x, int y, int width, int height, MenuButtonType buttonType,
-			GameState[] visibleStatesList) {
+			MapType mapType, GameState[] visibleStatesList) {
 		super(x, y, width, height, buttonType, visibleStatesList);
 	}
+	
+	public void render(Graphics g)
+	{
+		g.setColor(Color.red);
+		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+	}
 
+	public MapType getMapType(){
+		return map;
+	}
 }
