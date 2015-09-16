@@ -240,9 +240,10 @@ public class Game {
 			break;
 		case LOAD_MAP:
 			
+			String mapData = new String(data, 1, length - 1);
+			System.out.println("MAP DATA: " +mapData);
 			if (getHostType() != HostType.SERVER)
 			{
-				String mapData = new String(data, 1, length - 1);
 				gameMap = new GameMap(mapData.trim());
 			}
 			
@@ -356,15 +357,28 @@ public class Game {
 			gameMap = new GameMap(type.getText());
 			String mapName = type.getText();
 			String data = (char)ServerOption.MAP_SELECTION.ordinal() + " " + mapName;
+			
+			while(playerMap.size() < MIN_PlAYERS)
+			{
+				Thread.sleep(100);
+			}
+			
+			Thread.sleep(1000);
+			
 			for(String id : playerMap.keySet())
 			{	
-				sendPacket = new DatagramPacket(data.getBytes(),
+				sendPacket = new DatagramPacket(
+						data.getBytes(),
 						data.length(),
 						playerMap.get(id).getAddress(),
-						playerMap.get(id).getPort());
+						CLIENT_PORT);
 				serverSocket.send(sendPacket);
+				System.out.println("SENDING MAP DATA TO: " + playerMap.get(id).getAddress());
 				Thread.sleep(1);
 			}
+
+			
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
