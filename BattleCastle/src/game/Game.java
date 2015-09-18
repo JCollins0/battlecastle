@@ -245,6 +245,7 @@ public class Game {
 			if (getHostType() != HostType.SERVER)
 			{
 				gameMap = new GameMap(mapData.trim());
+				System.out.println(gameMap.toString());
 			}
 			
 			break;
@@ -356,14 +357,14 @@ public class Game {
 		try {
 			gameMap = new GameMap(type.getText());
 			String mapName = type.getText();
-			String data = (char)ServerOption.MAP_SELECTION.ordinal() + " " + mapName;
+			String data = (char)ClientOption.LOAD_MAP.ordinal() + " " + mapName;
 			
 			while(playerMap.size() < MIN_PlAYERS)
 			{
 				Thread.sleep(100);
 			}
 			
-			Thread.sleep(1000);
+			Thread.sleep(100);
 			
 			for(String id : playerMap.keySet())
 			{	

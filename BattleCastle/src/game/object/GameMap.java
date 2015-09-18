@@ -24,4 +24,9 @@ public class GameMap {
 	{
 		
 	}
+	
+	public String toString()
+	{
+		return String.format("Background Null? %b",background == null);
+	}
 }
