@@ -37,6 +37,12 @@ public abstract class Tile extends Rectangle
 		this(x,y,width,height,new Image[]{pic});
 	}
 	
+	protected void shift(int x,int y)
+	{
+		this.x+=x;
+		this.y+=y;
+	}
+	
 	public abstract void draw(Graphics g);
 	
 	public abstract void tick();
