@@ -77,9 +77,9 @@ public class Game {
 	
 	public void render(Graphics g)
 	{
-	
-		if(playerMap.size() >= MIN_PlAYERS)
+		if(playerMap.size() >= MIN_PlAYERS) //player map on client side is not full
 		{
+			System.out.println("GameMap null? " + gameMap == null);
 			if (gameMap != null)
 			{
 				gameMap.render(g);
@@ -156,7 +156,7 @@ public class Game {
 					
 					serverSocket.send(sendPacket);
 					
-					Thread.sleep(1);
+					Thread.sleep(100);
 				}catch(Exception e)
 				{
 					e.printStackTrace();
@@ -222,7 +222,9 @@ public class Game {
 				playerMap.put(uuid, user);
 				
 				playerList[user.getPlayerNumber()] = new Player();
-//				System.out.println("CLIENT RECIEVED DATA: " + user.toString());
+				System.out.println("CLIENT RECIEVED DATA: " + user.toString());
+				System.out.println("Player Map Size: " + playerMap.size());
+				System.out.println("Player Map Contents: " + playerMap);
 				
 			}catch(Exception e)
 			{
@@ -358,8 +360,8 @@ public class Game {
 			gameMap = new GameMap(type.getText());
 			String mapName = type.getText();
 			String data = (char)ClientOption.LOAD_MAP.ordinal() + " " + mapName;
-			
-			while(playerMap.size() < MIN_PlAYERS)
+			//
+			while(playerMap.size() < MIN_PlAYERS) //turn into a timer
 			{
 				Thread.sleep(100);
 			}
@@ -377,7 +379,7 @@ public class Game {
 				System.out.println("SENDING MAP DATA TO: " + playerMap.get(id).getAddress());
 				Thread.sleep(1);
 			}
-
+			//
 			
 			
 		} catch (Exception e) {
