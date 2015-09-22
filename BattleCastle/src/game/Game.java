@@ -4,8 +4,10 @@ import java.awt.Graphics;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 import core.BattleCastleCanvas;
@@ -31,11 +33,12 @@ public class Game {
 	
 	private static final int MIN_PlAYERS = 2;
 	
+	private String step;
+	
 	public Game(BattleCastleCanvas canvasRef, HostType type)
 	{
 		this.canvasRef = canvasRef;
 		this.type = type;
-		 
 		/*
 		 * Server specific stuff
 		 */
@@ -43,21 +46,25 @@ public class Game {
 		{
 			try {
 				serverSocket = new DatagramSocket(SERVER_PORT);
+				System.out.printf("Server- Receive: %d, Send: %d \n",serverSocket.getReceiveBufferSize(),serverSocket.getSendBufferSize());
+				serverSocket.setReceiveBufferSize(16384);
+				serverSocket.setSendBufferSize(16384);
 			} catch (SocketException e) {
 				e.printStackTrace();
 			}
-			
-			
 			serverThread = new ServerThread();
 			Thread serverTask = new Thread(serverThread);
 			serverTask.start();
 		}
-				
+						
 		/*
 		 * Client stuff
 		 */
 		try {
 			clientSocket = new DatagramSocket(CLIENT_PORT);
+			System.out.printf("Client- Receive: %d, Send: %d \n",clientSocket.getReceiveBufferSize(),clientSocket.getSendBufferSize());
+			clientSocket.setReceiveBufferSize(16384);
+			clientSocket.setSendBufferSize(16384);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
@@ -68,6 +75,8 @@ public class Game {
 		
 		playerMap = new TreeMap<String, BattleCastleUser>();
 		playerList = new Player[4];
+		
+		step += "players";
 	}
 	
 	public BattleCastleCanvas getCanvas()
@@ -132,35 +141,67 @@ public class Game {
 			String uuid = userData.substring(userData.indexOf("uuid=")+5,userData.indexOf(",ip=")).trim();
 
 			int playerNum = playerMap.size();
-			
+
 			BattleCastleUser user = new BattleCastleUser(name,serverReceivePacket.getAddress(), CLIENT_PORT);
 			user.setPlayerNumber(playerNum);
 			playerMap.put(user.getUUID(), user);
 			playerList[user.getPlayerNumber()] = new Player();
-			
+
 			System.out.println("SERVER RECEIVED DATA: " + user.toString());
 			//send data to other players
-//			System.out.println("Player Map: " + playerMap.toString());
-			for(String id : playerMap.keySet())
-				for(String oid : playerMap.keySet())
-				try
+			//System.out.println("Player Map: " + playerMap.toString());
+			try
+			{
+				for(int t= 0; t < 10; t++)
 				{
-					System.out.println("SENDING  " + playerMap.get(id).toString() + " DATA TO " + playerMap.get(oid).getAddress());
-					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
-					
-					sendPacket = new DatagramPacket(
-								sendData.getBytes(),
-								sendData.length(),
-								playerMap.get(oid).getAddress(),
-								CLIENT_PORT);
-					
-					serverSocket.send(sendPacket);
-					
-					Thread.sleep(100);
-				}catch(Exception e)
-				{
-					e.printStackTrace();
+					ArrayList<String> pMapList = new ArrayList<String>(playerMap.keySet());
+					for(int i = 0; i < pMapList.size(); i++)
+					{
+
+						String id = pMapList.get(i);
+						for(int j = 0; j < pMapList.size(); j++)
+						{
+
+							String oid = pMapList.get(j);
+
+							System.out.println("SENDING  " + playerMap.get(id).toString() + " DATA TO " + playerMap.get(oid).getAddress());
+							String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
+
+							sendToClientPacket = new DatagramPacket(
+									sendData.getBytes(),
+									sendData.length(),
+									playerMap.get(oid).getAddress(),
+									CLIENT_PORT);
+
+							serverSocket.send(sendToClientPacket);
+						}
+					}
 				}
+				
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+//			for(String id : playerMap.keySet())
+//				for(String oid : playerMap.keySet())
+//				try
+//				{
+//					System.out.println("SENDING  " + playerMap.get(id).toString() + " DATA TO " + playerMap.get(oid).getAddress());
+//					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
+//					
+//					sendPacket = new DatagramPacket(
+//								sendData.getBytes(),
+//								sendData.length(),
+//								playerMap.get(oid).getAddress(),
+//								CLIENT_PORT);
+//					
+//					serverSocket.send(sendPacket);
+//					
+//					Thread.sleep(100);
+//				}catch(Exception e)
+//				{
+//					e.printStackTrace();
+//				}
 			
 			break;
 		case LOGOUT_USER:
@@ -173,11 +214,11 @@ public class Game {
 				try
 				{
 					String removeData = (char)ClientOption.REMOVE_USER.ordinal() + " " + uuid;
-					sendPacket = new DatagramPacket(removeData.getBytes(),
+					sendToClientPacket = new DatagramPacket(removeData.getBytes(),
 													removeData.length(),
 													playerMap.get(id).getAddress(),
 													playerMap.get(id).getPort());
-					clientSocket.send(sendPacket);
+					clientSocket.send(sendToClientPacket);
 				}catch(Exception e)
 				{
 					e.printStackTrace();
@@ -327,11 +368,11 @@ public class Game {
 		try
 		{
 			String data = (char)ServerOption.LOGIN_USER.ordinal() + " " + user.toString();
-			sendPacket = new DatagramPacket(data.getBytes(),
+			sendToServerPacket = new DatagramPacket(data.getBytes(),
 											data.length(),
 											serverIP,
 											SERVER_PORT);
-			clientSocket.send(sendPacket);
+			clientSocket.send(sendToServerPacket);
 		}catch(Exception e)
 		{
 			e.printStackTrace();
@@ -343,11 +384,11 @@ public class Game {
 		try
 		{
 			String data = (char)ServerOption.LOGOUT_USER.ordinal() + " " + playerMap.get(myUUID).toString();
-			sendPacket = new DatagramPacket(data.getBytes(),
+			sendToServerPacket = new DatagramPacket(data.getBytes(),
 											data.length(),
 											serverIP,
 											SERVER_PORT);
-			clientSocket.send(sendPacket);
+			clientSocket.send(sendToServerPacket);
 		}catch(Exception e)
 		{
 			e.printStackTrace();
@@ -370,12 +411,12 @@ public class Game {
 			
 			for(String id : playerMap.keySet())
 			{	
-				sendPacket = new DatagramPacket(
+				sendToClientPacket = new DatagramPacket(
 						data.getBytes(),
 						data.length(),
 						playerMap.get(id).getAddress(),
 						CLIENT_PORT);
-				serverSocket.send(sendPacket);
+				serverSocket.send(sendToClientPacket);
 				System.out.println("SENDING MAP DATA TO: " + playerMap.get(id).getAddress());
 				Thread.sleep(1);
 			}
@@ -397,7 +438,8 @@ public class Game {
 	private DatagramPacket serverReceivePacket;
 	private DatagramSocket serverSocket;
 	private DatagramSocket clientSocket;
-	private DatagramPacket sendPacket;
+	private DatagramPacket sendToServerPacket;
+	private DatagramPacket sendToClientPacket;
 	private InetAddress serverIP;
 	private String myUUID;
 	
