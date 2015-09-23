@@ -38,6 +38,9 @@ public class Game {
 	{
 		this.canvasRef = canvasRef;
 		this.type = type;
+		playerMap = new TreeMap<String, BattleCastleUser>();
+		playerList = new Player[4];
+		
 		/*
 		 * Server specific stuff
 		 */
@@ -70,11 +73,7 @@ public class Game {
 		
 		clientThread = new ClientThread();
 		Thread clientTask = new Thread(clientThread);
-		clientTask.start();
-		
-		playerMap = new TreeMap<String, BattleCastleUser>();
-		playerList = new Player[4];
-	
+		clientTask.start();	
 	}
 	
 	public BattleCastleCanvas getCanvas()
@@ -275,7 +274,7 @@ public class Game {
 			
 			uuid = message.trim().split("-")[0];
 			String state = message.trim().split("-")[1];
-			
+			System.out.println(uuid);
 			switch(state)
 			{
 			case "connected": playerMap.get(uuid).setConnected(true);
@@ -414,6 +413,7 @@ public class Game {
 //		myUUID = user.getUUID();
 //		playerMap.put(user.getUUID(), user);
 //		System.out.println("Player Map: " + playerMap.toString());
+		myUUID = user.getUUID();
 		try
 		{
 			String data = (char)ServerOption.LOGIN_USER.ordinal() + " " + user.toString();
