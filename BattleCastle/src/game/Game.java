@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.Graphics;
+import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -32,8 +33,6 @@ public class Game {
 	private HostType type;
 	
 	private static final int MIN_PlAYERS = 2;
-	
-	private String step;
 	
 	public Game(BattleCastleCanvas canvasRef, HostType type)
 	{
@@ -75,8 +74,7 @@ public class Game {
 		
 		playerMap = new TreeMap<String, BattleCastleUser>();
 		playerList = new Player[4];
-		
-		step += "players";
+	
 	}
 	
 	public BattleCastleCanvas getCanvas()
@@ -88,7 +86,7 @@ public class Game {
 	{
 		if(playerMap.size() >= MIN_PlAYERS) //player map on client side is not full
 		{
-			System.out.println("GameMap null? " + gameMap == null);
+//			System.out.println("GameMap null? " + gameMap == null);
 			if (gameMap != null)
 			{
 				gameMap.render(g);
@@ -100,8 +98,9 @@ public class Game {
 	{
 		if(type == HostType.SERVER) //server stuff
 		{
-			if(playerMap.size() >= MIN_PlAYERS )
+			if(playerMap.size() >= MIN_PlAYERS && allPlayersConnected())
 			{
+								
 				if(!loadedMap)
 				{
 					//Send map number
@@ -109,6 +108,35 @@ public class Game {
 				}
 				
 				//update objects
+				
+			}else
+			{
+				//send user data to all
+				for(String id : playerMap.keySet())
+				{
+					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
+					sendToClientPacket = new DatagramPacket(
+							sendData.getBytes(),
+							sendData.length());
+					sendPacketToAll(sendToClientPacket);
+				}
+			}
+		}
+		
+		if (type == HostType.CLIENT)
+		{
+			if(playerMap.size() >= MIN_PlAYERS)
+			{
+				//send all players recieved
+				String sendData = (char)ServerOption.CONFIRM_STATE_MESSAGE.ordinal() + " " + myUUID +"-connected";
+				sendToServerPacket = new DatagramPacket(
+						sendData.getBytes(),
+						sendData.length());
+				sendPacketToServer(sendToServerPacket);
+				
+				
+			}else
+			{
 				
 			}
 		}
@@ -150,38 +178,47 @@ public class Game {
 			System.out.println("SERVER RECEIVED DATA: " + user.toString());
 			//send data to other players
 			//System.out.println("Player Map: " + playerMap.toString());
-			try
-			{
-				for(int t= 0; t < 10; t++)
-				{
-					ArrayList<String> pMapList = new ArrayList<String>(playerMap.keySet());
-					for(int i = 0; i < pMapList.size(); i++)
-					{
-
-						String id = pMapList.get(i);
-						for(int j = 0; j < pMapList.size(); j++)
-						{
-
-							String oid = pMapList.get(j);
-
-							System.out.println("SENDING  " + playerMap.get(id).toString() + " DATA TO " + playerMap.get(oid).getAddress());
-							String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
-
-							sendToClientPacket = new DatagramPacket(
-									sendData.getBytes(),
-									sendData.length(),
-									playerMap.get(oid).getAddress(),
-									CLIENT_PORT);
-
-							serverSocket.send(sendToClientPacket);
-						}
-					}
-				}
-				
-			}catch(Exception e)
-			{
-				e.printStackTrace();
-			}
+//			try
+//			{
+//				for(String id : playerMap.keySet())
+//				{
+//					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
+//					sendToClientPacket = new DatagramPacket(
+//							sendData.getBytes(),
+//							sendData.length());
+//					sendPacketToAll(sendToClientPacket);
+//				}
+//				
+////				for(int t= 0; t < 10; t++)
+////				{
+////					ArrayList<String> pMapList = new ArrayList<String>(playerMap.keySet());
+////					for(int i = 0; i < pMapList.size(); i++)
+////					{
+////
+////						String id = pMapList.get(i);
+////						for(int j = 0; j < pMapList.size(); j++)
+////						{
+////
+////							String oid = pMapList.get(j);
+////
+////							System.out.println("SENDING  " + playerMap.get(id).toString() + " DATA TO " + playerMap.get(oid).getAddress());
+////							String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
+////
+////							sendToClientPacket = new DatagramPacket(
+////									sendData.getBytes(),
+////									sendData.length(),
+////									playerMap.get(oid).getAddress(),
+////									CLIENT_PORT);
+////
+////							serverSocket.send(sendToClientPacket);
+////						}
+////					}
+////				}
+//				
+//			}catch(Exception e)
+//			{
+//				e.printStackTrace();
+//			}
 //			for(String id : playerMap.keySet())
 //				for(String oid : playerMap.keySet())
 //				try
@@ -232,7 +269,19 @@ public class Game {
 			//Not Sure if this needs to be used because server will be the one choosing
 			
 			break;
-		default:
+		case CONFIRM_STATE_MESSAGE:
+			
+			String message = new String(data, 1, length-1);
+			
+			uuid = message.trim().split("-")[0];
+			String state = message.trim().split("-")[1];
+			
+			switch(state)
+			{
+			case "connected": playerMap.get(uuid).setConnected(true);
+				break;
+			}
+			
 			break;
 		}		
 		
@@ -420,12 +469,57 @@ public class Game {
 				System.out.println("SENDING MAP DATA TO: " + playerMap.get(id).getAddress());
 				Thread.sleep(1);
 			}
+			
 			//
 			
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void sendPacketToAll(DatagramPacket packet)
+	{
+		for(int i = 0; i < 5; i++)
+		{
+			ArrayList<String> pMapList = new ArrayList<String>(playerMap.keySet());
+			for(int j = 0; j < pMapList.size(); j++)
+			{
+				String oid = pMapList.get(j);
+				System.out.println("SENDING DATA TO " + playerMap.get(oid).getAddress());
+
+				packet.setAddress(playerMap.get(oid).getAddress());
+				packet.setPort(CLIENT_PORT);
+
+				try {
+					serverSocket.send(sendToClientPacket);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
+	
+	private void sendPacketToServer(DatagramPacket packet)
+	{	
+		try {
+			packet.setAddress(serverIP);
+			packet.setPort(SERVER_PORT);
+			clientSocket.send(packet);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public boolean allPlayersConnected()
+	{
+		boolean connected = true;
+		for(String uuid : playerMap.keySet())
+		{
+			connected = playerMap.get(uuid).getConnected() && connected;
+		}
+		return connected;
 	}
 	
 	public HostType getHostType()

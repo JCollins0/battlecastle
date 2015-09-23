@@ -10,6 +10,7 @@ public class BattleCastleUser {
 	private int port;
 	private String uniqueID;
 	private int playerNum;
+	private boolean connected;
 	
 	public BattleCastleUser(String name, InetAddress address, int port)
 	{
@@ -56,6 +57,17 @@ public class BattleCastleUser {
 	{
 		return playerNum;
 	}
+	
+	public void setConnected(boolean connected)
+	{
+		this.connected = connected;
+	}
+	
+	public boolean getConnected()
+	{
+		return connected;
+	}
+	
 	
 	@Override
 	public String toString() {
