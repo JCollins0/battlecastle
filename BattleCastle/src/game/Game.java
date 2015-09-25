@@ -30,6 +30,7 @@ public class Game {
 	
 	private GameMap gameMap;
 	private boolean loadedMap;
+	private boolean allPlayersConnected;
 	private HostType type;
 	
 	private static final int MIN_PlAYERS = 2;
@@ -97,9 +98,10 @@ public class Game {
 	{
 		if(type == HostType.SERVER) //server stuff
 		{
+			System.out.println(allPlayersConnected());
 			if(playerMap.size() >= MIN_PlAYERS && allPlayersConnected())
 			{
-								
+				System.out.println(playerMap.size());			
 				if(!loadedMap)
 				{
 					//Send map number
@@ -110,6 +112,17 @@ public class Game {
 				
 			}else
 			{
+				if(playerMap.size() >= MIN_PlAYERS && !allPlayersConnected)
+				{
+					//send all players recieved
+					String sendData = (char)ServerOption.CONFIRM_STATE_MESSAGE.ordinal() + " " + myUUID +"-connected";
+					sendToServerPacket = new DatagramPacket(
+							sendData.getBytes(),
+							sendData.length());
+					sendPacketToServer(sendToServerPacket);
+					if(allPlayersConnected())
+						allPlayersConnected = true;
+				}
 				//send user data to all
 				for(String id : playerMap.keySet())
 				{
@@ -132,13 +145,15 @@ public class Game {
 						sendData.getBytes(),
 						sendData.length());
 				sendPacketToServer(sendToServerPacket);
-				
-				
+
 			}else
 			{
-				
+
 			}
 		}
+		
+		
+		
 
 		//client stuff
 	}
@@ -271,7 +286,7 @@ public class Game {
 		case CONFIRM_STATE_MESSAGE:
 			
 			String message = new String(data, 1, length-1);
-			
+			System.out.println("Player is connected: " + message);
 			uuid = message.trim().split("-")[0];
 			String state = message.trim().split("-")[1];
 			System.out.println(uuid);
@@ -311,9 +326,9 @@ public class Game {
 				playerMap.put(uuid, user);
 				
 				playerList[user.getPlayerNumber()] = new Player();
-				System.out.println("CLIENT RECIEVED DATA: " + user.toString());
-				System.out.println("Player Map Size: " + playerMap.size());
-				System.out.println("Player Map Contents: " + playerMap);
+			//	System.out.println("CLIENT RECIEVED DATA: " + user.toString());
+			//	System.out.println("Player Map Size: " + playerMap.size());
+			//	System.out.println("Player Map Contents: " + playerMap);
 				
 			}catch(Exception e)
 			{
@@ -480,8 +495,8 @@ public class Game {
 	
 	private void sendPacketToAll(DatagramPacket packet)
 	{
-		for(int i = 0; i < 5; i++)
-		{
+//		for(int i = 0; i < 5; i++)
+//		{
 			ArrayList<String> pMapList = new ArrayList<String>(playerMap.keySet());
 			for(int j = 0; j < pMapList.size(); j++)
 			{
@@ -497,7 +512,7 @@ public class Game {
 					e.printStackTrace();
 				}
 			}
-		}
+//		}
 		
 	}
 	
@@ -519,7 +534,7 @@ public class Game {
 		{
 			connected = playerMap.get(uuid).getConnected() && connected;
 		}
-		return connected;
+		return connected && playerMap.size() >= MIN_PlAYERS;
 	}
 	
 	public HostType getHostType()
