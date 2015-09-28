@@ -2,10 +2,10 @@ package core;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.ArrayList;
 
 import core.constants.Keys;
 import core.menu_object.MenuTextField;
+import game.player.Player;
 
 public class KeyHandler implements KeyListener {
 
@@ -53,6 +53,8 @@ public class KeyHandler implements KeyListener {
 			//handle player input
 			int keyCode = e.getKeyCode();
 			
+			Player myPlayer = canvasref.getGame().getMyPlayer();
+			
 			switch(keyCode)
 			{
 			case Keys.UP:
@@ -65,11 +67,45 @@ public class KeyHandler implements KeyListener {
 			}
 			
 			break;
+		case SELECT_MAP:
+			break;
+		default:
+			break;
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
+		switch(canvasref.getCurrentState())
+		{
+		case GAMEPLAY:
+			
+			//handle player input
+			int keyCode = e.getKeyCode();
+			
+			switch(keyCode)
+			{
+			case Keys.UP:
+				break;
+			case Keys.DOWN:
+				break;
+			case Keys.LEFT:
+				break;
+			case Keys.RIGHT:
+			}
+			
+			break;
+		case INPUT_USER_NAME:	
+			break;
+		case JOIN_SERVER:
+			break;
+		case MAIN_MENU:
+			break;
+		case SELECT_MAP:
+			break;
+		default:
+			break;
+		
+		}
 	}
 }

@@ -101,7 +101,7 @@ public class Game {
 			System.out.println(allPlayersConnected());
 			if(playerMap.size() >= MIN_PlAYERS && allPlayersConnected())
 			{
-				System.out.println(playerMap.size());			
+				//System.out.println(playerMap.size());			
 				if(!loadedMap)
 				{
 					//Send map number
@@ -122,22 +122,24 @@ public class Game {
 					sendPacketToServer(sendToServerPacket);
 					if(allPlayersConnected())
 						allPlayersConnected = true;
-				}
-				//send user data to all
-				for(String id : playerMap.keySet())
+				}else
 				{
-					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
-					sendToClientPacket = new DatagramPacket(
-							sendData.getBytes(),
-							sendData.length());
-					sendPacketToAll(sendToClientPacket);
+					//send user data to all
+					for(String id : playerMap.keySet())
+					{
+						String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
+						sendToClientPacket = new DatagramPacket(
+								sendData.getBytes(),
+								sendData.length());
+						sendPacketToAll(sendToClientPacket);
+					}
 				}
 			}
 		}
-		
+		//client stuff
 		if (type == HostType.CLIENT)
 		{
-			if(playerMap.size() >= MIN_PlAYERS)
+			if(playerMap.size() >= MIN_PlAYERS && !allPlayersConnected)
 			{
 				//send all players recieved
 				String sendData = (char)ServerOption.CONFIRM_STATE_MESSAGE.ordinal() + " " + myUUID +"-connected";
@@ -145,17 +147,12 @@ public class Game {
 						sendData.getBytes(),
 						sendData.length());
 				sendPacketToServer(sendToServerPacket);
-
+				allPlayersConnected = true;
 			}else
 			{
 
 			}
 		}
-		
-		
-		
-
-		//client stuff
 	}
 	
 	public void reset()
@@ -190,69 +187,70 @@ public class Game {
 			playerList[user.getPlayerNumber()] = new Player();
 
 			System.out.println("SERVER RECEIVED DATA: " + user.toString());
-			//send data to other players
+/*			send data to other players
 			//System.out.println("Player Map: " + playerMap.toString());
-//			try
-//			{
-//				for(String id : playerMap.keySet())
-//				{
-//					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
-//					sendToClientPacket = new DatagramPacket(
-//							sendData.getBytes(),
-//							sendData.length());
-//					sendPacketToAll(sendToClientPacket);
-//				}
-//				
-////				for(int t= 0; t < 10; t++)
-////				{
-////					ArrayList<String> pMapList = new ArrayList<String>(playerMap.keySet());
-////					for(int i = 0; i < pMapList.size(); i++)
-////					{
-////
-////						String id = pMapList.get(i);
-////						for(int j = 0; j < pMapList.size(); j++)
-////						{
-////
-////							String oid = pMapList.get(j);
-////
-////							System.out.println("SENDING  " + playerMap.get(id).toString() + " DATA TO " + playerMap.get(oid).getAddress());
-////							String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
-////
-////							sendToClientPacket = new DatagramPacket(
-////									sendData.getBytes(),
-////									sendData.length(),
-////									playerMap.get(oid).getAddress(),
-////									CLIENT_PORT);
-////
-////							serverSocket.send(sendToClientPacket);
-////						}
-////					}
-////				}
-//				
-//			}catch(Exception e)
-//			{
-//				e.printStackTrace();
-//			}
-//			for(String id : playerMap.keySet())
-//				for(String oid : playerMap.keySet())
-//				try
-//				{
-//					System.out.println("SENDING  " + playerMap.get(id).toString() + " DATA TO " + playerMap.get(oid).getAddress());
-//					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
-//					
-//					sendPacket = new DatagramPacket(
-//								sendData.getBytes(),
-//								sendData.length(),
-//								playerMap.get(oid).getAddress(),
-//								CLIENT_PORT);
-//					
-//					serverSocket.send(sendPacket);
-//					
-//					Thread.sleep(100);
-//				}catch(Exception e)
-//				{
-//					e.printStackTrace();
-//				}
+			try
+			{
+				for(String id : playerMap.keySet())
+				{
+					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
+					sendToClientPacket = new DatagramPacket(
+							sendData.getBytes(),
+							sendData.length());
+					sendPacketToAll(sendToClientPacket);
+				}
+				
+				for(int t= 0; t < 10; t++)
+				{
+					ArrayList<String> pMapList = new ArrayList<String>(playerMap.keySet());
+					for(int i = 0; i < pMapList.size(); i++)
+					{
+
+						String id = pMapList.get(i);
+						for(int j = 0; j < pMapList.size(); j++)
+						{
+
+							String oid = pMapList.get(j);
+
+							System.out.println("SENDING  " + playerMap.get(id).toString() + " DATA TO " + playerMap.get(oid).getAddress());
+							String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
+
+							sendToClientPacket = new DatagramPacket(
+									sendData.getBytes(),
+									sendData.length(),
+									playerMap.get(oid).getAddress(),
+									CLIENT_PORT);
+
+							serverSocket.send(sendToClientPacket);
+						}
+					}
+				}
+				
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			for(String id : playerMap.keySet())
+				for(String oid : playerMap.keySet())
+				try
+				{
+					System.out.println("SENDING  " + playerMap.get(id).toString() + " DATA TO " + playerMap.get(oid).getAddress());
+					String sendData = (char)ClientOption.REGISTER_USERS.ordinal() + " " + playerMap.get(id).toString();
+					
+					sendPacket = new DatagramPacket(
+								sendData.getBytes(),
+								sendData.length(),
+								playerMap.get(oid).getAddress(),
+								CLIENT_PORT);
+					
+					serverSocket.send(sendPacket);
+					
+					Thread.sleep(100);
+				}catch(Exception e)
+				{
+					e.printStackTrace();
+				}.
+ */
 			
 			break;
 		case LOGOUT_USER:
@@ -542,6 +540,10 @@ public class Game {
 		return type;
 	}
 	
+	public Player getMyPlayer() {
+		return playerList[playerMap.get(myUUID).getPlayerNumber()];
+	}
+	
 	private TreeMap<String, BattleCastleUser> playerMap;
 	private DatagramPacket clientReceivePacket;
 	private DatagramPacket serverReceivePacket;
@@ -553,4 +555,6 @@ public class Game {
 	private String myUUID;
 	
 	private Player[] playerList;
+
+	
 }
