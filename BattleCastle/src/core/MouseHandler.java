@@ -124,6 +124,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 							//System.out.println(user.getAddress());
 							canvasref.getGame().setServerIP(InetAddress.getLocalHost());
 							canvasref.getGame().sendUserData(user);
+							canvasref.getGame().getMyUser().setConnected(true);
 						} catch (UnknownHostException e1) {
 							e1.printStackTrace();
 						}

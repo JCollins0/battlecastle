@@ -112,7 +112,7 @@ public class Game {
 				
 			}else
 			{
-				if(playerMap.size() >= MIN_PlAYERS && !allPlayersConnected)
+				if(playerMap.size() >= MIN_PlAYERS && allPlayersConnected())
 				{
 					//send all players recieved
 					String sendData = (char)ServerOption.CONFIRM_STATE_MESSAGE.ordinal() + " " + myUUID +"-connected";
@@ -120,10 +120,9 @@ public class Game {
 							sendData.getBytes(),
 							sendData.length());
 					sendPacketToServer(sendToServerPacket);
-					if(allPlayersConnected())
-						allPlayersConnected = true;
 				}else
 				{
+					System.out.println("Sending User info to all clients");
 					//send user data to all
 					for(String id : playerMap.keySet())
 					{
@@ -180,13 +179,18 @@ public class Game {
 			String uuid = userData.substring(userData.indexOf("uuid=")+5,userData.indexOf(",ip=")).trim();
 
 			int playerNum = playerMap.size();
+			if(!uuid.equals(myUUID) )
+			{
+				BattleCastleUser user = new BattleCastleUser(name,serverReceivePacket.getAddress(), CLIENT_PORT);
+				user.setPlayerNumber(playerNum);
+				playerMap.put(user.getUUID(), user);
+				playerList[user.getPlayerNumber()] = new Player();
 
-			BattleCastleUser user = new BattleCastleUser(name,serverReceivePacket.getAddress(), CLIENT_PORT);
-			user.setPlayerNumber(playerNum);
-			playerMap.put(user.getUUID(), user);
-			playerList[user.getPlayerNumber()] = new Player();
-
-			System.out.println("SERVER RECEIVED DATA: " + user.toString());
+				System.out.println("SERVER RECEIVED DATA: " + user.toString());
+				System.out.println("playerMap Contents:  " + playerMap);
+			}
+			
+			
 /*			send data to other players
 			//System.out.println("Player Map: " + playerMap.toString());
 			try
@@ -319,15 +323,20 @@ public class Game {
 			String playerNum = userData.substring(userData.indexOf("playerNum=")+10,userData.length()-1).trim();
 			try
 			{
-				BattleCastleUser user = new BattleCastleUser(name,InetAddress.getByName(address),CLIENT_PORT);
-				user.setPlayerNumber(Integer.parseInt(playerNum));
-				playerMap.put(uuid, user);
-				
-				playerList[user.getPlayerNumber()] = new Player();
-			//	System.out.println("CLIENT RECIEVED DATA: " + user.toString());
-			//	System.out.println("Player Map Size: " + playerMap.size());
-			//	System.out.println("Player Map Contents: " + playerMap);
-				
+				if(!uuid.equals(myUUID.trim()))
+				{
+					BattleCastleUser user = new BattleCastleUser(name,InetAddress.getByName(address),CLIENT_PORT);
+					user.setPlayerNumber(Integer.parseInt(playerNum));
+					playerMap.put(uuid, user);
+
+					playerList[user.getPlayerNumber()] = new Player();
+					//	System.out.println("CLIENT RECIEVED DATA: " + user.toString());
+					System.out.println("Client Player Map Size: " + playerMap.size());
+					//	System.out.println("Player Map Contents: " + playerMap);
+				}else
+				{
+					playerMap.get(myUUID).setPlayerNumber(Integer.parseInt(playerNum));
+				}
 			}catch(Exception e)
 			{
 				e.printStackTrace();
@@ -424,7 +433,7 @@ public class Game {
 	public void sendUserData(BattleCastleUser user)
 	{
 //		myUUID = user.getUUID();
-//		playerMap.put(user.getUUID(), user);
+		playerMap.put(user.getUUID(), user);
 //		System.out.println("Player Map: " + playerMap.toString());
 		myUUID = user.getUUID();
 		try
@@ -531,6 +540,7 @@ public class Game {
 		for(String uuid : playerMap.keySet())
 		{
 			connected = playerMap.get(uuid).getConnected() && connected;
+			System.out.println("Player " + uuid + " is connect: " + playerMap.get(uuid).getConnected());
 		}
 		return connected && playerMap.size() >= MIN_PlAYERS;
 	}
@@ -544,6 +554,10 @@ public class Game {
 		return playerList[playerMap.get(myUUID).getPlayerNumber()];
 	}
 	
+	public BattleCastleUser getMyUser() {
+		return playerMap.get(myUUID);
+	}
+	
 	private TreeMap<String, BattleCastleUser> playerMap;
 	private DatagramPacket clientReceivePacket;
 	private DatagramPacket serverReceivePacket;
@@ -555,6 +569,8 @@ public class Game {
 	private String myUUID;
 	
 	private Player[] playerList;
+
+	
 
 	
 }
