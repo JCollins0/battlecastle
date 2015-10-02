@@ -16,26 +16,38 @@ public class State
 		ty=0;
 	}
 	
-	public State(boolean paused,int restTime)
+	public State(int restTime)
 	{
-		this.paused=paused;
+		this.paused=true;
 		this.restTime=restTime;
 	}
 	
-	public State(boolean continual,int sx,int sy)
+	public State(int sx,int sy)
 	{
-		this.continual=continual;
+		this.continual=true;
 		this.sx=sx;
 		this.sy=sy;
 	}
 	
-	public void reset()
+	public State()
 	{
-		tx=0;
-		ty=0;
+		continual=true;
+		sx=0;
+		sy=0;
 	}
 	
-	public boolean increment(Tile t)//boolean true indicates the change of state
+	public void reset()
+	{
+		if(paused)
+			this.restTime=0;
+		else if(!continual)
+		{
+			tx=0;
+			ty=0;
+		}
+	}
+	
+	public boolean increment(StaticTile t)//boolean true indicates the change of state
 	{
 		if(continual)
 		{
@@ -44,7 +56,20 @@ public class State
 		}
 		if(!paused)
 		{
-			
+			t.shift(sx, sy);
+			if(tx<dx)
+				tx+=sx;
+			if(ty<dy)
+				ty+=sy;
+			if(tx>=dx&&ty>=dy)
+			{
+				return true;
+			}
+		}
+		if(paused)
+		{
+			if(--restTime==0)
+				return true;
 		}
 		return true;
 	}
