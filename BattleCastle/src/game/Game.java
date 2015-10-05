@@ -31,6 +31,7 @@ public class Game {
 	private GameMap gameMap;
 	private boolean loadedMap;
 	private boolean allPlayersConnected;
+	private boolean objectLocationsSet;
 	private HostType type;
 	
 	private static final int MIN_PlAYERS = 2;
@@ -90,6 +91,18 @@ public class Game {
 			if (gameMap != null)
 			{
 				gameMap.render(g);
+				
+				if(objectLocationsSet)
+				{
+					for(int i = 0; i < playerList.length; i++)
+					{
+						if(playerList[i] != null)
+						{
+							playerList[i].render(g);
+						}
+					}
+				}
+				
 			}
 		}
 	}
@@ -106,9 +119,36 @@ public class Game {
 				{
 					//Send map number
 					loadedMap =  true;
+				}else
+				{
+					//send data to other clients
+					if(!objectLocationsSet)
+					{
+						System.out.println("playerList.length: " + playerList.length);
+						for(int i = 0; i < playerList.length; i++)
+						{
+							if(playerList[i] != null)
+							{
+								playerList[i].setLocation(i * 32 + 32, 32);
+							}
+						}
+						objectLocationsSet = true;
+					}else
+					{
+						for(int i = 0; i < playerList.length; i++)
+						{
+							if(playerList[i] != null)
+							{
+								playerList[i].tick();
+							}
+						}
+					}
+					
 				}
-				
 				//update objects
+				
+				
+				
 				
 			}else
 			{
@@ -149,7 +189,29 @@ public class Game {
 				allPlayersConnected = true;
 			}else
 			{
-
+				if(loadedMap)
+				{
+					if(!objectLocationsSet)
+					{
+						for(int i = 0; i < playerList.length; i++)
+						{
+							if(playerList[i] != null)
+							{
+								playerList[i].setLocation(i * 32 + 32, 32);
+							}
+						}
+						objectLocationsSet = true;
+					}else
+					{
+						for(int i = 0; i < playerList.length; i++)
+						{
+							if(playerList[i] != null)
+							{
+								playerList[i].tick();
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -323,7 +385,7 @@ public class Game {
 			String playerNum = userData.substring(userData.indexOf("playerNum=")+10,userData.length()-1).trim();
 			try
 			{
-				if(!uuid.equals(myUUID.trim()))
+				if(getHostType() != HostType.SERVER) //!uuid.equals(myUUID.trim())
 				{
 					BattleCastleUser user = new BattleCastleUser(name,InetAddress.getByName(address),CLIENT_PORT);
 					user.setPlayerNumber(Integer.parseInt(playerNum));
@@ -359,6 +421,7 @@ public class Game {
 			{
 				gameMap = new GameMap(mapData.trim());
 				System.out.println(gameMap.toString());
+				loadedMap = true;
 			}
 			
 			break;
@@ -540,9 +603,18 @@ public class Game {
 		for(String uuid : playerMap.keySet())
 		{
 			connected = playerMap.get(uuid).getConnected() && connected;
-			System.out.println("Player " + uuid + " is connect: " + playerMap.get(uuid).getConnected());
+//			System.out.println("Player " + uuid + " is connect: " + playerMap.get(uuid).getConnected());
 		}
 		return connected && playerMap.size() >= MIN_PlAYERS;
+	}
+	
+	public int getPlayersInList()
+	{
+		int count = 0;
+		for(int i = 0; i < playerList.length; i++)
+			if(playerList[i] != null)
+				count++;
+		return count;
 	}
 	
 	public HostType getHostType()
