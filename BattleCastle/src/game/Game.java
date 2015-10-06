@@ -11,6 +11,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import com.sun.xml.internal.ws.resources.SenderMessages;
+
 import core.BattleCastleCanvas;
 import core.HostType;
 import game.object.GameMap;
@@ -50,7 +52,7 @@ public class Game {
 		{
 			try {
 				serverSocket = new DatagramSocket(SERVER_PORT);
-				System.out.printf("Server- Receive: %d, Send: %d \n",serverSocket.getReceiveBufferSize(),serverSocket.getSendBufferSize());
+//				System.out.printf("Server- Receive: %d, Send: %d \n",serverSocket.getReceiveBufferSize(),serverSocket.getSendBufferSize());
 				serverSocket.setReceiveBufferSize(16384);
 				serverSocket.setSendBufferSize(16384);
 			} catch (SocketException e) {
@@ -66,7 +68,7 @@ public class Game {
 		 */
 		try {
 			clientSocket = new DatagramSocket(CLIENT_PORT);
-			System.out.printf("Client- Receive: %d, Send: %d \n",clientSocket.getReceiveBufferSize(),clientSocket.getSendBufferSize());
+//			System.out.printf("Client- Receive: %d, Send: %d \n",clientSocket.getReceiveBufferSize(),clientSocket.getSendBufferSize());
 			clientSocket.setReceiveBufferSize(16384);
 			clientSocket.setSendBufferSize(16384);
 		} catch (SocketException e) {
@@ -147,15 +149,12 @@ public class Game {
 				}
 				//update objects
 				
-				
-				
-				
 			}else
 			{
 				if(playerMap.size() >= MIN_PlAYERS && allPlayersConnected())
 				{
 					//send all players recieved
-					String sendData = (char)ServerOption.CONFIRM_STATE_MESSAGE.ordinal() + " " + myUUID +"-connected";
+					String sendData = (char)ServerOption.CONFIRM_STATE_MESSAGE.ordinal() + " connected-" + myUUID;
 					sendToServerPacket = new DatagramPacket(
 							sendData.getBytes(),
 							sendData.length());
@@ -181,7 +180,7 @@ public class Game {
 			if(playerMap.size() >= MIN_PlAYERS && !allPlayersConnected)
 			{
 				//send all players recieved
-				String sendData = (char)ServerOption.CONFIRM_STATE_MESSAGE.ordinal() + " " + myUUID +"-connected";
+				String sendData = (char)ServerOption.CONFIRM_STATE_MESSAGE.ordinal() +" connected-"+ myUUID;
 				sendToServerPacket = new DatagramPacket(
 						sendData.getBytes(),
 						sendData.length());
@@ -246,7 +245,8 @@ public class Game {
 				BattleCastleUser user = new BattleCastleUser(name,serverReceivePacket.getAddress(), CLIENT_PORT);
 				user.setPlayerNumber(playerNum);
 				playerMap.put(user.getUUID(), user);
-				playerList[user.getPlayerNumber()] = new Player();
+				if(playerList[user.getPlayerNumber()] == null)
+					playerList[user.getPlayerNumber()] = new Player();
 
 				System.out.println("SERVER RECEIVED DATA: " + user.toString());
 				System.out.println("playerMap Contents:  " + playerMap);
@@ -350,13 +350,40 @@ public class Game {
 		case CONFIRM_STATE_MESSAGE:
 			
 			String message = new String(data, 1, length-1);
-			System.out.println("Player is connected: " + message);
-			uuid = message.trim().split("-")[0];
-			String state = message.trim().split("-")[1];
-			System.out.println(uuid);
+			String state = message.trim().split("-")[0];
 			switch(state)
 			{
-			case "connected": playerMap.get(uuid).setConnected(true);
+			case "connected":
+				System.out.println("Player is connected: " + message);
+				uuid = message.trim().split("-")[1];
+				System.out.println(uuid); 
+				playerMap.get(uuid).setConnected(true);
+				break;
+			case "ready_to_start_3":
+				String sendData = (char)ClientOption.CONFIRM_STATE_MESSAGE.ordinal() + " " + "ready_to_start_3";
+				DatagramPacket send = new DatagramPacket(
+										sendData.getBytes(),
+										sendData.length()
+									  );
+				sendPacketToAll(send);
+				break;
+			case "ready_to_start_2":
+				sendData = (char)ClientOption.CONFIRM_STATE_MESSAGE.ordinal() + " " + "ready_to_start_2";
+				send = new DatagramPacket(
+										sendData.getBytes(),
+										sendData.length()
+									  );
+				sendPacketToAll(send);
+				
+				break;
+			case "ready_to_start_1":
+				sendData = (char)ClientOption.CONFIRM_STATE_MESSAGE.ordinal() + " " + "ready_to_start_1";
+				send = new DatagramPacket(
+										sendData.getBytes(),
+										sendData.length()
+									  );
+				sendPacketToAll(send);
+				
 				break;
 			}
 			
@@ -385,20 +412,19 @@ public class Game {
 			String playerNum = userData.substring(userData.indexOf("playerNum=")+10,userData.length()-1).trim();
 			try
 			{
-				if(getHostType() != HostType.SERVER) //!uuid.equals(myUUID.trim())
+				if(playerMap.get(uuid)== null) 
 				{
 					BattleCastleUser user = new BattleCastleUser(name,InetAddress.getByName(address),CLIENT_PORT);
 					user.setPlayerNumber(Integer.parseInt(playerNum));
 					playerMap.put(uuid, user);
-
-					playerList[user.getPlayerNumber()] = new Player();
-					//	System.out.println("CLIENT RECIEVED DATA: " + user.toString());
-					System.out.println("Client Player Map Size: " + playerMap.size());
-					//	System.out.println("Player Map Contents: " + playerMap);
-				}else
-				{
-					playerMap.get(myUUID).setPlayerNumber(Integer.parseInt(playerNum));
 				}
+				BattleCastleUser user = playerMap.get(uuid);
+				playerList[user.getPlayerNumber()] = new Player();
+				playerMap.get(uuid).setPlayerNumber(Integer.parseInt(playerNum));
+				//	System.out.println("CLIENT RECIEVED DATA: " + user.toString());
+				System.out.println("Client Player Map Size: " + playerMap.size());
+				//	System.out.println("Player Map Contents: " + playerMap);
+				
 			}catch(Exception e)
 			{
 				e.printStackTrace();
@@ -423,6 +449,33 @@ public class Game {
 				System.out.println(gameMap.toString());
 				loadedMap = true;
 			}
+			
+			break;
+		case CONFIRM_STATE_MESSAGE:
+			
+			String message = new String(data, 1, length-1);
+			System.out.println("Player is connected: " + message);
+			uuid = message.trim().split("-")[0];
+			String state = message.trim().split("-")[1];
+			System.out.println(uuid);
+			switch(state)
+			{
+			case "ready_to_start_3":
+				String sendData = (char)ClientOption.CONFIRM_STATE_MESSAGE.ordinal() + " " + "ready_to_start_3";
+				DatagramPacket send = new DatagramPacket(
+										sendData.getBytes(),
+										sendData.length()
+									  );
+				sendPacketToAll(send);
+				break;
+			case "ready_to_start_2":
+				
+				break;
+			case "ready_to_start_1":
+				
+				break;
+			}
+			
 			
 			break;
 		default:
