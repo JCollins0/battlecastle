@@ -47,4 +47,8 @@ public class Player {
 		g.drawString(String.format("(%d,%d)", bounds.x, bounds.y ), bounds.x, bounds.y-5);
 	}
 	
+	public Rectangle getBounds()
+	{
+		return bounds;
+	}
 }

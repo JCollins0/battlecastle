@@ -124,7 +124,7 @@ public class Game {
 					//send data to other clients
 					if(!objectLocationsSet)
 					{
-						System.out.println("playerList.length: " + playerList.length);
+						System.out.println("playerList.length: " + getPlayersInList());
 						for(int i = 0; i < playerList.length; i++)
 						{
 							if(playerList[i] != null)
