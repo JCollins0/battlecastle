@@ -1,6 +1,7 @@
 package editor;
 
 import java.awt.Dimension;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
@@ -15,7 +16,11 @@ public class EditorFrame extends JFrame {
 	public static final String GAME_VERSION = "1.0";
 	public static final Dimension GAME_SIZE = new Dimension(1024,1024);
 	
-	public static EditorMainPanel editor_main;
+	protected ArrayList<Tile> tiles=new ArrayList<Tile>();
+	
+	public static EditorCanvas editor_canvas;
+	
+	
 	
 	public static void main(String[] args) {
 		new EditorFrame();
@@ -31,12 +36,12 @@ public class EditorFrame extends JFrame {
 		setResizable(false);
 		setVisible(true);
 		setFocusable(false);
-		editor_main.requestFocus();
+		editor_canvas.requestFocus();
 	}
 	
 	public void init(){
-		editor_main=new EditorMainPanel();
-		add(editor_main);
+		editor_canvas=new EditorCanvas();
+		add(editor_canvas);
 	}
 
 }

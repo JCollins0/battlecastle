@@ -1,62 +1,39 @@
 package editor;
 
+import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Image;
-import java.awt.Rectangle;
 
 import game.player.Player;
-import utility.Utility;
 
-public abstract class InteractiveTile extends Rectangle
+public class InteractiveTile extends Tile
 {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -2723258315202922739L;
-
-	protected Image[] pics;
 	
-	private static Image check;
-	//private int animation;
+	private boolean interacting;
 	
-	static
+	public InteractiveTile(int x,int y,int width,int height,Image[] pics,State[] states)
 	{
-		check=Utility.loadImage("check");
-	}
-
-	public InteractiveTile(int x,int y,int width,int height)
-	{
-		this(x,y,width,height,check);
+		super(x,y,width,height,pics,states);
 	}
 	
-	public InteractiveTile(int x,int y,int width,int height,Image[] pics)
+	public void interact(Player p)
 	{
-		this.x=x;
-		this.y=y;
-		this.width=width;
-		this.height=height;
-		this.pics=pics;
+		interacting=p.getBounds().intersects(this);
 	}
 	
-	public InteractiveTile(int x,int y,int width,int height,Image pic)
+	public void draw(Graphics g)
 	{
-		this(x,y,width,height,new Image[]{pic});
+		g.drawImage(pics[animation], x, y, width, height, null);
+		if(interacting)
+		{
+			g.setColor(Color.YELLOW);
+			g.fillRect(x,y,width,height);
+		}
 	}
-	
-	protected void shift(int x,int y)
-	{
-		this.x+=x;
-		this.y+=y;
-		if(this.x>1024)
-			this.x=-this.width;
-		else if(this.x<-this.width)
-			this.x=1024;
-		if(this.y>768)
-			this.y=-this.height;
-		else if(this.y<-this.height)
-			this.y=768;
-	}
-	
-	public abstract void interact(Player p);
 
 }

@@ -2,65 +2,67 @@ package editor;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
-import javax.swing.event.MouseInputListener;
+public class EditorMouseHandler implements MouseListener, MouseMotionListener, MouseWheelListener {
 
-public class EditorMouseHandler implements MouseInputListener,
-		MouseMotionListener, MouseWheelListener {
+	private EditorCanvas canvasref;
+	private Point mouse;
 	
-	private EditorMainPanel main_ref;
-	public Point mouse;
-
-	public EditorMouseHandler(EditorMainPanel main_ref) {
-		this.main_ref=main_ref;
-		mouse=new Point(-1,-1);
+	public EditorMouseHandler(EditorCanvas canvasref) {
+		this.canvasref = canvasref;
+		mouse = new Point(-1,-1);
 	}
-
+	
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mousePressed(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		
-	}
-
-	@Override
-	public void mouseEntered(MouseEvent e) {
+	public void mouseWheelMoved(MouseWheelEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void mouseExited(MouseEvent e) {
+	public void mouseDragged(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void mouseWheelMoved(MouseWheelEvent e) {
+	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void mouseDragged(MouseEvent e) {
+	public void mouseClicked(MouseEvent arg0) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void mouseMoved(MouseEvent e) {
-		mouse=e.getPoint();
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

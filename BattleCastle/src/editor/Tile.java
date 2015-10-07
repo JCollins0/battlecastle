@@ -6,45 +6,69 @@ import java.awt.Rectangle;
 
 import utility.Utility;
 
-public abstract class Tile extends Rectangle
+public class Tile extends Rectangle
 {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5649265101080536323L;
 	protected Image[] pics;
+	protected State[] states;
 	
-	private static Image check;
+	private static Image[] check;
+	private static State[] still;
+	protected int animation;
 	
 	static
 	{
-		check=Utility.loadImage("check");
+		check= new Image[]{Utility.loadImage("check")};
+		still=new State[]{new State()};
 	}
 
 	public Tile(int x,int y,int width,int height)
 	{
-		this(x,y,width,height,check);
+		this(x,y,width,height,check,still);
 	}
 	
-	public Tile(int x,int y,int width,int height,Image[] pics)
+	public Tile(int x,int y,int width,int height,Image[] pics,State[] states)
 	{
 		this.x=x;
 		this.y=y;
 		this.width=width;
 		this.height=height;
 		this.pics=pics;
+		this.states=states;
 	}
 	
-	public Tile(int x,int y,int width,int height,Image pic)
+	public Tile(int x,int y,int width,int height,Image pic,State[] states)
 	{
-		this(x,y,width,height,new Image[]{pic});
+		this(x,y,width,height,new Image[]{pic},states);
 	}
 	
 	protected void shift(int x,int y)
 	{
 		this.x+=x;
 		this.y+=y;
+		if(this.x>1024)
+			this.x=-this.width;
+		else if(this.x<-this.width)
+			this.x=1024;
+		if(this.y>768)
+			this.y=-this.height;
+		else if(this.y<-this.height)
+			this.y=768;
 	}
 	
-	public abstract void draw(Graphics g);
+	public void draw(Graphics g)
+	{
+		g.drawImage(pics[animation], x, y, width, height, null);
+	}
 	
-	public abstract void tick();
+	public void tick()
+	{
+		if(animation++==pics.length-1)
+			animation=0;
+	}
 
 }
