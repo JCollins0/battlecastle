@@ -37,6 +37,7 @@ public class Game {
 	private HostType type;
 	
 	private static final int MIN_PlAYERS = 2;
+	private Game2 game2;
 	
 	public Game(BattleCastleCanvas canvasRef, HostType type)
 	{
@@ -45,39 +46,41 @@ public class Game {
 		playerMap = new TreeMap<String, BattleCastleUser>();
 		playerList = new Player[4];
 		
+		game2 = new Game2(canvasRef,type);
+		return;
 		/*
 		 * Server specific stuff
 		 */
-		if (type == HostType.SERVER)
-		{
-			try {
-				serverSocket = new DatagramSocket(SERVER_PORT);
-//				System.out.printf("Server- Receive: %d, Send: %d \n",serverSocket.getReceiveBufferSize(),serverSocket.getSendBufferSize());
-				serverSocket.setReceiveBufferSize(16384);
-				serverSocket.setSendBufferSize(16384);
-			} catch (SocketException e) {
-				e.printStackTrace();
-			}
-			serverThread = new ServerThread();
-			Thread serverTask = new Thread(serverThread);
-			serverTask.start();
-		}
+//		if (type == HostType.SERVER)
+//		{
+//			try {
+//				serverSocket = new DatagramSocket(SERVER_PORT);
+////				System.out.printf("Server- Receive: %d, Send: %d \n",serverSocket.getReceiveBufferSize(),serverSocket.getSendBufferSize());
+//				serverSocket.setReceiveBufferSize(16384);
+//				serverSocket.setSendBufferSize(16384);
+//			} catch (SocketException e) {
+//				e.printStackTrace();
+//			}
+//			serverThread = new ServerThread();
+//			Thread serverTask = new Thread(serverThread);
+//			serverTask.start();
+//		}
 						
 		/*
 		 * Client stuff
 		 */
-		try {
-			clientSocket = new DatagramSocket(CLIENT_PORT);
-//			System.out.printf("Client- Receive: %d, Send: %d \n",clientSocket.getReceiveBufferSize(),clientSocket.getSendBufferSize());
-			clientSocket.setReceiveBufferSize(16384);
-			clientSocket.setSendBufferSize(16384);
-		} catch (SocketException e) {
-			e.printStackTrace();
-		}
-		
-		clientThread = new ClientThread();
-		Thread clientTask = new Thread(clientThread);
-		clientTask.start();	
+//		try {
+//			clientSocket = new DatagramSocket(CLIENT_PORT);
+////			System.out.printf("Client- Receive: %d, Send: %d \n",clientSocket.getReceiveBufferSize(),clientSocket.getSendBufferSize());
+//			clientSocket.setReceiveBufferSize(16384);
+//			clientSocket.setSendBufferSize(16384);
+//		} catch (SocketException e) {
+//			e.printStackTrace();
+//		}
+//		
+//		clientThread = new ClientThread();
+//		Thread clientTask = new Thread(clientThread);
+//		clientTask.start();	
 	}
 	
 	public BattleCastleCanvas getCanvas()
@@ -85,7 +88,7 @@ public class Game {
 		return canvasRef;
 	}
 	
-	public void render(Graphics g)
+	public void render2(Graphics g)
 	{
 		if(playerMap.size() >= MIN_PlAYERS) //player map on client side is not full
 		{
@@ -108,8 +111,10 @@ public class Game {
 			}
 		}
 	}
+	public void tick(){}
+	public void render(Graphics g){}
 	
-	public void tick()
+	public void tick2()
 	{
 		if(type == HostType.SERVER) //server stuff
 		{
