@@ -42,9 +42,11 @@ public class Game2 {
 		if(hostType == HostType.SERVER)
 		{
 			startServer();
+			startClient();
+			registerClasses();
 		}
-		startClient();	
-		registerClasses();
+//		startClient();	
+		
 	}
 	
 	private void startServer()
@@ -58,11 +60,11 @@ public class Game2 {
 			gameServer.addListener(new Listener() {
 				public void received (Connection connection, Object object) {
 					if (object instanceof BattleCastleUser) {
-						System.out.println("Recieved user");
+						
 						BattleCastleUser user = (BattleCastleUser)object;
+						System.out.println("Recieved user: " + user);
 						if(playerMap.get( user.getUUID() ) == null)
 						{
-							
 							playerMap.put(user.getUUID(), user);
 						}
 						int playerNum = playerMap.size()-1;
@@ -76,7 +78,7 @@ public class Game2 {
 		}
 	}
 	
-	private void startClient()
+	public void startClient()
 	{
 		try {
 			gameClient = new Client();
@@ -87,6 +89,7 @@ public class Game2 {
 				public void received (Connection connection, Object object) {
 					if (object instanceof TreeMap<?, ?>) {
 						playerMap = (TreeMap<String, BattleCastleUser>)object;
+						System.out.println("Client Player Map: " + playerMap);
 					}
 					else if (object instanceof BattleCastleUser)
 					{
@@ -97,7 +100,7 @@ public class Game2 {
 							playerMap.put(user.getUUID(), user);
 						}
 						playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
-						gameServer.sendToAllTCP(playerMap);
+						
 					}
 			       }
 			});
@@ -108,11 +111,13 @@ public class Game2 {
 		}
 	}
 	
-	private void registerClasses() //register classes in order to send them 
+	public void registerClasses() //register classes in order to send them 
 	{
-		Kryo serverRegistry = gameServer.getKryo();
+		if(hostType == HostType.SERVER){
+			Kryo serverRegistry = gameServer.getKryo();
 			serverRegistry.register(BattleCastleUser.class);
 			serverRegistry.register(TreeMap.class);
+		}
 		Kryo clientRegistry = gameClient.getKryo();
 			clientRegistry.register(BattleCastleUser.class);
 			clientRegistry.register(TreeMap.class);
