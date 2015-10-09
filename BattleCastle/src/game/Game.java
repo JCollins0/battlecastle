@@ -37,7 +37,6 @@ public class Game {
 	private HostType type;
 	
 	private static final int MIN_PlAYERS = 2;
-	private Game2 game2;
 	
 	public Game(BattleCastleCanvas canvasRef, HostType type)
 	{
@@ -45,8 +44,7 @@ public class Game {
 		this.type = type;
 		playerMap = new TreeMap<String, BattleCastleUser>();
 		playerList = new Player[4];
-		
-		game2 = new Game2(canvasRef,type);
+	
 		return;
 		/*
 		 * Server specific stuff

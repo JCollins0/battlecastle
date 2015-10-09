@@ -12,6 +12,7 @@ import core.menu_object.MenuButtonType;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
 import game.Game;
+import game.Game2;
 import game.object.MapType;
 
 public class BattleCastleCanvas extends Canvas implements Runnable{
@@ -25,6 +26,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private boolean running;
 	private GameState currentState;
 	private Game game;
+	private Game2 game2;
 	private MouseHandler mouseHandler;
 	private KeyHandler keyHandler;
 	
@@ -112,9 +114,14 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			break;
 		case GAMEPLAY:
 			
-			if (game != null)
+//			if (game != null)
+//			{
+//				game.render(b);
+//			}
+			
+			if(game2 != null)
 			{
-				game.render(b);
+				game2.render(b);
 			}
 			
 			break;
@@ -136,8 +143,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	
 	public void tick()
 	{
-		if(game != null)
-			game.tick();
+//		if(game != null)
+//			game.tick();
+		
+		if(game2 != null)
+			game2.tick();
 	}
 	
 	@Override
@@ -161,10 +171,15 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	
 	public void setGame(boolean host)
 	{
+//		if(host)
+//			game = new Game(this, HostType.SERVER);
+//		else
+//			game = new Game(this, HostType.CLIENT);
+		
 		if(host)
-			game = new Game(this, HostType.SERVER);
+			game2 = new Game2(this, HostType.SERVER);
 		else
-			game = new Game(this, HostType.CLIENT);
+			game2 = new Game2(this, HostType.CLIENT);
 	}
 	
 	public GameState getCurrentState()
@@ -194,9 +209,14 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		return ret;
 	}
 	
-	public Game getGame()
+//	public Game getGame()
+//	{
+//		return game;
+//		return game2;
+//	}
+	public Game2 getGame()
 	{
-		return game;
+		return game2;
 	}
 
 	public MenuTextField getTextFieldByID(MenuTextFieldType textFieldType) {
