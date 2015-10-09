@@ -11,19 +11,21 @@ public class EditorKeyHandler implements KeyListener {
 	}
 	
 	@Override
-	public void keyPressed(KeyEvent k) {
+	public void keyPressed(KeyEvent k)
+	{
 		
-
 	}
 
 	@Override
-	public void keyReleased(KeyEvent k) {
+	public void keyReleased(KeyEvent k)
+	{
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void keyTyped(KeyEvent k) {
+	public void keyTyped(KeyEvent k)
+	{
 		// TODO Auto-generated method stub
 
 	}

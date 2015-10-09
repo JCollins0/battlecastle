@@ -70,5 +70,15 @@ public class Tile extends Rectangle
 		if(animation++==pics.length-1)
 			animation=0;
 	}
+	
+	public String stringify()
+	{
+		return "";
+	}
+	
+	public void execute()
+	{
+		
+	}
 
 }
