@@ -2,6 +2,7 @@ package game;
 
 import java.awt.Graphics;
 import java.io.IOException;
+import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.TreeMap;
@@ -57,6 +58,7 @@ public class Game2 {
 			gameServer.addListener(new Listener() {
 				public void received (Connection connection, Object object) {
 					if (object instanceof BattleCastleUser) {
+						System.out.println("Recieved user");
 						BattleCastleUser user = (BattleCastleUser)object;
 						if(playerMap.get( user.getUUID() ) == null)
 						{
@@ -98,7 +100,6 @@ public class Game2 {
 						gameServer.sendToAllTCP(playerMap);
 					}
 			       }
-			
 			});
 			
 			
@@ -115,10 +116,12 @@ public class Game2 {
 		Kryo clientRegistry = gameClient.getKryo();
 			clientRegistry.register(BattleCastleUser.class);
 			clientRegistry.register(TreeMap.class);
+			
 	}
 	
 	public void sendUserData(BattleCastleUser user)
 	{
+		playerMap.put(user.getUUID(), user);
 		gameClient.sendTCP(user);
 	}
 	
@@ -171,6 +174,11 @@ public class Game2 {
 	public void sendMapChoice(MapType mapType)
 	{
 		
+	}
+	
+	public void setMyUserUUID(String uuid)
+	{
+		myUUID = uuid;
 	}
 
 	

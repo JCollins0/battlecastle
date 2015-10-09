@@ -324,24 +324,24 @@ public class Game {
 			break;
 		case LOGOUT_USER:
 			
-			userData = new String(data, 1, length - 1);
-			uuid = userData.substring(userData.indexOf("uuid=")+5,userData.indexOf(",ip="));
-			playerMap.remove(uuid);
-			for(String id : playerMap.keySet())
-			{
-				try
-				{
-					String removeData = (char)ClientOption.REMOVE_USER.ordinal() + " " + uuid;
-					sendToClientPacket = new DatagramPacket(removeData.getBytes(),
-													removeData.length(),
-													playerMap.get(id).getAddress(),
-													playerMap.get(id).getPort());
-					clientSocket.send(sendToClientPacket);
-				}catch(Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
+//			userData = new String(data, 1, length - 1);
+//			uuid = userData.substring(userData.indexOf("uuid=")+5,userData.indexOf(",ip="));
+//			playerMap.remove(uuid);
+//			for(String id : playerMap.keySet())
+//			{
+//				try
+//				{
+//					String removeData = (char)ClientOption.REMOVE_USER.ordinal() + " " + uuid;
+//					sendToClientPacket = new DatagramPacket(removeData.getBytes(),
+//													removeData.length(),
+//													playerMap.get(id).getAddress(),
+//													playerMap.get(id).getPort());
+//					clientSocket.send(sendToClientPacket);
+//				}catch(Exception e)
+//				{
+//					e.printStackTrace();
+//				}
+//			}
 			
 			break;
 		case MAP_SELECTION:
@@ -599,17 +599,17 @@ public class Game {
 			
 			Thread.sleep(100);
 			
-			for(String id : playerMap.keySet())
-			{	
-				sendToClientPacket = new DatagramPacket(
-						data.getBytes(),
-						data.length(),
-						playerMap.get(id).getAddress(),
-						CLIENT_PORT);
-				serverSocket.send(sendToClientPacket);
-				System.out.println("SENDING MAP DATA TO: " + playerMap.get(id).getAddress());
-				Thread.sleep(1);
-			}
+//			for(String id : playerMap.keySet())
+//			{	
+//				sendToClientPacket = new DatagramPacket(
+//						data.getBytes(),
+//						data.length(),
+//						playerMap.get(id).getAddress(),
+//						CLIENT_PORT);
+//				serverSocket.send(sendToClientPacket);
+//				System.out.println("SENDING MAP DATA TO: " + playerMap.get(id).getAddress());
+//				Thread.sleep(1);
+//			}
 			
 			//
 			
@@ -623,21 +623,21 @@ public class Game {
 	{
 //		for(int i = 0; i < 5; i++)
 //		{
-			ArrayList<String> pMapList = new ArrayList<String>(playerMap.keySet());
-			for(int j = 0; j < pMapList.size(); j++)
-			{
-				String oid = pMapList.get(j);
-				System.out.println("SENDING DATA TO " + playerMap.get(oid).getAddress());
-
-				packet.setAddress(playerMap.get(oid).getAddress());
-				packet.setPort(CLIENT_PORT);
-
-				try {
-					serverSocket.send(sendToClientPacket);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+//			ArrayList<String> pMapList = new ArrayList<String>(playerMap.keySet());
+//			for(int j = 0; j < pMapList.size(); j++)
+//			{
+//				String oid = pMapList.get(j);
+//				System.out.println("SENDING DATA TO " + playerMap.get(oid).getAddress());
+//
+//				packet.setAddress(playerMap.get(oid).getAddress());
+//				packet.setPort(CLIENT_PORT);
+//
+//				try {
+//					serverSocket.send(sendToClientPacket);
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
+//			}
 //		}
 		
 	}

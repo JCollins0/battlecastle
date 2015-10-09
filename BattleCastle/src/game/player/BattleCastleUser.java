@@ -6,16 +6,18 @@ import java.util.Arrays;
 public class BattleCastleUser {
 	
 	private String playerName;
-	private InetAddress address;
+//	private InetAddress address;
 	private int port;
 	private String uniqueID;
 	private int playerNum;
 	private boolean connected;
 	
+	public BattleCastleUser(){}
+	
 	public BattleCastleUser(String name, InetAddress address, int port)
 	{
 		this.playerName = name;
-		this.address = address;
+//		this.address = address;
 		this.port = port;
 		uniqueID = String.join("",address.getHostAddress().split("\\."));
 		//System.out.println(uniqueID);
@@ -26,9 +28,9 @@ public class BattleCastleUser {
 		return playerName;
 	}
 
-	public InetAddress getAddress() {
-		return address;
-	}
+//	public InetAddress getAddress() {
+//		return address;
+//	}
 
 	public int getPort() {
 		return port;
@@ -38,7 +40,7 @@ public class BattleCastleUser {
 	public boolean equals(Object obj) {
 		if(obj instanceof BattleCastleUser)
 		{
-			return address.equals( ((BattleCastleUser)obj).address );
+			return uniqueID.equals( ((BattleCastleUser)obj).uniqueID );
 		}
 		return false;
 	}
@@ -73,7 +75,7 @@ public class BattleCastleUser {
 	public String toString() {
 		return "BattleCastlePlayer[name=" + playerName + 
 								 ",uuid=" + getUUID() + 
-								 ",ip=" + address.getHostAddress().toString() + 
+//								 ",ip=" + address.getHostAddress().toString() + 
 								 ",playerNum=" + playerNum + "]";
 	}
 }
