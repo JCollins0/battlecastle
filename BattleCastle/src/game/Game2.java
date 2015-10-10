@@ -1,12 +1,15 @@
 package game;
 
 import game.message.Message;
+import game.message.MessageType;
 import game.object.GameMap;
 import game.object.MapType;
 import game.player.BattleCastleUser;
 import game.player.Player;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -104,9 +107,16 @@ public class Game2 {
 						}
 						playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
 						
-					}else if(object instanceof GameMap)
+					}else if(object instanceof Message)
 					{
-						gameMap = (GameMap)object;
+						Message messageOb = (Message)object;
+						String message = messageOb.toString();
+						String[] messageArr = message.split(":");
+						if(messageArr[0].trim().equals(MessageType.SELECT_MAP.toString()))
+						{
+							gameMap = new GameMap(messageArr[1].trim());
+						}
+						
 					}else if(object instanceof Player[])
 					{
 						playerList = (Player[])object;
@@ -128,15 +138,19 @@ public class Game2 {
 			serverRegistry.register(BattleCastleUser.class);
 			serverRegistry.register(TreeMap.class);
 			serverRegistry.register(Player[].class);
-			serverRegistry.register(GameMap.class);
 			serverRegistry.register(Message.class);
+			serverRegistry.register(Player.class);
+			serverRegistry.register(Rectangle.class);
+			
 		}
 		Kryo clientRegistry = gameClient.getKryo();
 			clientRegistry.register(BattleCastleUser.class);
 			clientRegistry.register(TreeMap.class);
 			clientRegistry.register(Player[].class);
-			clientRegistry.register(GameMap.class);
 			clientRegistry.register(Message.class);
+			clientRegistry.register(Player.class);
+			clientRegistry.register(Rectangle.class);
+			
 			
 			
 	}
@@ -218,8 +232,9 @@ public class Game2 {
 			playerList[i] = new Player();
 			playerList[i].setLocation(gameMap.getPlayerStartPoint(i));
 		}
+		Message message = new Message(MessageType.SELECT_MAP, mapType.getText());
 		
-		gameServer.sendToAllTCP(gameMap);
+		gameServer.sendToAllTCP(message);
 		gameServer.sendToAllTCP(playerList);
 		
 	}
