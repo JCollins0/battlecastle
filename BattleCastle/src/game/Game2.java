@@ -173,6 +173,10 @@ public class Game2 {
 			for(int i = 0; i < playerList.length; i++)
 				if(playerList[i] != null)
 					playerList[i].tick();
+			gameServer.sendToAllTCP(playerList);	
+			
+			
+			
 		}
 	}
 	
