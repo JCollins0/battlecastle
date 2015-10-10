@@ -92,7 +92,9 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 							BattleCastleUser user = new BattleCastleUser(name.getText(),InetAddress.getLocalHost(),Game.CLIENT_PORT);
 						//	System.out.println(user.getAddress());
 							canvasref.getGame().setMyUserUUID(user.getUUID());
+							canvasref.getGame().getMyUser().setConnected(true);
 							canvasref.getGame().sendUserData(user);
+							
 						} catch (UnknownHostException e1) {
 							e1.printStackTrace();
 						}
@@ -127,8 +129,9 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 							canvasref.getGame().setMyUserUUID(user.getUUID());
 							//System.out.println(user.getAddress());
 							canvasref.getGame().setServerIP(InetAddress.getLocalHost());
-							canvasref.getGame().sendUserData(user);
 							canvasref.getGame().getMyUser().setConnected(true);
+							canvasref.getGame().sendUserData(user);
+							
 						} catch (UnknownHostException e1) {
 							e1.printStackTrace();
 						}

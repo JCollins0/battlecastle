@@ -1,8 +1,13 @@
 package game;
 
+import game.message.Message;
+import game.object.GameMap;
+import game.object.MapType;
+import game.player.BattleCastleUser;
+import game.player.Player;
+
 import java.awt.Graphics;
 import java.io.IOException;
-import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.TreeMap;
@@ -15,9 +20,6 @@ import com.esotericsoftware.kryonet.Server;
 
 import core.BattleCastleCanvas;
 import core.HostType;
-import game.object.MapType;
-import game.player.BattleCastleUser;
-import game.player.Player;
 
 public class Game2 {
 	
@@ -31,6 +33,7 @@ public class Game2 {
 	private TreeMap<String, BattleCastleUser> playerMap;
 	private Player[] playerList;
 	private String myUUID;
+	private GameMap gameMap;
 	
 	public Game2(BattleCastleCanvas canvasRef, HostType hostType)
 	{
@@ -101,7 +104,14 @@ public class Game2 {
 						}
 						playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
 						
+					}else if(object instanceof GameMap)
+					{
+						gameMap = (GameMap)object;
+					}else if(object instanceof Player[])
+					{
+						playerList = (Player[])object;
 					}
+					
 			       }
 			});
 			
@@ -117,10 +127,14 @@ public class Game2 {
 			Kryo serverRegistry = gameServer.getKryo();
 			serverRegistry.register(BattleCastleUser.class);
 			serverRegistry.register(TreeMap.class);
+			serverRegistry.register(Player[].class);
+			serverRegistry.register(Message.class);
 		}
 		Kryo clientRegistry = gameClient.getKryo();
 			clientRegistry.register(BattleCastleUser.class);
 			clientRegistry.register(TreeMap.class);
+			clientRegistry.register(Player[].class);
+			clientRegistry.register(Message.class);
 			
 	}
 	
@@ -132,12 +146,26 @@ public class Game2 {
 	
 	public void tick()
 	{
-		
+		if(hostType == HostType.SERVER)
+		{
+			//will be handling collision
+			if(gameMap != null)
+				gameMap.tick();
+			
+			for(int i = 0; i < playerList.length; i++)
+				if(playerList[i] != null)
+					playerList[i].tick();
+		}
 	}
 	
 	public void render(Graphics g)
 	{
+		if(gameMap != null)
+			gameMap.render(g);
 		
+		for(int i = 0; i < playerList.length; i++)
+			if(playerList[i] != null)
+				playerList[i].render(g);
 	}
 	
 	public void setServerIP(String ip)
@@ -178,6 +206,17 @@ public class Game2 {
 	
 	public void sendMapChoice(MapType mapType)
 	{
+		gameMap = new GameMap(mapType.getText());
+		
+		//load players and then send to clients
+		for(int i = 0; i < playerMap.size(); i++)
+		{
+			playerList[i] = new Player();
+			playerList[i].setLocation(gameMap.getPlayerStartPoint(i));
+		}
+		
+		gameServer.sendToAllTCP(gameMap);
+		gameServer.sendToAllTCP(playerList);
 		
 	}
 	

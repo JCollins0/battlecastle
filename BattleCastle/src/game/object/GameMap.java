@@ -1,6 +1,7 @@
 package game.object;
 
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferedImage;
 
 import utility.Utility;
@@ -28,5 +29,16 @@ public class GameMap {
 	public String toString()
 	{
 		return "";
+	}
+
+	public Point getPlayerStartPoint(int playerNum) {
+		switch(playerNum)
+		{
+		case 0: return new Point(32,32);
+		case 1: return new Point(128,64);
+		case 2: return new Point(256,32);
+		case 3: return new Point(128,128);
+		}
+		return null;
 	}
 }

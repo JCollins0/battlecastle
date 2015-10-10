@@ -2,6 +2,7 @@ package game.player;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
 
 public class Player {
@@ -22,6 +23,11 @@ public class Player {
 	{
 		bounds.x = x;
 		bounds.y = y;
+	}
+	
+	public void setLocation(Point p)
+	{
+		setLocation(p.x,p.y);
 	}
 	
 	public String getPlayerInformation()
