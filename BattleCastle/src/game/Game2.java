@@ -141,6 +141,7 @@ public class Game2 {
 	public void sendUserData(BattleCastleUser user)
 	{
 		playerMap.put(user.getUUID(), user);
+		playerMap.get(user.getUUID()).setConnected(true);
 		gameClient.sendTCP(user);
 	}
 	
