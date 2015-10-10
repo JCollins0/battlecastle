@@ -128,13 +128,16 @@ public class Game2 {
 			serverRegistry.register(BattleCastleUser.class);
 			serverRegistry.register(TreeMap.class);
 			serverRegistry.register(Player[].class);
+			serverRegistry.register(GameMap.class);
 			serverRegistry.register(Message.class);
 		}
 		Kryo clientRegistry = gameClient.getKryo();
 			clientRegistry.register(BattleCastleUser.class);
 			clientRegistry.register(TreeMap.class);
 			clientRegistry.register(Player[].class);
+			clientRegistry.register(GameMap.class);
 			clientRegistry.register(Message.class);
+			
 			
 	}
 	
