@@ -37,6 +37,7 @@ public class Game2 {
 	private Player[] playerList;
 	private String myUUID;
 	private GameMap gameMap;
+	private static final int MIN_PLAYERS = 2;
 	
 	public Game2(BattleCastleCanvas canvasRef, HostType hostType)
 	{
@@ -75,7 +76,12 @@ public class Game2 {
 						}
 						int playerNum = playerMap.size()-1;
 						user.setPlayerNumber(playerNum);
-						gameServer.sendToAllTCP(playerMap);
+						
+						for(String uuid : playerMap.keySet())
+						{
+							gameServer.sendToAllTCP(playerMap.get(uuid));
+						}
+						
 					}
 				}
 			});
@@ -93,16 +99,12 @@ public class Game2 {
 			gameClient.addListener(new Listener(){
 				
 				public void received (Connection connection, Object object) {
-					if (object instanceof TreeMap<?, ?>) {
-						playerMap = (TreeMap<String, BattleCastleUser>)object;
-						System.out.println("Client Player Map: " + playerMap);
-					}
-					else if (object instanceof BattleCastleUser)
+					System.out.println("CLIENT RECEIVED OBJECT - " + object.toString());
+					if (object instanceof BattleCastleUser)
 					{
 						BattleCastleUser user = (BattleCastleUser)object;
 						if(playerMap.get( user.getUUID() ) == null)
 						{
-							
 							playerMap.put(user.getUUID(), user);
 						}
 						playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
@@ -122,6 +124,16 @@ public class Game2 {
 						playerList = (Player[])object;
 					}
 					
+					/*
+					    if (object instanceof TreeMap<?, ?>) {
+							playerMap = (TreeMap<String, BattleCastleUser>)object;
+							System.out.println("Client Player Map: " + playerMap);
+						}
+						else 
+					
+					*/
+					
+					
 			       }
 			});
 			
@@ -135,21 +147,23 @@ public class Game2 {
 	{
 		if(hostType == HostType.SERVER){
 			Kryo serverRegistry = gameServer.getKryo();
-			serverRegistry.register(BattleCastleUser.class);
-			serverRegistry.register(TreeMap.class);
-			serverRegistry.register(Player[].class);
-			serverRegistry.register(Message.class);
-			serverRegistry.register(Player.class);
-			serverRegistry.register(Rectangle.class);
-			
+//			serverRegistry.register(BattleCastleUser.class);
+//			serverRegistry.register(TreeMap.class);
+//			serverRegistry.register(Rectangle.class);
+//			serverRegistry.register(Player.class);
+//			serverRegistry.register(Player[].class);
+//			serverRegistry.register(Message.class);
+			serverRegistry.setRegistrationRequired(false);
 		}
 		Kryo clientRegistry = gameClient.getKryo();
-			clientRegistry.register(BattleCastleUser.class);
-			clientRegistry.register(TreeMap.class);
-			clientRegistry.register(Player[].class);
-			clientRegistry.register(Message.class);
-			clientRegistry.register(Player.class);
-			clientRegistry.register(Rectangle.class);
+//			clientRegistry.register(BattleCastleUser.class);
+//			clientRegistry.register(TreeMap.class);
+//			clientRegistry.register(Rectangle.class);
+//			clientRegistry.register(Player.class);
+//			clientRegistry.register(Player[].class);
+//			clientRegistry.register(Message.class);
+			clientRegistry.setRegistrationRequired(false);
+			
 			
 			
 			
@@ -170,11 +184,13 @@ public class Game2 {
 			if(gameMap != null)
 				gameMap.tick();
 			
-			for(int i = 0; i < playerList.length; i++)
-				if(playerList[i] != null)
-					playerList[i].tick();
-			gameServer.sendToAllTCP(playerList);	
-			
+			if(playerMap.size() >= MIN_PLAYERS)
+			{
+				for(int i = 0; i < playerList.length; i++)
+					if(playerList[i] != null)
+						playerList[i].tick();
+				gameServer.sendToAllTCP(playerList);	
+			}
 			
 			
 		}
@@ -237,7 +253,6 @@ public class Game2 {
 			playerList[i].setLocation(gameMap.getPlayerStartPoint(i));
 		}
 		Message message = new Message(MessageType.SELECT_MAP, mapType.getText());
-		
 		gameServer.sendToAllTCP(message);
 		gameServer.sendToAllTCP(playerList);
 		

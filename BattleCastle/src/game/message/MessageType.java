@@ -7,6 +7,11 @@ public enum MessageType {
 	SELECT_MAP("select_map");
 	
 	private String value;
+	MessageType()
+	{
+		
+	}
+	
 	MessageType(String value)
 	{
 		this.value = value;
