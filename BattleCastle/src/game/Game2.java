@@ -50,7 +50,7 @@ public class Game2 {
 		{
 			startServer();
 			startClient();
-			registerClasses();
+//			registerClasses();
 		}
 //		startClient();	
 		
@@ -62,6 +62,7 @@ public class Game2 {
 		try {
 			serverIP = InetAddress.getLocalHost();
 			gameServer = new Server();
+			gameServer.getKryo().setRegistrationRequired(false);
 			gameServer.start();
 			gameServer.bind(SERVER_PORT);
 			gameServer.addListener(new Listener() {
@@ -94,6 +95,7 @@ public class Game2 {
 	{
 		try {
 			gameClient = new Client();
+			gameClient.getKryo().setRegistrationRequired(false);
 			gameClient.start();
 			gameClient.connect(5000, serverIP, SERVER_PORT);
 			gameClient.addListener(new Listener(){
@@ -142,7 +144,8 @@ public class Game2 {
 			e.printStackTrace();
 		}
 	}
-	
+
+	/*
 	public void registerClasses() //register classes in order to send them 
 	{
 		if(hostType == HostType.SERVER){
@@ -168,6 +171,7 @@ public class Game2 {
 			
 			
 	}
+	*/
 	
 	public void sendUserData(BattleCastleUser user)
 	{
