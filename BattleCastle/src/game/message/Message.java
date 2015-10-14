@@ -11,7 +11,7 @@ public class Message {
 	
 	public Message(MessageType option, String text)
 	{
-		this.text = option + ":" + text;
+		this.text = option + "-" + text;
 	}
 	
 	public String toString()

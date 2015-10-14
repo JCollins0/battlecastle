@@ -61,8 +61,9 @@ public class Game2 {
 		
 		try {
 			serverIP = InetAddress.getLocalHost();
-			gameServer = new Server();
+			gameServer = new Server(65536, 16384);
 			gameServer.getKryo().setRegistrationRequired(false);
+			
 			gameServer.start();
 			gameServer.bind(SERVER_PORT);
 			gameServer.addListener(new Listener() {
@@ -94,7 +95,7 @@ public class Game2 {
 	public void startClient()
 	{
 		try {
-			gameClient = new Client();
+			gameClient = new Client(65536, 16384);
 			gameClient.getKryo().setRegistrationRequired(false);
 			gameClient.start();
 			gameClient.connect(5000, serverIP, SERVER_PORT);
@@ -115,19 +116,26 @@ public class Game2 {
 					{
 						Message messageOb = (Message)object;
 						String message = messageOb.toString();
-						String[] messageArr = message.split(":");
-						if(messageArr[0].trim().equals(MessageType.SELECT_MAP.toString()))
+						String[] messageArr = message.split("-");
+						String type = messageArr[0].trim();
+						if(type.equals(MessageType.SELECT_MAP.toString()))
 						{
 							gameMap = new GameMap(messageArr[1].trim());
+						}else if(type.equals(MessageType.UPDATE_PLAYER.toString()))
+						{
+							String[] num = messageArr[1].split("=");
+							playerList[Integer.parseInt(num[0])].decode(num[1]);
+							
 						}
 						
-					}else if(object instanceof Player[])
-					{
-						playerList = (Player[])object;
 					}
 					
 					/*
-					    if (object instanceof TreeMap<?, ?>) {
+					    else if(object instanceof Player[])
+						{
+							playerList = (Player[])object;
+						}
+						if (object instanceof TreeMap<?, ?>) {
 							playerMap = (TreeMap<String, BattleCastleUser>)object;
 							System.out.println("Client Player Map: " + playerMap);
 						}
@@ -192,11 +200,14 @@ public class Game2 {
 			{
 				for(int i = 0; i < playerList.length; i++)
 					if(playerList[i] != null)
+					{
 						playerList[i].tick();
-				gameServer.sendToAllTCP(playerList);	
+						Message message = new Message(MessageType.UPDATE_PLAYER,i + "=" + playerList[i].stringify());
+						gameServer.sendToAllTCP(message);
+					}
+					
+				
 			}
-			
-			
 		}
 	}
 	
@@ -253,12 +264,20 @@ public class Game2 {
 		//load players and then send to clients
 		for(int i = 0; i < playerMap.size(); i++)
 		{
-			playerList[i] = new Player();
+			playerList[i] = new Player("temp_player");
 			playerList[i].setLocation(gameMap.getPlayerStartPoint(i));
 		}
 		Message message = new Message(MessageType.SELECT_MAP, mapType.getText());
 		gameServer.sendToAllTCP(message);
-		gameServer.sendToAllTCP(playerList);
+		for(int i = 0; i < playerList.length; i++)
+		{
+			if(playerList[i] != null)
+			{
+				message = new Message(MessageType.UPDATE_PLAYER,i + "=" + playerList[i].stringify());
+				gameServer.sendToAllTCP(message);
+			}
+		}
+		
 		
 	}
 	
