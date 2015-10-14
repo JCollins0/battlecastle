@@ -76,7 +76,7 @@ public class Tile extends Rectangle
 		return "";
 	}
 	
-	public void execute()
+	public void execute(String s)
 	{
 		
 	}

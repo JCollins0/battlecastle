@@ -5,9 +5,11 @@ import java.awt.event.KeyListener;
 
 public class EditorKeyHandler implements KeyListener {
 
+	private EditorCanvas canvasref;
+	
 	public EditorKeyHandler(EditorCanvas canvasref)
 	{
-		
+		this.canvasref=canvasref;
 	}
 	
 	@Override

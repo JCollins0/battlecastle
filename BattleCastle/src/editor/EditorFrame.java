@@ -37,6 +37,9 @@ public class EditorFrame extends JFrame {
 		setVisible(true);
 		setFocusable(false);
 		editor_canvas.requestFocus();
+		Thread gameThread = new Thread(editor_canvas);
+		gameThread.start();
+		pack();
 	}
 	
 	public void init(){
