@@ -19,8 +19,9 @@ public class EditorCanvas extends Canvas implements Runnable{
 	 */
 	private static final long serialVersionUID = -6879897978771655344L;
 
-	private ArrayList<Tile> list;
+	protected ArrayList<Tile> list;
 	private ArrayList<Tile> examples;
+	public Tile addTileTile;
 	private static BufferedImage buffer;
 	private boolean running, bottom, grid;
 	private GameState currentState;
@@ -46,7 +47,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 		list=new ArrayList<Tile>();
 		
 		examples=new ArrayList<Tile>();
-		examples.add(new Tile(0,0,100,100));
+		addTileTile=new Tile(32,784,32,32);
+		examples.add(addTileTile);
 		
 		mouseHandler = new EditorMouseHandler(this);
 		keyHandler = new EditorKeyHandler(this);

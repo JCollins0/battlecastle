@@ -15,10 +15,10 @@ public class Tile extends Rectangle
 	private static final long serialVersionUID = -5649265101080536323L;
 	protected Image[] pics;
 	protected State[] states;
+	protected int animation;
 	
 	private static Image[] check;
 	private static State[] still;
-	protected int animation;
 	
 	static
 	{
@@ -44,6 +44,11 @@ public class Tile extends Rectangle
 	public Tile(int x,int y,int width,int height,Image pic,State[] states)
 	{
 		this(x,y,width,height,new Image[]{pic},states);
+	}
+	
+	public void setStates(State[] s)
+	{
+		states=s;
 	}
 	
 	protected void shift(int x,int y)
@@ -73,12 +78,31 @@ public class Tile extends Rectangle
 	
 	public String stringify()
 	{
-		return "";
+		return String.format("X:%d,Y:%d,W:%d,H:%d,A:%d",
+							 x,y,width,height,animation);
 	}
 	
 	public void execute(String s)
 	{
-		
+		String[] items = s.split(",");
+		for(String item : items)
+		{
+			String[] key_value = item.split(":");
+			switch(key_value[0])
+			{
+			case "X": this.x = Integer.parseInt(key_value[1]);
+				break;
+			case "Y": this.y = Integer.parseInt(key_value[1]);
+				break;
+			case "W": this.width = Integer.parseInt(key_value[1]);
+				break;
+			case "H": this.height = Integer.parseInt(key_value[1]);
+				break;
+			case "A": this.animation=Integer.parseInt(key_value[1]);
+				break;
+				
+			}
+		}
 	}
 
 }

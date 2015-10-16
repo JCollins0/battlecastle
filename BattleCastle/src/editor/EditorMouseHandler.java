@@ -37,8 +37,7 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 
 	@Override
 	public void mouseClicked(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
@@ -55,8 +54,10 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
+		if(canvasref.addTileTile.contains(mouse))
+		{
+			canvasref.list.add(new Tile(0, 0, 32, 32));
+		}
 	}
 
 	@Override
