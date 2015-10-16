@@ -6,5 +6,6 @@ public enum MenuButtonType
 	JOIN_GAME,
 	CONNECT_TO_IP,
 	CONTINUE_TO_GAME,
-	SELECT_MAP;
+	SELECT_MAP,
+	BACK_TO_MENU;
 }

@@ -97,6 +97,15 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 						} catch (UnknownHostException e1) {
 							e1.printStackTrace();
 						}
+					}else if (button.getButtonType() == MenuButtonType.BACK_TO_MENU)
+					{
+						canvasref.setCurrentState(GameState.MAIN_MENU);
+						if(canvasref.getGame() != null)
+						{
+							canvasref.getGame().stopServer();
+							canvasref.getGame().stopClient();
+						}
+					
 					}
 				}
 			}
@@ -144,6 +153,16 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 						}
 						
 					}
+					else if (button.getButtonType() == MenuButtonType.BACK_TO_MENU)
+					{
+						canvasref.setCurrentState(GameState.MAIN_MENU);
+						if(canvasref.getGame() != null)
+						{
+							canvasref.getGame().stopServer();
+							canvasref.getGame().stopClient();
+						}
+					
+					}
 				}
 			}
 			
@@ -170,6 +189,16 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 						canvasref.getGame().sendMapChoice(map.getMapType());
 						
 						canvasref.setCurrentState(GameState.GAMEPLAY);
+					}
+					else if (button.getButtonType() == MenuButtonType.BACK_TO_MENU)
+					{
+						canvasref.setCurrentState(GameState.MAIN_MENU);
+						if(canvasref.getGame() != null)
+						{
+							canvasref.getGame().stopServer();
+							canvasref.getGame().stopClient();
+						}
+					
 					}
 				}
 			}

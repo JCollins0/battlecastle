@@ -64,7 +64,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		joinGame = new MenuButton(500,500,200,50,MenuButtonType.JOIN_GAME, GameState.MAIN_MENU);
 		connectToServer = new MenuButton(200,300,100,50,MenuButtonType.CONNECT_TO_IP, GameState.JOIN_SERVER);
 		continueToGame = new MenuButton(200,300,100,50,MenuButtonType.CONTINUE_TO_GAME, GameState.INPUT_USER_NAME);
+		backButton = new MenuButton(800,500,200,50,MenuButtonType.BACK_TO_MENU, GameState.JOIN_SERVER, GameState.INPUT_USER_NAME, GameState.SELECT_MAP);
 		menuButtonList.add(connectToServer);
+		menuButtonList.add(backButton);
 		menuButtonList.add(hostGame);
 		menuButtonList.add(joinGame);
 		menuButtonList.add(continueToGame);
@@ -73,13 +75,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	
 	private ArrayList<MenuTextField> menuTextFieldList;
 	private ArrayList<MenuButton> menuButtonList;
-	private MenuTextField serverIPField;
-	private MenuButton hostGame;
-	private MenuButton joinGame;
-	private MenuButton connectToServer;
-	private MenuButton continueToGame;
+	private MenuTextField serverIPField, userNameField;;
+	private MenuButton hostGame, joinGame, connectToServer, continueToGame, backButton;
 	private MapSelectionObject map1,map2,map3;
-	private MenuTextField userNameField;
 	
 	public void render()
 	{

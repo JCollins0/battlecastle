@@ -130,22 +130,7 @@ public class Game2 {
 						}
 						
 					}
-					
-					/*
-					    else if(object instanceof Player[])
-						{
-							playerList = (Player[])object;
-						}
-						if (object instanceof TreeMap<?, ?>) {
-							playerMap = (TreeMap<String, BattleCastleUser>)object;
-							System.out.println("Client Player Map: " + playerMap);
-						}
-						else 
-					
-					*/
-					
-					
-			       }
+				}
 			});
 			
 			
@@ -153,34 +138,6 @@ public class Game2 {
 			e.printStackTrace();
 		}
 	}
-
-	/*
-	public void registerClasses() //register classes in order to send them 
-	{
-		if(hostType == HostType.SERVER){
-			Kryo serverRegistry = gameServer.getKryo();
-//			serverRegistry.register(BattleCastleUser.class);
-//			serverRegistry.register(TreeMap.class);
-//			serverRegistry.register(Rectangle.class);
-//			serverRegistry.register(Player.class);
-//			serverRegistry.register(Player[].class);
-//			serverRegistry.register(Message.class);
-			serverRegistry.setRegistrationRequired(false);
-		}
-		Kryo clientRegistry = gameClient.getKryo();
-//			clientRegistry.register(BattleCastleUser.class);
-//			clientRegistry.register(TreeMap.class);
-//			clientRegistry.register(Rectangle.class);
-//			clientRegistry.register(Player.class);
-//			clientRegistry.register(Player[].class);
-//			clientRegistry.register(Message.class);
-			clientRegistry.setRegistrationRequired(false);
-			
-			
-			
-			
-	}
-	*/
 	
 	public void sendUserData(BattleCastleUser user)
 	{
@@ -287,6 +244,17 @@ public class Game2 {
 		myUUID = uuid;
 	}
 
+	public void stopServer()
+	{
+		if(gameServer != null)
+			gameServer.stop();
+	}	
+	
+	public void stopClient()
+	{
+		if(gameClient != null)
+			gameClient.stop();
+	}
 	
 }
 
