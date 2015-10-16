@@ -102,7 +102,7 @@ public class Game2 {
 			gameClient.addListener(new Listener(){
 				
 				public void received (Connection connection, Object object) {
-					System.out.println("CLIENT RECEIVED OBJECT - " + object.toString());
+//					System.out.println("CLIENT RECEIVED OBJECT - " + object.toString());
 					if (object instanceof BattleCastleUser)
 					{
 						BattleCastleUser user = (BattleCastleUser)object;
@@ -111,6 +111,7 @@ public class Game2 {
 							playerMap.put(user.getUUID(), user);
 						}
 						playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
+						playerList[user.getPlayerNumber()] = new Player();
 						
 					}else if(object instanceof Message)
 					{

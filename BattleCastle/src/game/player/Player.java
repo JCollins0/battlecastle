@@ -20,7 +20,7 @@ public class Player {
 
 	public Player()
 	{
-		
+		this((BufferedImage)null);
 	}
 	
 	public Player(BufferedImage image)
