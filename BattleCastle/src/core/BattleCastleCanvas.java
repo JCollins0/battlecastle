@@ -219,6 +219,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 					for(int times = 0; times < 10; times++)
 					{
 						List<InetAddress> possibleServers = client.discoverHosts(Game2.SERVER_PORT, 3000);
+						System.out.println(possibleServers.size());
 						for(int i = 0; i < possibleServers.size(); i++)
 						{
 							ServerChoice choice = new ServerChoice(512,64 + (i * 32), possibleServers.get(i));

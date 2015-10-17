@@ -49,11 +49,16 @@ public class Game2 {
 		if(hostType == HostType.SERVER)
 		{
 			startServer();
-//			startClient();
-//			registerClasses();
+			startClient();
+			try {
+				gameClient.connect(5000, serverIP, SERVER_PORT);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-		startClient();	
-		
+		if(hostType == HostType.CLIENT)
+			startClient();
+		System.setProperty("java.net.preferIPv4Stack" , "true");
 	}
 	
 	private void startServer()
