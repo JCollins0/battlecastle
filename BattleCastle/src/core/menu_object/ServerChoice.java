@@ -45,6 +45,12 @@ public class ServerChoice {
 	{
 		return bounds.y;
 	}
+	
+	public String getAddress()
+	{
+		return address.getHostAddress();
+	}
+	
 	@Override
 	public boolean equals(Object o)
 	{

@@ -22,6 +22,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import core.BattleCastleCanvas;
+import core.GameState;
 import core.HostType;
 
 public class Game2 {
@@ -154,20 +155,23 @@ public class Game2 {
 		if(hostType == HostType.SERVER)
 		{
 			//will be handling collision
-			if(gameMap != null)
-				gameMap.tick();
-			
-			if(playerMap.size() >= MIN_PLAYERS)
+			if(canvasRef.getCurrentState() == GameState.GAMEPLAY)
 			{
-				for(int i = 0; i < playerList.length; i++)
-					if(playerList[i] != null)
-					{
-						playerList[i].tick();
-						Message message = new Message(MessageType.UPDATE_PLAYER,i + "=" + playerList[i].stringify());
-						gameServer.sendToAllTCP(message);
-					}
-					
-				
+				if(gameMap != null)
+					gameMap.tick();
+
+				if(playerMap.size() >= MIN_PLAYERS)
+				{
+					for(int i = 0; i < playerList.length; i++)
+						if(playerList[i] != null)
+						{
+							playerList[i].tick();
+							Message message = new Message(MessageType.UPDATE_PLAYER,i + "=" + playerList[i].stringify());
+							gameServer.sendToAllTCP(message);
+						}
+
+
+				}
 			}
 		}
 	}

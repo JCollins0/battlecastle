@@ -6,6 +6,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+import core.constants.ImageFilePaths;
 import utility.Utility;
 
 public class Player {
@@ -95,6 +96,9 @@ public class Player {
 			String[] key_value = item.split(":");
 			switch(key_value[0])
 			{
+			case "ImageFile":
+				//create 4 or 4+ folders in resources/entity/player/ to be used for a specific character
+				break;
 			case "X": bounds.x = Integer.parseInt(key_value[1]);
 				break;
 			case "Y": bounds.y = Integer.parseInt(key_value[1]);

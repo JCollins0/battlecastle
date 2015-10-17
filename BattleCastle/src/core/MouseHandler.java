@@ -18,6 +18,7 @@ import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
+import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
 
 public class MouseHandler implements MouseMotionListener, MouseListener, MouseWheelListener {
@@ -111,6 +112,19 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 					
 					}
 				}
+			}
+			
+			ServerSelectionBox selectionBox = canvasref.getServerSelectionBox();
+			ServerChoice choice = selectionBox.getServerChoice(mouse);
+			if(choice != null)
+			{
+				MenuTextField serverIPField = null;
+				for(int i = 0; i < menuTextFieldList.size(); i++)
+					if(menuTextFieldList.get(i).getID() == MenuTextFieldType.SERVER_IP_FIELD)
+						serverIPField = menuTextFieldList.get(i);
+				
+				if(serverIPField != null)
+					serverIPField.setText(choice.getAddress());
 			}
 			
 			break;

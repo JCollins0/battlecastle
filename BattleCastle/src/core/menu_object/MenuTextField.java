@@ -93,6 +93,11 @@ public class MenuTextField {
 		return text;
 	}
 	
+	public void setText(String text)
+	{
+		this.text = text;
+	}
+	
 	public boolean isVisibleAtState(GameState state)
 	{
 		for(GameState s : visibleStates)
