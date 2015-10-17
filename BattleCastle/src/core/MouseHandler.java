@@ -89,6 +89,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 						MenuTextField field = canvasref.getTextFieldByID(MenuTextFieldType.SERVER_IP_FIELD);
 						canvasref.getGame().setServerIP(field.getText());
 						canvasref.getGame().startClient();
+						canvasref.getGame().connectToServer();
 
 						MenuTextField name = canvasref.getTextFieldByID(MenuTextFieldType.USERNAME_FIELD);
 						try {

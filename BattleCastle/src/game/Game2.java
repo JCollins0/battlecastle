@@ -82,7 +82,7 @@ public class Game2 {
 							playerMap.put(user.getUUID(), user);
 						}
 						int playerNum = playerMap.size()-1;
-						user.setPlayerNumber(playerNum);
+						playerMap.get(user.getUUID()).setPlayerNumber(playerNum);
 						
 						for(String uuid : playerMap.keySet())
 						{
