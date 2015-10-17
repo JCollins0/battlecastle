@@ -27,6 +27,7 @@ import core.HostType;
 public class Game2 {
 	
 	public static final int SERVER_PORT = 25565;
+	public static final int SERVER_UDP = 25566;
 	
 	private Server gameServer;
 	private Client gameClient;
@@ -50,11 +51,7 @@ public class Game2 {
 		{
 			startServer();
 			startClient();
-			try {
-				gameClient.connect(5000, serverIP, SERVER_PORT);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			connectToServer();
 		}
 		if(hostType == HostType.CLIENT)
 			startClient();
@@ -70,7 +67,7 @@ public class Game2 {
 			gameServer.getKryo().setRegistrationRequired(false);
 			
 			gameServer.start();
-			gameServer.bind(SERVER_PORT);
+			gameServer.bind(SERVER_PORT,SERVER_UDP);
 			gameServer.addListener(new Listener() {
 				public void received (Connection connection, Object object) {
 					if (object instanceof BattleCastleUser) {
@@ -139,7 +136,7 @@ public class Game2 {
 	public void connectToServer()
 	{
 		try {
-			gameClient.connect(5000, serverIP, SERVER_PORT);
+			gameClient.connect(5000, serverIP, SERVER_PORT, SERVER_UDP);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
