@@ -120,7 +120,7 @@ public class Game2 {
 				{
 					Message messageOb = (Message)object;
 					String message = messageOb.toString();
-					String[] messageArr = message.split("-");
+					String[] messageArr = message.split(Message.SEPARATOR);
 					String type = messageArr[0].trim();
 					if(type.equals(MessageType.SELECT_MAP.toString()))
 					{
@@ -129,7 +129,6 @@ public class Game2 {
 					{
 						String[] num = messageArr[1].split("=");
 						playerList[Integer.parseInt(num[0])].decode(num[1]);
-						
 					}
 					
 				}

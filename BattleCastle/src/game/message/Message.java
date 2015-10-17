@@ -2,6 +2,7 @@ package game.message;
 
 public class Message {
 
+	public static final String SEPARATOR = "~";
 	private String text;
 	
 	public Message()
@@ -11,7 +12,7 @@ public class Message {
 	
 	public Message(MessageType option, String text)
 	{
-		this.text = option + "-" + text;
+		this.text = option + SEPARATOR + text;
 	}
 	
 	public String toString()
