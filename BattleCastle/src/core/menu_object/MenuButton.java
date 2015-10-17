@@ -2,39 +2,69 @@ package core.menu_object;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import core.GameState;
 
 public class MenuButton{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4897853488646672224L;
 	protected Rectangle bounds;
 	private MenuButtonType buttonType;
+	private BufferedImage image, hover_image;
 	private ArrayList<GameState> visibleStates;
+	private boolean hoverOver;
 	
-	public MenuButton(int x, int y, int width, int height, MenuButtonType buttonType, GameState visibleState)
+	public MenuButton(int x, int y, int width, int height, MenuButtonType buttonType,
+			BufferedImage base_image, BufferedImage hover_image, GameState visibleState)
 	{
-		this(x,y,width,height,buttonType,new GameState[]{ visibleState } );
+		this(x,y,width,height,buttonType,
+				base_image, hover_image,
+				new GameState[]{ visibleState } );
 	}
 	
-	public MenuButton(int x, int y, int width, int height, MenuButtonType buttonType, GameState... visibleStatesList)
+	public MenuButton(int x, int y, int width, int height, MenuButtonType buttonType,
+			BufferedImage base_image, BufferedImage hover_image,
+			GameState... visibleStatesList)
 	{
 		bounds = new Rectangle(x,y,width,height);
 		this.buttonType = buttonType;
+		this.image = base_image;
+		this.hover_image = hover_image;
 		visibleStates = new ArrayList<GameState>();
 		for(int i = 0; i < visibleStatesList.length; i++)
 			visibleStates.add(visibleStatesList[i]);
 	}
+	
+	public MenuButton(int x, int y, int width, int height, MenuButtonType buttonType,
+			GameState visibleState)
+	{
+		this(x,y,width,height,buttonType,
+				null, null, new GameState[]{ visibleState } );
+	}
+	
+	public MenuButton(int x, int y, int width, int height, MenuButtonType buttonType,
+			GameState... visibleStates)
+	{
+		this(x,y,width,height,buttonType,
+				null, null, visibleStates );
+	}
 		
 	public void render(Graphics g)
 	{
-		g.setColor(Color.blue);
-		g.fillRect(bounds.x,bounds.y,bounds.width,bounds.height);
+		if(image != null)
+		{
+			if(hoverOver)
+				g.drawImage(hover_image, bounds.x, bounds.y,bounds.width, bounds.height, null);
+			else
+				g.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height,  null);
+		}else
+		{
+			g.setColor(Color.blue);
+			g.fillRect(bounds.x,bounds.y,bounds.width,bounds.height);
+		}
 	}
 	
 	public void tick()
@@ -59,6 +89,17 @@ public class MenuButton{
 	public Rectangle getBounds()
 	{
 		return bounds;
+	}
+	
+	public boolean isHoverOver(Point p) 
+	{
+		return isHoverOver(p.x, p.y);
+	}
+	
+	public boolean isHoverOver(int x, int y)
+	{
+		return(hoverOver = bounds.contains(x,y));
+		
 	}
 	
 }

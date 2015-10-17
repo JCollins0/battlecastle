@@ -1,19 +1,34 @@
 package core;
 
+import game.Game;
+import game.Game2;
+import game.object.MapType;
+
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import utility.Utility;
+
+import com.esotericsoftware.kryonet.Client;
+
+import core.constants.ImageFilePaths;
 import core.menu_object.MapSelectionObject;
 import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
-import game.Game;
-import game.Game2;
-import game.object.MapType;
+import core.menu_object.ServerChoice;
+import core.menu_object.ServerSelectionBox;
 
 public class BattleCastleCanvas extends Canvas implements Runnable{
 
@@ -43,6 +58,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		keyHandler = new KeyHandler(this);
 		addMouseMotionListener(mouseHandler);
 		addMouseListener(mouseHandler);
+		addMouseWheelListener(mouseHandler);
 		addKeyListener(keyHandler);
 		
 		menuTextFieldList = new ArrayList<MenuTextField>();
@@ -60,8 +76,16 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuButtonList.add(map1);
 		menuButtonList.add(map2);
 		menuButtonList.add(map3);
-		hostGame = new MenuButton(500,400,200,50,MenuButtonType.HOST_GAME, GameState.MAIN_MENU);
-		joinGame = new MenuButton(500,500,200,50,MenuButtonType.JOIN_GAME, GameState.MAIN_MENU);
+		hostGame = new MenuButton(250,350,500,100,
+				MenuButtonType.HOST_GAME, 
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "host_game"),
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "host_game_selected"),
+				GameState.MAIN_MENU);
+		joinGame = new MenuButton(250,500,500,100,
+				MenuButtonType.JOIN_GAME,
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "join_game"),
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "join_game_selected"),
+				GameState.MAIN_MENU);
 		connectToServer = new MenuButton(200,300,100,50,MenuButtonType.CONNECT_TO_IP, GameState.JOIN_SERVER);
 		continueToGame = new MenuButton(200,300,100,50,MenuButtonType.CONTINUE_TO_GAME, GameState.INPUT_USER_NAME);
 		backButton = new MenuButton(800,500,200,50,MenuButtonType.BACK_TO_MENU, GameState.JOIN_SERVER, GameState.INPUT_USER_NAME, GameState.SELECT_MAP);
@@ -70,6 +94,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuButtonList.add(hostGame);
 		menuButtonList.add(joinGame);
 		menuButtonList.add(continueToGame);
+		
+		serverSelectionBox = new ServerSelectionBox();
 		running = true;
 	}
 	
@@ -78,6 +104,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private MenuTextField serverIPField, userNameField;;
 	private MenuButton hostGame, joinGame, connectToServer, continueToGame, backButton;
 	private MapSelectionObject map1,map2,map3;
+	private ServerSelectionBox serverSelectionBox;
 	
 	public void render()
 	{
@@ -94,6 +121,10 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		/*
 		 * Draw to screen
 		 */
+		b.setColor(Color.black);
+		b.drawString(String.format("%d,%d",MouseHandler.mouse.x, MouseHandler.mouse.y),
+				MouseHandler.mouse.x, MouseHandler.mouse.y);
+		
 		switch (currentState)
 		{
 		case MAIN_MENU:
@@ -112,16 +143,10 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			break;
 		case GAMEPLAY:
 			
-//			if (game != null)
-//			{
-//				game.render(b);
-//			}
-			
 			if(game2 != null)
 			{
 				game2.render(b);
-			}
-			
+			}			
 			break;
 		
 		default:
@@ -129,6 +154,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				
 		}
 		
+		if(currentState == GameState.JOIN_SERVER)
+		{
+			if(serverSelectionBox != null)
+				serverSelectionBox.render(b);
+		}
 		
 		Graphics g = bs.getDrawGraphics();
 		
@@ -177,7 +207,28 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		if(host)
 			game2 = new Game2(this, HostType.SERVER);
 		else
+		{
 			game2 = new Game2(this, HostType.CLIENT);
+			
+			Timer searchTimer = new Timer();
+			searchTimer.schedule(new TimerTask(){
+				public void run() {
+					
+					Client client = game2.getClient();
+					
+					for(int times = 0; times < 10; times++)
+					{
+						List<InetAddress> possibleServers = client.discoverHosts(Game2.SERVER_PORT, 3000);
+						for(int i = 0; i < possibleServers.size(); i++)
+						{
+							ServerChoice choice = new ServerChoice(512,64 + (i * 32), possibleServers.get(i));
+							serverSelectionBox.addServer(choice);
+						}
+					}
+					
+				}
+			}, 1000);
+		}
 	}
 	
 	public GameState getCurrentState()
@@ -222,6 +273,10 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			if (field.getID() == textFieldType)
 				return field;
 		return null;
+	}
+
+	public ServerSelectionBox getServerSelectionBox() {
+		return serverSelectionBox;
 	}
 	
 	

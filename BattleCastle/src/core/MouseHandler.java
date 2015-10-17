@@ -1,9 +1,14 @@
 package core;
 
+import game.Game;
+import game.player.BattleCastleUser;
+
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
@@ -13,13 +18,12 @@ import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
-import game.Game;
-import game.player.BattleCastleUser;
+import core.menu_object.ServerSelectionBox;
 
-public class MouseHandler implements MouseMotionListener, MouseListener {
+public class MouseHandler implements MouseMotionListener, MouseListener, MouseWheelListener {
 
 	private BattleCastleCanvas canvasref;
-	private static Point mouse;
+	public static Point mouse;
 	
 	public MouseHandler(BattleCastleCanvas canvasref){
 		this.canvasref = canvasref;
@@ -85,12 +89,10 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 						MenuTextField field = canvasref.getTextFieldByID(MenuTextFieldType.SERVER_IP_FIELD);
 						canvasref.getGame().setServerIP(field.getText());
 						canvasref.getGame().startClient();
-//						canvasref.getGame().registerClasses();
+
 						MenuTextField name = canvasref.getTextFieldByID(MenuTextFieldType.USERNAME_FIELD);
-						
 						try {
 							BattleCastleUser user = new BattleCastleUser(name.getText(),InetAddress.getLocalHost(),Game.CLIENT_PORT);
-						//	System.out.println(user.getAddress());
 							canvasref.getGame().setMyUserUUID(user.getUUID());
 							canvasref.getGame().sendUserData(user);
 							
@@ -231,6 +233,50 @@ public class MouseHandler implements MouseMotionListener, MouseListener {
 	@Override
 	public void mouseMoved(MouseEvent e) {
 		mouse = e.getPoint();
+		switch( canvasref.getCurrentState())
+		{
+		case GAMEPLAY:
+			break;
+		case SELECT_MAP:
+			break;
+		case INPUT_USER_NAME:
+		case JOIN_SERVER:
+		case MAIN_MENU: 
+			
+			ArrayList<MenuButton> buttonList = canvasref.getMenuButtons();
+			for(MenuButton button : buttonList)
+			{
+				button.isHoverOver(mouse);
+			}
+			
+			break;
+		default:
+			break;
+		}
+	}
+
+	@Override
+	public void mouseWheelMoved(MouseWheelEvent e) {
+		switch(canvasref.getCurrentState())
+		{
+		case GAMEPLAY:
+			break;
+		case INPUT_USER_NAME:
+			break;
+		case JOIN_SERVER:
+			
+			ServerSelectionBox serverSelectionBox = canvasref.getServerSelectionBox();
+			serverSelectionBox.updatePositions(e.getWheelRotation());
+			System.out.println("WHEEL ROTATION: " + e.getWheelRotation());
+			
+			break;
+		case MAIN_MENU:
+			break;
+		case SELECT_MAP:
+			break;
+		default:
+			break;
+		}
 	}
 	
 }

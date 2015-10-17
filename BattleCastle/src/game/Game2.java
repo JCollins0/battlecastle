@@ -26,7 +26,7 @@ import core.HostType;
 
 public class Game2 {
 	
-	private static final int SERVER_PORT = 25565;
+	public static final int SERVER_PORT = 25565;
 	
 	private Server gameServer;
 	private Client gameClient;
@@ -49,10 +49,10 @@ public class Game2 {
 		if(hostType == HostType.SERVER)
 		{
 			startServer();
-			startClient();
+//			startClient();
 //			registerClasses();
 		}
-//		startClient();	
+		startClient();	
 		
 	}
 	
@@ -94,46 +94,48 @@ public class Game2 {
 	
 	public void startClient()
 	{
-		try {
-			gameClient = new Client(65536, 16384);
-			gameClient.getKryo().setRegistrationRequired(false);
-			gameClient.start();
-			gameClient.connect(5000, serverIP, SERVER_PORT);
-			gameClient.addListener(new Listener(){
-				
-				public void received (Connection connection, Object object) {
+		gameClient = new Client(65536, 16384);
+		gameClient.getKryo().setRegistrationRequired(false);
+		gameClient.start();
+		gameClient.addListener(new Listener(){
+			
+			public void received (Connection connection, Object object) {
 //					System.out.println("CLIENT RECEIVED OBJECT - " + object.toString());
-					if (object instanceof BattleCastleUser)
+				if (object instanceof BattleCastleUser)
+				{
+					BattleCastleUser user = (BattleCastleUser)object;
+					if(playerMap.get( user.getUUID() ) == null)
 					{
-						BattleCastleUser user = (BattleCastleUser)object;
-						if(playerMap.get( user.getUUID() ) == null)
-						{
-							playerMap.put(user.getUUID(), user);
-						}
-						playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
-						playerList[user.getPlayerNumber()] = new Player();
-						
-					}else if(object instanceof Message)
+						playerMap.put(user.getUUID(), user);
+					}
+					playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
+					playerList[user.getPlayerNumber()] = new Player();
+					
+				}else if(object instanceof Message)
+				{
+					Message messageOb = (Message)object;
+					String message = messageOb.toString();
+					String[] messageArr = message.split("-");
+					String type = messageArr[0].trim();
+					if(type.equals(MessageType.SELECT_MAP.toString()))
 					{
-						Message messageOb = (Message)object;
-						String message = messageOb.toString();
-						String[] messageArr = message.split("-");
-						String type = messageArr[0].trim();
-						if(type.equals(MessageType.SELECT_MAP.toString()))
-						{
-							gameMap = new GameMap(messageArr[1].trim());
-						}else if(type.equals(MessageType.UPDATE_PLAYER.toString()))
-						{
-							String[] num = messageArr[1].split("=");
-							playerList[Integer.parseInt(num[0])].decode(num[1]);
-							
-						}
+						gameMap = new GameMap(messageArr[1].trim());
+					}else if(type.equals(MessageType.UPDATE_PLAYER.toString()))
+					{
+						String[] num = messageArr[1].split("=");
+						playerList[Integer.parseInt(num[0])].decode(num[1]);
 						
 					}
+					
 				}
-			});
-			
-			
+			}
+		});
+	}
+	
+	public void connectToServer()
+	{
+		try {
+			gameClient.connect(5000, serverIP, SERVER_PORT);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -242,6 +244,11 @@ public class Game2 {
 	public void setMyUserUUID(String uuid)
 	{
 		myUUID = uuid;
+	}
+	
+	public Client getClient()
+	{
+		return gameClient;
 	}
 
 	public void stopServer()
