@@ -1,10 +1,13 @@
 package core.menu_object;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+
+import core.BattleCastleCanvas;
 
 public class ServerSelectionBox {
 	
@@ -13,6 +16,9 @@ public class ServerSelectionBox {
 	private Rectangle bounds;
 	private static final int WIDTH = 256, HEIGHT = 256;
 	private static final int NUMBER_SERVERS_TO_SHOW = 4;
+	private int status;
+	private static final Font STATUS_FONT = new Font("Courier New",Font.PLAIN,25);
+	public static final int SEARCHING = 0, NOTHING = 1, FOUND = 2;
 	
 	public ServerSelectionBox(int x, int y)
 	{
@@ -28,6 +34,22 @@ public class ServerSelectionBox {
 	
 	public void render(Graphics g)
 	{
+		
+		g.setColor(Color.CYAN);
+		g.fillRect(bounds.x,bounds.y,bounds.width,bounds.height);
+		
+		if (status == SEARCHING)
+		{
+			g.setColor(Color.BLACK);
+			g.setFont(STATUS_FONT);
+			g.drawString("Searching...", bounds.x, bounds.y);
+		}else if(status == NOTHING)
+		{
+			g.setColor(Color.BLACK);
+			g.setFont(STATUS_FONT);
+			g.drawString("No Servers Found", bounds.x, bounds.y);
+		}
+		
 		if(yOffset <= 0)
 			yOffset = 0;
 		else if(yOffset >= serverChoices.size())
@@ -39,8 +61,7 @@ public class ServerSelectionBox {
 				serverChoices.get(i).render(g);
 		}
 		
-		g.setColor(Color.CYAN);
-		g.fillRect(bounds.x,bounds.y,bounds.width,bounds.height);
+		
 	}
 	
 	public void updatePositions(int offset)
@@ -53,13 +74,18 @@ public class ServerSelectionBox {
 			}
 		}
 		yOffset += offset;
-		System.out.println(yOffset);
+//		System.out.println(yOffset);
 		
 	}
 	
 	public void tick()
 	{
-		
+	
+	}
+	
+	public void setStatus(int status)
+	{
+		this.status = status;
 	}
 
 	public ServerChoice getServerChoice(Point mouse) {

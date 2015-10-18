@@ -6,6 +6,7 @@ import game.object.MapType;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
@@ -45,6 +46,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private BufferedImage title_image;
 	private ArrayList<Error> error_messages;
 	private boolean searchingForServers;
+	public static Font defaultFont;
 	
 	public BattleCastleCanvas()
 	{
@@ -52,6 +54,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		buffer = new BufferedImage(BattleCastleFrame.GAME_SIZE.width,
 								   BattleCastleFrame.GAME_SIZE.height,
 								   BufferedImage.TYPE_INT_ARGB);
+		
+		defaultFont = buffer.getGraphics().getFont();
 		
 		currentState = GameState.MAIN_MENU;
 
@@ -319,12 +323,13 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	public void searchForLanServers()
 	{
 		searchingForServers = true;
+		serverSelectionBox.setStatus(ServerSelectionBox.SEARCHING);
 		Timer searchTimer = new Timer();
 		searchTimer.schedule(new TimerTask(){
 			public void run() {
 				
 				Client client = game2.getClient();
-				List<InetAddress> possibleServers = client.discoverHosts(Game2.SERVER_UDP, 3000);
+				List<InetAddress> possibleServers = client.discoverHosts(Game2.SERVER_UDP, 5000);
 				System.out.println(possibleServers.size());
 				for(int i = 0; i < possibleServers.size(); i++)
 				{
@@ -332,8 +337,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 					serverSelectionBox.addServer(choice);
 				}
 				searchingForServers = false;
+				serverSelectionBox.setStatus(possibleServers.size() > 0 ? ServerSelectionBox.FOUND : ServerSelectionBox.NOTHING);
 			}
-		}, 0);
+		}, 1000);
 	}
 
 	public ServerSelectionBox getServerSelectionBox() {
