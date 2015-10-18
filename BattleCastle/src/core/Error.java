@@ -51,4 +51,14 @@ public class Error {
 	public int getY() {
 		return y;
 	}
+	
+	public int getX()
+	{
+		return x;
+	}
+	
+	public String getText()
+	{
+		return text;
+	}
 }
