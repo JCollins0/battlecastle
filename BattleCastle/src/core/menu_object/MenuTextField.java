@@ -1,6 +1,7 @@
 package core.menu_object;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -17,6 +18,7 @@ public class MenuTextField {
 	private MenuTextFieldType id;
 	private ArrayList<GameState> visibleStates;
 	private BufferedImage image;
+	private static final Font TEXT_FONT = new Font("Courier New", Font.PLAIN, 50);
 	
 	public MenuTextField(int x, int y, int width, int height, MenuTextFieldType id, GameState visibleState)
 	{
@@ -52,12 +54,13 @@ public class MenuTextField {
 	
 	public void space()
 	{
-		text = text + " ";
+		if(text.length() < 16)
+			text = text + " ";
 	}
 	
 	public void addCharacter(char c)
 	{
-		if ( allowablecharacters == "" || allowablecharacters.indexOf(c) >= 0)
+		if ( (allowablecharacters == "" || allowablecharacters.indexOf(c) >= 0 ) && text.length() < 16)
 		{
 			text = text + c;
 		}
@@ -110,10 +113,17 @@ public class MenuTextField {
 	
 	public void render(Graphics g)
 	{
-		g.setColor(Color.black);
-		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+		g.setFont(TEXT_FONT);
+		if(image != null)
+		{
+			g.drawImage(image,bounds.x,bounds.y,bounds.width,bounds.height, null);
+		}else
+		{
+			g.setColor(Color.black);
+			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+		}
 		g.setColor(Color.white);
-		g.drawString(text,bounds.x + bounds.width/3, bounds.y + bounds.height/2);
+		g.drawString(text,bounds.x + bounds.width/2 - g.getFontMetrics(TEXT_FONT).charWidth('a') * text.length()/2, bounds.y + bounds.height/2 + g.getFontMetrics(TEXT_FONT).getHeight()/4);
 	}
 
 	public MenuTextFieldType getID() {

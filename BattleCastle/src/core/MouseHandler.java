@@ -110,6 +110,10 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 							canvasref.getGame().stopClient();
 						}
 					
+					}else if(button.getButtonType() == MenuButtonType.REFRESH_LAN_SERVERS)
+					{
+						if(!canvasref.isSearchingForServers())
+							canvasref.searchForLanServers();
 					}
 				}
 			}

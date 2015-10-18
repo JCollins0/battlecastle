@@ -7,8 +7,6 @@ import game.object.MapType;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.net.InetAddress;
@@ -44,6 +42,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private Game2 game2;
 	private MouseHandler mouseHandler;
 	private KeyHandler keyHandler;
+	private BufferedImage title_image;
+	private ArrayList<Error> error_messages;
+	private boolean searchingForServers;
 	
 	public BattleCastleCanvas()
 	{
@@ -61,48 +62,90 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		addMouseWheelListener(mouseHandler);
 		addKeyListener(keyHandler);
 		
+		title_image = Utility.loadImage(ImageFilePaths.MENU_BACKGROUND + "title");
+		
+		serverSelectionBox = new ServerSelectionBox(672,200);
+		error_messages = new ArrayList<Error>();
+		
+		menuButtonList = new ArrayList<MenuButton>();
 		menuTextFieldList = new ArrayList<MenuTextField>();
-		serverIPField = new MenuTextField(100, 100, 300, 50, MenuTextFieldType.SERVER_IP_FIELD, GameState.JOIN_SERVER);
+		
+		serverIPField = new MenuTextField(100, 350, 500, 100,
+				MenuTextFieldType.SERVER_IP_FIELD,
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "text_field"),
+				GameState.JOIN_SERVER);
 		serverIPField.setDefaultText("10.118.40.251");
 		serverIPField.setAllowableCharacters("0123456789.");
-		userNameField = new MenuTextField(100, 600, 100, 50, MenuTextFieldType.USERNAME_FIELD, GameState.JOIN_SERVER, GameState.INPUT_USER_NAME);
+		
+		userNameField = new MenuTextField(100, 200, 500, 100,
+				MenuTextFieldType.USERNAME_FIELD,
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "text_field"),
+				GameState.JOIN_SERVER, GameState.INPUT_USER_NAME);
 		userNameField.setAllowableCharacters("abcdefghijklmnopqrstuvwxyz0123456789");
+		
 		menuTextFieldList.add(userNameField);
 		menuTextFieldList.add(serverIPField);
-		menuButtonList = new ArrayList<MenuButton>();
+		
 		map1 = new MapSelectionObject(200, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.ONE, GameState.SELECT_MAP);
 		map2 = new MapSelectionObject(500, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.TWO, GameState.SELECT_MAP);
 		map3 = new MapSelectionObject(800, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.THREE, GameState.SELECT_MAP);
 		menuButtonList.add(map1);
 		menuButtonList.add(map2);
 		menuButtonList.add(map3);
-		hostGame = new MenuButton(250,350,500,100,
+		
+		hostGame = new MenuButton(250,300,500,100,
 				MenuButtonType.HOST_GAME, 
 				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "host_game"),
 				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "host_game_selected"),
 				GameState.MAIN_MENU);
-		joinGame = new MenuButton(250,500,500,100,
+		
+		joinGame = new MenuButton(250,425,500,100,
 				MenuButtonType.JOIN_GAME,
 				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "join_game"),
 				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "join_game_selected"),
 				GameState.MAIN_MENU);
-		connectToServer = new MenuButton(200,300,100,50,MenuButtonType.CONNECT_TO_IP, GameState.JOIN_SERVER);
-		continueToGame = new MenuButton(200,300,100,50,MenuButtonType.CONTINUE_TO_GAME, GameState.INPUT_USER_NAME);
-		backButton = new MenuButton(800,500,200,50,MenuButtonType.BACK_TO_MENU, GameState.JOIN_SERVER, GameState.INPUT_USER_NAME, GameState.SELECT_MAP);
+		
+		levelEditor = new MenuButton(250,575,500,100,
+				MenuButtonType.LEVEL_EDITOR,
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "level_editor"),
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "level_editor_selected"),
+				GameState.MAIN_MENU);
+		
+		connectToServer = new MenuButton(150,500,400,100,
+				MenuButtonType.CONNECT_TO_IP,
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "connect_to_server"),
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "connect_to_server_selected"),
+				GameState.JOIN_SERVER);
+		
+		continueToGame = new MenuButton(200,300,400,100,
+				MenuButtonType.CONTINUE_TO_GAME,
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "continue"),
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "continue_selected"),
+				GameState.INPUT_USER_NAME);
+		
+		backButton = new MenuButton(250,650,200,50,
+				MenuButtonType.BACK_TO_MENU,
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "back"),
+				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "back_selected"),
+				GameState.JOIN_SERVER, GameState.INPUT_USER_NAME, GameState.SELECT_MAP);
+		
+		refreshLanServers = new MenuButton(704,472,192,48,MenuButtonType.REFRESH_LAN_SERVERS,GameState.JOIN_SERVER);
+		
 		menuButtonList.add(connectToServer);
 		menuButtonList.add(backButton);
 		menuButtonList.add(hostGame);
 		menuButtonList.add(joinGame);
 		menuButtonList.add(continueToGame);
+		menuButtonList.add(levelEditor);
+		menuButtonList.add(refreshLanServers);
 		
-		serverSelectionBox = new ServerSelectionBox();
 		running = true;
 	}
 	
 	private ArrayList<MenuTextField> menuTextFieldList;
 	private ArrayList<MenuButton> menuButtonList;
 	private MenuTextField serverIPField, userNameField;;
-	private MenuButton hostGame, joinGame, connectToServer, continueToGame, backButton;
+	private MenuButton hostGame, joinGame, connectToServer, continueToGame, backButton, levelEditor, refreshLanServers;
 	private MapSelectionObject map1,map2,map3;
 	private ServerSelectionBox serverSelectionBox;
 	
@@ -128,6 +171,14 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		switch (currentState)
 		{
 		case MAIN_MENU:
+			b.setColor(Color.RED);
+			b.setFont(Error.ERROR_FONT);
+			if(error_messages.size() > 0)
+				b.drawString("ERRORS:",16,error_messages.get(0).getY()-20);
+			for(int i = 0; i < error_messages.size(); i++)
+				error_messages.get(i).render(b);
+			b.drawImage(title_image, 0 , 32 , 1024, 128, null);
+			
 		case JOIN_SERVER:
 		case INPUT_USER_NAME:
 		case SELECT_MAP:
@@ -173,6 +224,13 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	{
 //		if(game != null)
 //			game.tick();
+		for(int i = 0; i < error_messages.size(); i++)
+		{
+			error_messages.get(i).tick();
+			if(error_messages.get(i).shouldRemove())
+				error_messages.remove(i--);
+		}
+		
 		
 		if(game2 != null)
 			game2.tick();
@@ -210,20 +268,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		{
 			game2 = new Game2(this, HostType.CLIENT);
 			
-			Timer searchTimer = new Timer();
-			searchTimer.schedule(new TimerTask(){
-				public void run() {
-					
-					Client client = game2.getClient();
-					List<InetAddress> possibleServers = client.discoverHosts(Game2.SERVER_UDP, 5000);
-					System.out.println(possibleServers.size());
-					for(int i = 0; i < possibleServers.size(); i++)
-					{
-						ServerChoice choice = new ServerChoice(512,64 + (i * 32), possibleServers.get(i));
-						serverSelectionBox.addServer(choice);
-					}
-				}
-			}, 1000);
+			searchForLanServers();
 		}
 	}
 	
@@ -270,11 +315,45 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				return field;
 		return null;
 	}
+	
+	public void searchForLanServers()
+	{
+		searchingForServers = true;
+		Timer searchTimer = new Timer();
+		searchTimer.schedule(new TimerTask(){
+			public void run() {
+				
+				Client client = game2.getClient();
+				List<InetAddress> possibleServers = client.discoverHosts(Game2.SERVER_UDP, 3000);
+				System.out.println(possibleServers.size());
+				for(int i = 0; i < possibleServers.size(); i++)
+				{
+					ServerChoice choice = new ServerChoice(672,200 + (i * ServerChoice.HEIGHT), possibleServers.get(i));
+					serverSelectionBox.addServer(choice);
+				}
+				searchingForServers = false;
+			}
+		}, 0);
+	}
 
 	public ServerSelectionBox getServerSelectionBox() {
 		return serverSelectionBox;
 	}
 	
+	public void addError(Error error)
+	{
+		
+		if(error_messages.isEmpty())
+			error.setPosition(16, 256);
+		else
+			error.setPosition(16, error_messages.get(error_messages.size()-1).getY()+20);
+			
+		error_messages.add(error);
+	}
+	public boolean isSearchingForServers()
+	{
+		return searchingForServers;
+	}
 	
 }
 

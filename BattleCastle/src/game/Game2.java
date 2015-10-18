@@ -8,14 +8,11 @@ import game.player.BattleCastleUser;
 import game.player.Player;
 
 import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.TreeMap;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -24,6 +21,7 @@ import com.esotericsoftware.kryonet.Server;
 import core.BattleCastleCanvas;
 import core.GameState;
 import core.HostType;
+import core.Error;
 
 public class Game2 {
 	
@@ -138,8 +136,9 @@ public class Game2 {
 	{
 		try {
 			gameClient.connect(5000, serverIP, SERVER_PORT, SERVER_UDP);
-		} catch (IOException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			canvasRef.setCurrentState(GameState.MAIN_MENU);
+			canvasRef.addError(new Error("Could Not Connect To Specified IP Address", 300));
 		}
 	}
 	
@@ -191,7 +190,8 @@ public class Game2 {
 		try {
 			serverIP = InetAddress.getByName(ip);
 		} catch (UnknownHostException e) {
-			e.printStackTrace();
+			canvasRef.setCurrentState(GameState.MAIN_MENU);
+			canvasRef.addError(new Error("IP Formatted Incorrectly: " + ip, 300));
 		}
 	}
 	

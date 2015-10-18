@@ -9,8 +9,8 @@ public class ServerChoice {
 
 	private InetAddress address;
 	private Rectangle bounds;
-	public static final int HEIGHT = 32;
-	public static final int WIDTH = 128;
+	public static final int HEIGHT = 64;
+	public static final int WIDTH = 256;
 	
 	public ServerChoice(int x, int y, InetAddress address )
 	{
