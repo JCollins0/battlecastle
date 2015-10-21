@@ -47,7 +47,6 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private ArrayList<Error> error_messages;
 	private boolean searchingForServers;
 	public static Font defaultFont;
-	private static final Color lightGray = new Color(128, 128, 128, 128);
 	
 	public BattleCastleCanvas()
 	{
@@ -179,17 +178,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			b.setColor(Color.RED);
 			b.setFont(Error.ERROR_FONT);
 			if(error_messages.size() > 0)
-			{
 				b.drawString("ERRORS:",16,error_messages.get(0).getY()-20);
-				b.setColor(lightGray);
-				b.fillRect(12,error_messages.get(0).getY()-40,b.getFontMetrics(Error.ERROR_FONT).charsWidth("ERRORS:".toCharArray(),0,"ERRORS:".length() )+8,20);
-			}
 			for(int i = 0; i < error_messages.size(); i++)
-			{
 				error_messages.get(i).render(b);
-				b.setColor(lightGray);
-				b.fillRect(error_messages.get(i).getX()-4, error_messages.get(i).getY()-20, b.getFontMetrics(Error.ERROR_FONT).charsWidth(error_messages.get(i).getText().toCharArray(),0,error_messages.get(i).getText().length() )+8, 20);
-			}
 			b.drawImage(title_image, 0 , 32 , 1024, 128, null);
 			
 		case JOIN_SERVER:
@@ -338,7 +329,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			public void run() {
 				
 				Client client = game2.getClient();
-				List<InetAddress> possibleServers = client.discoverHosts(Game2.SERVER_UDP, 5000);
+				List<InetAddress> possibleServers = client.discoverHosts(Game2.SERVER_UDP, 20000);
 				System.out.println(possibleServers.size());
 				for(int i = 0; i < possibleServers.size(); i++)
 				{

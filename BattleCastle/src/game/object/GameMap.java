@@ -9,6 +9,7 @@ import utility.Utility;
 public class GameMap {
 	
 	private BufferedImage background;
+	private Point[] playerStartLocations;
 	
 	public GameMap(String imageName)
 	{
@@ -40,5 +41,14 @@ public class GameMap {
 		case 3: return new Point(128,128);
 		}
 		return null;
+	}
+	
+	public static GameMap map1, map2, map3;
+	
+	static
+	{
+		map1 = new GameMap("");
+		map2 = new GameMap("");
+		map3 = new GameMap("");
 	}
 }
