@@ -14,7 +14,7 @@ public class EditorFrame extends JFrame {
 
 	public static final String GAME_NAME = "Battle Castle Level Editor";
 	public static final String GAME_VERSION = "1.0";
-	public static final Dimension GAME_SIZE = new Dimension(1024,1024);
+	public static final Dimension GAME_SIZE = new Dimension(1024,896);
 	
 	protected ArrayList<Tile> tiles=new ArrayList<Tile>();
 	

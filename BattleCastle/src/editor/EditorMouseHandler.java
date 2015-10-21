@@ -20,7 +20,7 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent arg0) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 	@Override
 	public void mouseMoved(MouseEvent arg0) {
 		// TODO Auto-generated method stub
-
+		mouse=arg0.getPoint();
 	}
 
 	@Override

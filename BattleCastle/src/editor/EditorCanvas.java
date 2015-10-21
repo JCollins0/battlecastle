@@ -89,6 +89,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 			for(Tile t:examples)
 				t.draw(b);
 		}
+		for(Tile t:list)
+			t.draw(b);
 		
 		
 		Graphics g = bs.getDrawGraphics();
