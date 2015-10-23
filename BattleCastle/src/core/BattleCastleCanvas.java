@@ -66,7 +66,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		addMouseWheelListener(mouseHandler);
 		addKeyListener(keyHandler);
 		
-		title_image = Utility.loadImage(ImageFilePaths.MENU_BACKGROUND + "title");
+		title_image = Utility.loadImage(ImageFilePaths.TITLE);
 		
 		serverSelectionBox = new ServerSelectionBox(672,200);
 		error_messages = new ArrayList<Error>();
@@ -76,14 +76,14 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		
 		serverIPField = new MenuTextField(100, 350, 500, 100,
 				MenuTextFieldType.SERVER_IP_FIELD,
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "text_field"),
+				Utility.loadImage(ImageFilePaths.TEXT_FIELD),
 				GameState.JOIN_SERVER);
 		serverIPField.setDefaultText("10.118.40.251");
 		serverIPField.setAllowableCharacters("0123456789.");
 		
 		userNameField = new MenuTextField(100, 200, 500, 100,
 				MenuTextFieldType.USERNAME_FIELD,
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "text_field"),
+				Utility.loadImage(ImageFilePaths.TEXT_FIELD),
 				GameState.JOIN_SERVER, GameState.INPUT_USER_NAME);
 		userNameField.setAllowableCharacters("abcdefghijklmnopqrstuvwxyz0123456789");
 		
@@ -99,38 +99,38 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		
 		hostGame = new MenuButton(250,300,500,100,
 				MenuButtonType.HOST_GAME, 
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "host_game"),
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "host_game_selected"),
+				Utility.loadImage(ImageFilePaths.HOST_GAME),
+				Utility.loadImage(ImageFilePaths.HOST_GAME_SELECTED),
 				GameState.MAIN_MENU);
 		
 		joinGame = new MenuButton(250,425,500,100,
 				MenuButtonType.JOIN_GAME,
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "join_game"),
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "join_game_selected"),
+				Utility.loadImage(ImageFilePaths.JOIN_GAME),
+				Utility.loadImage(ImageFilePaths.JOIN_GAME_SELECTED),
 				GameState.MAIN_MENU);
 		
 		levelEditor = new MenuButton(250,575,500,100,
 				MenuButtonType.LEVEL_EDITOR,
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "level_editor"),
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "level_editor_selected"),
+				Utility.loadImage(ImageFilePaths.LEVEL_EDITOR),
+				Utility.loadImage(ImageFilePaths.LEVEL_EDITOR_SELECTED),
 				GameState.MAIN_MENU);
 		
 		connectToServer = new MenuButton(150,500,400,100,
 				MenuButtonType.CONNECT_TO_IP,
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "connect_to_server"),
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "connect_to_server_selected"),
+				Utility.loadImage(ImageFilePaths.CONNECT_TO_SERVER),
+				Utility.loadImage(ImageFilePaths.CONNECT_TO_SERVER_SELECTED),
 				GameState.JOIN_SERVER);
 		
 		continueToGame = new MenuButton(200,300,400,100,
 				MenuButtonType.CONTINUE_TO_GAME,
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "continue"),
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "continue_selected"),
+				Utility.loadImage(ImageFilePaths.CONTINUE),
+				Utility.loadImage(ImageFilePaths.CONTINUE_SELECTED),
 				GameState.INPUT_USER_NAME);
 		
 		backButton = new MenuButton(250,650,200,50,
 				MenuButtonType.BACK_TO_MENU,
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "back"),
-				Utility.loadImage(ImageFilePaths.MENU_OBJECT + "back_selected"),
+				Utility.loadImage(ImageFilePaths.BACK),
+				Utility.loadImage(ImageFilePaths.BACK_SELECTED),
 				GameState.JOIN_SERVER, GameState.INPUT_USER_NAME, GameState.SELECT_MAP);
 		
 		refreshLanServers = new MenuButton(704,472,192,48,MenuButtonType.REFRESH_LAN_SERVERS,GameState.JOIN_SERVER);

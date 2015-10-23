@@ -16,6 +16,12 @@ public class GameMap {
 		background = Utility.loadImage(imageName);
 	}
 	
+	public GameMap(String imageName, Point[] playerLocations)
+	{
+		this(imageName);
+		this.playerStartLocations = playerLocations;
+	}
+	
 	public void render(Graphics g)
 	{
 		if(background != null)
@@ -33,6 +39,12 @@ public class GameMap {
 	}
 
 	public Point getPlayerStartPoint(int playerNum) {
+		if(playerStartLocations == null)
+		{
+			System.out.println("ADD SOME PLAYER LOCATIONS: " );
+			return new Point(-64,-64);
+		}
+		
 		switch(playerNum)
 		{
 		case 0: return new Point(32,32);
@@ -40,6 +52,7 @@ public class GameMap {
 		case 2: return new Point(256,32);
 		case 3: return new Point(128,128);
 		}
+		
 		return null;
 	}
 	
@@ -47,8 +60,8 @@ public class GameMap {
 	
 	static
 	{
-		map1 = new GameMap("");
-		map2 = new GameMap("");
-		map3 = new GameMap("");
+		map1 = new GameMap("", new Point[]{new Point(),new Point(),new Point(),new Point()});
+		map2 = new GameMap("", new Point[]{new Point(),new Point(),new Point(),new Point()});
+		map3 = new GameMap("", new Point[]{new Point(),new Point(),new Point(),new Point()});
 	}
 }

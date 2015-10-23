@@ -1,9 +1,11 @@
 package game.object;
 
+import core.constants.ImageFilePaths;
+
 public enum MapType {
-	ONE("map1"),
-	TWO("map2"),
-	THREE("map3");
+	ONE(ImageFilePaths.MAP_1),
+	TWO(ImageFilePaths.MAP_2),
+	THREE(ImageFilePaths.MAP_3);
 	
 	MapType(String s)
 	{
