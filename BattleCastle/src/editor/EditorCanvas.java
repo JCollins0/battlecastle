@@ -5,9 +5,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import core.BattleCastleFrame;
+import org.json.simple.JSONValue;
+
+import core.constants.*;
 import core.GameState;
 import core.GameTimer;
 import game.Game;
@@ -21,7 +26,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 
 	protected ArrayList<Tile> list;
 	private ArrayList<Tile> examples;
-	public Tile addTileTile;
+	public Tile addTile,saveTile;
 	private static BufferedImage buffer;
 	private boolean running, bottom, grid;
 	private GameState currentState;
@@ -47,8 +52,10 @@ public class EditorCanvas extends Canvas implements Runnable{
 		list=new ArrayList<Tile>();
 		
 		examples=new ArrayList<Tile>();
-		addTileTile=new Tile(32,784,32,32);
-		examples.add(addTileTile);
+		addTile=new Tile(32,784,32,32);
+		saveTile=new Tile(128,128,128,128);
+		examples.add(addTile);
+		examples.add(saveTile);
 		
 		mouseHandler = new EditorMouseHandler(this);
 		keyHandler = new EditorKeyHandler(this);
@@ -100,6 +107,31 @@ public class EditorCanvas extends Canvas implements Runnable{
 		
 		g.dispose();
 		bs.show();
+	}
+	
+	private ArrayList<Tile> readSave()
+	{
+		return null;
+	}
+	
+	public void save()
+	{
+		String listData=new JSONValue().toJSONString(list);
+		PrintWriter printer=null;
+		try
+		{
+			printer=new PrintWriter(new File(DataConstants.CURRENT_LEVEL));
+			printer.write(listData);
+		}
+		catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(printer!=null)
+				printer.close();
+		}
 	}
 	
 	public void tick()
