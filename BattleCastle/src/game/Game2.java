@@ -224,7 +224,7 @@ public class Game2 {
 	
 	public void sendMapChoice(MapType mapType)
 	{
-		gameMap = new GameMap(mapType.getText());
+		gameMap = new GameMap(mapType.getBackground());
 		
 		//load players and then send to clients
 		for(int i = 0; i < playerMap.size(); i++)
@@ -232,7 +232,7 @@ public class Game2 {
 			playerList[i] = new Player("temp_player");
 			playerList[i].setLocation(gameMap.getPlayerStartPoint(i));
 		}
-		Message message = new Message(MessageType.SELECT_MAP, mapType.getText());
+		Message message = new Message(MessageType.SELECT_MAP, mapType.getBackground());
 		gameServer.sendToAllTCP(message);
 		for(int i = 0; i < playerList.length; i++)
 		{

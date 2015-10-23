@@ -3,18 +3,18 @@ package game.object;
 import core.constants.ImageFilePaths;
 
 public enum MapType {
-	ONE(ImageFilePaths.MAP_1),
-	TWO(ImageFilePaths.MAP_2),
-	THREE(ImageFilePaths.MAP_3);
+	ONE(ImageFilePaths.MAP_1_BACKGROUND),
+	TWO(ImageFilePaths.MAP_2_BACKGROUND),
+	THREE(ImageFilePaths.MAP_3_BACKGROUND);
 	
-	MapType(String s)
+	MapType(String background)
 	{
-		text = s;
+		this.background = background;
 	}
 	
-	private String text;
-	public String getText()
+	private String background;
+	public String getBackground()
 	{
-		return text;
+		return background;
 	}
 }

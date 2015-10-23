@@ -588,8 +588,8 @@ public class Game {
 	public void sendMapChoice(MapType type)
 	{
 		try {
-			gameMap = new GameMap(type.getText());
-			String mapName = type.getText();
+			gameMap = new GameMap(type.getBackground());
+			String mapName = type.getBackground();
 			String data = (char)ClientOption.LOAD_MAP.ordinal() + " " + mapName;
 			//
 			while(playerMap.size() < MIN_PlAYERS) //turn into a timer

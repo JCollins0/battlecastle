@@ -12,8 +12,10 @@ public class ImageFilePaths {
 				PLAYER = ENTITY + "player/",
 				POWERUP = ITEM + "powerup/",
 				WEAPON = ITEM + "weapon/",
-				TILE = GAME + "tile/";
-				
+				TILE = GAME + "tile/",
+				MAP_1 = MAP + "1/",
+				MAP_2 = MAP + "2/",
+				MAP_3 = MAP + "3/";
 	
 	public static final String
 				HOST_GAME = MENU_OBJECT + "host_game",
@@ -30,8 +32,10 @@ public class ImageFilePaths {
 				BACK_SELECTED = MENU_OBJECT + "bacK_selected",
 				TEXT_FIELD = MENU_OBJECT + "text_field",
 				TITLE = MENU + "title",
-				MAP_1 = MAP + "map1/map1",
-				MAP_2 = MAP + "map2/map2",
-				MAP_3 = MAP + "map3/map3";
+				MAP_1_BACKGROUND = MAP_1 + "map1",
+				MAP_2_BACKGROUND = MAP_2 + "map2",
+				MAP_3_BACKGROUND = MAP_3 + "map3";
+				
+				
 		
 }
