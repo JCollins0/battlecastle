@@ -15,7 +15,7 @@ public class MenuButton{
 	private MenuButtonType buttonType;
 	private BufferedImage image, hover_image;
 	private ArrayList<GameState> visibleStates;
-	private boolean hoverOver;
+	protected boolean hoverOver;
 	
 	public MenuButton(int x, int y, int width, int height, MenuButtonType buttonType,
 			BufferedImage base_image, BufferedImage hover_image, GameState visibleState)

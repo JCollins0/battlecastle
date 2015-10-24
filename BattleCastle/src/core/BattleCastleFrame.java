@@ -1,7 +1,14 @@
 package core;
 
+import game.Game2;
+
 import java.awt.Dimension;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 import javax.swing.JFrame;
+
+import utility.Utility;
 
 public class BattleCastleFrame extends JFrame {
 
@@ -30,6 +37,59 @@ public class BattleCastleFrame extends JFrame {
 		setResizable(false);
 		setVisible(true);
 		setFocusable(false);
+		
+		setIconImage(Utility.loadImage("icon"));
+		
+		addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowOpened(WindowEvent e) {
+				
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+				
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+				
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+				
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				
+				if(game_canvas != null)
+				{
+					Game2 game = game_canvas.getGame();
+					if(game != null)
+					{
+						game.stopClient();
+						game.stopServer();
+					}
+				}
+				System.exit(0);
+			}
+			
+			@Override
+			public void windowClosed(WindowEvent e) {
+				
+			}
+			
+			@Override
+			public void windowActivated(WindowEvent e) {
+				
+			}
+		});
+			
+		
+		
 		game_canvas.requestFocus();
 		Thread gameThread = new Thread(game_canvas);
 		gameThread.start();

@@ -24,6 +24,7 @@ import core.constants.ImageFilePaths;
 import core.menu_object.MapSelectionObject;
 import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
+import core.menu_object.MenuLabel;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
 import core.menu_object.ServerChoice;
@@ -47,6 +48,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private ArrayList<Error> error_messages;
 	private boolean searchingForServers;
 	public static Font defaultFont;
+	private BufferedImage screenShotImage;
 	
 	public BattleCastleCanvas()
 	{
@@ -54,6 +56,10 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		buffer = new BufferedImage(BattleCastleFrame.GAME_SIZE.width,
 								   BattleCastleFrame.GAME_SIZE.height,
 								   BufferedImage.TYPE_INT_ARGB);
+		
+		screenShotImage = new BufferedImage(BattleCastleFrame.GAME_SIZE.width,
+				   							BattleCastleFrame.GAME_SIZE.height,
+				   							BufferedImage.TYPE_INT_ARGB);
 		
 		defaultFont = buffer.getGraphics().getFont();
 		
@@ -68,11 +74,12 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		
 		title_image = Utility.loadImage(ImageFilePaths.TITLE);
 		
-		serverSelectionBox = new ServerSelectionBox(672,200);
+		serverSelectionBox = new ServerSelectionBox(672,200,Utility.loadImage(ImageFilePaths.SERVER_SELECT_BOX));
 		error_messages = new ArrayList<Error>();
 		
 		menuButtonList = new ArrayList<MenuButton>();
 		menuTextFieldList = new ArrayList<MenuTextField>();
+		menuLabelList = new ArrayList<MenuLabel>();
 		
 		serverIPField = new MenuTextField(100, 350, 500, 100,
 				MenuTextFieldType.SERVER_IP_FIELD,
@@ -90,12 +97,20 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuTextFieldList.add(userNameField);
 		menuTextFieldList.add(serverIPField);
 		
-		map1 = new MapSelectionObject(200, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.ONE, GameState.SELECT_MAP);
-		map2 = new MapSelectionObject(500, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.TWO, GameState.SELECT_MAP);
-		map3 = new MapSelectionObject(800, 200, 200, 200, MenuButtonType.SELECT_MAP, MapType.THREE, GameState.SELECT_MAP);
+		map1 = new MapSelectionObject(64, 64, 256, 256,
+				MenuButtonType.SELECT_MAP, MapType.ONE, GameState.SELECT_MAP);
+		
+		map2 = new MapSelectionObject(384, 64, 256, 256,
+				MenuButtonType.SELECT_MAP, MapType.TWO, GameState.SELECT_MAP);
+		
+		map3 = new MapSelectionObject(704, 64, 256, 256,
+				MenuButtonType.SELECT_MAP, MapType.THREE, GameState.SELECT_MAP);
+		//MapSelectionObject map4 = new MapSelectionObject(64, 384, 256, 256, MenuButtonType.SELECT_MAP, MapType.ONE, GameState.SELECT_MAP);
+		
 		menuButtonList.add(map1);
 		menuButtonList.add(map2);
 		menuButtonList.add(map3);
+		//menuButtonList.add(map4);
 		
 		hostGame = new MenuButton(250,300,500,100,
 				MenuButtonType.HOST_GAME, 
@@ -121,7 +136,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				Utility.loadImage(ImageFilePaths.CONNECT_TO_SERVER_SELECTED),
 				GameState.JOIN_SERVER);
 		
-		continueToGame = new MenuButton(200,300,400,100,
+		continueToGame = new MenuButton(150,300,400,100,
 				MenuButtonType.CONTINUE_TO_GAME,
 				Utility.loadImage(ImageFilePaths.CONTINUE),
 				Utility.loadImage(ImageFilePaths.CONTINUE_SELECTED),
@@ -133,7 +148,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				Utility.loadImage(ImageFilePaths.BACK_SELECTED),
 				GameState.JOIN_SERVER, GameState.INPUT_USER_NAME, GameState.SELECT_MAP);
 		
-		refreshLanServers = new MenuButton(704,472,192,48,MenuButtonType.REFRESH_LAN_SERVERS,GameState.JOIN_SERVER);
+		refreshLanServers = new MenuButton(704,472,192,48,
+				MenuButtonType.REFRESH_LAN_SERVERS,
+				Utility.loadImage(ImageFilePaths.REFRESH),
+				Utility.loadImage(ImageFilePaths.REFRESH_SELECTED),
+				GameState.JOIN_SERVER);
 		
 		menuButtonList.add(connectToServer);
 		menuButtonList.add(backButton);
@@ -143,14 +162,27 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuButtonList.add(levelEditor);
 		menuButtonList.add(refreshLanServers);
 		
+		userNameLabel = new MenuLabel(250, 150, 200, 50,
+				Utility.loadImage(ImageFilePaths.USER_NAME_LABEL),
+				GameState.JOIN_SERVER, GameState.INPUT_USER_NAME);
+		
+		serverIPLabel = new MenuLabel(250, 300, 200, 50,
+				Utility.loadImage(ImageFilePaths.SERVER_IP_LABEL),
+				GameState.JOIN_SERVER);
+		
+		menuLabelList.add(userNameLabel);
+		menuLabelList.add(serverIPLabel);
+		
 		running = true;
 	}
 	
 	private ArrayList<MenuTextField> menuTextFieldList;
 	private ArrayList<MenuButton> menuButtonList;
+	private ArrayList<MenuLabel> menuLabelList;
 	private MenuTextField serverIPField, userNameField;;
 	private MenuButton hostGame, joinGame, connectToServer, continueToGame, backButton, levelEditor, refreshLanServers;
 	private MapSelectionObject map1,map2,map3;
+	private MenuLabel userNameLabel, serverIPLabel;
 	private ServerSelectionBox serverSelectionBox;
 	
 	public void render()
@@ -185,6 +217,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			
 		case JOIN_SERVER:
 		case INPUT_USER_NAME:
+			for(MenuLabel menuLabel : menuLabelList)
+				if(menuLabel.isVisibleAtState(currentState))
+					menuLabel.render(b);
+			
+			
 		case SELECT_MAP:
 			
 			for(MenuTextField menuTextField : menuTextFieldList)
@@ -219,6 +256,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		
 		g.drawImage(buffer, 0, 0, BattleCastleFrame.GAME_SIZE.width,
 				    BattleCastleFrame.GAME_SIZE.height, null);
+		
+		Graphics s = screenShotImage.getGraphics();
+		
+		s.drawImage(buffer, 0, 0, BattleCastleFrame.GAME_SIZE.width,
+			    BattleCastleFrame.GAME_SIZE.height, null);
 		
 		g.dispose();
 		bs.show();
@@ -359,6 +401,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	public boolean isSearchingForServers()
 	{
 		return searchingForServers;
+	}
+	
+	public BufferedImage getBuffer()
+	{
+		return screenShotImage;
 	}
 	
 }

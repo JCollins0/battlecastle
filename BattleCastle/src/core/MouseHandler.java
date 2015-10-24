@@ -257,7 +257,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 		case GAMEPLAY:
 			break;
 		case SELECT_MAP:
-			break;
+			
 		case INPUT_USER_NAME:
 		case JOIN_SERVER:
 		case MAIN_MENU: 
@@ -265,7 +265,8 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 			ArrayList<MenuButton> buttonList = canvasref.getMenuButtons();
 			for(MenuButton button : buttonList)
 			{
-				button.isHoverOver(mouse);
+				if(button.isVisibleAtState(canvasref.getCurrentState()))
+					button.isHoverOver(mouse);
 			}
 			
 			break;

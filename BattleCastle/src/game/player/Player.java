@@ -5,8 +5,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
-import core.constants.ImageFilePaths;
 import utility.Utility;
 
 public class Player {
@@ -18,7 +18,9 @@ public class Player {
 	private double vX, vY;
 	private static final double GRAVITY = 9.8;
 	private BufferedImage image;
-
+	private ArrayList<Arrow> arrowStorage;
+	
+	
 	public Player()
 	{
 		this((BufferedImage)null);
@@ -26,6 +28,7 @@ public class Player {
 	
 	public Player(BufferedImage image)
 	{
+		arrowStorage = new ArrayList<Arrow>();
 		bounds = new Rectangle(-WIDTH,-HEIGHT,WIDTH,HEIGHT);
 		this.image = image;
 	}

@@ -8,4 +8,6 @@ public class Keys {
 							DOWN = KeyEvent.VK_S,
 							LEFT = KeyEvent.VK_A,
 							RIGHT = KeyEvent.VK_D;
+							
+	public static final int SCREENSHOT = KeyEvent.VK_F2;
 }
