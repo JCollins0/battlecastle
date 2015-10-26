@@ -5,7 +5,8 @@ public enum MessageType {
 	CHANGE_STATE("state_change"),
 	START_ROUND("start_round"),
 	SELECT_MAP("select_map"),
-	UPDATE_PLAYER("update_player");
+	UPDATE_PLAYER("update_player"),
+	MOVE_PLAYER("move_player");
 	
 	private String value;
 	MessageType()

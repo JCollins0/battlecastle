@@ -87,8 +87,6 @@ public class BattleCastleFrame extends JFrame {
 				
 			}
 		});
-			
-		
 		
 		game_canvas.requestFocus();
 		Thread gameThread = new Thread(game_canvas);

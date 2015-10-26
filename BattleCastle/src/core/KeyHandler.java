@@ -21,8 +21,15 @@ public class KeyHandler implements KeyListener {
 
 	private BattleCastleCanvas canvasref;
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-YYYY-k-m-s"); 
-		
-		
+	public static boolean[] arrow_keys_down;
+	public static final int 
+				UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
+	
+	static
+	{
+		arrow_keys_down = new boolean[4];
+	}
+	
 	public KeyHandler(BattleCastleCanvas canvasref)
 	{
 		this.canvasref = canvasref;
@@ -85,12 +92,30 @@ public class KeyHandler implements KeyListener {
 			switch(keyCode)
 			{
 			case Keys.UP:
+				if(!arrow_keys_down[UP])
+				{
+					arrow_keys_down[UP] = true;
+				}
+				
 				break;
 			case Keys.DOWN:
+				if(!arrow_keys_down[DOWN])
+				{
+					arrow_keys_down[DOWN] = true;
+					canvasref.getGame().updateMyPlayer(KeyPress.LEFT_D);
+				}
 				break;
 			case Keys.LEFT:
+				if(!arrow_keys_down[LEFT])
+				{
+					arrow_keys_down[LEFT] = true;
+				}
 				break;
 			case Keys.RIGHT:
+				if(!arrow_keys_down[RIGHT])
+				{	
+					arrow_keys_down[RIGHT] = true;
+				}
 			}
 			
 			break;
@@ -113,12 +138,28 @@ public class KeyHandler implements KeyListener {
 			switch(keyCode)
 			{
 			case Keys.UP:
+				if(!arrow_keys_down[UP])
+				{
+					arrow_keys_down[UP] = false;
+				}	
 				break;
 			case Keys.DOWN:
+				if(!arrow_keys_down[DOWN])
+				{
+					arrow_keys_down[DOWN] = false;
+				}
 				break;
 			case Keys.LEFT:
+				if(!arrow_keys_down[LEFT])
+				{
+					arrow_keys_down[LEFT] = false;
+				}
 				break;
 			case Keys.RIGHT:
+				if(!arrow_keys_down[RIGHT])
+				{
+					arrow_keys_down[RIGHT] = false;
+				}
 			}
 			
 			break;

@@ -1,12 +1,5 @@
 package game;
 
-import game.message.Message;
-import game.message.MessageType;
-import game.object.GameMap;
-import game.object.MapType;
-import game.player.BattleCastleUser;
-import game.player.Player;
-
 import java.awt.Graphics;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -19,9 +12,16 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import core.BattleCastleCanvas;
+import core.Error;
 import core.GameState;
 import core.HostType;
-import core.Error;
+import core.KeyPress;
+import game.message.Message;
+import game.message.MessageType;
+import game.object.GameMap;
+import game.object.MapType;
+import game.player.BattleCastleUser;
+import game.player.Player;
 
 public class Game2 {
 	
@@ -37,7 +37,7 @@ public class Game2 {
 	private Player[] playerList;
 	private String myUUID;
 	private GameMap gameMap;
-	private static final int MIN_PLAYERS = 2;
+	private static final int MIN_PLAYERS = 1;
 	
 	public Game2(BattleCastleCanvas canvasRef, HostType hostType)
 	{
@@ -85,6 +85,21 @@ public class Game2 {
 							gameServer.sendToAllTCP(playerMap.get(uuid));
 						}
 						
+					}else if(object instanceof Message)
+					{
+						Message messageOb = (Message)object;
+						String message = messageOb.toString();
+						String[] messageArr = message.split(Message.SEPARATOR);
+						String type = messageArr[0].trim();
+						if(type.equals( MessageType.MOVE_PLAYER.toString()) )
+						{
+							String[] num = messageArr[1].split("=");
+							int playerNum = Integer.parseInt(messageArr[0]);
+							if(num[1].equals(KeyPress.RIGHT_D.getText()))
+							{
+								playerList[playerNum].setvX(1);
+							}
+						}
 					}
 				}
 			});
@@ -242,8 +257,15 @@ public class Game2 {
 				gameServer.sendToAllTCP(message);
 			}
 		}
+	}
+	
+	public void updateMyPlayer(KeyPress press)
+	{
 		
+		Message message = new Message(MessageType.MOVE_PLAYER,
+				playerMap.get(myUUID).getPlayerNumber() + "=" + press.getText() );
 		
+		gameClient.sendTCP(message);
 	}
 	
 	public void setMyUserUUID(String uuid)

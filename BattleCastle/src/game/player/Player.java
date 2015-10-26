@@ -84,6 +84,22 @@ public class Player {
 		return bounds;
 	}
 	
+	public double getvX() {
+		return vX;
+	}
+
+	public void setvX(double vX) {
+		this.vX = vX;
+	}
+
+	public double getvY() {
+		return vY;
+	}
+
+	public void setvY(double vY) {
+		this.vY = vY;
+	}
+
 	public String stringify()
 	{
 		return String.format("X:%d,Y:%d,W:%d,H:%d",
