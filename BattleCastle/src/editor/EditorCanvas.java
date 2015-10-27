@@ -6,11 +6,16 @@ import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
 
 import core.constants.*;
 import core.GameState;
@@ -49,7 +54,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		bottom=true;
 		grid=true;
 		
-		list=new ArrayList<Tile>();
+		list=readSave();
 		
 		examples=new ArrayList<Tile>();
 		addTile=new Tile(32,784,32,32);
@@ -111,6 +116,24 @@ public class EditorCanvas extends Canvas implements Runnable{
 	
 	private ArrayList<Tile> readSave()
 	{
+		ArrayList<Tile> list;
+		Scanner reader=null;
+		JSONParser parser=new JSONParser();
+		try
+		{
+			reader=new Scanner(new FileInputStream(DataConstants.CURRENT_LEVEL));
+			//System.out.println(reader.nextLine());
+			Object temp = parser.parse(reader.nextLine());
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(reader!=null)
+				reader.close();
+		}
 		return null;
 	}
 	
@@ -120,10 +143,10 @@ public class EditorCanvas extends Canvas implements Runnable{
 		PrintWriter printer=null;
 		try
 		{
-			printer=new PrintWriter(new File(DataConstants.CURRENT_LEVEL));
+			printer=new PrintWriter(new FileOutputStream(DataConstants.CURRENT_LEVEL));
 			printer.write(listData);
 		}
-		catch (FileNotFoundException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
