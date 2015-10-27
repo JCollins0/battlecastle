@@ -1,14 +1,9 @@
 package core;
 
-import game.player.Player;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.FieldPosition;
-import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -16,6 +11,7 @@ import javax.imageio.ImageIO;
 
 import core.constants.Keys;
 import core.menu_object.MenuTextField;
+import game.player.Player;
 
 public class KeyHandler implements KeyListener {
 
@@ -47,11 +43,9 @@ public class KeyHandler implements KeyListener {
 		if(e.getKeyCode() == Keys.SCREENSHOT)
 		{
 			
-			File f = new File(dateFormat.format(new Date(System.nanoTime()))+".png");
-			System.out.println(f.exists());
-			System.out.println(f.getAbsolutePath());
+			FileOutputStream f; 
 			try {
-				f.createNewFile();
+				f = new FileOutputStream(dateFormat.format(new Date(System.nanoTime()))+".png");
 				ImageIO.write(canvasref.getBuffer(), "png", f);
 			} catch (IOException e1) {
 				e1.printStackTrace();
@@ -95,6 +89,7 @@ public class KeyHandler implements KeyListener {
 				if(!arrow_keys_down[UP])
 				{
 					arrow_keys_down[UP] = true;
+					canvasref.getGame().updateMyPlayer(KeyPress.JUMP_D);
 				}
 				
 				break;
@@ -102,19 +97,21 @@ public class KeyHandler implements KeyListener {
 				if(!arrow_keys_down[DOWN])
 				{
 					arrow_keys_down[DOWN] = true;
-					canvasref.getGame().updateMyPlayer(KeyPress.LEFT_D);
+					canvasref.getGame().updateMyPlayer(KeyPress.DOWN_D);
 				}
 				break;
 			case Keys.LEFT:
 				if(!arrow_keys_down[LEFT])
 				{
 					arrow_keys_down[LEFT] = true;
+					canvasref.getGame().updateMyPlayer(KeyPress.LEFT_D);
 				}
 				break;
 			case Keys.RIGHT:
 				if(!arrow_keys_down[RIGHT])
 				{	
 					arrow_keys_down[RIGHT] = true;
+					canvasref.getGame().updateMyPlayer(KeyPress.RIGHT_D);
 				}
 			}
 			
@@ -141,24 +138,28 @@ public class KeyHandler implements KeyListener {
 				if(!arrow_keys_down[UP])
 				{
 					arrow_keys_down[UP] = false;
+					canvasref.getGame().updateMyPlayer(KeyPress.JUMP_U);
 				}	
 				break;
 			case Keys.DOWN:
 				if(!arrow_keys_down[DOWN])
 				{
 					arrow_keys_down[DOWN] = false;
+					canvasref.getGame().updateMyPlayer(KeyPress.DOWN_U);
 				}
 				break;
 			case Keys.LEFT:
 				if(!arrow_keys_down[LEFT])
 				{
 					arrow_keys_down[LEFT] = false;
+					canvasref.getGame().updateMyPlayer(KeyPress.LEFT_U);
 				}
 				break;
 			case Keys.RIGHT:
 				if(!arrow_keys_down[RIGHT])
 				{
 					arrow_keys_down[RIGHT] = false;
+					canvasref.getGame().updateMyPlayer(KeyPress.RIGHT_U);
 				}
 			}
 			

@@ -1,22 +1,22 @@
 package core;
 
-import game.Game;
-import game.Game2;
-import game.object.MapType;
-
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
-
-import utility.Utility;
 
 import com.esotericsoftware.kryonet.Client;
 
@@ -29,6 +29,10 @@ import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
 import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
+import game.Game;
+import game.Game2;
+import game.object.MapType;
+import utility.Utility;
 
 public class BattleCastleCanvas extends Canvas implements Runnable{
 
@@ -174,6 +178,34 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuLabelList.add(serverIPLabel);
 		
 		running = true;
+		
+		//read in data from bc_user.dat;
+		try
+		{
+			File f = new File("data/config.dat");
+			if(!f.exists())
+			{
+				f.createNewFile();
+				//write defaults
+				throw new FileNotFoundException();
+			}
+			FileInputStream stream = new FileInputStream(f);
+			Scanner reader = new Scanner(stream);
+			
+		}catch(Exception e)
+		{
+			try {
+				FileOutputStream stream = new FileOutputStream("data/config.dat");
+				PrintWriter writer = new PrintWriter(stream);
+				writer.println("last_ip:");
+				writer.println("user_name:");
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+		
+		
 	}
 	
 	private ArrayList<MenuTextField> menuTextFieldList;
