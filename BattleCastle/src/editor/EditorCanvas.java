@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 
@@ -55,9 +56,11 @@ public class EditorCanvas extends Canvas implements Runnable{
 		grid=true;
 		
 		list=readSave();
+		if(list==null)
+			list=new ArrayList<Tile>();
 		
 		examples=new ArrayList<Tile>();
-		addTile=new Tile(32,784,32,32);
+		addTile=new Tile(32,784,32,32,);
 		saveTile=new Tile(128,128,128,128);
 		examples.add(addTile);
 		examples.add(saveTile);
@@ -139,12 +142,13 @@ public class EditorCanvas extends Canvas implements Runnable{
 	
 	public void save()
 	{
-		String listData=new JSONValue().toJSONString(list);
+		JSONArray temp=new JSONArray();
+		System.out.println(temp);
 		PrintWriter printer=null;
 		try
 		{
 			printer=new PrintWriter(new FileOutputStream(DataConstants.CURRENT_LEVEL));
-			printer.write(listData);
+			temp.writeJSONString(printer);
 		}
 		catch (Exception e)
 		{

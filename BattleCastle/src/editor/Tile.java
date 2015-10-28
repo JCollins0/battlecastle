@@ -3,17 +3,25 @@ package editor;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.LinkedHashMap;
+
+import org.json.simple.JSONStreamAware;
+import org.json.simple.JSONValue;
 
 import utility.Utility;
 
-public class Tile extends Rectangle
+public class Tile extends Rectangle implements JSONStreamAware
 {
 	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -5649265101080536323L;
-	protected Image[] pics;
+	protected String picText,statesText;
+	protected BufferedImage[] pics;
 	protected State[] states;
 	protected int animation;
 	
@@ -28,22 +36,48 @@ public class Tile extends Rectangle
 
 	public Tile(int x,int y,int width,int height)
 	{
-		this(x,y,width,height,check,still);
+		this(x,y,width,height);
+		
+		picText="";
+		statesText="";
 	}
 	
-	public Tile(int x,int y,int width,int height,Image[] pics,State[] states)
+	public Tile(int x,int y,int width,int height,String picText,String statesText)
 	{
 		this.x=x;
 		this.y=y;
 		this.width=width;
 		this.height=height;
-		this.pics=pics;
-		this.states=states;
+		this.picText=picText;
+		this.pics=(BufferedImage[])Utility.loadBufferedArray(picText, 32, 32).toArray();
+		this.statesText=statesText;
+		this.states=createStates(statesText);
 	}
 	
-	public Tile(int x,int y,int width,int height,Image pic,State[] states)
+	/*public Tile(int x,int y,int width,int height,Image pic,State[] states)
 	{
 		this(x,y,width,height,new Image[]{pic},states);
+	}*/
+	
+	protected State[] createStates(String s)
+	{
+		String[] text=s.split(",");
+		State[] temp=new State[text.length];
+		for(int i = 0; i<temp.length;i++)
+		{
+			String[] data=text[i].split("-");
+			if(data.length==1)
+				temp[i]=new State(Integer.parseInt(data[0]));
+			else if(data.length==3)
+			{
+				temp[i]=new State(Integer.parseInt(data[0]),Integer.parseInt(data[1]));
+			}
+			else
+			{
+				temp[i]=new State(Integer.parseInt(data[0]),Integer.parseInt(data[1]),Integer.parseInt(data[2]),Integer.parseInt(data[3]));
+			}
+		}
+		return temp;
 	}
 	
 	public void setStates(State[] s)
@@ -103,6 +137,19 @@ public class Tile extends Rectangle
 				
 			}
 		}
+	}
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void writeJSONString(Writer out) throws IOException {
+		LinkedHashMap obj=new LinkedHashMap();
+		obj.put("x",new Integer(x));
+		obj.put("y",new Integer(y));
+		obj.put("width",new Integer(width));
+		obj.put("height",new Integer(height));
+		obj.put("pic",pic);
+		obj.put("states",)
+		JSONValue.writeJSONString(obj, out);
 	}
 	
 	
