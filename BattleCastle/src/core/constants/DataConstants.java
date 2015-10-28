@@ -8,6 +8,7 @@ public class DataConstants
 				LEVELS=DATA+"levels/";
 	
 	public static String
-				CURRENT_LEVEL=LEVELS+"current.dat";
+				CURRENT_LEVEL=LEVELS+ "current.dat",
+				USER_CONFIG = DATA + "config.dat";
 	
 }

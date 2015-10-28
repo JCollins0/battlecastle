@@ -8,6 +8,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import core.GameState;
+import core.constants.ImageFilePaths;
+import utility.Utility;
 
 public class MenuTextField {
 	
@@ -18,6 +20,9 @@ public class MenuTextField {
 	private MenuTextFieldType id;
 	private ArrayList<GameState> visibleStates;
 	private BufferedImage image;
+	private static final BufferedImage CURSOR = Utility.loadImage(ImageFilePaths.CURSOR);
+	private int cursorCount = 0;
+	private int cursorDelay = 20;
 	private static final Font TEXT_FONT = new Font("Courier New", Font.PLAIN, 50);
 	
 	public MenuTextField(int x, int y, int width, int height, MenuTextFieldType id, GameState visibleState)
@@ -117,6 +122,23 @@ public class MenuTextField {
 		if(image != null)
 		{
 			g.drawImage(image,bounds.x,bounds.y,bounds.width,bounds.height, null);
+			if(selected)
+			{
+				if(cursorCount <= cursorDelay-10)
+				{
+					if(CURSOR!= null)
+					{	
+						g.drawImage(CURSOR,bounds.x + bounds.width/2 + g.getFontMetrics(TEXT_FONT).charWidth('a') * text.length()/2,  bounds.y + bounds.height/2 - g.getFontMetrics(TEXT_FONT).getHeight()/2 ,4,g.getFontMetrics(TEXT_FONT).getHeight(),null);
+					}
+					else
+					{
+						g.setColor(Color.WHITE);
+						//System.out.printf("W:%d, H:%d",8,g.getFontMetrics(TEXT_FONT).getHeight());
+						g.fillRect(bounds.x + bounds.width/2 + g.getFontMetrics(TEXT_FONT).charWidth('a') * text.length()/2,  bounds.y + bounds.height/2 - g.getFontMetrics(TEXT_FONT).getHeight()/2 ,4,g.getFontMetrics(TEXT_FONT).getHeight());
+				
+					}
+				}				
+			}
 		}else
 		{
 			g.setColor(Color.black);
@@ -124,6 +146,13 @@ public class MenuTextField {
 		}
 		g.setColor(Color.white);
 		g.drawString(text,bounds.x + bounds.width/2 - g.getFontMetrics(TEXT_FONT).charWidth('a') * text.length()/2, bounds.y + bounds.height/2 + g.getFontMetrics(TEXT_FONT).getHeight()/4);
+	}
+	
+	public void tick()
+	{
+		cursorCount++;
+		if(cursorCount > cursorDelay)
+			cursorCount = 0;
 	}
 
 	public MenuTextFieldType getID() {

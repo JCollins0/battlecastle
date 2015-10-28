@@ -77,7 +77,6 @@ public class KeyHandler implements KeyListener {
 			
 			break;
 		case GAMEPLAY:
-			
 			//handle player input
 			int keyCode = e.getKeyCode();
 			

@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
@@ -20,6 +21,8 @@ import java.util.TimerTask;
 
 import com.esotericsoftware.kryonet.Client;
 
+import core.constants.ConfigConstants;
+import core.constants.DataConstants;
 import core.constants.ImageFilePaths;
 import core.menu_object.MapSelectionObject;
 import core.menu_object.MenuButton;
@@ -30,7 +33,6 @@ import core.menu_object.MenuTextFieldType;
 import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
 import game.Game;
-import game.Game2;
 import game.object.MapType;
 import utility.Utility;
 
@@ -44,8 +46,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private static BufferedImage buffer;
 	private boolean running;
 	private GameState currentState;
-	private Game game;
-	private Game2 game2;
+	private Game game2;
 	private MouseHandler mouseHandler;
 	private KeyHandler keyHandler;
 	private BufferedImage title_image;
@@ -96,7 +97,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				MenuTextFieldType.USERNAME_FIELD,
 				Utility.loadImage(ImageFilePaths.TEXT_FIELD),
 				GameState.JOIN_SERVER, GameState.INPUT_USER_NAME);
-		userNameField.setAllowableCharacters("abcdefghijklmnopqrstuvwxyz0123456789");
+		userNameField.setAllowableCharacters("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
 		
 		menuTextFieldList.add(userNameField);
 		menuTextFieldList.add(serverIPField);
@@ -182,23 +183,41 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		//read in data from bc_user.dat;
 		try
 		{
-			File f = new File("data/config.dat");
+			File f = new File(DataConstants.USER_CONFIG);
 			if(!f.exists())
 			{
 				f.createNewFile();
-				//write defaults
 				throw new FileNotFoundException();
 			}
 			FileInputStream stream = new FileInputStream(f);
 			Scanner reader = new Scanner(stream);
+			while(reader.hasNextLine())
+			{
+				String[] keyVal = reader.nextLine().split(":");
+				System.out.println(Arrays.toString(keyVal));
+				switch(keyVal[0])
+				{
+				case ConfigConstants.LAST_SERVER :
+					if(keyVal.length > 1)
+						serverIPField.setText(keyVal[1]);
+					break;
+				case ConfigConstants.USER:
+					if(keyVal.length > 1)
+						userNameField.setText(keyVal[1]);
+					break;
+				}
+			}
+			reader.close();
+			stream.close();
 			
 		}catch(Exception e)
 		{
 			try {
-				FileOutputStream stream = new FileOutputStream("data/config.dat");
+				FileOutputStream stream = new FileOutputStream(DataConstants.USER_CONFIG);
 				PrintWriter writer = new PrintWriter(stream);
-				writer.println("last_ip:");
-				writer.println("user_name:");
+				writer.println(ConfigConstants.LAST_SERVER);
+				writer.println(ConfigConstants.USER);
+				writer.close();
 			} catch (FileNotFoundException e1) {
 				e1.printStackTrace();
 			}
@@ -309,6 +328,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				error_messages.remove(i--);
 		}
 		
+		for(MenuTextField menuTextField : menuTextFieldList)
+			if(menuTextField.isVisibleAtState(currentState) )
+				menuTextField.tick();
 		
 		if(game2 != null)
 			game2.tick();
@@ -341,10 +363,10 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 //			game = new Game(this, HostType.CLIENT);
 		
 		if(host)
-			game2 = new Game2(this, HostType.SERVER);
+			game2 = new Game(this, HostType.SERVER);
 		else
 		{
-			game2 = new Game2(this, HostType.CLIENT);
+			game2 = new Game(this, HostType.CLIENT);
 			
 			searchForLanServers();
 		}
@@ -382,7 +404,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 //		return game;
 //		return game2;
 //	}
-	public Game2 getGame()
+	public Game getGame()
 	{
 		return game2;
 	}
@@ -403,7 +425,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			public void run() {
 				
 				Client client = game2.getClient();
-				List<InetAddress> possibleServers = client.discoverHosts(Game2.SERVER_UDP, 20000);
+				List<InetAddress> possibleServers = client.discoverHosts(Game.SERVER_UDP, 20000);
 				System.out.println(possibleServers.size());
 				for(int i = 0; i < possibleServers.size(); i++)
 				{

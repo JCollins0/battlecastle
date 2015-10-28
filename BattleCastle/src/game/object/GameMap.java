@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 
+import core.constants.ImageFilePaths;
 import utility.Utility;
 
 public class GameMap {
@@ -60,8 +61,8 @@ public class GameMap {
 	
 	static
 	{
-		map1 = new GameMap("", new Point[]{new Point(),new Point(),new Point(),new Point()});
-		map2 = new GameMap("", new Point[]{new Point(),new Point(),new Point(),new Point()});
-		map3 = new GameMap("", new Point[]{new Point(),new Point(),new Point(),new Point()});
+		map1 = new GameMap(ImageFilePaths.MAP_1_BACKGROUND, new Point[]{new Point(64,64),new Point(256,64),new Point(480,64),new Point(640,64)});
+		map2 = new GameMap(ImageFilePaths.MAP_2_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()});
+		map3 = new GameMap(ImageFilePaths.MAP_3_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()});
 	}
 }

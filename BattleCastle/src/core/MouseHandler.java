@@ -1,8 +1,5 @@
 package core;
 
-import game.Game;
-import game.player.BattleCastleUser;
-
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -20,6 +17,8 @@ import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
 import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
+import game.Game;
+import game.player.BattleCastleUser;
 
 public class MouseHandler implements MouseMotionListener, MouseListener, MouseWheelListener {
 

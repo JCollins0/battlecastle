@@ -33,6 +33,7 @@ public class ImageFilePaths {
 				REFRESH = MENU_OBJECT + "refresh",
 				REFRESH_SELECTED = MENU_OBJECT + "refresh_selected",
 				TEXT_FIELD = MENU_OBJECT + "text_field",
+				CURSOR = MENU_OBJECT + "cursor",
 				USER_NAME_LABEL = MENU_OBJECT + "user_name",
 				SERVER_IP_LABEL = MENU_OBJECT + "server_ip",
 				SERVER_SELECT_BOX = MENU_OBJECT + "server_select_box",
@@ -40,7 +41,8 @@ public class ImageFilePaths {
 				TITLE = MENU + "title",
 				MAP_1_BACKGROUND = MAP_1 + "map1",
 				MAP_2_BACKGROUND = MAP_2 + "map2",
-				MAP_3_BACKGROUND = MAP_3 + "map3";
+				MAP_3_BACKGROUND = MAP_3 + "map3",
+				TEMP_PLAYER = PLAYER + "temp_player";
 				
 				
 		
