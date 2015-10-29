@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import core.MouseHandler;
 import utility.Utility;
 
 public class Player {
@@ -62,6 +63,11 @@ public class Player {
 		bounds.y += vY;
 		
 		bounds.x += vX;
+		
+		if(vX > 0)
+			vX -=.1;
+		else if(vX < 0)
+			vX +=.1;
 	}
 	
 	public void render(Graphics g)
@@ -98,6 +104,23 @@ public class Player {
 
 	public void setvY(double vY) {
 		this.vY = vY;
+	}
+	
+	public void addArrow(int x, int y)
+	{
+		double theta = Math.atan2(bounds.x + bounds.width/2 - x, bounds.y + bounds.height / 2 - y);
+		theta = Math.toDegrees( theta) + 90;
+		if(theta < 0)
+			theta = 360 + theta;
+		//UP = 90
+		//DOWN = 270
+		//LEFT = 180
+		//RIGHT = 0
+		System.out.println(theta);
+		int dc = (int)Math.sqrt(Math.pow(MouseHandler.mouse.x - bounds.x + bounds.width/2, 2) + Math.pow(MouseHandler.mouse.y - bounds.y + bounds.height/2, 2) );
+		int dx = (int)(bounds.x + bounds.width/2 - MouseHandler.mouse.x);
+		int dy = (int)(bounds.y + bounds.height/2 - MouseHandler.mouse.y);
+		Arrow arrow = new Arrow((int)Math.cos(dc/dx),(int)Math.sin(dc/dy),1,1);
 	}
 
 	public String stringify()

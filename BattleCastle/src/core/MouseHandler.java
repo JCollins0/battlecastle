@@ -254,6 +254,9 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 		switch( canvasref.getCurrentState())
 		{
 		case GAMEPLAY:
+			
+			canvasref.getGame().getMyPlayer().addArrow(mouse.x, mouse.y);
+			
 			break;
 		case SELECT_MAP:
 			

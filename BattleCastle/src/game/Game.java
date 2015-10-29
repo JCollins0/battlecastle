@@ -96,12 +96,18 @@ public class Game {
 						if(type.equals( MessageType.MOVE_PLAYER.toString()) )
 						{
 							String[] num = messageArr[1].split("=");
-							System.out.println("NUM: " + num[1]);
-							int playerNum = Integer.parseInt(messageArr[0]);
+							//System.out.println("NUM: " + num[1]);
+							int playerNum = Integer.parseInt(num[0]);
 							if(num[1].equals(KeyPress.RIGHT_D.getText()))
 							{
-								playerList[playerNum].setvX(1);
-								
+								playerList[playerNum].setvX(4);
+							}else if(num[1].equals(KeyPress.LEFT_D.getText()))
+							{
+								playerList[playerNum].setvX( -4);
+							}
+							else if(num[1].equals(KeyPress.JUMP_D.getText()))
+							{
+								playerList[playerNum].setvY(-4);
 							}
 						}
 					}
@@ -268,7 +274,6 @@ public class Game {
 		
 		Message message = new Message(MessageType.MOVE_PLAYER,
 				playerMap.get(myUUID).getPlayerNumber() + "=" + press.getText() );
-		System.out.println("HELELO");
 		gameClient.sendTCP(message);
 	}
 	

@@ -79,39 +79,23 @@ public class KeyHandler implements KeyListener {
 		case GAMEPLAY:
 			//handle player input
 			int keyCode = e.getKeyCode();
+			//System.out.println(keyCode);
 			
 			Player myPlayer = canvasref.getGame().getMyPlayer();
 			
 			switch(keyCode)
 			{
 			case Keys.UP:
-				if(!arrow_keys_down[UP])
-				{
-					arrow_keys_down[UP] = true;
-					canvasref.getGame().updateMyPlayer(KeyPress.JUMP_D);
-				}
-				
+				canvasref.getGame().updateMyPlayer(KeyPress.JUMP_D);
 				break;
 			case Keys.DOWN:
-				if(!arrow_keys_down[DOWN])
-				{
-					arrow_keys_down[DOWN] = true;
 					canvasref.getGame().updateMyPlayer(KeyPress.DOWN_D);
-				}
 				break;
 			case Keys.LEFT:
-				if(!arrow_keys_down[LEFT])
-				{
-					arrow_keys_down[LEFT] = true;
-					canvasref.getGame().updateMyPlayer(KeyPress.LEFT_D);
-				}
+				canvasref.getGame().updateMyPlayer(KeyPress.LEFT_D);
 				break;
 			case Keys.RIGHT:
-				if(!arrow_keys_down[RIGHT])
-				{	
-					arrow_keys_down[RIGHT] = true;
-					canvasref.getGame().updateMyPlayer(KeyPress.RIGHT_D);
-				}
+				canvasref.getGame().updateMyPlayer(KeyPress.RIGHT_D);
 			}
 			
 			break;
@@ -134,32 +118,16 @@ public class KeyHandler implements KeyListener {
 			switch(keyCode)
 			{
 			case Keys.UP:
-				if(!arrow_keys_down[UP])
-				{
-					arrow_keys_down[UP] = false;
-					canvasref.getGame().updateMyPlayer(KeyPress.JUMP_U);
-				}	
+				canvasref.getGame().updateMyPlayer(KeyPress.JUMP_U);
 				break;
 			case Keys.DOWN:
-				if(!arrow_keys_down[DOWN])
-				{
-					arrow_keys_down[DOWN] = false;
-					canvasref.getGame().updateMyPlayer(KeyPress.DOWN_U);
-				}
+				canvasref.getGame().updateMyPlayer(KeyPress.DOWN_U);
 				break;
 			case Keys.LEFT:
-				if(!arrow_keys_down[LEFT])
-				{
-					arrow_keys_down[LEFT] = false;
-					canvasref.getGame().updateMyPlayer(KeyPress.LEFT_U);
-				}
+				canvasref.getGame().updateMyPlayer(KeyPress.LEFT_U);
 				break;
 			case Keys.RIGHT:
-				if(!arrow_keys_down[RIGHT])
-				{
-					arrow_keys_down[RIGHT] = false;
-					canvasref.getGame().updateMyPlayer(KeyPress.RIGHT_U);
-				}
+				canvasref.getGame().updateMyPlayer(KeyPress.RIGHT_U);
 			}
 			
 			break;
