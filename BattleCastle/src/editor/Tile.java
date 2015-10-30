@@ -25,18 +25,18 @@ public class Tile extends Rectangle implements JSONStreamAware
 	protected State[] states;
 	protected int animation;
 	
-	private static Image[] check;
+	private static BufferedImage[] check;
 	private static State[] still;
 	
 	static
 	{
-		check= new Image[]{Utility.loadImage("check")};
+		check= new BufferedImage[]{(BufferedImage)Utility.loadImage("check")};
 		still=new State[]{new State()};
 	}
 
 	public Tile(int x,int y,int width,int height)
 	{
-		this(x,y,width,height);
+		this(x,y,width,height,"","");
 		
 		picText="";
 		statesText="";
@@ -49,7 +49,10 @@ public class Tile extends Rectangle implements JSONStreamAware
 		this.width=width;
 		this.height=height;
 		this.picText=picText;
-		this.pics=(BufferedImage[])Utility.loadBufferedArray(picText, 32, 32).toArray();
+		if(!picText.equals(""))
+			this.pics=(BufferedImage[])Utility.loadBufferedArray(picText, 32, 32).toArray();
+		else
+			this.pics=check;
 		this.statesText=statesText;
 		this.states=createStates(statesText);
 	}
@@ -61,6 +64,8 @@ public class Tile extends Rectangle implements JSONStreamAware
 	
 	protected State[] createStates(String s)
 	{
+		if(s.equals(""))
+			return new State[]{new State(0,0)};
 		String[] text=s.split(",");
 		State[] temp=new State[text.length];
 		for(int i = 0; i<temp.length;i++)
@@ -147,8 +152,8 @@ public class Tile extends Rectangle implements JSONStreamAware
 		obj.put("y",new Integer(y));
 		obj.put("width",new Integer(width));
 		obj.put("height",new Integer(height));
-		obj.put("pic",pic);
-		obj.put("states",)
+		obj.put("picText",picText);
+		obj.put("statestext",statesText);
 		JSONValue.writeJSONString(obj, out);
 	}
 	

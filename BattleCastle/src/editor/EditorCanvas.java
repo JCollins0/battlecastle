@@ -60,7 +60,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 			list=new ArrayList<Tile>();
 		
 		examples=new ArrayList<Tile>();
-		addTile=new Tile(32,784,32,32,);
+		addTile=new Tile(32,784,32,32);
 		saveTile=new Tile(128,128,128,128);
 		examples.add(addTile);
 		examples.add(saveTile);
@@ -119,14 +119,15 @@ public class EditorCanvas extends Canvas implements Runnable{
 	
 	private ArrayList<Tile> readSave()
 	{
-		ArrayList<Tile> list;
+		ArrayList<Tile> temp;
 		Scanner reader=null;
 		JSONParser parser=new JSONParser();
 		try
 		{
 			reader=new Scanner(new FileInputStream(DataConstants.CURRENT_LEVEL));
 			//System.out.println(reader.nextLine());
-			Object temp = parser.parse(reader.nextLine());
+			JSONArray ja = (JSONArray)parser.parse(reader.nextLine());
+			System.out.println(ja.toArray()[0]);
 		}
 		catch (Exception e)
 		{
@@ -143,6 +144,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 	public void save()
 	{
 		JSONArray temp=new JSONArray();
+		temp.addAll(list);
 		System.out.println(temp);
 		PrintWriter printer=null;
 		try
