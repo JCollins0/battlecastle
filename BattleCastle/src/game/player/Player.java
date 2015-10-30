@@ -20,7 +20,9 @@ public class Player {
 	private static final double GRAVITY = 9.8;
 	private BufferedImage image;
 	private ArrayList<Arrow> arrowStorage;
+	private Arrow currentArrow;
 	private int arrowCount;
+	
 	
 	public Player()
 	{
@@ -30,6 +32,13 @@ public class Player {
 	public Player(BufferedImage image)
 	{
 		arrowStorage = new ArrayList<Arrow>();
+		arrowStorage.add(new Arrow());
+		arrowStorage.add(new Arrow());
+		arrowStorage.add(new Arrow());
+		arrowStorage.add(new Arrow());
+		arrowStorage.add(new Arrow());
+		
+		
 		bounds = new Rectangle(-WIDTH,-HEIGHT,WIDTH,HEIGHT);
 		this.image = image;
 	}
@@ -133,8 +142,12 @@ public class Player {
 //						, 2) 
 //				);
 //		System.out.printf("[DC:%d,COS:%d,SIN:%d]\n",dc,(int)(Math.cos(theta)*dc),(int)(Math.sin(theta)*dc));
-		Arrow arrow = new Arrow(bounds.x + bounds.width/2 + (int)(Math.cos(theta)*-dc),bounds.y + bounds.height/2 + (int)(Math.sin(theta)*-dc),1,1);
-		arrowStorage.add(arrow);
+		Arrow currentArrow= arrowStorage.get(0);
+		currentArrow.fix( 
+				bounds.x + bounds.width/2 + (int)(Math.cos(theta)*-dc),
+				bounds.y + bounds.height/2 + (int)(Math.sin(theta)*-dc),
+				1,1);
+		
 	}
 
 	public String stringify()

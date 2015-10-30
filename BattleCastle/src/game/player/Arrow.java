@@ -8,14 +8,14 @@ import utility.Utility;
 
 public class Arrow {
 
-	public static final int WIDTH = 16, HEIGHT = 8;
+	public static final int WIDTH = 32, HEIGHT = 16d;
 	private Rectangle bounds;
 	private double vX, vY;
 	private Color color; 
 	
-	public Arrow(int x, int y, double vX, double vY)
+	public Arrow()
 	{
-		bounds = new Rectangle(x,y,WIDTH,HEIGHT);
+		bounds = new Rectangle(0,0,WIDTH,HEIGHT);
 		color = Utility.randomRGBColor();
 	}
 	
@@ -33,6 +33,12 @@ public class Arrow {
 	{
 		g.setColor(color);
 		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+	}
+	
+	public void fix(int x, int y, double vX, double vY)
+	{
+		bounds.x = x;
+		bounds.y = y;
 	}
 	
 	public void tick()
