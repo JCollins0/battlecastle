@@ -20,7 +20,7 @@ public class Player {
 	private static final double GRAVITY = 9.8;
 	private BufferedImage image;
 	private ArrayList<Arrow> arrowStorage;
-	
+	private int arrowCount;
 	
 	public Player()
 	{
@@ -81,6 +81,11 @@ public class Player {
 			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 		}
 		
+		for(int i = 0; i < arrowStorage.size(); i++)
+		{
+			arrowStorage.get(i).render(g);
+		}
+		
 		g.setColor(Color.black);
 		g.drawString(String.format("(%d,%d)", bounds.x, bounds.y ), bounds.x, bounds.y-5);
 	}
@@ -108,19 +113,28 @@ public class Player {
 	
 	public void addArrow(int x, int y)
 	{
-		double theta = Math.atan2(bounds.x + bounds.width/2 - x, bounds.y + bounds.height / 2 - y);
-		theta = Math.toDegrees( theta) + 90;
-		if(theta < 0)
-			theta = 360 + theta;
+		double theta = Math.atan2((bounds.y + bounds.height / 2 - y),(bounds.x + bounds.width/2 - x ));
+		int dc =(int) Math.hypot(
+				MouseHandler.mouse.x - (bounds.x + bounds.width/2),
+				MouseHandler.mouse.y - (bounds.y + bounds.height/2)
+				);
+		//theta = Math.toDegrees( theta)
+//		if(theta < 0)
+//			theta = 360 + theta;
 		//UP = 90
 		//DOWN = 270
 		//LEFT = 180
 		//RIGHT = 0
-		System.out.println(theta);
-		int dc = (int)Math.sqrt(Math.pow(MouseHandler.mouse.x - bounds.x + bounds.width/2, 2) + Math.pow(MouseHandler.mouse.y - bounds.y + bounds.height/2, 2) );
-		int dx = (int)(bounds.x + bounds.width/2 - MouseHandler.mouse.x);
-		int dy = (int)(bounds.y + bounds.height/2 - MouseHandler.mouse.y);
-		Arrow arrow = new Arrow((int)Math.cos(dc/dx),(int)Math.sin(dc/dy),1,1);
+//		System.out.println(Math.toDegrees(theta));
+//		int dc = (int)Math.sqrt(
+//				Math.pow(
+//						, 2)
+//				+ Math.pow(
+//						, 2) 
+//				);
+//		System.out.printf("[DC:%d,COS:%d,SIN:%d]\n",dc,(int)(Math.cos(theta)*dc),(int)(Math.sin(theta)*dc));
+		Arrow arrow = new Arrow(bounds.x + bounds.width/2 + (int)(Math.cos(theta)*-dc),bounds.y + bounds.height/2 + (int)(Math.sin(theta)*-dc),1,1);
+		arrowStorage.add(arrow);
 	}
 
 	public String stringify()
