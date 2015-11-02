@@ -37,7 +37,7 @@ public class Tile extends Rectangle implements JSONStreamAware
 	public static Tile decodeJSON(JSONObject j)
 	{
 		if(j.size()==6)
-			return new Tile((int)j.get("x"),(int)j.get("y"),(int)j.get("width"),(int)j.get("height"),(String)j.get("picText"),(String)j.get("statesText"));
+			return new Tile((int)(long)j.get("x"),(int)(long)j.get("y"),(int)(long)j.get("width"),(int)(long)j.get("height"),(String)j.get("picText"),(String)j.get("statesText"));
 		return null;
 	}
 
@@ -56,7 +56,7 @@ public class Tile extends Rectangle implements JSONStreamAware
 		this.width=width;
 		this.height=height;
 		this.picText=picText;
-		if(!picText.equals(""))
+		if(picText!=null&&!picText.equals(""))
 			this.pics=(BufferedImage[])Utility.loadBufferedArray(picText, 32, 32).toArray();
 		else
 			this.pics=check;
@@ -71,7 +71,7 @@ public class Tile extends Rectangle implements JSONStreamAware
 	
 	protected State[] createStates(String s)
 	{
-		if(s.equals(""))
+		if(s==null||s.equals(""))
 			return new State[]{new State(0,0)};
 		String[] text=s.split(",");
 		State[] temp=new State[text.length];
