@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -118,10 +119,12 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuButtonList.add(map3);
 		menuButtonList.add(map4);
 		
-//		for(int i = 0; i < 9; i++)
+//		for(int i = 0; i < 10; i++)
 //		{
 //			menuButtonList.add(new MapSelectionObject(0, 0, 0, 0, MenuButtonType.SELECT_MAP, MapType.THREE, GameState.SELECT_MAP));
 //		}
+		
+		//load maps if any
 		
 		fixMapSelectionObjects(getMapSelectionSubset());
 		
@@ -251,7 +254,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		int width = BattleCastleFrame.GAME_SIZE.width;
 		int height = BattleCastleFrame.GAME_SIZE.height - 150;
 		
-		int desiredAmountPerRow = 3;
+		int desiredAmountPerRow = getRowsCols(size).x;
+		
 		int yRows = (int)Math.ceil(size / (double)desiredAmountPerRow) + 1;
 		int xCols = desiredAmountPerRow + 1;
 		
@@ -261,7 +265,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		ySize = height/yRows;
 		yOffset = (height - (yRows-1) * ySize ) / (yRows);
 		
-		System.out.printf("%d,%d,%d,%d%n",xSize,ySize,xOffset,yOffset);
+//		System.out.printf("%d,%d,%d,%d%n",xSize,ySize,xOffset,yOffset);
+		int remainder = size % desiredAmountPerRow;
+		System.out.println(remainder);
 		
 		int x = xOffset;
 		int y = yOffset;
@@ -270,20 +276,57 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			if(i != 0 && i % desiredAmountPerRow == 0)
 			{
 				x = xOffset;
+				
+				if(i >= objs.size() - remainder)
+				{
+					//System.out.println("Changing XOffset");
+					if( i == objs.size() - remainder)
+						x = 0;
+					int remainOffset = width/2 - (xSize * remainder + xOffset * (remainder - 1))/2;
+					x += remainOffset;
+				}
+				
 				y += yOffset + ySize;
 			}
+			
+			
+			
 			
 			objs.get(i).setX(x);
 			objs.get(i).setY(y);
 			objs.get(i).setWidth(xSize);
 			objs.get(i).setHeight(ySize);
 			
-			System.out.println(objs.get(i).getBounds());
+			//System.out.println(objs.get(i).getBounds());
+			
+			
 			
 			x += xOffset + xSize;
 			
 			
 		}
+	}
+	
+	private Point getRowsCols(int size)
+	{
+		Point p = new Point();
+		for(int i = 0; i < size; i++)
+		{
+			if(size < Math.pow(i, 2))
+			{
+				if(size < (i) * (i-1))
+				{
+					p.x = i;
+					p.y = i-1;
+					return p;
+				}else
+				{
+					p.x = p.y = i;
+					return p;
+				}
+			}
+		}
+		return p;
 	}
 	
 	private ArrayList<MapSelectionObject> getMapSelectionSubset()
