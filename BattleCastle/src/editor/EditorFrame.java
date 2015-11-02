@@ -29,7 +29,7 @@ public class EditorFrame extends JFrame {
 	public EditorFrame()
 	{
 		super(String.format("%s v%s",GAME_NAME,GAME_VERSION));
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setSize(GAME_SIZE);
 		setLocationRelativeTo(null);
 		init();

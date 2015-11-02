@@ -1,13 +1,13 @@
 package editor;
 
 import java.awt.Graphics;
-import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.LinkedHashMap;
 
+import org.json.simple.JSONObject;
 import org.json.simple.JSONStreamAware;
 import org.json.simple.JSONValue;
 
@@ -32,6 +32,13 @@ public class Tile extends Rectangle implements JSONStreamAware
 	{
 		check= new BufferedImage[]{(BufferedImage)Utility.loadImage("check")};
 		still=new State[]{new State()};
+	}
+	
+	public static Tile decodeJSON(JSONObject j)
+	{
+		if(j.size()==6)
+			return new Tile((int)j.get("x"),(int)j.get("y"),(int)j.get("width"),(int)j.get("height"),(String)j.get("picText"),(String)j.get("statesText"));
+		return null;
 	}
 
 	public Tile(int x,int y,int width,int height)

@@ -119,7 +119,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 	
 	private ArrayList<Tile> readSave()
 	{
-		ArrayList<Tile> temp;
+		ArrayList<Tile> temp = new ArrayList<Tile>();
 		Scanner reader=null;
 		JSONParser parser=new JSONParser();
 		try
@@ -127,7 +127,10 @@ public class EditorCanvas extends Canvas implements Runnable{
 			reader=new Scanner(new FileInputStream(DataConstants.CURRENT_LEVEL));
 			//System.out.println(reader.nextLine());
 			JSONArray ja = (JSONArray)parser.parse(reader.nextLine());
-			System.out.println(ja.toArray()[0]);
+			for(int i = 0;i<ja.size();i++)
+			{
+				temp.add(Tile.decodeJSON((JSONObject)ja.get(i)));
+			}
 		}
 		catch (Exception e)
 		{
@@ -138,7 +141,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 			if(reader!=null)
 				reader.close();
 		}
-		return null;
+		return temp;
 	}
 	
 	public void save()
