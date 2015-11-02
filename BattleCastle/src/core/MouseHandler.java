@@ -17,6 +17,7 @@ import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
 import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
+import editor.EditorFrame;
 import game.Game;
 import game.player.BattleCastleUser;
 
@@ -58,6 +59,9 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 						canvasref.setGame(false);
 						
 						canvasref.setCurrentState(GameState.JOIN_SERVER);
+					}else if(button.getButtonType() == MenuButtonType.LEVEL_EDITOR)
+					{
+						EditorFrame frame = new EditorFrame();
 					}
 					
 				}
@@ -224,7 +228,6 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 			}
 			
 			break;
-		
 		}
 	}
 

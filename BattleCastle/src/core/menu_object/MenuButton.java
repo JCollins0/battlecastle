@@ -86,6 +86,26 @@ public class MenuButton{
 		return buttonType;
 	}
 	
+	public void setX(int x)
+	{
+		bounds.x = x;
+	}
+	
+	public void setY(int y)
+	{
+		bounds.y = y;
+	}
+	
+	public void setWidth(int w)
+	{
+		bounds.width = w;
+	}
+	
+	public void setHeight(int h)
+	{
+		bounds.height = h;
+	}
+	
 	public Rectangle getBounds()
 	{
 		return bounds;

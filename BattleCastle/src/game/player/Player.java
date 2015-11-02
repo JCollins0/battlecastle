@@ -142,12 +142,15 @@ public class Player {
 //						, 2) 
 //				);
 //		System.out.printf("[DC:%d,COS:%d,SIN:%d]\n",dc,(int)(Math.cos(theta)*dc),(int)(Math.sin(theta)*dc));
-		Arrow currentArrow= arrowStorage.get(0);
-		currentArrow.fix( 
-				bounds.x + bounds.width/2 + (int)(Math.cos(theta)*-dc),
-				bounds.y + bounds.height/2 + (int)(Math.sin(theta)*-dc),
-				1,1);
-		
+		if(currentArrow == null)
+			currentArrow= arrowStorage.get(0);
+		else
+		{
+			currentArrow.fix( 
+					bounds.x + bounds.width/2 - (int)(Math.cos(theta) * Player.WIDTH ),
+					bounds.y + bounds.height/2 - (int)(Math.sin(theta) * Player.HEIGHT ),
+					(int)(Math.cos(theta)*-dc),(int)(Math.sin(theta)*-dc));
+		}
 	}
 
 	public String stringify()
@@ -181,6 +184,8 @@ public class Player {
 			case "J": //jumping = Boolean.parseBoolean(key_value[1]);
 				break;
 			case "S": //used in animation?
+				break;
+			case "Arrow": currentArrow.decode(key_value[1]);
 				break;
 				
 			}

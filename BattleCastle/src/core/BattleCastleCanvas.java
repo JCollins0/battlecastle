@@ -4,6 +4,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -46,7 +47,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private static BufferedImage buffer;
 	private boolean running;
 	private GameState currentState;
-	private Game game2;
+	private Game game;
 	private MouseHandler mouseHandler;
 	private KeyHandler keyHandler;
 	private BufferedImage title_image;
@@ -54,6 +55,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private boolean searchingForServers;
 	public static Font defaultFont;
 	private BufferedImage screenShotImage;
+	private BufferedImage backgroundImage;
 	
 	public BattleCastleCanvas()
 	{
@@ -110,12 +112,21 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		
 		map3 = new MapSelectionObject(704, 64, 256, 256,
 				MenuButtonType.SELECT_MAP, MapType.THREE, GameState.SELECT_MAP);
-		//MapSelectionObject map4 = new MapSelectionObject(64, 384, 256, 256, MenuButtonType.SELECT_MAP, MapType.ONE, GameState.SELECT_MAP);
+		MapSelectionObject map4 = new MapSelectionObject(64, 384, 256, 256, MenuButtonType.SELECT_MAP, MapType.ONE, GameState.SELECT_MAP);
 		
 		menuButtonList.add(map1);
 		menuButtonList.add(map2);
 		menuButtonList.add(map3);
-		//menuButtonList.add(map4);
+		menuButtonList.add(map4);
+		
+//		for(int i = 0; i < 10; i++)
+//		{
+//			menuButtonList.add(new MapSelectionObject(0, 0, 0, 0, MenuButtonType.SELECT_MAP, MapType.THREE, GameState.SELECT_MAP));
+//		}
+		
+		//load maps if any
+		
+		fixMapSelectionObjects(getMapSelectionSubset());
 		
 		hostGame = new MenuButton(250,300,500,100,
 				MenuButtonType.HOST_GAME, 
@@ -180,7 +191,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		
 		running = true;
 		
-		//read in data from bc_user.dat;
+		//read in data from config.dat; maybe encrypt/decrypt data...
 		try
 		{
 			File f = new File(DataConstants.USER_CONFIG);
@@ -224,7 +235,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		}
 		
 		
-		
+		backgroundImage = Utility.loadImage(ImageFilePaths.MENU_BACKGROUND_IMAGE);
 	}
 	
 	private ArrayList<MenuTextField> menuTextFieldList;
@@ -235,6 +246,100 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private MapSelectionObject map1,map2,map3;
 	private MenuLabel userNameLabel, serverIPLabel;
 	private ServerSelectionBox serverSelectionBox;
+	
+	private void fixMapSelectionObjects(ArrayList<MapSelectionObject> objs)
+	{
+		int size = objs.size();
+		int xOffset = 0, yOffset = 0, xSize = 0, ySize = 0;
+		int width = BattleCastleFrame.GAME_SIZE.width;
+		int height = BattleCastleFrame.GAME_SIZE.height - 150;
+		
+		int desiredAmountPerRow = getRowsCols(size).x;
+		
+		int yRows = (int)Math.ceil(size / (double)desiredAmountPerRow) + 1;
+		int xCols = desiredAmountPerRow + 1;
+		
+		xSize = width/xCols;
+		xOffset = (width - desiredAmountPerRow * xSize) / (desiredAmountPerRow + 1 );
+		
+		ySize = height/yRows;
+		yOffset = (height - (yRows-1) * ySize ) / (yRows);
+		
+//		System.out.printf("%d,%d,%d,%d%n",xSize,ySize,xOffset,yOffset);
+		int remainder = size % desiredAmountPerRow;
+		System.out.println(remainder);
+		
+		int x = xOffset;
+		int y = yOffset;
+		for(int i = 0; i < objs.size(); i++)
+		{
+			if(i != 0 && i % desiredAmountPerRow == 0)
+			{
+				x = xOffset;
+				
+				if(i >= objs.size() - remainder)
+				{
+					//System.out.println("Changing XOffset");
+					if( i == objs.size() - remainder)
+						x = 0;
+					int remainOffset = width/2 - (xSize * remainder + xOffset * (remainder - 1))/2;
+					x += remainOffset;
+				}
+				
+				y += yOffset + ySize;
+			}
+			
+			
+			
+			
+			objs.get(i).setX(x);
+			objs.get(i).setY(y);
+			objs.get(i).setWidth(xSize);
+			objs.get(i).setHeight(ySize);
+			
+			//System.out.println(objs.get(i).getBounds());
+			
+			
+			
+			x += xOffset + xSize;
+			
+			
+		}
+	}
+	
+	private Point getRowsCols(int size)
+	{
+		Point p = new Point();
+		for(int i = 0; i < size; i++)
+		{
+			if(size < Math.pow(i, 2))
+			{
+				if(size < (i) * (i-1))
+				{
+					p.x = i;
+					p.y = i-1;
+					return p;
+				}else
+				{
+					p.x = p.y = i;
+					return p;
+				}
+			}
+		}
+		return p;
+	}
+	
+	private ArrayList<MapSelectionObject> getMapSelectionSubset()
+	{
+		ArrayList<MapSelectionObject> obj = new ArrayList<MapSelectionObject>();
+		for(int i = 0; i < menuButtonList.size(); i++)
+		{
+			if(menuButtonList.get(i).getButtonType() == MenuButtonType.SELECT_MAP)
+				obj.add((MapSelectionObject)menuButtonList.get(i));
+		}
+		return obj;
+	}
+	
 	
 	public void render()
 	{
@@ -251,6 +356,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		/*
 		 * Draw to screen
 		 */
+		
+		
 		b.setColor(Color.black);
 		b.drawString(String.format("%d,%d",MouseHandler.mouse.x, MouseHandler.mouse.y),
 				MouseHandler.mouse.x, MouseHandler.mouse.y);
@@ -258,6 +365,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		switch (currentState)
 		{
 		case MAIN_MENU:
+			//draw background image;
+			b.drawImage(backgroundImage, 0, 0, BattleCastleFrame.GAME_SIZE.width, BattleCastleFrame.GAME_SIZE.height,null);
+			
 			b.setColor(Color.RED);
 			b.setFont(Error.ERROR_FONT);
 			if(error_messages.size() > 0)
@@ -286,9 +396,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			break;
 		case GAMEPLAY:
 			
-			if(game2 != null)
+			if(game != null)
 			{
-				game2.render(b);
+				game.render(b);
 			}			
 			break;
 		
@@ -319,8 +429,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	
 	public void tick()
 	{
-//		if(game != null)
-//			game.tick();
+
 		for(int i = 0; i < error_messages.size(); i++)
 		{
 			error_messages.get(i).tick();
@@ -332,8 +441,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			if(menuTextField.isVisibleAtState(currentState) )
 				menuTextField.tick();
 		
-		if(game2 != null)
-			game2.tick();
+		if(game != null)
+			game.tick();
 	}
 	
 	@Override
@@ -357,16 +466,12 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	
 	public void setGame(boolean host)
 	{
-//		if(host)
-//			game = new Game(this, HostType.SERVER);
-//		else
-//			game = new Game(this, HostType.CLIENT);
 		
 		if(host)
-			game2 = new Game(this, HostType.SERVER);
+			game = new Game(this, HostType.SERVER);
 		else
 		{
-			game2 = new Game(this, HostType.CLIENT);
+			game = new Game(this, HostType.CLIENT);
 			
 			searchForLanServers();
 		}
@@ -399,14 +504,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		return ret;
 	}
 	
-//	public Game getGame()
-//	{
-//		return game;
-//		return game2;
-//	}
 	public Game getGame()
 	{
-		return game2;
+		return game;
 	}
 
 	public MenuTextField getTextFieldByID(MenuTextFieldType textFieldType) {
@@ -424,7 +524,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		searchTimer.schedule(new TimerTask(){
 			public void run() {
 				
-				Client client = game2.getClient();
+				Client client = game.getClient();
 				List<InetAddress> possibleServers = client.discoverHosts(Game.SERVER_UDP, 20000);
 				System.out.println(possibleServers.size());
 				for(int i = 0; i < possibleServers.size(); i++)
