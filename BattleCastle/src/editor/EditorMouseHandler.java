@@ -62,6 +62,11 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 		{
 			canvasref.save();
 		}
+		for(Tile t:canvasref.list)
+		{
+			if(t.contains(mouse))
+				canvasref.activateTileEditor(t);
+		}
 	}
 
 	@Override

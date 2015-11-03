@@ -13,6 +13,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.swing.JTextField;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -32,13 +34,15 @@ public class EditorCanvas extends Canvas implements Runnable{
 
 	protected ArrayList<Tile> list;
 	private ArrayList<Tile> examples;
-	public Tile addTile,saveTile;
+	public Tile addTile,saveTile,editTile;
 	private static BufferedImage buffer;
 	private boolean running, bottom, grid;
 	private GameState currentState;
 	private Game game;
 	private EditorMouseHandler mouseHandler;
 	private EditorKeyHandler keyHandler;
+	
+	private JTextField tileX,tileY,tileWidth,tileHeight;
 	
 	public EditorCanvas()
 	{
@@ -64,6 +68,12 @@ public class EditorCanvas extends Canvas implements Runnable{
 		saveTile=new Tile(128,128,128,128);
 		examples.add(addTile);
 		examples.add(saveTile);
+		
+		tileX=new JTextField(2);
+		tileY=new JTextField(2);
+		tileWidth=new JTextField(2);
+		tileHeight=new JTextField(2);
+		
 		
 		mouseHandler = new EditorMouseHandler(this);
 		keyHandler = new EditorKeyHandler(this);
@@ -166,9 +176,18 @@ public class EditorCanvas extends Canvas implements Runnable{
 		}
 	}
 	
+	protected void activateTileEditor(Tile t)
+	{
+		editTile=t;
+		
+	}
+	
 	public void tick()
 	{
-		
+		for(Tile t:list)
+		{
+			t.tick();
+		}
 	}
 	
 	public void run() 
