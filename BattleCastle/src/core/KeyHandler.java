@@ -5,6 +5,7 @@ import java.awt.event.KeyListener;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.imageio.ImageIO;
@@ -16,14 +17,13 @@ import game.player.Player;
 public class KeyHandler implements KeyListener {
 
 	private BattleCastleCanvas canvasref;
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat("MM-dd-YYYY-k-m-s"); 
-	public static boolean[] arrow_keys_down;
-	public static final int 
-				UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
+	private static SimpleDateFormat dateFormat;
+	public static ArrayList<KeyPress> presses;
 	
 	static
 	{
-		arrow_keys_down = new boolean[4];
+		 presses = new ArrayList<KeyPress>(); 
+		 dateFormat = new SimpleDateFormat("MM-dd-YYYY-k-m-s"); 
 	}
 	
 	public KeyHandler(BattleCastleCanvas canvasref)
@@ -86,16 +86,20 @@ public class KeyHandler implements KeyListener {
 			switch(keyCode)
 			{
 			case Keys.UP:
-				canvasref.getGame().updateMyPlayer(KeyPress.JUMP_D);
+				add(KeyPress.JUMP_D);
+				//canvasref.getGame().updateMyPlayer(KeyPress.JUMP_D);
 				break;
 			case Keys.DOWN:
-					canvasref.getGame().updateMyPlayer(KeyPress.DOWN_D);
+				add(KeyPress.DOWN_D);
+				//	canvasref.getGame().updateMyPlayer(KeyPress.DOWN_D);
 				break;
 			case Keys.LEFT:
-				canvasref.getGame().updateMyPlayer(KeyPress.LEFT_D);
+				add(KeyPress.LEFT_D);
+				//canvasref.getGame().updateMyPlayer(KeyPress.LEFT_D);
 				break;
 			case Keys.RIGHT:
-				canvasref.getGame().updateMyPlayer(KeyPress.RIGHT_D);
+				add(KeyPress.RIGHT_D);
+				//canvasref.getGame().updateMyPlayer(KeyPress.RIGHT_D);
 			}
 			
 			break;
@@ -118,16 +122,16 @@ public class KeyHandler implements KeyListener {
 			switch(keyCode)
 			{
 			case Keys.UP:
-				canvasref.getGame().updateMyPlayer(KeyPress.JUMP_U);
+				remove(KeyPress.JUMP_D);
 				break;
 			case Keys.DOWN:
-				canvasref.getGame().updateMyPlayer(KeyPress.DOWN_U);
+				remove(KeyPress.DOWN_D);
 				break;
 			case Keys.LEFT:
-				canvasref.getGame().updateMyPlayer(KeyPress.LEFT_U);
+				remove(KeyPress.LEFT_D);
 				break;
 			case Keys.RIGHT:
-				canvasref.getGame().updateMyPlayer(KeyPress.RIGHT_U);
+				remove(KeyPress.RIGHT_D);
 			}
 			
 			break;
@@ -144,4 +148,16 @@ public class KeyHandler implements KeyListener {
 		
 		}
 	}
+	
+	public void add(KeyPress press)
+	{
+		if(presses.contains(press))
+			presses.remove(press);
+		presses.add(0, press);
+	}
+	
+	public void remove(KeyPress press)
+	{
+		presses.remove(press);
+	}	
 }

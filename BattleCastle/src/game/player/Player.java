@@ -77,6 +77,8 @@ public class Player {
 			vX -=.1;
 		else if(vX < 0)
 			vX +=.1;
+		
+		addArrow(MouseHandler.mouse.x, MouseHandler.mouse.y);
 	}
 	
 	public void render(Graphics g)

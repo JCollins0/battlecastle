@@ -1,9 +1,11 @@
 package game;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 import com.esotericsoftware.kryonet.Client;
@@ -15,12 +17,14 @@ import core.BattleCastleCanvas;
 import core.Error;
 import core.GameState;
 import core.HostType;
+import core.KeyHandler;
 import core.KeyPress;
 import core.constants.ImageFilePaths;
 import game.message.Message;
 import game.message.MessageType;
 import game.object.GameMap;
 import game.object.MapType;
+import game.player.Arrow;
 import game.player.BattleCastleUser;
 import game.player.Player;
 
@@ -37,6 +41,8 @@ public class Game {
 	private InetAddress serverIP;
 	private TreeMap<String, BattleCastleUser> playerMap;
 	private Player[] playerList;
+	private ArrayList<Arrow> arrows;
+	
 	private String myUUID;
 	private GameMap gameMap;
 	private static final int MIN_PLAYERS = 1;
@@ -47,6 +53,7 @@ public class Game {
 		this.hostType = hostType;
 		playerList = new Player[4];
 		playerMap = new TreeMap<String, BattleCastleUser>();
+		arrows = new ArrayList<Arrow>();
 		
 		if(hostType == HostType.SERVER)
 		{
@@ -101,11 +108,12 @@ public class Game {
 							if(num[1].equals(KeyPress.RIGHT_D.getText()))
 							{
 								playerList[playerNum].setvX(4);
-							}else if(num[1].equals(KeyPress.LEFT_D.getText()))
+							}
+							if(num[1].equals(KeyPress.LEFT_D.getText()))
 							{
 								playerList[playerNum].setvX( -4);
 							}
-							else if(num[1].equals(KeyPress.JUMP_D.getText()))
+							if(num[1].equals(KeyPress.JUMP_D.getText()))
 							{
 								playerList[playerNum].setvY(-4);
 							}
@@ -198,6 +206,8 @@ public class Game {
 				}
 			}
 		}
+		
+		updateMyPlayer();
 	}
 	
 	public void render(Graphics g)
@@ -208,6 +218,13 @@ public class Game {
 		for(int i = 0; i < playerList.length; i++)
 			if(playerList[i] != null)
 				playerList[i].render(g);
+		
+		for(int i = 0; i < KeyHandler.presses.size(); i++)
+		{
+			g.setColor(Color.darkGray);
+			g.drawString(KeyHandler.presses.get(i).getText(), 100, i * 64 + 15 );
+		}
+			
 	}
 	
 	public void setServerIP(String ip)
@@ -269,12 +286,18 @@ public class Game {
 		}
 	}
 	
-	public void updateMyPlayer(KeyPress press)
+	public void updateMyPlayer()
 	{
+		for(int i = 0; i < KeyHandler.presses.size(); i++)
+		{
+			
+			Message message = new Message(MessageType.MOVE_PLAYER,
+					playerMap.get(myUUID).getPlayerNumber() + "=" + KeyHandler.presses.get(i).getText() );
+			gameClient.sendTCP(message);
+
+		}
 		
-		Message message = new Message(MessageType.MOVE_PLAYER,
-				playerMap.get(myUUID).getPlayerNumber() + "=" + press.getText() );
-		gameClient.sendTCP(message);
+	
 	}
 	
 	public void setMyUserUUID(String uuid)
@@ -298,6 +321,7 @@ public class Game {
 		if(gameClient != null)
 			gameClient.stop();
 	}
+	
 	
 }
 

@@ -13,11 +13,19 @@ public class Arrow {
 	private double vX, vY;
 	private Color color; 
 	private Player shotByPlayer;
+	private String ID = "";
 	
 	public Arrow()
 	{
 		bounds = new Rectangle(0,0,WIDTH,HEIGHT);
 		color = Utility.randomRGBColor();
+		int random = (int)(Math.random() * 26 + 65);
+		for(int i = 0; i < 20; i++)
+		{
+			ID += (char)random;
+			random = (int)(Math.random() * 26 + 65);
+		}
+		System.out.println(ID);
 	}
 	
 	public String stringify()
