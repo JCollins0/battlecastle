@@ -264,8 +264,14 @@ public class Game {
 		return playerMap.get(myUUID);
 	}
 	
-	public void sendMapChoice(MapType mapType)
+	public void sendMapChoice(MapType mapType, String mapName)
 	{
+		
+		if(mapType == MapType.CUSTOM)
+		{
+			
+		}
+		
 		gameMap = GameMap.map1;//new GameMap(mapType.getBackground());
 		
 		//load players and then send to clients

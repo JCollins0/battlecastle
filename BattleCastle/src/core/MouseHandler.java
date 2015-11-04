@@ -210,7 +210,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 						MapSelectionObject map = (MapSelectionObject) button;
 						
 						//Send which map 
-						canvasref.getGame().sendMapChoice(map.getMapType());
+						canvasref.getGame().sendMapChoice(map.getMapType(), map.getMapName());
 						
 						canvasref.setCurrentState(GameState.GAMEPLAY);
 					}

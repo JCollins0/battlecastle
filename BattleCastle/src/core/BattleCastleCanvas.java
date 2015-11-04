@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -119,12 +120,43 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuButtonList.add(map3);
 		menuButtonList.add(map4);
 		
-//		for(int i = 0; i < 10; i++)
+//		for(int i = 0; i < 21; i++)
 //		{
 //			menuButtonList.add(new MapSelectionObject(0, 0, 0, 0, MenuButtonType.SELECT_MAP, MapType.THREE, GameState.SELECT_MAP));
 //		}
 		
 		//load maps if any
+		File directory = new File(DataConstants.LEVELS);
+		File[] levels  = directory.listFiles();
+
+		for(int i = 0; i < levels.length; i++)
+		{
+			String name = levels[i].getName();
+			System.out.println(name);
+			
+			if(name.contains(".png"))
+			{
+				MapSelectionObject obj = new MapSelectionObject(0, 0, 0, 0, MenuButtonType.SELECT_MAP, MapType.CUSTOM, levels[i].getAbsolutePath(), GameState.SELECT_MAP);
+				menuButtonList.add(obj);
+			}else
+			{
+				try {
+					FileInputStream inputStream = new FileInputStream(levels[i]);
+					Scanner reader = new Scanner(inputStream);
+
+					//load level here
+
+
+
+					reader.close();
+					inputStream.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			
+		}
 		
 		fixMapSelectionObjects(getMapSelectionSubset());
 		
