@@ -10,6 +10,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import core.menu_object.MapSelectionObject;
 import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
@@ -19,6 +21,7 @@ import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
 import editor.EditorFrame;
 import game.Game;
+import game.object.MapType;
 import game.player.BattleCastleUser;
 
 public class MouseHandler implements MouseMotionListener, MouseListener, MouseWheelListener {
@@ -210,8 +213,8 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 						MapSelectionObject map = (MapSelectionObject) button;
 						
 						//Send which map 
-						canvasref.getGame().sendMapChoice(map.getMapType(), map.getMapName());
-						
+						canvasref.getGame().sendMapChoice(map.getMapType(), map.getFileName());
+						//JOptionPane.showMessageDialog(null, map.getMapType() == MapType.CUSTOM);
 						canvasref.setCurrentState(GameState.GAMEPLAY);
 					}
 					else if (button.getButtonType() == MenuButtonType.BACK_TO_MENU)

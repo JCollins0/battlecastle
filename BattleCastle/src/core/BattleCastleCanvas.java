@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.TreeMap;
 
 import com.esotericsoftware.kryonet.Client;
 
@@ -35,6 +36,7 @@ import core.menu_object.MenuTextFieldType;
 import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
 import game.Game;
+import game.object.GameMap;
 import game.object.MapType;
 import utility.Utility;
 
@@ -57,6 +59,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	public static Font defaultFont;
 	private BufferedImage screenShotImage;
 	private BufferedImage backgroundImage;
+	private TreeMap<String, GameMap> customLevels;
 	
 	public BattleCastleCanvas()
 	{
@@ -115,6 +118,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				MenuButtonType.SELECT_MAP, MapType.THREE, GameState.SELECT_MAP);
 		MapSelectionObject map4 = new MapSelectionObject(64, 384, 256, 256, MenuButtonType.SELECT_MAP, MapType.ONE, GameState.SELECT_MAP);
 		
+		customLevels = new TreeMap<String, GameMap>();
+		
 		menuButtonList.add(map1);
 		menuButtonList.add(map2);
 		menuButtonList.add(map3);
@@ -128,34 +133,44 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		//load maps if any
 		File directory = new File(DataConstants.LEVELS);
 		File[] levels  = directory.listFiles();
-
+		
 		for(int i = 0; i < levels.length; i++)
 		{
-			String name = levels[i].getName();
-			System.out.println(name);
-			
-			if(name.contains(".png"))
+			String levelname = levels[i].getName();
+			if(levels[i].isDirectory())
 			{
-				MapSelectionObject obj = new MapSelectionObject(0, 0, 0, 0, MenuButtonType.SELECT_MAP, MapType.CUSTOM, levels[i].getAbsolutePath(), GameState.SELECT_MAP);
-				menuButtonList.add(obj);
-			}else
-			{
-				try {
-					FileInputStream inputStream = new FileInputStream(levels[i]);
-					Scanner reader = new Scanner(inputStream);
+				File[] levelData = levels[i].listFiles();
+				
+				GameMap map = new GameMap();
+				for(int j = 0; j < levelData.length; j++)
+				{
+					String name = levelData[j].getName();
+					
+					if(name.contains(".png"))
+					{
+						map.loadBackground(levelData[j].getAbsolutePath());
+						MapSelectionObject obj = new MapSelectionObject(0, 0, 0, 0, MenuButtonType.SELECT_MAP, MapType.CUSTOM, levelname, levelData[j].getAbsolutePath(), GameState.SELECT_MAP);
+						menuButtonList.add(obj);
+					}else
+					{
+						try {
+							FileInputStream inputStream = new FileInputStream(levelData[i]);
+							Scanner reader = new Scanner(inputStream);
 
-					//load level here
-
-
-
-					reader.close();
-					inputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
+							//load level here
+							map.loadLevelData(reader.nextLine());
+							
+							reader.close();
+							inputStream.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+					}
+					
 				}
+				customLevels.put(levelname, map);
 			}
-			
-			
+						
 		}
 		
 		fixMapSelectionObjects(getMapSelectionSubset());
@@ -592,6 +607,10 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	public BufferedImage getBuffer()
 	{
 		return screenShotImage;
+	}
+
+	public TreeMap<String, GameMap> getCustomLevels() {
+		return customLevels;
 	}
 	
 }

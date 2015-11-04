@@ -3,6 +3,12 @@ package game.object;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import javax.swing.JOptionPane;
 
 import core.constants.ImageFilePaths;
 import utility.Utility;
@@ -11,10 +17,17 @@ public class GameMap {
 	
 	private BufferedImage background;
 	private Point[] playerStartLocations;
+	private String imageName;
+	
+	public GameMap()
+	{
+		
+	}
 	
 	public GameMap(String imageName)
 	{
 		background = Utility.loadImage(imageName);
+		this.imageName = imageName;
 	}
 	
 	public GameMap(String imageName, Point[] playerLocations)
@@ -34,11 +47,49 @@ public class GameMap {
 		
 	}
 	
+	public String getImageName() {
+		return imageName;
+	}
+
+	public void setImageName(String imageName)
+	{
+		this.imageName = imageName;
+	}
+
+	public BufferedImage getBackground() {
+		return background;
+	}
+
+	public void loadBackground(String name){
+		try {
+			background = ImageIO.read(new FileInputStream(new File(name)));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void setBackground(BufferedImage background) {
+		this.background = background;
+	}
+
+	public Point[] getPlayerStartLocations() {
+		return playerStartLocations;
+	}
+
+	public void setPlayerStartLocations(Point[] playerStartLocations) {
+		this.playerStartLocations = playerStartLocations;
+	}
+
 	public String toString()
 	{
 		return "";
 	}
-
+	
+	public void loadLevelData(String data)
+	{
+		JOptionPane.showMessageDialog(null, data);
+	}
+	
 	public Point getPlayerStartPoint(int playerNum) {
 		if(playerStartLocations == null)
 		{

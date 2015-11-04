@@ -8,6 +8,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
+import javax.swing.JOptionPane;
+
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
 import com.esotericsoftware.kryonet.Listener;
@@ -267,27 +269,30 @@ public class Game {
 	public void sendMapChoice(MapType mapType, String mapName)
 	{
 		
-		if(mapType == MapType.CUSTOM)
+		if(mapType.equals(MapType.CUSTOM) )
 		{
-			
+			JOptionPane.showMessageDialog(null, "loading customLevel" + canvasRef.getCustomLevels().get(mapName));
+			gameMap = canvasRef.getCustomLevels().get(mapName);
 		}
-		
-		gameMap = GameMap.map1;//new GameMap(mapType.getBackground());
-		
-		//load players and then send to clients
-		for(int i = 0; i < playerMap.size(); i++)
+		else
 		{
-			playerList[i] = new Player(ImageFilePaths.TEMP_PLAYER);
-			playerList[i].setLocation(gameMap.getPlayerStartPoint(i));
-		}
-		Message message = new Message(MessageType.SELECT_MAP, mapType.getBackground());
-		gameServer.sendToAllTCP(message);
-		for(int i = 0; i < playerList.length; i++)
-		{
-			if(playerList[i] != null)
+			gameMap = GameMap.map1;//new GameMap(mapType.getBackground());
+
+			//load players and then send to clients
+			for(int i = 0; i < playerMap.size(); i++)
 			{
-				message = new Message(MessageType.UPDATE_PLAYER,i + "=" + playerList[i].stringify());
-				gameServer.sendToAllTCP(message);
+				playerList[i] = new Player(ImageFilePaths.TEMP_PLAYER);
+				playerList[i].setLocation(gameMap.getPlayerStartPoint(i));
+			}
+			Message message = new Message(MessageType.SELECT_MAP, mapType.getBackground());
+			gameServer.sendToAllTCP(message);
+			for(int i = 0; i < playerList.length; i++)
+			{
+				if(playerList[i] != null)
+				{
+					message = new Message(MessageType.UPDATE_PLAYER,i + "=" + playerList[i].stringify());
+					gameServer.sendToAllTCP(message);
+				}
 			}
 		}
 	}
