@@ -16,9 +16,9 @@ public class InteractiveTile extends Tile
 	
 	private boolean interacting;
 	
-	public InteractiveTile(int x,int y,int width,int height,Image[] pics,State[] states)
+	public InteractiveTile(int x, int y, int width, int height)
 	{
-		super(x,y,width,height,pics,states);
+		super(x, y, width, height);
 	}
 	
 	public void interact(Player p)

@@ -54,19 +54,12 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 
 	@Override
 	public void mousePressed(MouseEvent arg0) {
-		if(canvasref.addTile.contains(mouse))
-		{
-			canvasref.list.add(new Tile(0, 0, 32, 32));
-		}
-		if(canvasref.saveTile.contains(mouse))
-		{
-			canvasref.save();
-		}
 		for(Tile t:canvasref.list)
 		{
 			if(t.contains(mouse))
 				canvasref.activateTileEditor(t);
 		}
+		//canvasref.editPanel.checkToolClicked(canvasref, mouse);
 	}
 
 	@Override

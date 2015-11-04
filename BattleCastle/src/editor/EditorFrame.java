@@ -19,6 +19,7 @@ public class EditorFrame extends JFrame {
 	protected ArrayList<Tile> tiles=new ArrayList<Tile>();
 	
 	public static EditorCanvas editor_canvas;
+	public static EditorPanel editor_panel;
 	
 	
 	

@@ -3,27 +3,24 @@ package editor;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.swing.JTextField;
-
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 import org.json.simple.parser.JSONParser;
 
-import core.constants.*;
 import core.GameState;
 import core.GameTimer;
+import core.constants.DataConstants;
 import game.Game;
+import core.menu_object.*;
 
 public class EditorCanvas extends Canvas implements Runnable{
 
@@ -33,16 +30,14 @@ public class EditorCanvas extends Canvas implements Runnable{
 	private static final long serialVersionUID = -6879897978771655344L;
 
 	protected ArrayList<Tile> list;
-	private ArrayList<Tile> examples;
-	public Tile addTile,saveTile,editTile;
+	private ArrayList<MenuTextField> bottomTextFields;
 	private static BufferedImage buffer;
 	private boolean running, bottom, grid;
 	private GameState currentState;
 	private Game game;
+	protected EditorPanel editPanel;
 	private EditorMouseHandler mouseHandler;
 	private EditorKeyHandler keyHandler;
-	
-	private JTextField tileX,tileY,tileWidth,tileHeight;
 	
 	public EditorCanvas()
 	{
@@ -56,24 +51,12 @@ public class EditorCanvas extends Canvas implements Runnable{
 		buffer=new BufferedImage(EditorFrame.GAME_SIZE.width,EditorFrame.GAME_SIZE.height,BufferedImage.TYPE_INT_ARGB);
 		
 		running=true;
-		bottom=true;
+		bottom=false;
 		grid=true;
 		
 		list=readSave();
 		if(list==null)
 			list=new ArrayList<Tile>();
-		
-		examples=new ArrayList<Tile>();
-		addTile=new Tile(32,784,32,32);
-		saveTile=new Tile(128,128,128,128);
-		examples.add(addTile);
-		examples.add(saveTile);
-		
-		tileX=new JTextField(2);
-		tileY=new JTextField(2);
-		tileWidth=new JTextField(2);
-		tileHeight=new JTextField(2);
-		
 		
 		mouseHandler = new EditorMouseHandler(this);
 		keyHandler = new EditorKeyHandler(this);
@@ -111,8 +94,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		}
 		if(bottom)
 		{
-			for(Tile t:examples)
-				t.draw(b);
+			
 		}
 		for(Tile t:list)
 			t.draw(b);
@@ -176,9 +158,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 		}
 	}
 	
-	protected void activateTileEditor(Tile t)
+	public void activateTileEditor(Tile t)
 	{
-		editTile=t;
 		
 	}
 	
@@ -207,5 +188,16 @@ public class EditorCanvas extends Canvas implements Runnable{
 			render();
 		}
 	}
+	
+	/*public void checkToolClicked(EditorCanvas canvasref,Point mouse)
+	{
+		int i;
+		for(i=0;i<tools.size()&&!tools.get(i).contains(mouse);i++);
+		switch(i)
+		{
+		case 0:canvasref.list.add(new Tile(0,0,32,32));break;
+		default:System.out.println("Function not added to index "+i+ "yet!");
+		}
+	}*/
 	
 }

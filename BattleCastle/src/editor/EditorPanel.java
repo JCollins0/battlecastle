@@ -5,13 +5,17 @@ import java.awt.Point;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 public class EditorPanel extends JPanel
 {
 	
 	private ArrayList<Tile> tools;
+	public Tile addTile,saveTile,editTile;
 	
-	public EditorPanel(EditorCanvas canvasref)
+	private JTextField tileX,tileY,tileWidth,tileHeight;
+	
+	public EditorPanel()
 	{
 		init();
 	}
@@ -20,18 +24,19 @@ public class EditorPanel extends JPanel
 	{
 		setSize(new Dimension(EditorFrame.GAME_SIZE.width, 128));
 		
+		tileX=new JTextField(2);
+		tileY=new JTextField(2);
+		tileWidth=new JTextField(2);
+		tileHeight=new JTextField(2);
+		
 		tools=new ArrayList<Tile>();
+		addTile=new Tile(32,784,32,32);
+		saveTile=new Tile(128,128,128,128);
+		tools.add(addTile);
+		tools.add(saveTile);
 		
 	}
 	
-	public void checkToolClicked(EditorCanvas canvasref,Point mouse)
-	{
-		int i;
-		for(i=0;i<tools.size()&&!tools.get(i).contains(mouse);i++);
-		switch(i)
-		{
-		case 0:canvasref.list.add(new Tile(0,0,32,32));break;
-		}
-	}
+	
 	
 }
