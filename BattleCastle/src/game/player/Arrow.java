@@ -69,10 +69,13 @@ public class Arrow {
 	{
 		bounds.x = x;
 		bounds.y = y;
+		this.vX = vX;
+		this.vY = vY;
 	}
 	
 	public void tick()
 	{
-		
+		bounds.x += vX;
+		bounds.y += vY;
 	}
 }

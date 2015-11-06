@@ -160,6 +160,9 @@ public class Game {
 					{
 						String[] num = messageArr[1].split("=");
 						playerList[Integer.parseInt(num[0])].decode(num[1]);
+					}else if(type.equals(MessageType.UPDATE_ARROW.toString()))
+					{
+						
 					}
 					
 				}
@@ -203,6 +206,12 @@ public class Game {
 							Message message = new Message(MessageType.UPDATE_PLAYER,i + "=" + playerList[i].stringify());
 							gameServer.sendToAllTCP(message);
 						}
+					
+					for(int i = 0; i < arrows.size(); i++)
+					{
+						//System.out.println("Ticking Arrow");
+						arrows.get(i).tick();
+					}
 
 
 				}
@@ -220,6 +229,11 @@ public class Game {
 		for(int i = 0; i < playerList.length; i++)
 			if(playerList[i] != null)
 				playerList[i].render(g);
+		
+		for(int i = 0; i < arrows.size(); i++)
+		{
+			arrows.get(i).render(g);
+		}
 		
 		for(int i = 0; i < KeyHandler.presses.size(); i++)
 		{
@@ -309,6 +323,25 @@ public class Game {
 		}
 		
 	
+	}
+	
+	public void launchArrow()
+	{
+		Player player = getMyPlayer();
+		Arrow arrow = player.removeArrow();
+		
+		if(arrow != null)
+		{
+			arrows.add(arrow);
+			for(int i = 0; i < arrows.size(); i++)
+			{
+				Message message = new Message(MessageType.UPDATE_ARROW, arrows.get(i).stringify());
+				gameClient.sendTCP(message);
+			}
+		}
+		
+		
+		
 	}
 	
 	public void setMyUserUUID(String uuid)

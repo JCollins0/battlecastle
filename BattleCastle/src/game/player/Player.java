@@ -2,8 +2,10 @@ package game.player;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
@@ -14,6 +16,7 @@ public class Player {
 	
 	public static final int HEIGHT = 64;
 	public static final int WIDTH = 32;
+	public static final int ARROW_SPEED = 4;
 	
 	private Rectangle bounds;
 	private double vX, vY;
@@ -80,9 +83,16 @@ public class Player {
 		
 		addArrow(MouseHandler.mouse.x, MouseHandler.mouse.y);
 	}
+	Graphics2D g2 = null;
+	AffineTransform at = new AffineTransform();
 	
 	public void render(Graphics g)
 	{		
+		if(g2 == null)
+		{
+			g2 = (Graphics2D)g;
+		}
+		
 		if(image != null)
 		{
 			g.drawImage(image, bounds.x, bounds.y, bounds.width,bounds.height,null);
@@ -92,13 +102,23 @@ public class Player {
 			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 		}
 		
+		
+		at.translate(bounds.x + bounds.width/2, bounds.y + bounds.height/2 );
+		at.rotate(Math.toRadians(45));
+		g2.setTransform(at);
 		for(int i = 0; i < arrowStorage.size(); i++)
 		{
-			arrowStorage.get(i).render(g);
+			arrowStorage.get(i).render(g2);
 		}
+		at.translate(-(bounds.x + bounds.width/2), -(bounds.y + bounds.height/2) );
+		at.rotate(Math.toRadians(-45));
+		//g2.setTransform(at);
+		
 		
 		g.setColor(Color.black);
 		g.drawString(String.format("(%d,%d)", bounds.x, bounds.y ), bounds.x, bounds.y-5);
+		
+		
 	}
 	
 	public Rectangle getBounds()
@@ -144,15 +164,25 @@ public class Player {
 //						, 2) 
 //				);
 //		System.out.printf("[DC:%d,COS:%d,SIN:%d]\n",dc,(int)(Math.cos(theta)*dc),(int)(Math.sin(theta)*dc));
-		if(currentArrow == null)
+		if(currentArrow == null && arrowStorage.size() > 0)
 			currentArrow= arrowStorage.get(0);
-		else
+		else if(arrowStorage.size() > 0)
 		{
 			currentArrow.fix( 
 					bounds.x + bounds.width/2 - (int)(Math.cos(theta) * Player.WIDTH ),
 					bounds.y + bounds.height/2 - (int)(Math.sin(theta) * Player.HEIGHT ),
-					(int)(Math.cos(theta)*-dc),(int)(Math.sin(theta)*-dc));
+					(int)(Math.cos(theta)*-ARROW_SPEED),(int)(Math.sin(theta)*-ARROW_SPEED));
 		}
+	}
+	
+	public Arrow removeArrow()
+	{
+		if(arrowStorage.size() > 0)
+		{
+			currentArrow = null;
+			return arrowStorage.remove(0);
+		}
+		return null;
 	}
 
 	public String stringify()
