@@ -19,7 +19,6 @@ public class EditorFrame extends JFrame {
 	protected ArrayList<Tile> tiles=new ArrayList<Tile>();
 	
 	public static EditorCanvas editor_canvas;
-	public static EditorPanel editor_panel;
 	
 	
 	
@@ -31,7 +30,7 @@ public class EditorFrame extends JFrame {
 	{
 		super(String.format("%s v%s",GAME_NAME,GAME_VERSION));
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setSize(GAME_SIZE);
+		//setSize(GAME_SIZE);
 		setLocationRelativeTo(null);
 		init();
 		setResizable(false);

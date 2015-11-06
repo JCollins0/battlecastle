@@ -29,13 +29,12 @@ public class EditorCanvas extends Canvas implements Runnable{
 	 */
 	private static final long serialVersionUID = -6879897978771655344L;
 
-	protected ArrayList<Tile> list;
+	protected ArrayList<Tile> list,tools;
 	private ArrayList<MenuTextField> bottomTextFields;
 	private static BufferedImage buffer;
 	private boolean running, bottom, grid;
 	private GameState currentState;
 	private Game game;
-	protected EditorPanel editPanel;
 	private EditorMouseHandler mouseHandler;
 	private EditorKeyHandler keyHandler;
 	
@@ -51,12 +50,17 @@ public class EditorCanvas extends Canvas implements Runnable{
 		buffer=new BufferedImage(EditorFrame.GAME_SIZE.width,EditorFrame.GAME_SIZE.height,BufferedImage.TYPE_INT_ARGB);
 		
 		running=true;
-		bottom=false;
+		bottom=true;
 		grid=true;
 		
 		list=readSave();
 		if(list==null)
 			list=new ArrayList<Tile>();
+		
+		tools=new ArrayList<Tile>();
+		Tile addNewTile=new Tile(32,768,32,32);
+		//Tile saveTiles=new Tile();
+		tools.add(addNewTile);
 		
 		mouseHandler = new EditorMouseHandler(this);
 		keyHandler = new EditorKeyHandler(this);
@@ -94,7 +98,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 		}
 		if(bottom)
 		{
-			
+			for(Tile t:tools)
+				t.draw(b);
 		}
 		for(Tile t:list)
 			t.draw(b);
@@ -136,6 +141,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		return temp;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void save()
 	{
 		JSONArray temp=new JSONArray();
@@ -166,9 +172,9 @@ public class EditorCanvas extends Canvas implements Runnable{
 	public void tick()
 	{
 		for(Tile t:list)
-		{
 			t.tick();
-		}
+		for(Tile t:tools)
+			t.tick();
 	}
 	
 	public void run() 
@@ -189,15 +195,15 @@ public class EditorCanvas extends Canvas implements Runnable{
 		}
 	}
 	
-	/*public void checkToolClicked(EditorCanvas canvasref,Point mouse)
+	public void checkToolClicked(Point mouse)
 	{
 		int i;
 		for(i=0;i<tools.size()&&!tools.get(i).contains(mouse);i++);
 		switch(i)
 		{
-		case 0:canvasref.list.add(new Tile(0,0,32,32));break;
-		default:System.out.println("Function not added to index "+i+ "yet!");
+		case 0:list.add(new Tile(0,0,32,32));break;
+		default:break;
 		}
-	}*/
+	}
 	
 }

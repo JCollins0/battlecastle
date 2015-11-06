@@ -11,6 +11,8 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 
 	private EditorCanvas canvasref;
 	private Point mouse;
+	private int indexOfCurrent;
+	private Tile current;
 	
 	public EditorMouseHandler(EditorCanvas canvasref) {
 		this.canvasref = canvasref;
@@ -56,16 +58,15 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 	public void mousePressed(MouseEvent arg0) {
 		for(Tile t:canvasref.list)
 		{
-			if(t.contains(mouse))
+			if(t.contains(mouse)&&indexOfCurrent==-1)
 				canvasref.activateTileEditor(t);
 		}
-		//canvasref.editPanel.checkToolClicked(canvasref, mouse);
+		canvasref.checkToolClicked(mouse);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		// TODO Auto-generated method stub
-
+		current=null;
 	}
 
 }
