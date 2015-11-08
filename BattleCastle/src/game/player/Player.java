@@ -10,13 +10,14 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import core.MouseHandler;
+import core.constants.ImageFilePaths;
 import utility.Utility;
 
 public class Player {
 	
 	public static final int HEIGHT = 64;
 	public static final int WIDTH = 32;
-	public static final int ARROW_SPEED = 4;
+	public static final int ARROW_SPEED = 8;
 	
 	private Rectangle bounds;
 	private double vX, vY;
@@ -35,11 +36,11 @@ public class Player {
 	public Player(BufferedImage image)
 	{
 		arrowStorage = new ArrayList<Arrow>();
-		arrowStorage.add(new Arrow());
-		arrowStorage.add(new Arrow());
-		arrowStorage.add(new Arrow());
-		arrowStorage.add(new Arrow());
-		arrowStorage.add(new Arrow());
+		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
+		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
+		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
+		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
+		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 		
 		
 		bounds = new Rectangle(-WIDTH,-HEIGHT,WIDTH,HEIGHT);
@@ -53,8 +54,8 @@ public class Player {
 	
 	public void setLocation(int x, int y)
 	{
-		bounds.x = x;
-		bounds.y = y;
+		bounds.x = 400;
+		bounds.y = 400;
 	}
 	
 	public void setLocation(Point p)
@@ -72,7 +73,7 @@ public class Player {
 		vY += GRAVITY / 100;
 		if ( vY > GRAVITY )
 			vY = GRAVITY;
-		bounds.y += vY;
+		//bounds.y += vY;
 		
 		bounds.x += vX;
 		
@@ -83,16 +84,10 @@ public class Player {
 		
 		addArrow(MouseHandler.mouse.x, MouseHandler.mouse.y);
 	}
-	Graphics2D g2 = null;
-	AffineTransform at = new AffineTransform();
+	
 	
 	public void render(Graphics g)
-	{		
-		if(g2 == null)
-		{
-			g2 = (Graphics2D)g;
-		}
-		
+	{			
 		if(image != null)
 		{
 			g.drawImage(image, bounds.x, bounds.y, bounds.width,bounds.height,null);
@@ -102,18 +97,8 @@ public class Player {
 			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 		}
 		
-		
-		at.translate(bounds.x + bounds.width/2, bounds.y + bounds.height/2 );
-		at.rotate(Math.toRadians(45));
-		g2.setTransform(at);
-		for(int i = 0; i < arrowStorage.size(); i++)
-		{
-			arrowStorage.get(i).render(g2);
-		}
-		at.translate(-(bounds.x + bounds.width/2), -(bounds.y + bounds.height/2) );
-		at.rotate(Math.toRadians(-45));
-		//g2.setTransform(at);
-		
+		if(currentArrow != null)
+			currentArrow.render(g);	
 		
 		g.setColor(Color.black);
 		g.drawString(String.format("(%d,%d)", bounds.x, bounds.y ), bounds.x, bounds.y-5);
@@ -142,6 +127,16 @@ public class Player {
 		this.vY = vY;
 	}
 	
+	public int getCenterX()
+	{
+		return bounds.x + bounds.width/2;
+	}
+	
+	public int getCenterY()
+	{
+		return bounds.y + bounds.height/2;
+	}
+	
 	public void addArrow(int x, int y)
 	{
 		double theta = Math.atan2((bounds.y + bounds.height / 2 - y),(bounds.x + bounds.width/2 - x ));
@@ -164,14 +159,17 @@ public class Player {
 //						, 2) 
 //				);
 //		System.out.printf("[DC:%d,COS:%d,SIN:%d]\n",dc,(int)(Math.cos(theta)*dc),(int)(Math.sin(theta)*dc));
+		
 		if(currentArrow == null && arrowStorage.size() > 0)
 			currentArrow= arrowStorage.get(0);
 		else if(arrowStorage.size() > 0)
 		{
+			//System.out.println(theta);
+			int ax = bounds.x - (int)(Math.cos(theta) * WIDTH);
+			int ay = bounds.y - (int)(Math.sin(theta) * HEIGHT);
 			currentArrow.fix( 
-					bounds.x + bounds.width/2 - (int)(Math.cos(theta) * Player.WIDTH ),
-					bounds.y + bounds.height/2 - (int)(Math.sin(theta) * Player.HEIGHT ),
-					(int)(Math.cos(theta)*-ARROW_SPEED),(int)(Math.sin(theta)*-ARROW_SPEED));
+					ax , ay,
+					(int)(Math.cos(theta)*-ARROW_SPEED),(int)(Math.sin(theta)*-ARROW_SPEED), theta);
 		}
 	}
 	

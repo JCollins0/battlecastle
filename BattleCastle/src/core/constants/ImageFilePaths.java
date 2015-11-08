@@ -43,7 +43,8 @@ public class ImageFilePaths {
 				MAP_1_BACKGROUND = MAP_1 + "map1",
 				MAP_2_BACKGROUND = MAP_2 + "map2",
 				MAP_3_BACKGROUND = MAP_3 + "map3",
-				TEMP_PLAYER = PLAYER + "temp_player";
+				TEMP_PLAYER = PLAYER + "temp_player",
+				ARROW = WEAPON + "arrow";
 				
 				
 		

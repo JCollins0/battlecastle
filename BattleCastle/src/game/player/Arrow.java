@@ -2,7 +2,10 @@ package game.player;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 
 import utility.Utility;
 
@@ -14,8 +17,11 @@ public class Arrow {
 	private Color color; 
 	private Player shotByPlayer;
 	private String ID = "";
+	private BufferedImage image;
+	private double theta;
+	private static final double GRAVITY = 9.8;
 	
-	public Arrow()
+	public Arrow(Player player, String imagePath)
 	{
 		bounds = new Rectangle(0,0,WIDTH,HEIGHT);
 		color = Utility.randomRGBColor();
@@ -25,7 +31,10 @@ public class Arrow {
 			ID += (char)random;
 			random = (int)(Math.random() * 26 + 65);
 		}
+		image = Utility.loadImage(imagePath);
+		shotByPlayer = player;
 		System.out.println(ID);
+		
 	}
 	
 	public String stringify()
@@ -61,21 +70,52 @@ public class Arrow {
 	
 	public void render(Graphics g)
 	{
-		g.setColor(color);
-		g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+		
+		Graphics2D g2 = (Graphics2D)g;
+		g2.translate(shotByPlayer.getCenterX(), shotByPlayer.getCenterY()-HEIGHT/2);
+		g2.rotate(theta);
+		g2.translate(bounds.x, bounds.y);
+		if(image !=  null)
+		{
+			g2.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height, null);
+		}else
+		{
+			g.setColor(color);
+			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+		}
+		g2.translate(-bounds.x, -bounds.y);
+		g2.rotate(-theta);
+		g2.translate(-shotByPlayer.getCenterX(), -shotByPlayer.getCenterY()+HEIGHT/2);
+		
 	}
 	
-	public void fix(int x, int y, double vX, double vY)
+	public void fix(int x, int y, double vX, double vY, double theta)
 	{
-		bounds.x = x;
-		bounds.y = y;
+	//	bounds.x = x;
+	//	bounds.y = y;
 		this.vX = vX;
 		this.vY = vY;
+		this.theta = theta;
+		
 	}
 	
 	public void tick()
 	{
+		if(Math.abs(theta)<Math.PI/2)
+			theta -= .01;
+		else
+			theta += .01;
+		
+		vY += GRAVITY / 100;
+		if ( vY > GRAVITY )
+			vY = GRAVITY;
+		
 		bounds.x += vX;
 		bounds.y += vY;
+		
+	}
+	
+	public double getTheta() {
+		return theta;
 	}
 }
