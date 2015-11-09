@@ -97,6 +97,8 @@ public class Tile extends Rectangle implements JSONStreamAware
 		states=s;
 	}
 	
+	
+	
 	protected void shift(int x,int y)
 	{
 		this.x+=x;

@@ -45,9 +45,9 @@ public class EditorCanvas extends Canvas implements Runnable{
 	
 	public void init()
 	{
-		setPreferredSize(EditorFrame.GAME_SIZE);
+		setPreferredSize(EditorFrame.EDITOR_SIZE);
 		setBackground(Color.BLACK);
-		buffer=new BufferedImage(EditorFrame.GAME_SIZE.width,EditorFrame.GAME_SIZE.height,BufferedImage.TYPE_INT_ARGB);
+		buffer=new BufferedImage(EditorFrame.EDITOR_SIZE.width,EditorFrame.EDITOR_SIZE.height,BufferedImage.TYPE_INT_ARGB);
 		
 		running=true;
 		bottom=true;
@@ -80,7 +80,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		}
 		
 		Graphics b = buffer.getGraphics();
-		b.fillRect(0, 0, EditorFrame.GAME_SIZE.width, EditorFrame.GAME_SIZE.height);
+		b.fillRect(0, 0, EditorFrame.EDITOR_SIZE.width, EditorFrame.EDITOR_SIZE.height);
 		/*
 		 * Draw to screen
 		 */
@@ -107,8 +107,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 		
 		Graphics g = bs.getDrawGraphics();
 		
-		g.drawImage(buffer, 0, 0, EditorFrame.GAME_SIZE.width,
-				    EditorFrame.GAME_SIZE.height, null);
+		g.drawImage(buffer, 0, 0, EditorFrame.EDITOR_SIZE.width,
+				    EditorFrame.EDITOR_SIZE.height, null);
 		
 		g.dispose();
 		bs.show();
@@ -195,7 +195,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		}
 	}
 	
-	public void checkToolClicked(Point mouse)
+	protected void checkToolClicked(Point mouse)
 	{
 		int i;
 		for(i=0;i<tools.size()&&!tools.get(i).contains(mouse);i++);
@@ -204,6 +204,21 @@ public class EditorCanvas extends Canvas implements Runnable{
 		case 0:list.add(new Tile(0,0,32,32));break;
 		default:break;
 		}
+	}
+	
+	protected void snapToGrid(Tile t)
+	{
+		int x=t.x;
+		int y=t.y;
+		if(x%32<16||x>992)
+			x-=x%32;
+		else
+			x+=32-(x%32);
+		if(y%32<16||y>864)
+			y-=y%32;
+		else
+			y+=32-(y%32);
+		t.setLocation(x, y);
 	}
 	
 }
