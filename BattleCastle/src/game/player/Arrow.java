@@ -3,9 +3,12 @@ package game.player;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.util.ArrayList;
 
 import utility.Utility;
 
@@ -68,24 +71,30 @@ public class Arrow {
 		}
 	}
 	
+	double translateX, translateY;
+	static int setDistance = 20;
+	ArrayList<Point> points = new ArrayList<Point>();
+
+	
 	public void render(Graphics g)
 	{
+		g.setColor(Color.black);
+		for(int i = 0; i < points.size(); i++)
+		{
+			Point p = points.get(i);
+			g.drawLine(p.x, p.y, p.x, p.y);
+		}
 		
-		Graphics2D g2 = (Graphics2D)g;
-		g2.translate(shotByPlayer.getCenterX(), shotByPlayer.getCenterY()-HEIGHT/2);
-		g2.rotate(theta);
-		g2.translate(bounds.x, bounds.y);
 		if(image !=  null)
 		{
-			g2.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height, null);
+			g.drawImage(image, bounds.x, bounds.y,null);
 		}else
 		{
 			g.setColor(color);
 			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 		}
-		g2.translate(-bounds.x, -bounds.y);
-		g2.rotate(-theta);
-		g2.translate(-shotByPlayer.getCenterX(), -shotByPlayer.getCenterY()+HEIGHT/2);
+
+		
 		
 	}
 	
@@ -97,6 +106,19 @@ public class Arrow {
 		this.vY = vY;
 		this.theta = theta;
 		
+		double hypot = Math.hypot(setDistance, HEIGHT/2);
+		translateX = hypot * Math.cos(theta);
+		translateY = hypot * Math.sin(theta);
+		bounds.x = (int) (shotByPlayer.getCenterX() + translateX);
+		bounds.y = (int) (shotByPlayer.getCenterY() + translateY);
+		
+		if(Math.sin(theta) < 0)
+			bounds.y = (int) (shotByPlayer.getCenterY() - translateY);
+			
+		
+		Point p = new Point((int)(shotByPlayer.getCenterX() + translateX),(int)(shotByPlayer.getCenterY() + translateY));
+		if(!points.contains(p))
+			points.add(p);
 	}
 	
 	public void tick()
