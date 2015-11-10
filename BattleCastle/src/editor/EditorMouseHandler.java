@@ -28,7 +28,7 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
 		mouse=arg0.getPoint();
-		System.out.println(current);
+		//System.out.println(current);
 		if(current!=null)
 			current.setLocation(mouse.x-tx, mouse.y-ty);
 	}
@@ -72,12 +72,15 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		if(mouse.y>=896)
-			canvasref.list.remove(current);
-		else
+		if(current!=null)
 		{
-			canvasref.snapToGrid(current);
-			current=null;
+			if(mouse.y>=768)
+				canvasref.list.remove(current);
+			else
+			{
+				canvasref.snapToGrid(current);
+				current=null;
+			}
 		}
 	}
 
