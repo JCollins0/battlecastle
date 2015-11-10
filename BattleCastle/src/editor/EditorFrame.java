@@ -40,6 +40,7 @@ public class EditorFrame extends JFrame {
 		Thread gameThread = new Thread(editor_canvas);
 		gameThread.start();
 		pack();
+		setLocationRelativeTo(null);
 	}
 	
 	public void init(){

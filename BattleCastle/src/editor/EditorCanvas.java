@@ -210,11 +210,19 @@ public class EditorCanvas extends Canvas implements Runnable{
 	{
 		int x=t.x;
 		int y=t.y;
-		if(x%32<16||x>992)
+		if(x>992)
+			x=992;
+		else if(x<0)
+			x=0;
+		else if(x%32<16)
 			x-=x%32;
 		else
 			x+=32-(x%32);
-		if(y%32<16||y>864)
+		if(y>736)
+			y=736;
+		else if(y<0)
+			y=0;
+		else if(y%32<16)
 			y-=y%32;
 		else
 			y+=32-(y%32);
