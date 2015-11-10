@@ -60,6 +60,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private BufferedImage screenShotImage;
 	private BufferedImage backgroundImage;
 	private TreeMap<String, GameMap> customLevels;
+	private static int GAME_FRAMES = 30;
+	public static double time_Step = GAME_FRAMES/1000;
 	
 	public BattleCastleCanvas()
 	{
@@ -448,7 +450,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		
 		while(running)
 		{
-			if (timer.getElapsedTime() > 30)
+			if (timer.getElapsedTime() > GAME_FRAMES)
 			{
 				timer.restart();
 				tick();

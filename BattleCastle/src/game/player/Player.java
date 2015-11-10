@@ -127,6 +127,16 @@ public class Player {
 		this.vY = vY;
 	}
 	
+	public int getX()
+	{
+		return bounds.x;
+	}
+	
+	public int getY()
+	{
+		return bounds.y;
+	}
+	
 	public int getCenterX()
 	{
 		return bounds.x + bounds.width/2;

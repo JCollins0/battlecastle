@@ -10,9 +10,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.util.ArrayList;
 
+import game.physics.PhysicsRect;
+import game.physics.Vector;
 import utility.Utility;
 
-public class Arrow {
+public class Arrow extends PhysicsRect{
 
 	public static final int WIDTH = 32, HEIGHT = 16;
 	private Rectangle bounds;
@@ -24,8 +26,17 @@ public class Arrow {
 	private double theta;
 	private static final double GRAVITY = 9.8;
 	
+	public Arrow(int x, int y, int width, int height, double theta, Vector velocity, double torque, double mass,
+			double dragC, Player player, String imagePath) {
+		super(x, y, width, height, theta, velocity, torque, mass, dragC);
+		this.shotByPlayer = player;
+		this.image = Utility.loadImage(imagePath);
+	}
+	
+	
 	public Arrow(Player player, String imagePath)
 	{
+		this(0,0,WIDTH,HEIGHT,0,null,0,0,1,player,imagePath);
 		bounds = new Rectangle(0,0,WIDTH,HEIGHT);
 		color = Utility.randomRGBColor();
 		int random = (int)(Math.random() * 26 + 65);
@@ -76,66 +87,68 @@ public class Arrow {
 	ArrayList<Point> points = new ArrayList<Point>();
 
 	
-	public void render(Graphics g)
-	{
-		g.setColor(Color.black);
-		for(int i = 0; i < points.size(); i++)
-		{
-			Point p = points.get(i);
-			g.drawLine(p.x, p.y, p.x, p.y);
-		}
-		
-		if(image !=  null)
-		{
-			g.drawImage(image, bounds.x, bounds.y,null);
-		}else
-		{
-			g.setColor(color);
-			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-		}
-
-		
-		
-	}
+//	public void render(Graphics g)
+//	{
+//		super.render(g);
+//		
+////		g.setColor(Color.black);
+////		for(int i = 0; i < points.size(); i++)
+////		{
+////			Point p = points.get(i);
+////			g.drawLine(p.x, p.y, p.x, p.y);
+////		}
+////		
+////		if(image !=  null)
+////		{
+////			g.drawImage(image, bounds.x, bounds.y,null);
+////		}else
+////		{
+////			g.setColor(color);
+////			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+////		}
+//
+//		
+//		
+//	}
 	
 	public void fix(int x, int y, double vX, double vY, double theta)
 	{
-	//	bounds.x = x;
-	//	bounds.y = y;
-		this.vX = vX;
-		this.vY = vY;
-		this.theta = theta;
+		//move(new Vector(shotByPlayer.getCenterX()-getCenter().XPoint(),shotByPlayer.getCenterY()-getCenter().YPoint()));
+		rotate(theta,getCorners());
 		
-		double hypot = Math.hypot(setDistance, HEIGHT/2);
-		translateX = hypot * Math.cos(theta);
-		translateY = hypot * Math.sin(theta);
-		bounds.x = (int) (shotByPlayer.getCenterX() + translateX);
-		bounds.y = (int) (shotByPlayer.getCenterY() + translateY);
-		
-		if(Math.sin(theta) < 0)
-			bounds.y = (int) (shotByPlayer.getCenterY() - translateY);
-			
-		
-		Point p = new Point((int)(shotByPlayer.getCenterX() + translateX),(int)(shotByPlayer.getCenterY() + translateY));
-		if(!points.contains(p))
-			points.add(p);
+//	//	bounds.x = x;
+//	//	bounds.y = y;
+//		this.vX = vX;
+//		this.vY = vY;
+//		this.theta = theta;
+//		
+//		double hypot = Math.hypot(setDistance, HEIGHT/2);
+//		translateX = hypot * Math.cos(theta);
+//		translateY = hypot * Math.sin(theta);
+//		bounds.x = (int) (shotByPlayer.getCenterX() + translateX);
+//		bounds.y = (int) (shotByPlayer.getCenterY() + translateY);
+//					
+//		
+//		Point p = new Point((int)(shotByPlayer.getCenterX() + translateX),(int)(shotByPlayer.getCenterY() + translateY));
+//		if(!points.contains(p))
+//			points.add(p);
 	}
 	
-	public void tick()
-	{
-		if(Math.abs(theta)<Math.PI/2)
-			theta -= .01;
-		else
-			theta += .01;
-		
-		vY += GRAVITY / 100;
-		if ( vY > GRAVITY )
-			vY = GRAVITY;
-		
-		bounds.x += vX;
-		bounds.y += vY;
-		
-	}
+//	public void tick()
+//	{
+//		if(Math.abs(theta)<Math.PI/2)
+//			theta -= .01;
+//		else
+//			theta += .01;
+//		
+//		vY += GRAVITY / 100;
+//		if ( vY > GRAVITY )
+//			vY = GRAVITY;
+//		
+//		bounds.x += vX;
+//		bounds.y += vY;
+//		
+//	}
 	
 	public double getTheta() {
 		return theta;

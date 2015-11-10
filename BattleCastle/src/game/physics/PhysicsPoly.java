@@ -2,6 +2,8 @@ package game.physics;
 
 import java.awt.Graphics;
 
+import core.BattleCastleCanvas;
+
 public class PhysicsPoly extends Polygon
 {
 	
@@ -16,6 +18,7 @@ public class PhysicsPoly extends Polygon
 	private double mass;
 	//private double dampingC;
 	private double dragC;
+	private static final double GRAVITY = 0;
 
 	/*public PhysicsPoly(int x, int y, int width, int height, double theta, Vector velocity, double torque, double mass, double dragC) {
 		super(x, y, width, height,theta);
@@ -98,10 +101,10 @@ public class PhysicsPoly extends Polygon
 	public void tick()
 	{
 		//move the thing-start Verlet integration
-		super.move(velocity.vectorScale(RobotCanvas.timeStep).vectorAdd(acceleration.vectorScale(Math.pow(RobotCanvas.timeStep, 2)*.5)).vectorScale(100));//last scale makes the meters per pixel into centimeters per pixel
+		super.move(velocity.vectorScale(BattleCastleCanvas.time_Step).vectorAdd(acceleration.vectorScale(Math.pow(BattleCastleCanvas.time_Step, 2)*.5)).vectorScale(100));//last scale makes the meters per pixel into centimeters per pixel
 		
 		//calculate the forces on the object
-		Vector netForce=new Vector(0,(int)(mass*RobotCanvas.gravity));// force of gravity
+		Vector netForce=new Vector(0,(int)(mass*GRAVITY));// force of gravity
 		netForce=netForce.vectorSub(velocity.vectorScale(1.225*.5*dragC*super.getArea()));//force of drag
 		//System.out.println(super.getCenter().X());
 		//netForce=netForce.vectorSub(velocity.vectorScale(dampingC));//force of damping
@@ -115,7 +118,7 @@ public class PhysicsPoly extends Polygon
 		//Verlet integration finished
 		Vector new_acceleration=netForce.vectorScale(1/mass);
 		Vector avg_acceleration = acceleration.vectorAdd(new_acceleration).vectorScale(.5);
-		velocity=velocity.vectorAdd(avg_acceleration.vectorScale(RobotCanvas.timeStep));
+		velocity=velocity.vectorAdd(avg_acceleration.vectorScale(BattleCastleCanvas.time_Step));
 		//System.out.println(velocity.Y());//check the objects terminal velocity
 		acceleration=new_acceleration;
 	}
