@@ -16,6 +16,7 @@ public class Polygon
 	protected Vector[] axes;//extend to the shapes implemented already for parallel
 	
 	protected int count;
+	protected double theta;
 
 	/*public Polygon(int x,int y,int width,int height,double theta)
 	{	
@@ -37,6 +38,7 @@ public class Polygon
 		calculateArea();
 		rotate(theta,null);
 		count=corners.length;
+		this.theta = theta;
 	}
 	
 	public Vector getCenter()//uses the summation equation for finding the centroid of a non-self-intersecting closed polygon
@@ -79,9 +81,15 @@ public class Polygon
 			//set axis
 		}
 		//System.out.println(center.X()+"-"+center.Y());
-		
 		for(i=0;i<count;i++)
 			corners[i]=corners[i].vectorRotate(angle, axis);
+	}
+	
+	public void rotateTo(double angle)
+	{
+		
+		rotate(angle-theta,null);
+		theta = angle;
 	}
 	
 	public void move(Vector pos)
@@ -180,7 +188,7 @@ public class Polygon
 	public void render(Graphics g)
 	{
 		g.setColor(Color.BLACK);
-		i=0;
+		int i=0;
 		for(;i<count-1;i++)
 			g.drawLine(corners[i].XPoint(), corners[i].YPoint(), corners[i+1].XPoint(), corners[i+1].YPoint());
 		g.drawLine(corners[i].XPoint(), corners[i].YPoint(), corners[0].XPoint(), corners[0].YPoint());

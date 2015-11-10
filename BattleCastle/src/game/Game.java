@@ -21,6 +21,7 @@ import core.GameState;
 import core.HostType;
 import core.KeyHandler;
 import core.KeyPress;
+import core.MouseHandler;
 import core.constants.ImageFilePaths;
 import game.message.Message;
 import game.message.MessageType;
@@ -209,7 +210,7 @@ public class Game {
 					
 					for(int i = 0; i < arrows.size(); i++)
 					{
-						//System.out.println("Ticking Arrow");
+						//System.out.println("Ticking Arrow: " + i);
 						arrows.get(i).tick();
 					}
 
@@ -330,8 +331,10 @@ public class Game {
 		Player player = getMyPlayer();
 		Arrow arrow = player.removeArrow();
 		
+		
 		if(arrow != null)
 		{
+			arrow.addVelocity();
 			arrows.add(arrow);
 			for(int i = 0; i < arrows.size(); i++)
 			{

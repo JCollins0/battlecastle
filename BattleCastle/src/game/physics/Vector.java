@@ -109,5 +109,10 @@ public class Vector {
 		g.setColor(Color.LIGHT_GRAY);
 		g.drawLine(0, 0, (int)x, (int)y);
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("X: %d,Y: %d",XPoint(),YPoint());
+	}
 
 }

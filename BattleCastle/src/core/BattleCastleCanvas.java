@@ -61,7 +61,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private BufferedImage backgroundImage;
 	private TreeMap<String, GameMap> customLevels;
 	private static int GAME_FRAMES = 30;
-	public static double time_Step = GAME_FRAMES/1000;
+	public static double time_Step = 1.0/GAME_FRAMES;
 	
 	public BattleCastleCanvas()
 	{

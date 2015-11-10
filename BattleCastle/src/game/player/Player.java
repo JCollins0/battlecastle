@@ -35,16 +35,15 @@ public class Player {
 	
 	public Player(BufferedImage image)
 	{
+		bounds = new Rectangle(-WIDTH,-HEIGHT,WIDTH,HEIGHT);
+		this.image = image;
+		
 		arrowStorage = new ArrayList<Arrow>();
 		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
-		
-		
-		bounds = new Rectangle(-WIDTH,-HEIGHT,WIDTH,HEIGHT);
-		this.image = image;
 	}
 	
 	public Player(String imageFileName)
@@ -82,7 +81,7 @@ public class Player {
 		else if(vX < 0)
 			vX +=.1;
 		
-		addArrow(MouseHandler.mouse.x, MouseHandler.mouse.y);
+		fixArrow(MouseHandler.mouse.x, MouseHandler.mouse.y);
 	}
 	
 	
@@ -147,34 +146,18 @@ public class Player {
 		return bounds.y + bounds.height/2;
 	}
 	
-	public void addArrow(int x, int y)
+	public void fixArrow(int x, int y)
 	{
 		double theta = Math.atan2((bounds.y + bounds.height / 2 - y),(bounds.x + bounds.width/2 - x ));
 		int dc =(int) Math.hypot(
 				MouseHandler.mouse.x - (bounds.x + bounds.width/2),
 				MouseHandler.mouse.y - (bounds.y + bounds.height/2)
 				);
-		//theta = Math.toDegrees( theta)
-//		if(theta < 0)
-//			theta = 360 + theta;
-		//UP = 90
-		//DOWN = 270
-		//LEFT = 180
-		//RIGHT = 0
-//		System.out.println(Math.toDegrees(theta));
-//		int dc = (int)Math.sqrt(
-//				Math.pow(
-//						, 2)
-//				+ Math.pow(
-//						, 2) 
-//				);
-//		System.out.printf("[DC:%d,COS:%d,SIN:%d]\n",dc,(int)(Math.cos(theta)*dc),(int)(Math.sin(theta)*dc));
-		
+
 		if(currentArrow == null && arrowStorage.size() > 0)
 			currentArrow= arrowStorage.get(0);
 		else if(arrowStorage.size() > 0)
 		{
-			//System.out.println(theta);
 			int ax = bounds.x - (int)(Math.cos(theta) * WIDTH);
 			int ay = bounds.y - (int)(Math.sin(theta) * HEIGHT);
 			currentArrow.fix( 

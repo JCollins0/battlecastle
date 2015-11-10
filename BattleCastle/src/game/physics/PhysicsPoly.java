@@ -18,7 +18,7 @@ public class PhysicsPoly extends Polygon
 	private double mass;
 	//private double dampingC;
 	private double dragC;
-	private static final double GRAVITY = 0;
+	private static final double GRAVITY = 9.8;
 
 	/*public PhysicsPoly(int x, int y, int width, int height, double theta, Vector velocity, double torque, double mass, double dragC) {
 		super(x, y, width, height,theta);
@@ -83,6 +83,16 @@ public class PhysicsPoly extends Polygon
 		
 	}
 	
+	public void setVelocity(Vector velocity)
+	{
+		this.velocity = velocity;
+	}
+	
+	public void setAngularVelocity(double vel)
+	{
+		this.angularVelocity = vel;
+	}
+	
 	public double getMomentum()
 	{
 		return mass*velocity.vectorMagnitude();
@@ -105,6 +115,7 @@ public class PhysicsPoly extends Polygon
 		
 		//calculate the forces on the object
 		Vector netForce=new Vector(0,(int)(mass*GRAVITY));// force of gravity
+		calculateArea();
 		netForce=netForce.vectorSub(velocity.vectorScale(1.225*.5*dragC*super.getArea()));//force of drag
 		//System.out.println(super.getCenter().X());
 		//netForce=netForce.vectorSub(velocity.vectorScale(dampingC));//force of damping
@@ -119,7 +130,7 @@ public class PhysicsPoly extends Polygon
 		Vector new_acceleration=netForce.vectorScale(1/mass);
 		Vector avg_acceleration = acceleration.vectorAdd(new_acceleration).vectorScale(.5);
 		velocity=velocity.vectorAdd(avg_acceleration.vectorScale(BattleCastleCanvas.time_Step));
-		//System.out.println(velocity.Y());//check the objects terminal velocity
+		//check the objects terminal velocity
 		acceleration=new_acceleration;
 	}
 
