@@ -11,6 +11,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONStreamAware;
 import org.json.simple.JSONValue;
 
+import core.constants.ImageFilePaths;
 import utility.Utility;
 
 public class Tile extends Rectangle implements JSONStreamAware
@@ -30,7 +31,7 @@ public class Tile extends Rectangle implements JSONStreamAware
 	
 	static
 	{
-		check= new BufferedImage[]{(BufferedImage)Utility.loadImage("check")};
+		check= new BufferedImage[]{(BufferedImage)Utility.loadImage(ImageFilePaths.CHECK)};
 		still=new State[]{new State()};
 	}
 	

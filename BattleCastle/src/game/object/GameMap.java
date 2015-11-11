@@ -87,7 +87,7 @@ public class GameMap {
 	
 	public void loadLevelData(String data)
 	{
-		JOptionPane.showMessageDialog(null, data);
+		//JOptionPane.showMessageDialog(null, data);
 	}
 	
 	public Point getPlayerStartPoint(int playerNum) {

@@ -83,27 +83,7 @@ public class Arrow extends PhysicsRect{
 	static int setDistance = 10;
 	ArrayList<Point> points = new ArrayList<Point>();
 
-	
-//	public void render(Graphics g)
-//	{
-//		super.render(g);
-//		
-////		g.setColor(Color.black);
-////		for(int i = 0; i < points.size(); i++)
-////		{
-////			Point p = points.get(i);
-////			g.drawLine(p.x, p.y, p.x, p.y);
-////		}
-////		
-////		if(image !=  null)
-////		{
-////			g.drawImage(image, bounds.x, bounds.y,null);
-////		}else
-////		{
-////			g.setColor(color);
-////			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
-////		}
-//	}
+
 	/**
 	 * @param g the graphics for drawing
 	 */
@@ -145,9 +125,6 @@ public class Arrow extends PhysicsRect{
 	public void tick()
 	{
 		super.tick();
-		Vector v = getCenter();
-		Vector v2 = getCorners()[0];
-		
 		//theta = Math.atan2(v.YPoint() - v2.YPoint(), v.XPoint()-v2.XPoint());
 		System.out.println(Math.abs(Math.toRadians(mYtheta) - Math.toRadians(theta)));
 		if(mYtheta - theta < 0)
@@ -157,26 +134,9 @@ public class Arrow extends PhysicsRect{
 		{
 			mYtheta= -Math.toRadians((mYtheta - theta));
 		}
-		
-		
 	}
 	
-//	public void tick()
-//	{
-//		if(Math.abs(theta)<Math.PI/2)
-//			theta -= .01;
-//		else
-//			theta += .01;
-//		
-//		vY += GRAVITY / 100;
-//		if ( vY > GRAVITY )
-//			vY = GRAVITY;
-//		
-//		bounds.x += vX;
-//		bounds.y += vY;
-//		
-//	}
-	
+
 	public double getTheta() {
 		return mYtheta;
 	}
