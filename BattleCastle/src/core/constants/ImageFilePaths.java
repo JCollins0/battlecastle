@@ -5,6 +5,7 @@ public class ImageFilePaths {
 	private static final String 
 				MENU = "menu/",
 				GAME = "game/",
+				EDITOR = "editor/",
 				ENTITY = GAME + "entity/",
 				ITEM = GAME + "item/",
 				MAP = GAME + "map/",
@@ -44,8 +45,13 @@ public class ImageFilePaths {
 				MAP_2_BACKGROUND = MAP_2 + "map2",
 				MAP_3_BACKGROUND = MAP_3 + "map3",
 				TEMP_PLAYER = PLAYER + "temp_player",
-				ARROW = WEAPON + "arrow";
-				
+				ARROW = WEAPON + "arrow",
+				CHECK = EDITOR + "check",
+				STATICCHECK = EDITOR + "static_check",
+				INCWIDTH = EDITOR + "increment_width",
+				DECWIDTH = EDITOR + "decrement_width",
+				INCHEIGHT = EDITOR + "increment_height",
+				DECHEIGHT = EDITOR + "decrement_height";
 				
 		
 }

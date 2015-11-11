@@ -64,10 +64,11 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 				current=t;
 				tx=mouse.x-t.x;
 				ty=mouse.y-t.y;
-				canvasref.activateTileEditor(t);
+				canvasref.selectTile(t);
 			}
 		}
 		canvasref.checkToolClicked(mouse);
+		canvasref.checkEditorClicked(mouse);
 	}
 
 	@Override
@@ -75,12 +76,15 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 		if(current!=null)
 		{
 			if(mouse.y>=768)
+			{
 				canvasref.list.remove(current);
+				canvasref.deselectTile();
+			}
 			else
 			{
 				canvasref.snapToGrid(current);
-				current=null;
 			}
+			current=null;
 		}
 	}
 

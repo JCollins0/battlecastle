@@ -29,7 +29,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 	 */
 	private static final long serialVersionUID = -6879897978771655344L;
 
-	protected ArrayList<Tile> list,tools;
+	protected ArrayList<Tile> list,tools,editor;
 	private ArrayList<MenuTextField> bottomTextFields;
 	private static BufferedImage buffer;
 	private boolean running, bottom, grid;
@@ -37,6 +37,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 	private Game game;
 	private EditorMouseHandler mouseHandler;
 	private EditorKeyHandler keyHandler;
+	private Tile current;
 	
 	public EditorCanvas()
 	{
@@ -59,8 +60,19 @@ public class EditorCanvas extends Canvas implements Runnable{
 		
 		tools=new ArrayList<Tile>();
 		Tile addNewTile=new Tile(32,768,32,32);
-		//Tile saveTiles=new Tile();
+		Tile saveTiles=new Tile(96,768,32,32);
 		tools.add(addNewTile);
+		tools.add(saveTiles);
+		
+		editor=new ArrayList<Tile>();
+		Tile incrementWidth=new Tile(896,768,32,32);
+		Tile decrementWidth=new Tile(896,800,32,32);
+		Tile incrementHeight=new Tile(928,768,32,32);
+		Tile decrementHeight=new Tile(928,800,32,32);
+		editor.add(incrementWidth);
+		editor.add(decrementWidth);
+		editor.add(incrementHeight);
+		editor.add(decrementHeight);
 		
 		mouseHandler = new EditorMouseHandler(this);
 		keyHandler = new EditorKeyHandler(this);
@@ -103,6 +115,12 @@ public class EditorCanvas extends Canvas implements Runnable{
 		}
 		for(Tile t:list)
 			t.draw(b);
+		if(current!=null)
+		{
+			for(Tile t:editor)
+				t.draw(b);
+		}
+			
 		
 		
 		Graphics g = bs.getDrawGraphics();
@@ -164,9 +182,14 @@ public class EditorCanvas extends Canvas implements Runnable{
 		}
 	}
 	
-	public void activateTileEditor(Tile t)
+	public void selectTile(Tile t)
 	{
-		
+		current=t;
+	}
+	
+	public void deselectTile()
+	{
+		current=null;
 	}
 	
 	public void tick()
@@ -202,6 +225,21 @@ public class EditorCanvas extends Canvas implements Runnable{
 		switch(i)
 		{
 		case 0:list.add(new Tile(0,0,32,32));break;
+		case 1:save();
+		default:break;
+		}
+	}
+	
+	protected void checkEditorClicked(Point mouse)
+	{
+		int i;
+		for(i=0;i<editor.size()&&!editor.get(i).contains(mouse);i++);
+		switch(i)
+		{
+		case 0:current.width+=32;break;
+		case 1:if(current.width!=32)current.width-=32;break;
+		case 2:current.height+=32;break;
+		case 3:if(current.height!=32)current.height-=32;break;
 		default:break;
 		}
 	}
