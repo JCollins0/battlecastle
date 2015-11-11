@@ -1,15 +1,16 @@
 package game.player;
 
-import game.physics.PhysicsRect;
-import game.physics.Vector;
-
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Arrays;
 
+import game.physics.PhysicsRect;
+import game.physics.Vector;
 import utility.Utility;
 
 public class Arrow extends PhysicsRect{
@@ -21,7 +22,7 @@ public class Arrow extends PhysicsRect{
 	private Player shotByPlayer;
 	private String ID = "";
 	private BufferedImage image;
-	private double theta;
+	private double mYtheta;
 	
 	public Arrow(int x, int y, int width, int height, double theta, Vector velocity, double torque, double mass,
 			double dragC, Player player, String imagePath) {
@@ -33,7 +34,7 @@ public class Arrow extends PhysicsRect{
 	
 	public Arrow(Player player, String imagePath)
 	{
-		this(player.getCenterX(),player.getCenterY(),WIDTH,HEIGHT,0,new Vector(5,0),0,500,1.05,player,imagePath);
+		this(player.getCenterX(),player.getCenterY(),WIDTH,HEIGHT,0,null,0,500,1.05,player,imagePath);
 		color = Utility.randomRGBColor();
 		int random = (int)(Math.random() * 26 + 65);
 		for(int i = 0; i < 20; i++)
@@ -102,18 +103,33 @@ public class Arrow extends PhysicsRect{
 ////			g.setColor(color);
 ////			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
 ////		}
-//
-//		
-//		
 //	}
+	/**
+	 * @param g the graphics for drawing
+	 */
+	public void render(Graphics g)
+	{
+		super.render(g);
+		
+		Graphics2D g2d = (Graphics2D)g;
+		
+		g2d.translate(getTopLeft().XPoint() , getTopLeft().YPoint() );
+		g2d.rotate(mYtheta);
+		g2d.drawImage(image, 0 , 0, WIDTH, HEIGHT, null);
+		g2d.rotate(-mYtheta);
+		g2d.translate(-(getTopLeft().XPoint() ),-( getTopLeft().YPoint()));
+		
+		//System.out.println( (getTopLeft().XPoint() + WIDTH/2 - HEIGHT/2) + " " +  (getTopLeft().YPoint() + HEIGHT/2 - WIDTH/2) );
+		
+	}
 	
 	public void addVelocity()
 	{
-		int vX = (int) (setDistance * Math.cos(theta));
-		int vY = (int) (setDistance * Math.sin(theta));
+		int vX = (int) (setDistance * Math.cos(mYtheta));
+		int vY = (int) (setDistance * Math.sin(mYtheta));
 		setVelocity(new Vector(-vX,-vY));
 		
-		if(Math.cos(theta) < 0)
+		if(Math.cos(mYtheta) < 0)
 			setAngularVelocity(2);
 		else
 			setAngularVelocity(-2);
@@ -123,12 +139,26 @@ public class Arrow extends PhysicsRect{
 	{
 		move(new Vector(shotByPlayer.getCenterX()-getCenter().XPoint(),shotByPlayer.getCenterY()-getCenter().YPoint()));
 		rotateTo(Math.toDegrees(theta));
-		this.theta = theta;
+		this.mYtheta = theta;
 	}
 	
 	public void tick()
 	{
 		super.tick();
+		Vector v = getCenter();
+		Vector v2 = getCorners()[0];
+		
+		//theta = Math.atan2(v.YPoint() - v2.YPoint(), v.XPoint()-v2.XPoint());
+		System.out.println(Math.abs(Math.toRadians(mYtheta) - Math.toRadians(theta)));
+		if(mYtheta - theta < 0)
+		{
+			mYtheta= Math.toRadians(Math.abs(mYtheta - theta));
+		}else
+		{
+			mYtheta= -Math.toRadians((mYtheta - theta));
+		}
+		
+		
 	}
 	
 //	public void tick()
@@ -148,6 +178,6 @@ public class Arrow extends PhysicsRect{
 //	}
 	
 	public double getTheta() {
-		return theta;
+		return mYtheta;
 	}
 }

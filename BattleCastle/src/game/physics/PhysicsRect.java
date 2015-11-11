@@ -18,6 +18,11 @@ public class PhysicsRect extends PhysicsPoly {
 	public PhysicsRect(int x,int y,int width,int height,double theta,Vector velocity,double torque,double mass,double dragC)
 	{
 		super(new int[]{x,x+width,x+width,x},new int[]{y,y,y+height,y+height},theta, velocity, torque, mass, dragC);
+		
 	}
 
+	public Vector getTopLeft()
+	{
+		return getCorners()[0];
+	}
 }

@@ -111,6 +111,16 @@ public class Vector {
 	}
 	
 	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Vector)
+		{
+			Vector v = (Vector)obj;
+			return YPoint() == v.YPoint() && XPoint() == v.XPoint();
+		}
+		return false;
+	}
+	
+	@Override
 	public String toString() {
 		return String.format("X: %d,Y: %d",XPoint(),YPoint());
 	}

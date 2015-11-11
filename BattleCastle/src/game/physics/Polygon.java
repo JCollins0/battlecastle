@@ -9,7 +9,6 @@ public class Polygon
 	
 	int i;
 	
-	//private double theta=0;
 	private double area=-1;
 	
 	private Vector[] corners;
@@ -73,7 +72,9 @@ public class Polygon
 		Vector axis=new Vector();
 		if(points==null)
 		{
-			//this.theta+=angle;
+			this.theta += angle;
+			if(theta > 360)
+				theta %= 360;
 			axis=this.getCenter();
 		}
 		else
@@ -175,6 +176,21 @@ public class Polygon
 		return axes;
 	}
 	
+	public Vector getVector(double x, double y)
+	{
+		Vector v = new Vector(x,y);
+		for(int i = 0; i < corners.length; i++)
+		{
+			if(corners[i].equals(v))
+			{
+				System.out.println("A MATCH " + v);
+				return corners[i];
+			}
+		}
+		
+		return null;
+	}
+		
 	public int getCount()
 	{
 		return count;
