@@ -19,8 +19,9 @@ import org.json.simple.parser.JSONParser;
 import core.GameState;
 import core.GameTimer;
 import core.constants.DataConstants;
+import core.constants.ImageFilePaths;
+import core.menu_object.MenuTextField;
 import game.Game;
-import core.menu_object.*;
 
 public class EditorCanvas extends Canvas implements Runnable{
 
@@ -65,10 +66,10 @@ public class EditorCanvas extends Canvas implements Runnable{
 		tools.add(saveTiles);
 		
 		editor=new ArrayList<Tile>();
-		Tile incrementWidth=new Tile(896,768,32,32);
-		Tile decrementWidth=new Tile(896,800,32,32);
-		Tile incrementHeight=new Tile(928,768,32,32);
-		Tile decrementHeight=new Tile(928,800,32,32);
+		Tile incrementWidth=new Tile(896,768,32,32,ImageFilePaths.INCWIDTH,null);
+		Tile decrementWidth=new Tile(896,800,32,32,ImageFilePaths.DECWIDTH,null);
+		Tile incrementHeight=new Tile(928,768,32,32,ImageFilePaths.INCHEIGHT,null);
+		Tile decrementHeight=new Tile(928,800,32,32,ImageFilePaths.DECHEIGHT,null);
 		editor.add(incrementWidth);
 		editor.add(decrementWidth);
 		editor.add(incrementHeight);

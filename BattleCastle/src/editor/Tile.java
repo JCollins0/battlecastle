@@ -58,7 +58,7 @@ public class Tile extends Rectangle implements JSONStreamAware
 		this.height=height;
 		this.picText=picText;
 		if(picText!=null&&!picText.equals(""))
-			this.pics=(BufferedImage[])Utility.loadBufferedArray(picText, 32, 32).toArray();
+			this.pics=Utility.loadBufferedArray(picText, 32, 32);
 		else
 			this.pics=check;
 		this.statesText=statesText;

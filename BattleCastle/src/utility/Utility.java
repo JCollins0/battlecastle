@@ -34,7 +34,7 @@ public class Utility {
     	}
     }
     
-    public static ArrayList<BufferedImage> loadBufferedArray(String img, int xOffset, int yOffset)
+    public static BufferedImage[] loadBufferedArray(String img, int xOffset, int yOffset)
     {
     	BufferedImage image = loadImage(img);
     	ArrayList<BufferedImage> imagepix = new ArrayList<BufferedImage>();
@@ -45,7 +45,9 @@ public class Utility {
     			imagepix.add(image.getSubimage(x, y, xOffset, yOffset));
     		}
     	}
-    	return imagepix;
+    	BufferedImage[] temp=new BufferedImage[imagepix.size()];
+    	temp=imagepix.toArray(temp);
+    	return temp;
     }
     
     public static Color randomRGBColor()
