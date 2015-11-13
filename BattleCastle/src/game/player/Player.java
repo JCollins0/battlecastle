@@ -39,11 +39,12 @@ public class Player {
 		this.image = image;
 		
 		arrowStorage = new ArrayList<Arrow>();
-		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
-		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
-		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
-		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
-		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
+		for(int i = 0; i < 30; i++)
+			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
+//		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
+//		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
+//		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
+//		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 	}
 	
 	public Player(String imageFileName)
@@ -53,8 +54,8 @@ public class Player {
 	
 	public void setLocation(int x, int y)
 	{
-		bounds.x = 400;
-		bounds.y = 400;
+		bounds.x = x;
+		bounds.y = x;
 	}
 	
 	public void setLocation(Point p)
@@ -75,6 +76,12 @@ public class Player {
 		//bounds.y += vY;
 		
 		bounds.x += vX;
+		bounds.y += vY;
+		
+		if(vY > 0)
+			vY -=.1;
+		else if(vY < 0)
+			vY +=.1;
 		
 		if(vX > 0)
 			vX -=.1;

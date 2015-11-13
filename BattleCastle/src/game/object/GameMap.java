@@ -99,10 +99,10 @@ public class GameMap {
 		
 		switch(playerNum)
 		{
-		case 0: return new Point(32,32);
-		case 1: return new Point(128,64);
-		case 2: return new Point(256,32);
-		case 3: return new Point(128,128);
+		case 0: return new Point(10,10);
+		case 1: return new Point(10,10);
+		case 2: return new Point(10,10);
+		case 3: return new Point(10,10);
 		}
 		
 		return null;
@@ -112,7 +112,7 @@ public class GameMap {
 	
 	static
 	{
-		map1 = new GameMap(ImageFilePaths.MAP_1_BACKGROUND, new Point[]{new Point(64,64),new Point(256,64),new Point(480,64),new Point(640,64)});
+		map1 = new GameMap(ImageFilePaths.MAP_1_BACKGROUND, new Point[]{new Point(10,10),new Point(10,10),new Point(10,10),new Point(10,10)});
 		map2 = new GameMap(ImageFilePaths.MAP_2_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()});
 		map3 = new GameMap(ImageFilePaths.MAP_3_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()});
 	}

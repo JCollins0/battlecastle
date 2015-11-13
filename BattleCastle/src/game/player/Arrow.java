@@ -80,7 +80,7 @@ public class Arrow extends PhysicsRect{
 	}
 	
 	double translateX, translateY;
-	static int setDistance = 10;
+	static int setDistance = 5;
 	ArrayList<Point> points = new ArrayList<Point>();
 
 
@@ -126,7 +126,10 @@ public class Arrow extends PhysicsRect{
 	{
 		super.tick();
 		//theta = Math.atan2(v.YPoint() - v2.YPoint(), v.XPoint()-v2.XPoint());
-		System.out.println(Math.abs(Math.toRadians(mYtheta) - Math.toRadians(theta)));
+		//System.out.println(theta);
+		theta = Math.atan2((double)getAcceleration().YPoint(), (double)getAcceleration().XPoint());
+		rotateTo(theta);
+		//System.out.println(Math.abs(Math.toRadians(mYtheta) - Math.toRadians(theta)));
 		if(mYtheta - theta < 0)
 		{
 			mYtheta= Math.toRadians(Math.abs(mYtheta - theta));

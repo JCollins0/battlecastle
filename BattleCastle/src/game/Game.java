@@ -120,6 +120,10 @@ public class Game {
 							{
 								playerList[playerNum].setvY(-4);
 							}
+							if(num[1].equals(KeyPress.DOWN_D.getText()))
+							{
+								playerList[playerNum].setvY(4);
+							}
 						}
 					}
 				}

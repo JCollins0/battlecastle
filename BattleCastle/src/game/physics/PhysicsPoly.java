@@ -133,5 +133,10 @@ public class PhysicsPoly extends Polygon
 		//check the objects terminal velocity
 		acceleration=new_acceleration;
 	}
+	
+	public Vector getAcceleration()
+	{
+		return acceleration;
+	}
 
 }
