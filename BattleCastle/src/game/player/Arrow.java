@@ -127,8 +127,8 @@ public class Arrow extends PhysicsRect{
 		super.tick();
 		//theta = Math.atan2(v.YPoint() - v2.YPoint(), v.XPoint()-v2.XPoint());
 		//System.out.println(theta);
-		theta = Math.atan2((double)getAcceleration().YPoint(), (double)getAcceleration().XPoint());
-		rotateTo(theta);
+//		theta = Math.atan2((double)getAcceleration().YPoint(), (double)getAcceleration().XPoint());
+//		rotateTo(theta);
 		//System.out.println(Math.abs(Math.toRadians(mYtheta) - Math.toRadians(theta)));
 		if(mYtheta - theta < 0)
 		{
