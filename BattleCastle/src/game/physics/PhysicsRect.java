@@ -15,6 +15,12 @@ public class PhysicsRect extends PhysicsPoly {
 				//new int[]{(int) r.getY(),(int) r.getY(),(int) (r.getY()+r.getHeight()),(int) (r.getY()+r.getHeight())},theta,velocity,torque,mass,dragC);
 	}
 	
+	/*
+	 * Top Left = 0
+	 * Top Right = 1
+	 * Bottom Right = 2
+	 * Bottom Left = 3
+	 */
 	public PhysicsRect(int x,int y,int width,int height,double theta,Vector velocity,double torque,double mass,double dragC)
 	{
 		super(new int[]{x,x+width,x+width,x},new int[]{y,y,y+height,y+height},theta, velocity, torque, mass, dragC);

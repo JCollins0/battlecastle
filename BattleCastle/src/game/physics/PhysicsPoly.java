@@ -88,6 +88,11 @@ public class PhysicsPoly extends Polygon
 		this.velocity = velocity;
 	}
 	
+	public double getAngularVelocity()
+	{
+		return angularVelocity;
+	}
+	
 	public void setAngularVelocity(double vel)
 	{
 		this.angularVelocity = vel;
@@ -137,6 +142,11 @@ public class PhysicsPoly extends Polygon
 	public Vector getAcceleration()
 	{
 		return acceleration;
+	}
+	
+	public Vector getVelocity()
+	{
+		return velocity;
 	}
 
 }

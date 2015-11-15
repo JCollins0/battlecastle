@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import game.physics.PhysicsRect;
 import game.physics.Vector;
@@ -80,7 +81,7 @@ public class Arrow extends PhysicsRect{
 	}
 	
 	double translateX, translateY;
-	static int setDistance = 5;
+	static int setDistance = 10;
 	ArrayList<Point> points = new ArrayList<Point>();
 
 
@@ -120,16 +121,25 @@ public class Arrow extends PhysicsRect{
 		move(new Vector(shotByPlayer.getCenterX()-getCenter().XPoint(),shotByPlayer.getCenterY()-getCenter().YPoint()));
 		rotateTo(Math.toDegrees(theta));
 		this.mYtheta = theta;
+		//System.out.println(Arrays.toString(getCorners()));
 	}
+	
+	double deltaTheta = 0;
 	
 	public void tick()
 	{
 		super.tick();
-		//theta = Math.atan2(v.YPoint() - v2.YPoint(), v.XPoint()-v2.XPoint());
-		//System.out.println(theta);
-//		theta = Math.atan2((double)getAcceleration().YPoint(), (double)getAcceleration().XPoint());
-//		rotateTo(theta);
-		//System.out.println(Math.abs(Math.toRadians(mYtheta) - Math.toRadians(theta)));
+	
+		double velX = getVelocity().XExact();
+		double velY = getVelocity().YExact();
+		rotateTo(Math.toDegrees(Math.atan2(-velY,-velX)));
+//		if(velY >= 0 && getAngularVelocity() != 0)
+//		{
+//			//deltaTheta = .1;
+//		
+//		}
+	//	System.out.println(theta + " " + getAngularVelocity());
+		
 		if(mYtheta - theta < 0)
 		{
 			mYtheta= Math.toRadians(Math.abs(mYtheta - theta));
