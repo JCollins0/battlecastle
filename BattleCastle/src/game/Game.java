@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.swing.JOptionPane;
 
@@ -44,7 +45,7 @@ public class Game {
 	private InetAddress serverIP;
 	private TreeMap<String, BattleCastleUser> playerMap;
 	private Player[] playerList;
-	private ArrayList<Arrow> arrows;
+	private ConcurrentHashMap<String,Arrow> arrows;
 	
 	private String myUUID;
 	private GameMap gameMap;
@@ -56,7 +57,7 @@ public class Game {
 		this.hostType = hostType;
 		playerList = new Player[4];
 		playerMap = new TreeMap<String, BattleCastleUser>();
-		arrows = new ArrayList<Arrow>();
+		arrows = new ConcurrentHashMap<String,Arrow>();
 		
 		if(hostType == HostType.SERVER)
 		{
@@ -150,7 +151,7 @@ public class Game {
 						playerMap.put(user.getUUID(), user);
 					}
 					playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
-					playerList[user.getPlayerNumber()] = new Player();
+					playerList[user.getPlayerNumber()] = new Player(user.getUUID());
 					
 				}else if(object instanceof Message)
 				{
@@ -167,7 +168,8 @@ public class Game {
 						playerList[Integer.parseInt(num[0])].decode(num[1]);
 					}else if(type.equals(MessageType.UPDATE_ARROW.toString()))
 					{
-						
+						String[] id = messageArr[1].split("=");
+						arrows.get(id[0]).decode(id[1]);
 					}
 					
 				}
@@ -212,10 +214,9 @@ public class Game {
 							gameServer.sendToAllTCP(message);
 						}
 					
-					for(int i = 0; i < arrows.size(); i++)
+					for(Arrow arrow : arrows.values())
 					{
-						//System.out.println("Ticking Arrow: " + i);
-						arrows.get(i).tick();
+						arrow.tick();
 					}
 
 
@@ -235,9 +236,9 @@ public class Game {
 			if(playerList[i] != null)
 				playerList[i].render(g);
 		
-		for(int i = 0; i < arrows.size(); i++)
+		for(Arrow arrow : arrows.values())
 		{
-			arrows.get(i).render(g);
+			arrow.render(g);
 		}
 		
 		for(int i = 0; i < KeyHandler.presses.size(); i++)
@@ -300,7 +301,7 @@ public class Game {
 			//load players and then send to clients
 			for(int i = 0; i < playerMap.size(); i++)
 			{
-				playerList[i] = new Player(ImageFilePaths.TEMP_PLAYER);
+				playerList[i] = new Player(ImageFilePaths.TEMP_PLAYER,getUUIDFromPlayer(playerList[i]));
 				playerList[i].setLocation(gameMap.getPlayerStartPoint(i));
 			}
 			Message message = new Message(MessageType.SELECT_MAP, mapType.getBackground());
@@ -339,16 +340,29 @@ public class Game {
 		if(arrow != null)
 		{
 			arrow.addVelocity();
-			arrows.add(arrow);
-			for(int i = 0; i < arrows.size(); i++)
+			arrows.put(arrow.getID(), arrow);
+			for(Arrow a : arrows.values())
 			{
-				Message message = new Message(MessageType.UPDATE_ARROW, arrows.get(i).stringify());
+				Message message = new Message(MessageType.UPDATE_ARROW, a.stringify());
 				gameClient.sendTCP(message);
 			}
 		}
 		
 		
 		
+	}
+	
+	public String getUUIDFromPlayer(Player p)
+	{
+		for(String s : playerMap.keySet())
+		{
+			if(playerMap.get(s).equals(p))
+			{
+				return s;
+			}
+		}
+		
+		return null;
 	}
 	
 	public void setMyUserUUID(String uuid)

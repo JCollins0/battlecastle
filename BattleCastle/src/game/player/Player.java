@@ -26,20 +26,20 @@ public class Player {
 	private ArrayList<Arrow> arrowStorage;
 	private Arrow currentArrow;
 	private int arrowCount;
+	private String uuid;
 	
-	
-	public Player()
+	public Player(String uuid)
 	{
-		this((BufferedImage)null);
+		this((BufferedImage)null,uuid);
 	}
 	
-	public Player(BufferedImage image)
+	public Player(BufferedImage image, String uuid)
 	{
 		bounds = new Rectangle(-WIDTH,-HEIGHT,WIDTH,HEIGHT);
 		this.image = image;
 		
 		arrowStorage = new ArrayList<Arrow>();
-		for(int i = 0; i < 30; i++)
+		for(int i = 0; i < 100; i++)
 			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 //		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 //		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
@@ -47,9 +47,9 @@ public class Player {
 //		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 	}
 	
-	public Player(String imageFileName)
+	public Player(String imageFileName,String uuid)
 	{
-		this(Utility.loadImage(imageFileName));
+		this(Utility.loadImage(imageFileName), uuid);
 	}
 	
 	public void setLocation(int x, int y)
@@ -150,6 +150,19 @@ public class Player {
 	public int getCenterY()
 	{
 		return bounds.y + bounds.height/2;
+	}
+	
+	public String getUUID() {
+		return uuid;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Player)
+		{
+			return uuid.equals(( (Player)obj).getUUID());
+		}
+		return false;
 	}
 	
 	public void fixArrow(int x, int y)

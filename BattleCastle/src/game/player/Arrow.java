@@ -3,12 +3,8 @@ package game.player;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import game.physics.PhysicsRect;
 import game.physics.Vector;
@@ -23,6 +19,7 @@ public class Arrow extends PhysicsRect{
 	private Player shotByPlayer;
 	private String ID = "";
 	private BufferedImage image;
+	private String imagePath;
 	private double mYtheta;
 	
 	public Arrow(int x, int y, int width, int height, double theta, Vector velocity, double torque, double mass,
@@ -30,6 +27,7 @@ public class Arrow extends PhysicsRect{
 		super(x, y, width, height, theta, velocity, torque, mass, dragC);
 		this.shotByPlayer = player;
 		this.image = Utility.loadImage(imagePath);
+		this.imagePath = imagePath;
 	}
 	
 	
@@ -51,7 +49,11 @@ public class Arrow extends PhysicsRect{
 	
 	public String stringify()
 	{
-		return "";
+		String format = "ImageFile:%s,Corner0X:%d,Corner0Y:%d,Theta:%f,MyTheta:%f"+
+						"PlayerID:%s";
+		String s=String.format(format,imagePath, getCorners()[0].XPoint(), getCorners()[0].YPoint()
+				, theta, mYtheta, shotByPlayer.getUUID());
+		return s;
 	}
 	
 	public void decode(String text)
@@ -82,8 +84,6 @@ public class Arrow extends PhysicsRect{
 	
 	double translateX, translateY;
 	static int setDistance = 10;
-	ArrayList<Point> points = new ArrayList<Point>();
-
 
 	/**
 	 * @param g the graphics for drawing
@@ -110,10 +110,6 @@ public class Arrow extends PhysicsRect{
 		int vY = (int) (setDistance * Math.sin(mYtheta));
 		setVelocity(new Vector(-vX,-vY));
 		
-		if(Math.cos(mYtheta) < 0)
-			setAngularVelocity(2);
-		else
-			setAngularVelocity(-2);
 	}
 	
 	public void fix(int x, int y, double vX, double vY, double theta)
@@ -133,12 +129,6 @@ public class Arrow extends PhysicsRect{
 		double velX = getVelocity().XExact();
 		double velY = getVelocity().YExact();
 		rotateTo(Math.toDegrees(Math.atan2(-velY,-velX)));
-//		if(velY >= 0 && getAngularVelocity() != 0)
-//		{
-//			//deltaTheta = .1;
-//		
-//		}
-	//	System.out.println(theta + " " + getAngularVelocity());
 		
 		if(mYtheta - theta < 0)
 		{
@@ -153,4 +143,10 @@ public class Arrow extends PhysicsRect{
 	public double getTheta() {
 		return mYtheta;
 	}
+	
+	public String getID() {
+		return ID;
+	}
+	
+	
 }
