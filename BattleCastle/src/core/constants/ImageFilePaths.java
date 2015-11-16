@@ -51,7 +51,14 @@ public class ImageFilePaths {
 				INCWIDTH = EDITOR + "increment_width",
 				DECWIDTH = EDITOR + "decrement_width",
 				INCHEIGHT = EDITOR + "increment_height",
-				DECHEIGHT = EDITOR + "decrement_height";
+				DECHEIGHT = EDITOR + "decrement_height",
+				TORCH = TILE + "torch",
+				CHEST = TILE + "chest",
+				BRICK = TILE + "brick",
+				STONE = TILE + "stone",
+				WOOD = TILE + "wood",
+				PRESSUREPLATESPIKES = TILE + "ppspikes",
+				SPIKES = TILE + "spikes";
 				
 		
 }
