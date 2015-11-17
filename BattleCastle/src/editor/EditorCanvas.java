@@ -29,20 +29,36 @@ public class EditorCanvas extends Canvas implements Runnable{
 	 * 
 	 */
 	private static final long serialVersionUID = -6879897978771655344L;
+	
+	private static final int TOOLS_Y=768;
+	private static final int BOTTOM_Y=768;
 
-	protected ArrayList<Tile> list,tools,editor;
-	private ArrayList<MenuTextField> bottomTextFields;
+	protected ArrayList<Tile> list,tools,tileAdder,editor;
 	private static BufferedImage buffer;
-	private boolean running, bottom, grid;
-	private GameState currentState;
-	private Game game;
+	private int tileAdderX,tileAdderY;
+	private boolean running, bottom, grid,drawMouseLoc;
 	private EditorMouseHandler mouseHandler;
 	private EditorKeyHandler keyHandler;
-	private Tile current;
+	private Tile current,trashIndicator;
 	
 	public EditorCanvas()
 	{
 		init();
+	}
+	
+	public int getNextX()
+	{
+		return tileAdderX+=32;
+	}
+	
+	public int resetX()
+	{
+		return tileAdderX=0;
+	}
+	
+	public int getNextY()
+	{
+		return tileAdderY+=32;
 	}
 	
 	public void init()
@@ -51,19 +67,36 @@ public class EditorCanvas extends Canvas implements Runnable{
 		setBackground(Color.BLACK);
 		buffer=new BufferedImage(EditorFrame.EDITOR_SIZE.width,EditorFrame.EDITOR_SIZE.height,BufferedImage.TYPE_INT_ARGB);
 		
+		trashIndicator=new Tile(0,BOTTOM_Y,1024,128,ImageFilePaths.TRASH,null);
+		
 		running=true;
 		bottom=true;
 		grid=true;
+		drawMouseLoc=true;
 		
 		list=readSave();
 		if(list==null)
 			list=new ArrayList<Tile>();
+		tileAdderY=800;
 		
 		tools=new ArrayList<Tile>();
-		Tile addNewTile=new Tile(32,768,32,32);
-		Tile saveTiles=new Tile(96,768,32,32);
+		Tile addNewTile=new Tile(32,TOOLS_Y,32,32);
+		Tile saveTiles=new Tile(96,TOOLS_Y,32,32,ImageFilePaths.SAVE,null);
 		tools.add(addNewTile);
 		tools.add(saveTiles);
+		
+		tileAdder=new ArrayList<Tile>();
+		
+		Tile addWoodTile=new Tile(resetX(),tileAdderY,32,32,ImageFilePaths.WOOD,null);
+		Tile addBrickTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.GRAY_BRICK,null);
+		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.STONE,null);
+		tileAdder.add(addWoodTile);
+		tileAdder.add(addBrickTile);
+		tileAdder.add(addStoneTile);
+		
+		Tile addChestTile=new Tile(resetX(),getNextY(),32,32,ImageFilePaths.CHEST,null);
+		tileAdder.add(addChestTile);
+		
 		
 		editor=new ArrayList<Tile>();
 		Tile incrementWidth=new Tile(896,768,32,32,ImageFilePaths.INCWIDTH,null);
@@ -109,20 +142,35 @@ public class EditorCanvas extends Canvas implements Runnable{
 				b.drawLine(j<<5,0,j<<5,768);
 			}
 		}
-		if(bottom)
-		{
-			for(Tile t:tools)
-				t.draw(b);
-		}
+		
 		for(Tile t:list)
 			t.draw(b);
-		if(current!=null)
-		{
-			for(Tile t:editor)
-				t.draw(b);
-		}
+		
+		
 			
 		
+		if(bottom)
+		{
+			
+			b.setColor(Color.WHITE);
+			b.fillRect(0, 768, 1024, 128);
+			for(Tile t:tools)
+				t.draw(b);
+			for(Tile t:tileAdder)
+				t.draw(b);
+			if(current!=null)
+			{
+				for(Tile t:editor)
+					t.draw(b);
+				if(mouseHandler.mouse.y>BOTTOM_Y)
+					trashIndicator.draw(b);
+			}
+		}
+		
+		
+			
+		if(drawMouseLoc)
+			b.drawString(mouseHandler.mouse.x + "," + mouseHandler.mouse.y, mouseHandler.mouse.x, mouseHandler.mouse.y);
 		
 		Graphics g = bs.getDrawGraphics();
 		
@@ -165,7 +213,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 	{
 		JSONArray temp=new JSONArray();
 		temp.addAll(list);
-		System.out.println(temp);
+//		System.out.println(temp);
 		PrintWriter printer=null;
 		try
 		{
@@ -197,8 +245,14 @@ public class EditorCanvas extends Canvas implements Runnable{
 	{
 		for(Tile t:list)
 			t.tick();
-		for(Tile t:tools)
-			t.tick();
+		if(bottom)
+		{
+			for(Tile t:tools)
+				t.tick();
+			for(Tile t:tileAdder)
+				t.tick();
+			trashIndicator.tick();
+		}
 	}
 	
 	public void run() 
@@ -226,9 +280,18 @@ public class EditorCanvas extends Canvas implements Runnable{
 		switch(i)
 		{
 		case 0:list.add(new Tile(0,0,32,32));break;
-		case 1:save();
+		case 1:save();break;
 		default:break;
 		}
+	}
+	
+	protected void checkTileAdderClicked(Point mouse)
+	{
+		int i;
+		for(i=0;i<tileAdder.size()&&!tileAdder.get(i).contains(mouse);i++);
+		if(i<tileAdder.size())
+			
+			list.add(tileAdder.get(i).copy());
 	}
 	
 	protected void checkEditorClicked(Point mouse)
@@ -243,6 +306,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 		case 3:if(current.height!=32)current.height-=32;break;
 		default:break;
 		}
+		if(current!=null)
+			snapToGrid(current);
 	}
 	
 	protected void snapToGrid(Tile t)
@@ -252,7 +317,10 @@ public class EditorCanvas extends Canvas implements Runnable{
 		if(x>992)
 			x=992;
 		else if(x<0)
-			x=0;
+		{
+			int width=t.width;
+			x=32-width;
+		}
 		else if(x%32<16)
 			x-=x%32;
 		else

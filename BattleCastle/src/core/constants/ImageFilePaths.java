@@ -46,18 +46,20 @@ public class ImageFilePaths {
 				MAP_3_BACKGROUND = MAP_3 + "map3",
 				TEMP_PLAYER = PLAYER + "temp_player",
 				ARROW = WEAPON + "arrow",
+				TRASH = EDITOR + "trash",
 				CHECK = EDITOR + "check",
-				STATICCHECK = EDITOR + "static_check",
+				SAVE = EDITOR + "save",
 				INCWIDTH = EDITOR + "increment_width",
 				DECWIDTH = EDITOR + "decrement_width",
 				INCHEIGHT = EDITOR + "increment_height",
 				DECHEIGHT = EDITOR + "decrement_height",
 				TORCH = TILE + "torch",
 				CHEST = TILE + "chest",
-				BRICK = TILE + "brick",
+				GRAY_BRICK = TILE + "gray_brick",
+				BROWN_BRICK = TILE + "brown_brick",
 				STONE = TILE + "stone",
 				WOOD = TILE + "wood",
-				PRESSUREPLATESPIKES = TILE + "ppspikes",
+				PRESSURE_PLATE_SPIKES = TILE + "pp_spikes",
 				SPIKES = TILE + "spikes";
 				
 		

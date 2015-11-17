@@ -10,7 +10,7 @@ import java.awt.event.MouseWheelListener;
 public class EditorMouseHandler implements MouseListener, MouseMotionListener, MouseWheelListener {
 
 	private EditorCanvas canvasref;
-	private Point mouse;
+	public Point mouse;
 	private int tx,ty;
 	private Tile current;
 	
@@ -69,6 +69,7 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 		}
 		canvasref.checkToolClicked(mouse);
 		canvasref.checkEditorClicked(mouse);
+		canvasref.checkTileAdderClicked(mouse);
 	}
 
 	@Override
