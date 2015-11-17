@@ -27,6 +27,7 @@ public class Player {
 	private Arrow currentArrow;
 	private int arrowCount;
 	private String uuid;
+	private String imageFilePath;
 	
 	public Player(String uuid)
 	{
@@ -50,6 +51,7 @@ public class Player {
 	public Player(String imageFileName,String uuid)
 	{
 		this(Utility.loadImage(imageFileName), uuid);
+		this.imageFilePath = imageFileName;
 	}
 	
 	public void setLocation(int x, int y)
@@ -197,7 +199,8 @@ public class Player {
 
 	public String stringify()
 	{
-		return String.format("X:%d,Y:%d,W:%d,H:%d",
+		return String.format("ImageFile:%s,X:%d,Y:%d,W:%d,H:%d",
+					imageFilePath,
 					bounds.x,bounds.y,bounds.width,bounds.height
 					);
 	}
@@ -211,7 +214,8 @@ public class Player {
 			switch(key_value[0])
 			{
 			case "ImageFile":
-				//create 4 or 4+ folders in resources/entity/player/ to be used for a specific character
+				if(image == null)
+					image = Utility.loadImage(key_value[1]);
 				break;
 			case "X": bounds.x = Integer.parseInt(key_value[1]);
 				break;

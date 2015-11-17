@@ -327,8 +327,6 @@ public class Game {
 			gameClient.sendTCP(message);
 
 		}
-		
-	
 	}
 	
 	public void launchArrow()
