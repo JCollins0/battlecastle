@@ -13,18 +13,15 @@ import utility.Utility;
 public class Arrow extends PhysicsRect{
 
 	public static final int WIDTH = 32, HEIGHT = 16;
-	private Rectangle bounds;
-	private double vX, vY;
-	private Color color; 
 	private Player shotByPlayer;
 	private String ID = "";
 	private BufferedImage image;
 	private String imagePath;
 	private double mYtheta;
+	public static final double MASS = 500, DRAGC = 1.05;
 	
-	public Arrow(int x, int y, int width, int height, double theta, Vector velocity, double torque, double mass,
-			double dragC, Player player, String imagePath) {
-		super(x, y, width, height, theta, velocity, torque, mass, dragC);
+	public Arrow(int x, int y, double theta, Vector velocity, double torque, Player player, String imagePath) {
+		super(x, y, WIDTH, HEIGHT, theta, velocity, torque, MASS,DRAGC);
 		this.shotByPlayer = player;
 		this.image = Utility.loadImage(imagePath);
 		this.imagePath = imagePath;
@@ -33,8 +30,7 @@ public class Arrow extends PhysicsRect{
 	
 	public Arrow(Player player, String imagePath)
 	{
-		this(player.getCenterX(),player.getCenterY(),WIDTH,HEIGHT,0,null,0,500,1.05,player,imagePath);
-		color = Utility.randomRGBColor();
+		this(player.getCenterX(),player.getCenterY(),0,null,0,player,imagePath);
 		int random = (int)(Math.random() * 26 + 65);
 		for(int i = 0; i < 20; i++)
 		{
@@ -65,20 +61,21 @@ public class Arrow extends PhysicsRect{
 			switch(key_value[0])
 			{
 			case "ImageFile":
+				if(image == null)
+					image = Utility.loadImage(key_value[1]);
 				break;
-			case "X": bounds.x = Integer.parseInt(key_value[1]);
+			case "Corner0X":
 				break;
-			case "Y": bounds.y = Integer.parseInt(key_value[1]);
+			case "Corner0Y":
 				break;
-			case "W": bounds.width = Integer.parseInt(key_value[1]);
+			case "Theta":
 				break;
-			case "H": bounds.height = Integer.parseInt(key_value[1]);
+			case "MyTheta":
 				break;
-			case "rotation": //used for rotating maybe? 
+			case "PlayerID":
 				break;
-			case "S": //used in animation?
-				break;				
 			}
+			
 		}
 	}
 	

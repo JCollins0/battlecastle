@@ -125,6 +125,23 @@ public class Game {
 							{
 								playerList[playerNum].setvY(4);
 							}
+						}else if(type.equals(MessageType.UPDATE_ARROW.toString()))
+						{
+							String[] id = messageArr[1].split("=");
+							String uuid = id[0];
+							if(arrows.get(uuid)== null)
+							{
+								String[] items = id[1].split(",");
+							/*	"ImageFile:%s,Corner0X:%d,Corner0Y:%d,Theta:%f,MyTheta:%f"+
+								"PlayerID:%s";
+							*/
+								arrows.put(uuid, new Arrow(Integer.parseInt(items[1]),Integer.parseInt(items[2]),Double.parseDouble(items[3]),
+										null,0,playerList[playerMap.get(items[5]).getPlayerNumber()],items[0]));
+							}
+							
+							Message mess = new Message(MessageType.UPDATE_ARROW, arrows.get(uuid).getID() + "=" + arrows.get(uuid).stringify());
+							gameServer.sendToAllTCP(mess);
+							
 						}
 					}
 				}
@@ -169,7 +186,14 @@ public class Game {
 					}else if(type.equals(MessageType.UPDATE_ARROW.toString()))
 					{
 						String[] id = messageArr[1].split("=");
-						arrows.get(id[0]).decode(id[1]);
+						String uid = id[0];
+						if(arrows.get(uid)==null)
+						{
+							String[] items = id[1].split(",");
+							arrows.put(uid, new Arrow(Integer.parseInt(items[1]),Integer.parseInt(items[2]),Double.parseDouble(items[3]),
+									null,0,playerList[playerMap.get(items[5]).getPlayerNumber()],items[0]));
+						}
+						
 					}
 					
 				}
@@ -218,8 +242,18 @@ public class Game {
 					{
 						arrow.tick();
 					}
-
-
+				}
+			}
+		}else if(hostType == HostType.CLIENT)
+		{
+			if(canvasRef.getCurrentState() == GameState.GAMEPLAY)
+			{
+				if(playerMap.size() >= MIN_PLAYERS)
+				{					
+					for(Arrow arrow : arrows.values())
+					{
+						arrow.tick();
+					}
 				}
 			}
 		}
@@ -341,7 +375,7 @@ public class Game {
 			arrows.put(arrow.getID(), arrow);
 			for(Arrow a : arrows.values())
 			{
-				Message message = new Message(MessageType.UPDATE_ARROW, a.stringify());
+				Message message = new Message(MessageType.UPDATE_ARROW, a.getID() + "=" + a.stringify());
 				gameClient.sendTCP(message);
 			}
 		}
