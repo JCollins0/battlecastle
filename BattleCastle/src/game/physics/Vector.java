@@ -122,7 +122,7 @@ public class Vector {
 	
 	@Override
 	public String toString() {
-		return String.format("X: %d,Y: %d",XPoint(),YPoint());
+		return String.format("X: %f,Y: %f",XExact(),YExact());
 	}
 
 }

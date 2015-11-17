@@ -1,13 +1,12 @@
 package game.player;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-
 import game.physics.PhysicsRect;
 import game.physics.Vector;
+
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+
 import utility.Utility;
 
 public class Arrow extends PhysicsRect{
@@ -17,8 +16,9 @@ public class Arrow extends PhysicsRect{
 	private String ID = "";
 	private BufferedImage image;
 	private String imagePath;
-	private double mYtheta;
+	private double graphicsRotationTheta;
 	public static final double MASS = 500, DRAGC = 1.05;
+	static int setDistance = 10;
 	
 	public Arrow(int x, int y, double theta, Vector velocity, double torque, Player player, String imagePath) {
 		super(x, y, WIDTH, HEIGHT, theta, velocity, torque, MASS,DRAGC);
@@ -30,7 +30,7 @@ public class Arrow extends PhysicsRect{
 	
 	public Arrow(Player player, String imagePath)
 	{
-		this(player.getCenterX(),player.getCenterY(),0,null,0,player,imagePath);
+		this(player.getCenter().XPoint(),player.getCenter().YPoint(),0,null,0,player,imagePath);
 		int random = (int)(Math.random() * 26 + 65);
 		for(int i = 0; i < 20; i++)
 		{
@@ -43,15 +43,23 @@ public class Arrow extends PhysicsRect{
 		
 	}
 	
+	/**
+	 * 
+	 * @return a string representation of the object
+	 */
 	public String stringify()
 	{
 		String format = "ImageFile:%s,Corner0X:%d,Corner0Y:%d,Theta:%f,MyTheta:%f"+
 						"PlayerID:%s";
 		String s=String.format(format,imagePath, getCorners()[0].XPoint(), getCorners()[0].YPoint()
-				, theta, mYtheta, shotByPlayer.getUUID());
+				, theta, graphicsRotationTheta, shotByPlayer.getUUID());
 		return s;
 	}
 	
+	/**
+	 * 
+	 * @param text a string that describes an object
+	 */
 	public void decode(String text)
 	{
 		String[] items = text.split(",");
@@ -78,9 +86,6 @@ public class Arrow extends PhysicsRect{
 			
 		}
 	}
-	
-	double translateX, translateY;
-	static int setDistance = 10;
 
 	/**
 	 * @param g the graphics for drawing
@@ -92,33 +97,41 @@ public class Arrow extends PhysicsRect{
 		Graphics2D g2d = (Graphics2D)g;
 		
 		g2d.translate(getTopLeft().XPoint() , getTopLeft().YPoint() );
-		g2d.rotate(mYtheta);
+		g2d.rotate(graphicsRotationTheta);
 		g2d.drawImage(image, 0 , 0, WIDTH, HEIGHT, null);
-		g2d.rotate(-mYtheta);
+		g2d.rotate(-graphicsRotationTheta);
 		g2d.translate(-(getTopLeft().XPoint() ),-( getTopLeft().YPoint()));
 		
 		//System.out.println( (getTopLeft().XPoint() + WIDTH/2 - HEIGHT/2) + " " +  (getTopLeft().YPoint() + HEIGHT/2 - WIDTH/2) );
 		
 	}
 	
+	/**
+	 * Adds a certain velocity based on angle around player
+	 */
 	public void addVelocity()
 	{
-		int vX = (int) (setDistance * Math.cos(mYtheta));
-		int vY = (int) (setDistance * Math.sin(mYtheta));
+		int vX = (int) (setDistance * Math.cos(graphicsRotationTheta));
+		int vY = (int) (setDistance * Math.sin(graphicsRotationTheta));
 		setVelocity(new Vector(-vX,-vY));
 		
 	}
 	
-	public void fix(int x, int y, double vX, double vY, double theta)
+	/**
+	 * 
+	 * @param theta the angle to rotate the arrow to
+	 */
+	public void fix(double theta)
 	{
-		move(new Vector(shotByPlayer.getCenterX()-getCenter().XPoint(),shotByPlayer.getCenterY()-getCenter().YPoint()));
+		move(new Vector(shotByPlayer.getCenter().XPoint()-getCenter().XPoint(),shotByPlayer.getCenter().YPoint()-getCenter().YPoint()));
 		rotateTo(Math.toDegrees(theta));
-		this.mYtheta = theta;
+		this.graphicsRotationTheta = theta;
 		//System.out.println(Arrays.toString(getCorners()));
 	}
 	
-	double deltaTheta = 0;
-	
+	/**
+	 * updates arrow
+	 */
 	public void tick()
 	{
 		super.tick();
@@ -127,20 +140,27 @@ public class Arrow extends PhysicsRect{
 		double velY = getVelocity().YExact();
 		rotateTo(Math.toDegrees(Math.atan2(-velY,-velX)));
 		
-		if(mYtheta - theta < 0)
+		if(graphicsRotationTheta - theta < 0)
 		{
-			mYtheta= Math.toRadians(Math.abs(mYtheta - theta));
+			graphicsRotationTheta= Math.toRadians(Math.abs(graphicsRotationTheta - theta));
 		}else
 		{
-			mYtheta= -Math.toRadians((mYtheta - theta));
+			graphicsRotationTheta= -Math.toRadians((graphicsRotationTheta - theta));
 		}
 	}
 	
-
-	public double getTheta() {
-		return mYtheta;
+	/**
+	 * 
+	 * @return angle of image rotation
+	 */
+	public double getGraphicsRotationTheta() {
+		return graphicsRotationTheta;
 	}
 	
+	/**
+	 * 
+	 * @return arrow id
+	 */
 	public String getID() {
 		return ID;
 	}

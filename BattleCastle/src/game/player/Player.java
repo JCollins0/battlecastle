@@ -1,5 +1,8 @@
 package game.player;
 
+import game.physics.PhysicsRect;
+import game.physics.Vector;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -13,15 +16,15 @@ import core.MouseHandler;
 import core.constants.ImageFilePaths;
 import utility.Utility;
 
-public class Player {
+public class Player extends PhysicsRect{
 	
 	public static final int HEIGHT = 64;
 	public static final int WIDTH = 32;
 	public static final int ARROW_SPEED = 8;
+	public static final double MASS = 10;
+	public static final double ANG_VEL = 0;
+	public static final double DRAG_C = 1.05;
 	
-	private Rectangle bounds;
-	private double vX, vY;
-	private static final double GRAVITY = 9.8;
 	private BufferedImage image;
 	private ArrayList<Arrow> arrowStorage;
 	private Arrow currentArrow;
@@ -36,7 +39,7 @@ public class Player {
 	
 	public Player(BufferedImage image, String uuid)
 	{
-		bounds = new Rectangle(-WIDTH,-HEIGHT,WIDTH,HEIGHT);
+		super(0, 0, WIDTH, HEIGHT,0, null, ANG_VEL, MASS, DRAG_C);
 		this.image = image;
 		
 		arrowStorage = new ArrayList<Arrow>();
@@ -53,44 +56,12 @@ public class Player {
 		this(Utility.loadImage(imageFileName), uuid);
 		this.imageFilePath = imageFileName;
 	}
-	
-	public void setLocation(int x, int y)
-	{
-		bounds.x = x;
-		bounds.y = x;
-	}
-	
-	public void setLocation(Point p)
-	{
-		setLocation(p.x,p.y);
-	}
-	
-	public String getPlayerInformation()
-	{
-		return String.format("X:%d Y:%d W:%d H:%d", bounds.x,bounds.y,bounds.width,bounds.height);
-	}
-	
+		
 	public void tick()
 	{
-		vY += GRAVITY / 100;
-		if ( vY > GRAVITY )
-			vY = GRAVITY;
-		//bounds.y += vY;
-		
-		bounds.x += vX;
-		bounds.y += vY;
-		
-		if(vY > 0)
-			vY -=.1;
-		else if(vY < 0)
-			vY +=.1;
-		
-		if(vX > 0)
-			vX -=.1;
-		else if(vX < 0)
-			vX +=.1;
-		
+		super.tick();
 		fixArrow(MouseHandler.mouse.x, MouseHandler.mouse.y);
+		System.out.println(getVelocity());
 	}
 	
 	
@@ -98,64 +69,51 @@ public class Player {
 	{			
 		if(image != null)
 		{
-			g.drawImage(image, bounds.x, bounds.y, bounds.width,bounds.height,null);
+			g.drawImage(image, getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
 		}else
 		{
 			g.setColor(Color.cyan);
-			g.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
+			g.fillRect( getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT);
 		}
 		
 		if(currentArrow != null)
 			currentArrow.render(g);	
 		
 		g.setColor(Color.black);
-		g.drawString(String.format("(%d,%d)", bounds.x, bounds.y ), bounds.x, bounds.y-5);
+		g.drawString(String.format("(%d,%d)",  getCorners()[0].XPoint(), getCorners()[0].YPoint() ),  getCorners()[0].XPoint(), getCorners()[0].YPoint()-5);
 		
 	}
 	
-	public Rectangle getBounds()
+	public void setLocation(int x, int y)
 	{
-		return bounds;
+		move(new Vector(x,y));
+//		System.out.println("WHAT?");
 	}
 	
-	public double getvX() {
-		return vX;
+	public void setLocation(Point p)
+	{
+		setLocation(p.x,p.y);
 	}
 
 	public void setvX(double vX) {
-		this.vX = vX;
-	}
-
-	public double getvY() {
-		return vY;
+		if(vX == 0)
+		{
+			setVelocity(getVelocity().vectorSub(new Vector(getVelocity().XExact(),0)));
+		}else
+			setVelocity(getVelocity().vectorAdd(new Vector(vX-getVelocity().XExact(),0)));
 	}
 
 	public void setvY(double vY) {
-		this.vY = vY;
+		setVelocity(getVelocity().vectorAdd(new Vector(0,vY-getVelocity().YExact())));
 	}
-	
-	public int getX()
-	{
-		return bounds.x;
-	}
-	
-	public int getY()
-	{
-		return bounds.y;
-	}
-	
-	public int getCenterX()
-	{
-		return bounds.x + bounds.width/2;
-	}
-	
-	public int getCenterY()
-	{
-		return bounds.y + bounds.height/2;
-	}
-	
+
 	public String getUUID() {
 		return uuid;
+	}
+	//Temp used to not have errors
+	public Rectangle getBounds()
+	{
+		return null;
 	}
 	
 	@Override
@@ -169,21 +127,13 @@ public class Player {
 	
 	public void fixArrow(int x, int y)
 	{
-		double theta = Math.atan2((bounds.y + bounds.height / 2 - y),(bounds.x + bounds.width/2 - x ));
-		int dc =(int) Math.hypot(
-				MouseHandler.mouse.x - (bounds.x + bounds.width/2),
-				MouseHandler.mouse.y - (bounds.y + bounds.height/2)
-				);
-
+		double theta = Math.atan2((getCenter().YPoint()-y),(getCenter().XPoint()-x));
+		
 		if(currentArrow == null && arrowStorage.size() > 0)
 			currentArrow= arrowStorage.get(0);
 		else if(arrowStorage.size() > 0)
 		{
-			int ax = bounds.x - (int)(Math.cos(theta) * WIDTH);
-			int ay = bounds.y - (int)(Math.sin(theta) * HEIGHT);
-			currentArrow.fix( 
-					ax , ay,
-					(int)(Math.cos(theta)*-ARROW_SPEED),(int)(Math.sin(theta)*-ARROW_SPEED), theta);
+			currentArrow.fix(theta);
 		}
 	}
 	
@@ -196,12 +146,17 @@ public class Player {
 		}
 		return null;
 	}
+	
+	public String getPlayerInformation()
+	{
+		return String.format("X:%d Y:%d W:%d H:%d", getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT);
+	}
 
 	public String stringify()
 	{
 		return String.format("ImageFile:%s,X:%d,Y:%d,W:%d,H:%d",
 					imageFilePath,
-					bounds.x,bounds.y,bounds.width,bounds.height
+					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT
 					);
 	}
 	
@@ -217,13 +172,9 @@ public class Player {
 				if(image == null)
 					image = Utility.loadImage(key_value[1]);
 				break;
-			case "X": bounds.x = Integer.parseInt(key_value[1]);
+			case "X": move(new Vector(getCorners()[0].XPoint()-Integer.parseInt(key_value[1]),0));
 				break;
-			case "Y": bounds.y = Integer.parseInt(key_value[1]);
-				break;
-			case "W": bounds.width = Integer.parseInt(key_value[1]);
-				break;
-			case "H": bounds.height = Integer.parseInt(key_value[1]);
+			case "Y": move(new Vector(0,getCorners()[0].YPoint()-Integer.parseInt(key_value[1])));
 				break;
 			case "F": //falling = Boolean.parseBoolean(key_value[1]); 
 				break;

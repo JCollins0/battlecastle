@@ -94,10 +94,14 @@ public class KeyHandler implements KeyListener {
 				//	canvasref.getGame().updateMyPlayer(KeyPress.DOWN_D);
 				break;
 			case Keys.LEFT:
+				remove(KeyPress.RIGHT_U);
+				remove(KeyPress.LEFT_U);
 				add(KeyPress.LEFT_D);
 				//canvasref.getGame().updateMyPlayer(KeyPress.LEFT_D);
 				break;
 			case Keys.RIGHT:
+				remove(KeyPress.LEFT_U);
+				remove(KeyPress.RIGHT_U);
 				add(KeyPress.RIGHT_D);
 				//canvasref.getGame().updateMyPlayer(KeyPress.RIGHT_D);
 			}
@@ -129,9 +133,11 @@ public class KeyHandler implements KeyListener {
 				break;
 			case Keys.LEFT:
 				remove(KeyPress.LEFT_D);
+				add(KeyPress.LEFT_U);
 				break;
 			case Keys.RIGHT:
 				remove(KeyPress.RIGHT_D);
+				add(KeyPress.RIGHT_U);
 			}
 			
 			break;

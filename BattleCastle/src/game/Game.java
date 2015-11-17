@@ -70,6 +70,9 @@ public class Game {
 		System.setProperty("java.net.preferIPv4Stack" , "true");
 	}
 	
+	/**
+	 * Initializes Server
+	 */
 	private void startServer()
 	{
 		
@@ -111,20 +114,28 @@ public class Game {
 							int playerNum = Integer.parseInt(num[0]);
 							if(num[1].equals(KeyPress.RIGHT_D.getText()))
 							{
-								playerList[playerNum].setvX(4);
+								playerList[playerNum].setvX(2);
 							}
 							if(num[1].equals(KeyPress.LEFT_D.getText()))
 							{
-								playerList[playerNum].setvX( -4);
+								playerList[playerNum].setvX(-2);
 							}
 							if(num[1].equals(KeyPress.JUMP_D.getText()))
 							{
-								playerList[playerNum].setvY(-4);
+								playerList[playerNum].setvY(-2);
 							}
 							if(num[1].equals(KeyPress.DOWN_D.getText()))
 							{
-								playerList[playerNum].setvY(4);
+								playerList[playerNum].setvY(2);
+							}if(num[1].equals(KeyPress.RIGHT_U.getText()))
+							{
+								playerList[playerNum].setvX(0);
 							}
+							if(num[1].equals(KeyPress.LEFT_U.getText()))
+							{
+								playerList[playerNum].setvX( 0);
+							}
+							
 						}else if(type.equals(MessageType.UPDATE_ARROW.toString()))
 						{
 							String[] id = messageArr[1].split("=");
@@ -134,8 +145,8 @@ public class Game {
 								String[] items = id[1].split(",");
 								System.out.println("hello");
 								//items[x] = "Prop:Val"
-								arrows.put(uuid, new Arrow(Integer.parseInt(items[1]),Integer.parseInt(items[2]),Double.parseDouble(items[3]),
-										null,0,playerList[playerMap.get(items[5]).getPlayerNumber()],items[0]));
+								arrows.put(uuid, new Arrow(Integer.parseInt(items[1].split(":")[1]),Integer.parseInt(items[2].split(":")[1]),Double.parseDouble(items[3].split(":")[1]),
+										null,0,playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],items[0].split(":")[1]));
 							}
 							
 							Message mess = new Message(MessageType.UPDATE_ARROW, arrows.get(uuid).getID() + "=" + arrows.get(uuid).stringify());
@@ -150,6 +161,9 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * Initializes client
+	 */
 	public void startClient()
 	{
 		gameClient = new Client(65536, 16384);
@@ -189,8 +203,8 @@ public class Game {
 						if(arrows.get(uid)==null)
 						{
 							String[] items = id[1].split(",");
-							arrows.put(uid, new Arrow(Integer.parseInt(items[1]),Integer.parseInt(items[2]),Double.parseDouble(items[3]),
-									null,0,playerList[playerMap.get(items[5]).getPlayerNumber()],items[0]));
+							arrows.put(uid, new Arrow(Integer.parseInt(items[1].split(":")[1]),Integer.parseInt(items[2].split(":")[1]),Double.parseDouble(items[3].split(":")[1]),
+									null,0,playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],items[0].split(":")[1]));
 						}
 						
 					}
@@ -200,6 +214,10 @@ public class Game {
 		});
 	}
 	
+	
+	/**
+	 * connects client to server
+	 */
 	public void connectToServer()
 	{
 		try {
@@ -210,6 +228,9 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * @param user the user to login to server
+	 */
 	public void sendUserData(BattleCastleUser user)
 	{
 		playerMap.put(user.getUUID(), user);
@@ -217,6 +238,9 @@ public class Game {
 		gameClient.sendTCP(user);
 	}
 	
+	/**
+	 * updates everything
+	 */
 	public void tick()
 	{
 		if(hostType == HostType.SERVER)
@@ -260,6 +284,10 @@ public class Game {
 		updateMyPlayer();
 	}
 	
+	/**
+	 * draws everything to screen
+	 * @param g Graphics for drawing
+	 */
 	public void render(Graphics g)
 	{
 		if(gameMap != null)
@@ -282,6 +310,11 @@ public class Game {
 			
 	}
 	
+	
+	/**
+	 * 
+	 * @param ip the String IP of the server to join
+	 */
 	public void setServerIP(String ip)
 	{
 		try {
@@ -292,11 +325,19 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param address the InetAddress of the server to join.
+	 */
 	public void setServerIP(InetAddress address)
 	{
 		serverIP = address;
 	}
 	
+	/**
+	 * 
+	 * @return number of players in game
+	 */
 	public int getPlayersInList()
 	{
 		int count = 0;
@@ -306,25 +347,42 @@ public class Game {
 		return count;
 	}
 	
+	/**
+	 * 
+	 * @return hosting type (CLIENT or SERVER)
+	 */
 	public HostType getHostType()
 	{
 		return hostType;
 	}
 	
+	/**
+	 * 
+	 * @return this client's player
+	 */
 	public Player getMyPlayer() {
 		return playerList[playerMap.get(myUUID).getPlayerNumber()];
 	}
 	
+	/**
+	 * 
+	 * @return this client's user data
+	 */
 	public BattleCastleUser getMyUser() {
 		return playerMap.get(myUUID);
 	}
 	
+	/**
+	 * 
+	 * @param mapType the type of map to load
+	 * @param mapName the name only used if custom map
+	 */
 	public void sendMapChoice(MapType mapType, String mapName)
 	{
 		
 		if(mapType.equals(MapType.CUSTOM) )
 		{
-			JOptionPane.showMessageDialog(null, "loading customLevel" + canvasRef.getCustomLevels().get(mapName));
+			//JOptionPane.showMessageDialog(null, "loading customLevel" + canvasRef.getCustomLevels().get(mapName));
 			gameMap = canvasRef.getCustomLevels().get(mapName);
 		}
 		else
@@ -350,11 +408,13 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * sends player information to the server
+	 */
 	public void updateMyPlayer()
 	{
 		for(int i = 0; i < KeyHandler.presses.size(); i++)
 		{
-			
 			Message message = new Message(MessageType.MOVE_PLAYER,
 					playerMap.get(myUUID).getPlayerNumber() + "=" + KeyHandler.presses.get(i).getText() );
 			gameClient.sendTCP(message);
@@ -362,11 +422,13 @@ public class Game {
 		}
 	}
 	
+	/**
+	 * sends arrow information to server
+	 */
 	public void launchArrow()
 	{
 		Player player = getMyPlayer();
 		Arrow arrow = player.removeArrow();
-		
 		
 		if(arrow != null)
 		{
@@ -383,6 +445,11 @@ public class Game {
 		
 	}
 	
+	/**
+	 * 
+	 * @param p Player to get id from
+	 * @return uuid if player exists, null if not
+	 */
 	public String getUUIDFromPlayer(Player p)
 	{
 		for(String s : playerMap.keySet())
@@ -396,22 +463,35 @@ public class Game {
 		return null;
 	}
 	
+	/**
+	 * 
+	 * @param uuid the uuid to set for this client
+	 */
 	public void setMyUserUUID(String uuid)
 	{
 		myUUID = uuid;
 	}
 	
+	/**
+	 * @return this client
+	 */
 	public Client getClient()
 	{
 		return gameClient;
 	}
 
+	/**
+	 * stops the server if hosting
+	 */
 	public void stopServer()
 	{
 		if(gameServer != null)
 			gameServer.stop();
 	}	
 	
+	/**
+	 * stops client
+	 */
 	public void stopClient()
 	{
 		if(gameClient != null)
