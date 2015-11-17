@@ -132,9 +132,8 @@ public class Game {
 							if(arrows.get(uuid)== null)
 							{
 								String[] items = id[1].split(",");
-							/*	"ImageFile:%s,Corner0X:%d,Corner0Y:%d,Theta:%f,MyTheta:%f"+
-								"PlayerID:%s";
-							*/
+								System.out.println("hello");
+								//items[x] = "Prop:Val"
 								arrows.put(uuid, new Arrow(Integer.parseInt(items[1]),Integer.parseInt(items[2]),Double.parseDouble(items[3]),
 										null,0,playerList[playerMap.get(items[5]).getPlayerNumber()],items[0]));
 							}
