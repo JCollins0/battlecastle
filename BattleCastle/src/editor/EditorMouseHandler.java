@@ -10,9 +10,9 @@ import java.awt.event.MouseWheelListener;
 public class EditorMouseHandler implements MouseListener, MouseMotionListener, MouseWheelListener {
 
 	private EditorCanvas canvasref;
-	public Point mouse;
+	protected Point mouse;
 	private int tx,ty;
-	private Tile current;
+	protected Tile dragging;
 	
 	public EditorMouseHandler(EditorCanvas canvasref) {
 		this.canvasref = canvasref;
@@ -21,7 +21,6 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 	
 	@Override
 	public void mouseWheelMoved(MouseWheelEvent arg0) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -29,8 +28,8 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 	public void mouseDragged(MouseEvent arg0) {
 		mouse=arg0.getPoint();
 		//System.out.println(current);
-		if(current!=null)
-			current.setLocation(mouse.x-tx, mouse.y-ty);
+		if(dragging!=null)
+			dragging.setLocation(mouse.x-tx, mouse.y-ty);
 	}
 
 	@Override
@@ -59,9 +58,9 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 	public void mousePressed(MouseEvent arg0) {
 		for(Tile t:canvasref.list)
 		{
-			if(t.contains(mouse)&&current==null)
+			if(t.contains(mouse)&&dragging==null)
 			{
-				current=t;
+				dragging=t;
 				tx=mouse.x-t.x;
 				ty=mouse.y-t.y;
 				canvasref.selectTile(t);
@@ -74,18 +73,18 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 
 	@Override
 	public void mouseReleased(MouseEvent arg0) {
-		if(current!=null)
+		if(dragging!=null)
 		{
 			if(mouse.y>=768)
 			{
-				canvasref.list.remove(current);
+				canvasref.list.remove(dragging);
 				canvasref.deselectTile();
 			}
 			else
 			{
-				canvasref.snapToGrid(current);
+				canvasref.snapToGrid(dragging);
 			}
-			current=null;
+			dragging=null;
 		}
 	}
 

@@ -67,7 +67,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 		setBackground(Color.BLACK);
 		buffer=new BufferedImage(EditorFrame.EDITOR_SIZE.width,EditorFrame.EDITOR_SIZE.height,BufferedImage.TYPE_INT_ARGB);
 		
-		trashIndicator=new Tile(0,BOTTOM_Y,1024,128,ImageFilePaths.TRASH,null);
+//		trashIndicator=new Tile(0,BOTTOM_Y,1024,128,ImageFilePaths.TRASH,null);
+		trashIndicator=new Tile(0,BOTTOM_Y,1024,128);
 		
 		running=true;
 		bottom=true;
@@ -80,16 +81,20 @@ public class EditorCanvas extends Canvas implements Runnable{
 		tileAdderY=800;
 		
 		tools=new ArrayList<Tile>();
-		Tile addNewTile=new Tile(32,TOOLS_Y,32,32);
-		Tile saveTiles=new Tile(96,TOOLS_Y,32,32,ImageFilePaths.SAVE,null);
+		Tile addNewTile=new Tile(resetX(),TOOLS_Y,32,32);
+		Tile saveTile=new Tile(getNextX(),TOOLS_Y,32,32,ImageFilePaths.SAVE,null);
+		Tile cloneTile=new Tile(getNextX(),TOOLS_Y,32,32);
 		tools.add(addNewTile);
-		tools.add(saveTiles);
+		tools.add(saveTile);
+		tools.add(cloneTile);
+		
 		
 		tileAdder=new ArrayList<Tile>();
 		
 		Tile addWoodTile=new Tile(resetX(),tileAdderY,32,32,ImageFilePaths.WOOD,null);
 		Tile addBrickTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.GRAY_BRICK,null);
-		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.STONE,null);
+//		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.STONE,null);
+		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32);
 		tileAdder.add(addWoodTile);
 		tileAdder.add(addBrickTile);
 		tileAdder.add(addStoneTile);
@@ -162,7 +167,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 			{
 				for(Tile t:editor)
 					t.draw(b);
-				if(mouseHandler.mouse.y>BOTTOM_Y)
+				if(mouseHandler.dragging!=null&&mouseHandler.mouse.y>BOTTOM_Y)
 					trashIndicator.draw(b);
 			}
 		}
@@ -314,11 +319,12 @@ public class EditorCanvas extends Canvas implements Runnable{
 	{
 		int x=t.x;
 		int y=t.y;
+		int width;
+		int height;
 		if(x>992)
 			x=992;
-		else if(x<0)
+		else if(x<32-(width=t.width))
 		{
-			int width=t.width;
 			x=32-width;
 		}
 		else if(x%32<16)
@@ -327,8 +333,10 @@ public class EditorCanvas extends Canvas implements Runnable{
 			x+=32-(x%32);
 		if(y>736)
 			y=736;
-		else if(y<0)
-			y=0;
+		else if(y<32-(height=t.height))
+		{
+			y=32-height;
+		}
 		else if(y%32<16)
 			y-=y%32;
 		else
