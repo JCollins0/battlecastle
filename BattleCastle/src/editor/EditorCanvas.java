@@ -16,12 +16,10 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import core.GameState;
 import core.GameTimer;
 import core.constants.DataConstants;
+import core.constants.ImageFileDimensions;
 import core.constants.ImageFilePaths;
-import core.menu_object.MenuTextField;
-import game.Game;
 
 public class EditorCanvas extends Canvas implements Runnable{
 
@@ -82,7 +80,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		
 		tools=new ArrayList<Tile>();
 		Tile addNewTile=new Tile(resetX(),TOOLS_Y,32,32);
-		Tile saveTile=new Tile(getNextX(),TOOLS_Y,32,32,ImageFilePaths.SAVE,null);
+		Tile saveTile=new Tile(getNextX(),TOOLS_Y,32,32,ImageFilePaths.SAVE,ImageFileDimensions.SAVE.x,ImageFileDimensions.SAVE.y,null);
 		Tile cloneTile=new Tile(getNextX(),TOOLS_Y,32,32);
 		tools.add(addNewTile);
 		tools.add(saveTile);
@@ -91,23 +89,23 @@ public class EditorCanvas extends Canvas implements Runnable{
 		
 		tileAdder=new ArrayList<Tile>();
 		
-		Tile addWoodTile=new Tile(resetX(),tileAdderY,32,32,ImageFilePaths.WOOD,null);
-		Tile addBrickTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.GRAY_BRICK,null);
+		Tile addWoodTile=new Tile(resetX(),tileAdderY,32,32,ImageFilePaths.WOOD,ImageFileDimensions.WOOD.x,ImageFileDimensions.WOOD.y,null);
+		Tile addBrickTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.GRAY_BRICK,ImageFileDimensions.GRAY_BRICK.x,ImageFileDimensions.GRAY_BRICK.y,null);
 //		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.STONE,null);
 		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32);
 		tileAdder.add(addWoodTile);
 		tileAdder.add(addBrickTile);
 		tileAdder.add(addStoneTile);
 		
-		Tile addChestTile=new Tile(resetX(),getNextY(),32,32,ImageFilePaths.CHEST,null);
+		Tile addChestTile=new Tile(resetX(),getNextY(),32,32,ImageFilePaths.CHEST,ImageFileDimensions.CHEST.x,ImageFileDimensions.CHEST.y,null);
 		tileAdder.add(addChestTile);
 		
 		
 		editor=new ArrayList<Tile>();
-		Tile incrementWidth=new Tile(896,768,32,32,ImageFilePaths.INCWIDTH,null);
-		Tile decrementWidth=new Tile(896,800,32,32,ImageFilePaths.DECWIDTH,null);
-		Tile incrementHeight=new Tile(928,768,32,32,ImageFilePaths.INCHEIGHT,null);
-		Tile decrementHeight=new Tile(928,800,32,32,ImageFilePaths.DECHEIGHT,null);
+		Tile incrementWidth=new Tile(896,768,32,32,ImageFilePaths.INCWIDTH,ImageFileDimensions.INCWIDTH.x,ImageFileDimensions.INCWIDTH.y,null);
+		Tile decrementWidth=new Tile(896,800,32,32,ImageFilePaths.DECWIDTH,ImageFileDimensions.DECWIDTH.x,ImageFileDimensions.DECWIDTH.y,null);
+		Tile incrementHeight=new Tile(928,768,32,32,ImageFilePaths.INCHEIGHT,ImageFileDimensions.INCHEIGHT.x,ImageFileDimensions.INCHEIGHT.y,null);
+		Tile decrementHeight=new Tile(928,800,32,32,ImageFilePaths.DECHEIGHT,ImageFileDimensions.DECHEIGHT.x,ImageFileDimensions.DECHEIGHT.y,null);
 		editor.add(incrementWidth);
 		editor.add(decrementWidth);
 		editor.add(incrementHeight);
