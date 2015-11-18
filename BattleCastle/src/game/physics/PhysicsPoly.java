@@ -18,7 +18,7 @@ public class PhysicsPoly extends Polygon
 	private double mass;
 	//private double dampingC;
 	private double dragC;
-	private static final double GRAVITY = 9.8;
+	protected static double GRAVITY = 9.8;
 
 	/*public PhysicsPoly(int x, int y, int width, int height, double theta, Vector velocity, double torque, double mass, double dragC) {
 		super(x, y, width, height,theta);

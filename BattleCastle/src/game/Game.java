@@ -418,8 +418,10 @@ public class Game {
 			Message message = new Message(MessageType.MOVE_PLAYER,
 					playerMap.get(myUUID).getPlayerNumber() + "=" + KeyHandler.presses.get(i).getText() );
 			gameClient.sendTCP(message);
-
 		}
+		
+		KeyHandler.presses.remove(KeyPress.LEFT_U);
+		KeyHandler.presses.remove(KeyPress.RIGHT_U);
 	}
 	
 	/**
