@@ -23,7 +23,7 @@ public class Player extends PhysicsRect{
 	public static final int ARROW_SPEED = 8;
 	public static final double MASS = 10;
 	public static final double ANG_VEL = 0;
-	public static final double DRAG_C = 1.05;
+	public static final double DRAG_C = 2;
 	
 	private BufferedImage image;
 	private ArrayList<Arrow> arrowStorage;
@@ -40,7 +40,7 @@ public class Player extends PhysicsRect{
 	public Player(BufferedImage image, String uuid)
 	{
 		super(0, 0, WIDTH, HEIGHT,0, null, ANG_VEL, MASS, DRAG_C);
-		GRAVITY = 0;
+		//GRAVITY = 0;
 		this.image = image;
 		
 		arrowStorage = new ArrayList<Arrow>();
@@ -62,7 +62,7 @@ public class Player extends PhysicsRect{
 	{
 		super.tick();
 		fixArrow(MouseHandler.mouse.x, MouseHandler.mouse.y);
-		System.out.println(getVelocity());
+//		System.out.println(getVelocity());
 	}
 	
 	
@@ -170,16 +170,15 @@ public class Player extends PhysicsRect{
 			switch(key_value[0])
 			{
 			case "ImageFile":
-				if(image == null)
+				if(image == null && !loadedImage)
+				{
 					image = Utility.loadImage(key_value[1]);
+					loadedImage = true;
+				}
 				break;
-			case "X": move(new Vector(getCorners()[0].XPoint()-Integer.parseInt(key_value[1]),0));
+			case "X": move(new Vector(Integer.parseInt(key_value[1])-getCorners()[0].XPoint(),0));
 				break;
-			case "Y": move(new Vector(0,getCorners()[0].YPoint()-Integer.parseInt(key_value[1])));
-				break;
-			case "F": //falling = Boolean.parseBoolean(key_value[1]); 
-				break;
-			case "J": //jumping = Boolean.parseBoolean(key_value[1]);
+			case "Y": move(new Vector(0,Integer.parseInt(key_value[1])-getCorners()[0].YPoint()));
 				break;
 			case "S": //used in animation?
 				break;
@@ -189,5 +188,7 @@ public class Player extends PhysicsRect{
 			}
 		}
 	}
+	
+	private boolean loadedImage = false;
 }
 
