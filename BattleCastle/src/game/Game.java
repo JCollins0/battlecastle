@@ -5,11 +5,8 @@ import java.awt.Graphics;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.swing.JOptionPane;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -22,7 +19,6 @@ import core.GameState;
 import core.HostType;
 import core.KeyHandler;
 import core.KeyPress;
-import core.MouseHandler;
 import core.constants.ImageFilePaths;
 import game.message.Message;
 import game.message.MessageType;
@@ -58,7 +54,7 @@ public class Game {
 		playerList = new Player[4];
 		playerMap = new TreeMap<String, BattleCastleUser>();
 		arrows = new ConcurrentHashMap<String,Arrow>();
-		
+
 		if(hostType == HostType.SERVER)
 		{
 			startServer();
@@ -69,7 +65,7 @@ public class Game {
 			startClient();
 		System.setProperty("java.net.preferIPv4Stack" , "true");
 	}
-	
+
 	/**
 	 * Initializes Server
 	 */

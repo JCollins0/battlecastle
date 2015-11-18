@@ -61,7 +61,13 @@ public class Player extends PhysicsRect{
 	public void tick()
 	{
 		super.tick();
-		fixArrow(MouseHandler.mouse.x, MouseHandler.mouse.y);
+		if(currentArrow == null && arrowStorage.size() > 0)
+			currentArrow= arrowStorage.get(0);
+		else if(arrowStorage.size() > 0)
+		{
+			fixArrows(2,MouseHandler.mouse.x, MouseHandler.mouse.y);
+		}
+		
 //		System.out.println(getVelocity());
 	}
 	
@@ -124,6 +130,18 @@ public class Player extends PhysicsRect{
 			return uuid.equals(( (Player)obj).getUUID());
 		}
 		return false;
+	}
+	
+	public void fixArrows(int num, int x, int y)
+	{
+		double theta = Math.atan2((getCenter().YPoint()-y),(getCenter().XPoint()-x));
+		
+		for(int i = 0; i < num & i < arrowStorage.size(); i++)
+		{
+			Arrow a = arrowStorage.get(i);
+			a.fix(theta);
+		}
+		
 	}
 	
 	public void fixArrow(int x, int y)
