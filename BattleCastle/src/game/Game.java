@@ -95,7 +95,7 @@ public class Game {
 						}
 						int playerNum = playerMap.size()-1;
 						playerMap.get(user.getUUID()).setPlayerNumber(playerNum);
-						
+						System.out.println(playerMap);
 						for(String uuid : playerMap.keySet())
 						{
 							gameServer.sendToAllTCP(playerMap.get(uuid));
@@ -127,14 +127,15 @@ public class Game {
 							if(num[1].equals(KeyPress.DOWN_D.getText()))
 							{
 								playerList[playerNum].setvY(2);
-							}if(num[1].equals(KeyPress.RIGHT_U.getText()))
-							{
-								playerList[playerNum].setvX(0);
 							}
-							if(num[1].equals(KeyPress.LEFT_U.getText()))
-							{
-								playerList[playerNum].setvX( 0);
-							}
+//							if(num[1].equals(KeyPress.RIGHT_U.getText()))
+//							{
+//								playerList[playerNum].setvX(0);
+//							}
+//							if(num[1].equals(KeyPress.LEFT_U.getText()))
+//							{
+//								playerList[playerNum].setvX( 0);
+//							}
 							
 						}else if(type.equals(MessageType.UPDATE_ARROW.toString()))
 						{
