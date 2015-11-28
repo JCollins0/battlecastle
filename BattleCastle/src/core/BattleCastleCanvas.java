@@ -66,6 +66,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	public BattleCastleCanvas()
 	{
 		setPreferredSize(BattleCastleFrame.GAME_SIZE);
+		setMinimumSize(BattleCastleFrame.GAME_SIZE);
+		setMaximumSize(BattleCastleFrame.GAME_SIZE);
 		buffer = new BufferedImage(BattleCastleFrame.GAME_SIZE.width,
 								   BattleCastleFrame.GAME_SIZE.height,
 								   BufferedImage.TYPE_INT_ARGB);
@@ -586,18 +588,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 						menuButtonList.add(obj);
 					}else
 					{
-						try {
-							FileInputStream inputStream = new FileInputStream(levelData[i]);
-							Scanner reader = new Scanner(inputStream);
-
-							//load level here
-							map.loadLevelData(reader.nextLine());
-							
-							reader.close();
-							inputStream.close();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+						//load level here
+						map.loadLevelData(levelData[i].getAbsolutePath());
 					}
 					
 				}

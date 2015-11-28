@@ -188,7 +188,7 @@ public class Game {
 					String type = messageArr[0].trim();
 					if(type.equals(MessageType.SELECT_MAP.toString()))
 					{
-						gameMap = new GameMap(messageArr[1].trim());
+						gameMap = GameMap.map1;//new GameMap(messageArr[1].trim());
 					}else if(type.equals(MessageType.UPDATE_PLAYER.toString()))
 					{
 						String[] num = messageArr[1].split("=");
@@ -381,6 +381,11 @@ public class Game {
 		{
 			//JOptionPane.showMessageDialog(null, "loading customLevel" + canvasRef.getCustomLevels().get(mapName));
 			gameMap = canvasRef.getCustomLevels().get(mapName);
+			for(int i = 0; i < playerMap.size(); i++)
+			{
+				playerList[i] = new Player(ImageFilePaths.TEMP_PLAYER,getUUIDFromPlayer(playerList[i]));
+				//playerList[i].setLocation(gameMap.getPlayerStartPoint(i));
+			}
 		}
 		else
 		{
@@ -412,9 +417,12 @@ public class Game {
 	{
 		for(int i = 0; i < KeyHandler.presses.size(); i++)
 		{
-			Message message = new Message(MessageType.MOVE_PLAYER,
+			if(i < KeyHandler.presses.size())
+			{	
+				Message message = new Message(MessageType.MOVE_PLAYER,
 					playerMap.get(myUUID).getPlayerNumber() + "=" + KeyHandler.presses.get(i).getText() );
-			gameClient.sendTCP(message);
+				gameClient.sendTCP(message);
+			}
 		}
 		
 		KeyHandler.presses.remove(KeyPress.LEFT_U);
@@ -439,9 +447,6 @@ public class Game {
 				gameClient.sendTCP(message);
 			}
 		}
-		
-		
-		
 	}
 	
 	/**

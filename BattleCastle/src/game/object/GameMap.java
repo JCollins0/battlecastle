@@ -6,45 +6,68 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 
-import core.constants.ImageFilePaths;
 import utility.Utility;
+import core.constants.ImageFilePaths;
+import core.constants.LevelTileData;
+import editor.Tile;
 
 public class GameMap {
 	
 	private BufferedImage background;
 	private Point[] playerStartLocations;
 	private String imageName;
+	private ArrayList<Tile> tiles;
 	
 	public GameMap()
 	{
-		
+	
 	}
 	
 	public GameMap(String imageName)
 	{
-		background = Utility.loadImage(imageName);
-		this.imageName = imageName;
+		
+		this(imageName,null);
 	}
 	
 	public GameMap(String imageName, Point[] playerLocations)
 	{
-		this(imageName);
+		this(imageName,playerLocations,null);	
+	}
+	
+	public GameMap(String imageName, Point[] playerLocations, String tileData)
+	{
+		background = Utility.loadImage(imageName);
+		this.imageName = imageName;
 		this.playerStartLocations = playerLocations;
+		if(tileData != null && !tileData.equals(""))
+			tiles = Utility.readLevelSaveFromString(tileData);
 	}
 	
 	public void render(Graphics g)
 	{
 		if(background != null)
 			g.drawImage(background, 0, 0, null);
+		
+		if(tiles != null)
+			for(int i = 0; i < tiles.size(); i++)
+			{
+				tiles.get(i).draw(g);
+				//System.out.println("Drawing Tiles");
+			}
+		
 	}
 	
 	public void tick()
 	{
-		
+		if(tiles != null)
+			for(int i = 0; i < tiles.size(); i++)
+			{
+				tiles.get(i).tick();
+			}
 	}
 	
 	public String getImageName() {
@@ -85,9 +108,11 @@ public class GameMap {
 		return "";
 	}
 	
-	public void loadLevelData(String data)
+	public void loadLevelData(String filePath)
 	{
 		//JOptionPane.showMessageDialog(null, data);
+		tiles = Utility.readLevelSaveFromFile(filePath);
+		//System.out.println(tiles);
 	}
 	
 	public Point getPlayerStartPoint(int playerNum) {
@@ -112,8 +137,8 @@ public class GameMap {
 	
 	static
 	{
-		map1 = new GameMap(ImageFilePaths.MAP_1_BACKGROUND, new Point[]{new Point(10,10),new Point(10,10),new Point(10,10),new Point(10,10)});
-		map2 = new GameMap(ImageFilePaths.MAP_2_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()});
-		map3 = new GameMap(ImageFilePaths.MAP_3_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()});
+		map1 = new GameMap(ImageFilePaths.MAP_1_BACKGROUND, new Point[]{new Point(10,10),new Point(10,10),new Point(10,10),new Point(10,10)}, LevelTileData.MAP_1_DATA);
+		map2 = new GameMap(ImageFilePaths.MAP_2_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()}, LevelTileData.MAP_1_DATA);
+		map3 = new GameMap(ImageFilePaths.MAP_3_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()}, LevelTileData.MAP_1_DATA);
 	}
 }

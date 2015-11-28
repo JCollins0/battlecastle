@@ -30,6 +30,7 @@ public class BattleCastleFrame extends JFrame {
 	public static final String GAME_NAME = "Battle Castle";
 	public static final String GAME_VERSION = "1.0";
 	public static final Dimension GAME_SIZE = new Dimension(1024,768);
+	public static final Dimension GAME_FRAME = new Dimension(GAME_SIZE.width+5,GAME_SIZE.height+28);
 	
 	public static BattleCastleCanvas game_canvas;
 	
@@ -41,9 +42,10 @@ public class BattleCastleFrame extends JFrame {
 	{
 		super(String.format("%s v%s",GAME_NAME,GAME_VERSION));
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		setSize(GAME_SIZE);
-		setLocationRelativeTo(null);
 		init();
+		setSize(GAME_FRAME);
+		setLocationRelativeTo(null);
+		
 		setResizable(false);
 		setVisible(true);
 		setFocusable(false);

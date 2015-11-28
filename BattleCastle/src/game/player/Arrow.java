@@ -92,7 +92,7 @@ public class Arrow extends PhysicsRect{
 	 */
 	public void render(Graphics g)
 	{
-		super.render(g);
+//		super.render(g);
 		
 		Graphics2D g2d = (Graphics2D)g;
 		

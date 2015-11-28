@@ -182,6 +182,9 @@ public class Tile extends Rectangle implements JSONStreamAware
 		JSONValue.writeJSONString(obj, out);
 	}
 
-
+	@Override
+	public String toString() {
+		return stringify();
+	}
 
 }

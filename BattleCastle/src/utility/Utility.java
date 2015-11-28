@@ -5,10 +5,19 @@ import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
+import core.constants.DataConstants;
+import editor.Tile;
 
 public class Utility {
 	private Utility() {}
@@ -16,6 +25,7 @@ public class Utility {
     public static BufferedImage loadImage(String img) {
         try
         {
+//        	System.out.println(img);
       		return ImageIO.read(new File("resources/" + img + ".png"));
 		}
 	    catch(Exception ioexception) {
@@ -47,6 +57,60 @@ public class Utility {
     	}
     	BufferedImage[] temp=new BufferedImage[imagepix.size()];
     	temp=imagepix.toArray(temp);
+    	return temp;
+    }
+    
+    public static ArrayList<Tile> readLevelSaveFromFile(String filePath)
+	{
+		ArrayList<Tile> temp = new ArrayList<Tile>();
+		Scanner reader=null;
+		JSONParser parser=new JSONParser();
+		try
+		{
+			reader=new Scanner(new FileInputStream(filePath));
+			//System.out.println(reader.nextLine());
+			JSONArray ja = (JSONArray)parser.parse(reader.nextLine());
+			for(int i = 0;i<ja.size();i++)
+			{
+				temp.add(Tile.decodeJSON((JSONObject)ja.get(i)));
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(reader!=null)
+				reader.close();
+		}
+		return temp;
+	}
+    
+    public static ArrayList<Tile> readLevelSaveFromString(String data)
+    {
+    	ArrayList<Tile> temp = new ArrayList<Tile>();
+    	Scanner reader=null;
+		JSONParser parser=new JSONParser();
+		try
+		{
+			reader=new Scanner(data);
+			JSONArray ja = (JSONArray)parser.parse(reader.nextLine());
+			for(int i = 0;i<ja.size();i++)
+			{
+				temp.add(Tile.decodeJSON((JSONObject)ja.get(i)));
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			if(reader!=null)
+				reader.close();
+		}
+//		System.out.println("Temp SIZE: " + temp.size());
     	return temp;
     }
     
