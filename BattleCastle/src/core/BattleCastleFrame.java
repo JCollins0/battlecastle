@@ -1,6 +1,7 @@
 package core;
 
 import java.awt.Dimension;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -15,9 +16,11 @@ import javax.swing.JFrame;
 
 import core.constants.ConfigConstants;
 import core.constants.DataConstants;
+import core.constants.Keys;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
 import game.Game;
+import utility.ConfigLoader;
 import utility.Utility;
 
 public class BattleCastleFrame extends JFrame {
@@ -33,7 +36,7 @@ public class BattleCastleFrame extends JFrame {
 	public static final Dimension GAME_FRAME = new Dimension(GAME_SIZE.width+5,GAME_SIZE.height+28);
 	
 	public static BattleCastleCanvas game_canvas;
-	
+		
 	public static void main(String[] args) {
 		new BattleCastleFrame();
 	}
@@ -86,25 +89,7 @@ public class BattleCastleFrame extends JFrame {
 						game.stopServer();
 					}
 					
-					//write new defaults
-					ArrayList<MenuTextField> fields = game_canvas.getMenuTextFields();
-					MenuTextField user = null, server = null;
-					for(MenuTextField field : fields)
-						if(field.getID() == MenuTextFieldType.SERVER_IP_FIELD)
-							server = field;
-						else if(field.getID() == MenuTextFieldType.USERNAME_FIELD)
-							user = field;
-					try
-					{
-						FileOutputStream stream = new FileOutputStream(DataConstants.USER_CONFIG);
-						PrintWriter writer = new PrintWriter(stream);
-						writer.println(String.format("%s:%s", ConfigConstants.LAST_SERVER, server.getText()));
-						writer.println(String.format("%s:%s", ConfigConstants.USER, user.getText()));
-						writer.close();
-					}catch(Exception ex)
-					{
-						ex.printStackTrace();
-					}
+					ConfigLoader.saveConfig();
 				}
 				
 				System.exit(0);

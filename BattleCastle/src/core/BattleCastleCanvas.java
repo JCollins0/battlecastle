@@ -27,6 +27,7 @@ import com.esotericsoftware.kryonet.Client;
 import core.constants.ConfigConstants;
 import core.constants.DataConstants;
 import core.constants.ImageFilePaths;
+import core.constants.Keys;
 import core.menu_object.MapSelectionObject;
 import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
@@ -35,9 +36,11 @@ import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
 import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
+import core.menu_object.TutorialObject;
 import game.Game;
 import game.object.GameMap;
 import game.object.MapType;
+import utility.ConfigLoader;
 import utility.Utility;
 
 public class BattleCastleCanvas extends Canvas implements Runnable{
@@ -47,21 +50,38 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	 */
 	private static final long serialVersionUID = 2960889500737732477L;
 	
+	private static final int GAME_FRAMES = 30;
+	public static final double time_Step = 1.0/GAME_FRAMES;
+	
 	private static BufferedImage buffer;
-	private boolean running;
+	public static boolean debug;
+	public static Font defaultFont;
+	
 	private GameState currentState;
 	private Game game;
 	private MouseHandler mouseHandler;
 	private KeyHandler keyHandler;
 	private BufferedImage title_image;
-	private ArrayList<Error> error_messages;
-	private boolean searchingForServers;
-	public static Font defaultFont;
 	private BufferedImage screenShotImage;
 	private BufferedImage backgroundImage;
 	private TreeMap<String, GameMap> customLevels;
-	private static int GAME_FRAMES = 30;
-	public static double time_Step = 1.0/GAME_FRAMES;
+	private ArrayList<Error> error_messages;
+	
+	private ArrayList<TutorialObject> tutorialObjectList;
+	private ArrayList<MenuTextField> menuTextFieldList;
+	private ArrayList<MenuButton> menuButtonList;
+	private ArrayList<MenuLabel> menuLabelList;
+	private static MenuTextField serverIPField, userNameField;;
+	private MenuButton hostGame, joinGame, connectToServer,
+					   continueToGame, backButton, levelEditor,
+					   refreshLanServers, infoButton;
+	private MapSelectionObject map1,map2,map3;
+	private MenuLabel userNameLabel, serverIPLabel;
+	private TutorialObject leftMouse, upKey, downKey, leftKey, rightKey, dashKey;
+	private ServerSelectionBox serverSelectionBox;
+	
+	private boolean running;
+	private boolean searchingForServers;
 	
 	public BattleCastleCanvas()
 	{
@@ -79,7 +99,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		defaultFont = buffer.getGraphics().getFont();
 		
 		currentState = GameState.MAIN_MENU;
-
+		
 		mouseHandler = new MouseHandler(this);
 		keyHandler = new KeyHandler(this);
 		addMouseMotionListener(mouseHandler);
@@ -95,6 +115,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuButtonList = new ArrayList<MenuButton>();
 		menuTextFieldList = new ArrayList<MenuTextField>();
 		menuLabelList = new ArrayList<MenuLabel>();
+		tutorialObjectList = new ArrayList<TutorialObject>();
 		
 		serverIPField = new MenuTextField(100, 350, 500, 100,
 				MenuTextFieldType.SERVER_IP_FIELD,
@@ -152,6 +173,12 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				Utility.loadImage(ImageFilePaths.LEVEL_EDITOR_SELECTED),
 				GameState.MAIN_MENU);
 		
+		infoButton = new MenuButton(64,608,64,64,
+				MenuButtonType.INFO_BUTTON,
+				Utility.loadImage(ImageFilePaths.INFO_BUTTON),
+				Utility.loadImage(ImageFilePaths.INFO_BUTTON_SELECTED),
+				GameState.MAIN_MENU);
+		
 		connectToServer = new MenuButton(150,500,400,100,
 				MenuButtonType.CONNECT_TO_IP,
 				Utility.loadImage(ImageFilePaths.CONNECT_TO_SERVER),
@@ -168,7 +195,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				MenuButtonType.BACK_TO_MENU,
 				Utility.loadImage(ImageFilePaths.BACK),
 				Utility.loadImage(ImageFilePaths.BACK_SELECTED),
-				GameState.JOIN_SERVER, GameState.INPUT_USER_NAME, GameState.SELECT_MAP);
+				GameState.JOIN_SERVER, GameState.INPUT_USER_NAME, GameState.SELECT_MAP, GameState.INFO);
 		
 		refreshLanServers = new MenuButton(704,472,192,48,
 				MenuButtonType.REFRESH_LAN_SERVERS,
@@ -183,6 +210,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuButtonList.add(continueToGame);
 		menuButtonList.add(levelEditor);
 		menuButtonList.add(refreshLanServers);
+		menuButtonList.add(infoButton);
 		
 		userNameLabel = new MenuLabel(250, 150, 200, 50,
 				Utility.loadImage(ImageFilePaths.USER_NAME_LABEL),
@@ -195,63 +223,52 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuLabelList.add(userNameLabel);
 		menuLabelList.add(serverIPLabel);
 		
+		//read in data from config.dat; maybe encrypt/decrypt data...
+		ConfigLoader.loadConfig();
+				
+		leftMouse = new TutorialObject(64, 64, 64, 128,
+				Utility.loadBufferedList(ImageFilePaths.LEFT_MOUSE_CLICK, 64, 128),
+				3, "Launch Arrow", false, GameState.INFO);
+		
+		upKey = new TutorialObject(370,64, 64, 64,
+				Utility.loadBufferedList(ImageFilePaths.KEY_PRESS, 64, 64),
+				10, "Jump Key", true, GameState.INFO);
+		upKey.setText(Keys.getKeyConfigString(Keys.UP));
+		
+		leftKey = new TutorialObject(260,134, 64, 64,
+				Utility.loadBufferedList(ImageFilePaths.KEY_PRESS, 64, 64),
+				10, "Move Left", false, GameState.INFO);
+		leftKey.setText(Keys.getKeyConfigString(Keys.LEFT));
+		
+		downKey = new TutorialObject(370,134, 64, 64,
+				Utility.loadBufferedList(ImageFilePaths.KEY_PRESS, 64, 64),
+				10, "Move Down", false, GameState.INFO);
+		downKey.setText(Keys.getKeyConfigString(Keys.DOWN));
+		
+		rightKey = new TutorialObject(480,134, 64, 64,
+				Utility.loadBufferedList(ImageFilePaths.KEY_PRESS, 64, 64),
+				10, "Move Right", false, GameState.INFO);
+		rightKey.setText(Keys.getKeyConfigString(Keys.RIGHT));
+		
+		dashKey = new TutorialObject(590,99, 64, 64,
+				Utility.loadBufferedList(ImageFilePaths.KEY_PRESS, 64, 64),
+				10, "Dash Key", false, GameState.INFO);
+		dashKey.setText(Keys.getKeyConfigString(Keys.DASH));
+		
+		tutorialObjectList.add(leftMouse);
+		tutorialObjectList.add(upKey);
+		tutorialObjectList.add(leftKey);
+		tutorialObjectList.add(rightKey);
+		tutorialObjectList.add(downKey);
+		tutorialObjectList.add(dashKey);
+		
 		running = true;
 		
-		//read in data from config.dat; maybe encrypt/decrypt data...
-		try
-		{
-			File f = new File(DataConstants.USER_CONFIG);
-			if(!f.exists())
-			{
-				f.createNewFile();
-				throw new FileNotFoundException();
-			}
-			FileInputStream stream = new FileInputStream(f);
-			Scanner reader = new Scanner(stream);
-			while(reader.hasNextLine())
-			{
-				String[] keyVal = reader.nextLine().split(":");
-				System.out.println(Arrays.toString(keyVal));
-				switch(keyVal[0])
-				{
-				case ConfigConstants.LAST_SERVER :
-					if(keyVal.length > 1)
-						serverIPField.setText(keyVal[1]);
-					break;
-				case ConfigConstants.USER:
-					if(keyVal.length > 1)
-						userNameField.setText(keyVal[1]);
-					break;
-				}
-			}
-			reader.close();
-			stream.close();
-			
-		}catch(Exception e)
-		{
-			try {
-				FileOutputStream stream = new FileOutputStream(DataConstants.USER_CONFIG);
-				PrintWriter writer = new PrintWriter(stream);
-				writer.println(ConfigConstants.LAST_SERVER);
-				writer.println(ConfigConstants.USER);
-				writer.close();
-			} catch (FileNotFoundException e1) {
-				e1.printStackTrace();
-			}
-		}
-		
+		if(debug)
+			System.out.println("DEBUGGING...");
 		
 		backgroundImage = Utility.loadImage(ImageFilePaths.MENU_BACKGROUND_IMAGE);
 	}
-	
-	private ArrayList<MenuTextField> menuTextFieldList;
-	private ArrayList<MenuButton> menuButtonList;
-	private ArrayList<MenuLabel> menuLabelList;
-	private MenuTextField serverIPField, userNameField;;
-	private MenuButton hostGame, joinGame, connectToServer, continueToGame, backButton, levelEditor, refreshLanServers;
-	private MapSelectionObject map1,map2,map3;
-	private MenuLabel userNameLabel, serverIPLabel;
-	private ServerSelectionBox serverSelectionBox;
 	
 	private void fixMapSelectionObjects(ArrayList<MapSelectionObject> objs)
 	{
@@ -273,7 +290,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		
 //		System.out.printf("%d,%d,%d,%d%n",xSize,ySize,xOffset,yOffset);
 		int remainder = size % desiredAmountPerRow;
-		System.out.println(remainder);
+//		System.out.println(remainder);
 		
 		int x = xOffset;
 		int y = yOffset;
@@ -325,6 +342,16 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			}
 		}
 		return p;
+	}
+	
+	public static MenuTextField getUserNameField()
+	{
+		return userNameField;
+	}
+	
+	public static MenuTextField getServerIpField()
+	{
+		return serverIPField;
 	}
 	
 	private ArrayList<MapSelectionObject> getMapSelectionSubset()
@@ -399,10 +426,14 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				game.render(b);
 			}			
 			break;
-		
-		default:
+		case INFO:
+			for(TutorialObject tutorialObject : tutorialObjectList)
+				if(tutorialObject.isVisibleAtState(currentState))
+					tutorialObject.render(b);		
+			for(MenuButton menuButton : menuButtonList)
+				if(menuButton.isVisibleAtState(currentState) )
+					menuButton.render(b);
 			break;
-				
 		}
 		
 		if(currentState == GameState.JOIN_SERVER)
@@ -438,6 +469,10 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		for(MenuTextField menuTextField : menuTextFieldList)
 			if(menuTextField.isVisibleAtState(currentState) )
 				menuTextField.tick();
+		
+		for(TutorialObject tutorialObject : tutorialObjectList)
+			if(tutorialObject.isVisibleAtState(currentState))
+				tutorialObject.tick();
 		
 		if(game != null)
 			game.tick();

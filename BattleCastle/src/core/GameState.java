@@ -5,5 +5,6 @@ public enum GameState {
 	JOIN_SERVER,
 	INPUT_USER_NAME,
 	GAMEPLAY,
-	SELECT_MAP;
+	SELECT_MAP,
+	INFO;
 }

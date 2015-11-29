@@ -36,7 +36,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
+		System.out.println(e.getPoint());
 	}
 
 	@Override
@@ -65,6 +65,9 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 					}else if(button.getButtonType() == MenuButtonType.LEVEL_EDITOR)
 					{
 						EditorFrame frame = new EditorFrame();
+					}else if(button.getButtonType() == MenuButtonType.INFO_BUTTON)
+					{
+						canvasref.setCurrentState(GameState.INFO);
 					}
 					
 				}
@@ -231,6 +234,23 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 			}
 			
 			break;
+		case INFO:
+			
+			buttonList = canvasref.getMenuButtons();
+			
+			for(MenuButton button : buttonList)
+			{
+				if (button.getBounds().contains(mouse))
+				{
+					if (button.getButtonType() == MenuButtonType.BACK_TO_MENU)
+					{
+						canvasref.setCurrentState(GameState.MAIN_MENU);					
+					}
+				}
+			}
+			
+			
+			break;
 		}
 	}
 
@@ -266,8 +286,8 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 			
 		case INPUT_USER_NAME:
 		case JOIN_SERVER:
-		case MAIN_MENU: 
-			
+		case MAIN_MENU:
+		case INFO:	
 			ArrayList<MenuButton> buttonList = canvasref.getMenuButtons();
 			for(MenuButton button : buttonList)
 			{
@@ -275,8 +295,6 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 					button.isHoverOver(mouse);
 			}
 			
-			break;
-		default:
 			break;
 		}
 	}
@@ -300,8 +318,8 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 			break;
 		case SELECT_MAP:
 			break;
-		default:
-			break;
+		case INFO:
+			break;		
 		}
 	}
 	

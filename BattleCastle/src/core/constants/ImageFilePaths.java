@@ -10,6 +10,7 @@ public class ImageFilePaths {
 				ITEM = GAME + "item/",
 				MAP = GAME + "map/",
 				MENU_OBJECT = MENU + "object/",
+				TUTORIAL_OBJECT = MENU + "tutorial/",
 				PLAYER = ENTITY + "player/",
 				POWERUP = ITEM + "powerup/",
 				WEAPON = ITEM + "weapon/",
@@ -22,7 +23,9 @@ public class ImageFilePaths {
 				HOST_GAME = MENU_OBJECT + "host_game",
 				HOST_GAME_SELECTED = MENU_OBJECT + "host_game_selected",
 				JOIN_GAME = MENU_OBJECT + "join_game",
-				JOIN_GAME_SELECTED = MENU_OBJECT + "join_game_selected",
+				JOIN_GAME_SELECTED = MENU_OBJECT + "join_game_selected", 
+				INFO_BUTTON = MENU_OBJECT + "info",
+				INFO_BUTTON_SELECTED = MENU_OBJECT + "info_selected",
 				LEVEL_EDITOR = MENU_OBJECT + "level_editor",
 				LEVEL_EDITOR_SELECTED = MENU_OBJECT + "level_editor_selected",
 				CONNECT_TO_SERVER = MENU_OBJECT + "connect_to_server",
@@ -44,6 +47,8 @@ public class ImageFilePaths {
 				MAP_1_BACKGROUND = MAP_1 + "map1",
 				MAP_2_BACKGROUND = MAP_2 + "map2",
 				MAP_3_BACKGROUND = MAP_3 + "map3",
+				LEFT_MOUSE_CLICK = TUTORIAL_OBJECT + "left_mouse_click",
+				KEY_PRESS = TUTORIAL_OBJECT + "key_press",
 				TEMP_PLAYER = PLAYER + "temp_player",
 				ARROW = WEAPON + "arrow",
 				TRASH = EDITOR + "trash",
@@ -61,6 +66,8 @@ public class ImageFilePaths {
 				WOOD = TILE + "wood",
 				PRESSURE_PLATE_SPIKES = TILE + "pp_spikes",
 				SPIKES = TILE + "spikes";
+
+	
 				
 		
 }

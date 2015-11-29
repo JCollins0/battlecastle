@@ -79,33 +79,25 @@ public class KeyHandler implements KeyListener {
 		case GAMEPLAY:
 			//handle player input
 			int keyCode = e.getKeyCode();
-			//System.out.println(keyCode);
 			
-			Player myPlayer = canvasref.getGame().getMyPlayer();
-			
-			switch(keyCode)
-			{
-			case Keys.UP:
+			if(keyCode == Keys.UP)
 				add(KeyPress.JUMP_D);
-				//canvasref.getGame().updateMyPlayer(KeyPress.JUMP_D);
-				break;
-			case Keys.DOWN:
+			if(keyCode == Keys.DOWN)
 				add(KeyPress.DOWN_D);
-				//	canvasref.getGame().updateMyPlayer(KeyPress.DOWN_D);
-				break;
-			case Keys.LEFT:
+			
+			if(keyCode == Keys.LEFT)
+			{
 				remove(KeyPress.RIGHT_U);
 				remove(KeyPress.LEFT_U);
 				add(KeyPress.LEFT_D);
-				//canvasref.getGame().updateMyPlayer(KeyPress.LEFT_D);
-				break;
-			case Keys.RIGHT:
+			}
+			if(keyCode == Keys.RIGHT)
+			{	
 				remove(KeyPress.LEFT_U);
 				remove(KeyPress.RIGHT_U);
 				add(KeyPress.RIGHT_D);
-				//canvasref.getGame().updateMyPlayer(KeyPress.RIGHT_D);
 			}
-			
+						
 			break;
 		case SELECT_MAP:
 			break;
@@ -123,23 +115,21 @@ public class KeyHandler implements KeyListener {
 			//handle player input
 			int keyCode = e.getKeyCode();
 			
-			switch(keyCode)
-			{
-			case Keys.UP:
+			if(keyCode == Keys.UP)
 				remove(KeyPress.JUMP_D);
-				break;
-			case Keys.DOWN:
+			if(keyCode == Keys.DOWN)
 				remove(KeyPress.DOWN_D);
-				break;
-			case Keys.LEFT:
+			if(keyCode == Keys.LEFT)
+			{		
 				remove(KeyPress.LEFT_D);
 				add(KeyPress.LEFT_U);
-				break;
-			case Keys.RIGHT:
+			}
+			if(keyCode == Keys.RIGHT)
+			{	
 				remove(KeyPress.RIGHT_D);
 				add(KeyPress.RIGHT_U);
 			}
-			
+						
 			break;
 		case INPUT_USER_NAME:	
 			break;

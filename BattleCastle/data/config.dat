@@ -1,2 +1,19 @@
+##############################
+#   GENERAL CONFIG OPTIONS   #
+##############################
 last_ip:10.118.40.251
 user_name:Jonathan
+debug:false
+##############################################
+#######         KEY BINDINGS         #########
+##  **Uppercase Letters Only!**             ##
+##  *Special Keys (Key = Config_Value)      ##
+##    DOWN_ARROW = DOWN, LEFT_ARROW = LEFT, ##
+##    RIGHT_ARROW = RIGHT, UP_ARROW = UP,   ##
+##    SPACE_KEY = SPACE                     ##
+##############################################
+left_key:A
+jump_key:W
+right_key:D
+down_key:S
+dash_key:F

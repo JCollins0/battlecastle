@@ -60,6 +60,21 @@ public class Utility {
     	return temp;
     }
     
+    public static ArrayList<BufferedImage> loadBufferedList(String img, int xOffset, int yOffset)
+    {
+    	BufferedImage image = loadImage(img);
+    	ArrayList<BufferedImage> imagepix = new ArrayList<BufferedImage>();
+    	for (int y = 0; y < image.getHeight(); y += yOffset)
+    	{
+    		for (int x = 0; x < image.getWidth(); x += xOffset)
+    		{
+    			imagepix.add(image.getSubimage(x, y, xOffset, yOffset));
+    		}
+    	}
+    	
+    	return imagepix;
+    }
+    
     public static ArrayList<Tile> readLevelSaveFromFile(String filePath)
 	{
 		ArrayList<Tile> temp = new ArrayList<Tile>();
