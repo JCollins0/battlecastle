@@ -293,7 +293,6 @@ public class EditorCanvas extends Canvas implements Runnable{
 		int i;
 		for(i=0;i<tileAdder.size()&&!tileAdder.get(i).contains(mouse);i++);
 		if(i<tileAdder.size())
-			
 			list.add(tileAdder.get(i).copy());
 	}
 	
