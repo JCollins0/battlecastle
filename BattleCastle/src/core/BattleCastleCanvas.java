@@ -624,7 +624,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 					}else
 					{
 						//load level here
-						map.loadLevelData(levelData[i].getAbsolutePath());
+						map.loadLevelData(levelData[j].getAbsolutePath());
 					}
 					
 				}
