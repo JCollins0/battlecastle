@@ -2,7 +2,24 @@ package core.constants;
 
 public class LevelTileData {
 	
+	private static final String 
+				RESOURCES = "resources/",
+				MENU = RESOURCES + "menu/",
+				GAME = RESOURCES + "game/",
+				EDITOR = RESOURCES + "editor/",
+				ENTITY = GAME + "entity/",
+				ITEM = GAME + "item/",
+				MAP = GAME + "map/",
+				MENU_OBJECT = MENU + "object/",
+				TUTORIAL_OBJECT = MENU + "tutorial/",
+				PLAYER = ENTITY + "player/",
+				POWERUP = ITEM + "powerup/",
+				WEAPON = ITEM + "weapon/",
+				TILE = GAME + "tile/",
+				MAP_1 = MAP + "1/",
+				MAP_2 = MAP + "2/",
+				MAP_3 = MAP + "3/";
 	
 	public static final String
-				MAP_1_DATA = "[{\"x\":256,\"y\":-224,\"width\":192,\"height\":384,\"picText\":\"game\\/tile\\/gray_brick\",\"imageX\":32,\"imageY\":32,\"statestext\":null}]";
+				MAP_1_DATA = MAP_1 + "tileData.txt";
 }

@@ -44,7 +44,7 @@ public class GameMap {
 		this.imageName = imageName;
 		this.playerStartLocations = playerLocations;
 		if(tileData != null && !tileData.equals(""))
-			tiles = Utility.readLevelSaveFromString(tileData);
+			tiles = Utility.readLevelSaveFromFile(tileData);
 	}
 	
 	public void render(Graphics g)
