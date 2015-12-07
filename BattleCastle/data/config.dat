@@ -13,7 +13,7 @@ debug:false
 ##    SPACE_KEY = SPACE                     ##
 ##############################################
 left_key:A
-jump_key:W
+jump_key:SPACE
 right_key:D
 down_key:S
 dash_key:F

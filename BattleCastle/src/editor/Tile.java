@@ -105,28 +105,29 @@ public class Tile extends Rectangle implements JSONStreamAware
 
 
 
-	protected void shift(int x,int y)
-	{
-		this.x+=x;
-		this.y+=y;
-		if(this.x>1024)
-			this.x=-this.width;
-		else if(this.x<-this.width)
-			this.x=1024;
-		if(this.y>768)
-			this.y=-this.height;
-		else if(this.y<-this.height)
-			this.y=768;
-	}
+//	protected void shift(int x,int y)
+//	{
+//		this.x+=x;
+//		this.y+=y;
+//		if(this.x>1024)
+//			this.x=-this.width;
+//		else if(this.x<-this.width)
+//			this.x=1024;
+//		if(this.y>768)
+//			this.y=-this.height;
+//		else if(this.y<-this.height)
+//			this.y=768;
+//	}
 
 	public void draw(Graphics g)
 	{
 		g.drawImage(pics[animation], x, y, width, height, null);
+//		System.out.println(picText + " " + animation + " " + currentState + " " + x + " " + y);
 	}
 
 	public void tick()
 	{
-		if(animation++==pics.length-1)
+		if(animation++>=pics.length-1)
 			animation=0;
 		if(states[currentState].increment(this))
 			currentState=(currentState+1)%states.length;

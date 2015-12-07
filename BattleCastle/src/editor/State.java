@@ -51,12 +51,12 @@ public class State
 	{
 		if(continual)
 		{
-			t.shift(sx, sy);
+			t.translate(sx, sy);
 			return false;
 		}
 		if(!paused)
 		{
-			t.shift(sx, sy);
+			t.translate(sx, sy);
 			if(tx<dx)
 				tx+=sx;
 			if(ty<dy)

@@ -88,7 +88,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 		
 		
 		tileAdder=new ArrayList<Tile>();
-		
+//		System.out.println(" Tile Adder " + tileAdderY);
+//		System.exit(0);
 		Tile addWoodTile=new Tile(resetX(),tileAdderY,32,32,ImageFilePaths.WOOD,ImageFileDimensions.WOOD.x,ImageFileDimensions.WOOD.y,null);
 		Tile addBrickTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.GRAY_BRICK,ImageFileDimensions.GRAY_BRICK.x,ImageFileDimensions.GRAY_BRICK.y,null);
 //		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.STONE,null);
