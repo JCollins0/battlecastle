@@ -144,7 +144,7 @@ public class Game {
 								System.out.println("hello");
 								System.out.println(Arrays.toString(items));
 								arrows.put(uuid, new Arrow(Integer.parseInt(items[1].split(":")[1]),Integer.parseInt(items[2].split(":")[1]),Double.parseDouble(items[3].split(":")[1]),
-										null,0,playerList[playerMap.get(items[4].split(":")[1]).getPlayerNumber()],items[0].split(":")[1],uuid));
+										Double.parseDouble(items[4].split(":")[1]),null,0,playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],items[0].split(":")[1],uuid));
 							}
 							
 							Message mess = new Message(MessageType.UPDATE_ARROW, arrows.get(uuid).getID() + "=" + arrows.get(uuid).stringify());
@@ -202,7 +202,7 @@ public class Game {
 						{
 							String[] items = id[1].split(",");
 							arrows.put(uid, new Arrow(Integer.parseInt(items[1].split(":")[1]),Integer.parseInt(items[2].split(":")[1]),Double.parseDouble(items[3].split(":")[1]),
-									null,0,playerList[playerMap.get(items[4].split(":")[1]).getPlayerNumber()],items[0].split(":")[1],uid));
+									Double.parseDouble(items[4].split(":")[1]),null,0,playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],items[0].split(":")[1],uid));
 						}
 						
 					}
