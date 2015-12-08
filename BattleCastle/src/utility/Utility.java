@@ -129,6 +129,18 @@ public class Utility {
     	return temp;
     }
     
+    public static String generateRandomUUID(int length)
+    {
+    	String ID = "";
+    	int random = (int)(Math.random() * 26 + 65);
+		for(int i = 0; i < length; i++)
+		{
+			ID += (char)random;
+			random = (int)(Math.random() * 26 + 65);
+		}
+		return ID;
+    }
+    
     public static Color randomRGBColor()
     {
     	return new Color((int)(Math.random() * 256), (int)(Math.random() * 256), (int)(Math.random() * 256));

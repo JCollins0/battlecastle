@@ -20,27 +20,18 @@ public class Arrow extends PhysicsRect{
 	public static final double MASS = 500, DRAGC = 1.05;
 	static int setDistance = 10;
 	
-	public Arrow(int x, int y, double theta, Vector velocity, double torque, Player player, String imagePath) {
+	public Arrow(int x, int y, double theta, Vector velocity, double torque, Player player, String imagePath, String ID) {
 		super(x, y, WIDTH, HEIGHT, theta, velocity, torque, MASS,DRAGC);
 		this.shotByPlayer = player;
 		this.image = Utility.loadImage(imagePath);
 		this.imagePath = imagePath;
+		this.ID = ID;
 	}
 	
 	
 	public Arrow(Player player, String imagePath)
 	{
-		this(player.getCenter().XPoint(),player.getCenter().YPoint(),0,null,0,player,imagePath);
-		int random = (int)(Math.random() * 26 + 65);
-		for(int i = 0; i < 20; i++)
-		{
-			ID += (char)random;
-			random = (int)(Math.random() * 26 + 65);
-		}
-		image = Utility.loadImage(imagePath);
-		shotByPlayer = player;
-		System.out.println(ID);
-		
+		this(player.getCenter().XPoint(),player.getCenter().YPoint(),0,null,0,player,imagePath,Utility.generateRandomUUID(20));		
 	}
 	
 	/**
