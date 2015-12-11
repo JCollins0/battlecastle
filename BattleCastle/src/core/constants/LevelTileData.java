@@ -21,5 +21,7 @@ public class LevelTileData {
 				MAP_3 = MAP + "3/";
 	
 	public static final String
-				MAP_1_DATA = MAP_1 + "tileData.txt";
+				MAP_1_DATA = MAP_1 + "tileData.txt",
+				MAP_2_DATA = MAP_2 + "tileData.txt",
+				MAP_3_DATA = MAP_3 + "tileData.txt";
 }
