@@ -1,5 +1,6 @@
 package core;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -33,8 +34,8 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		
 	}
 	
-	Node front,rear;
-	int count;
+	private Node front,rear;
+	private int count;
 	
 	public DoubleLinkedList()
 	{
@@ -55,6 +56,7 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		{
 			front=new Node(value,front,null);
 		}
+		count++;
 	}
 	
 	public void addRear(T value)
@@ -65,6 +67,7 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		{
 			rear=new Node(value,null,rear);
 		}
+		count++;
 	}
 	
 	public T removeFront()
@@ -73,7 +76,15 @@ public class DoubleLinkedList<T> implements Iterable<T>
 			throw new NoSuchElementException();
 		T temp=front.getValue();
 		front=front.getNext();
+		count--;
 		return temp;
+	}
+	
+	public T peekFront()
+	{
+		if(count==0)
+			throw new NoSuchElementException();
+		return front.getValue();
 	}
 	
 	public T removeRear()
@@ -82,7 +93,15 @@ public class DoubleLinkedList<T> implements Iterable<T>
 			throw new NoSuchElementException();
 		T temp=rear.getValue();
 		rear=rear.getPrev();
+		count--;
 		return temp;
+	}
+	
+	public T peekRear()
+	{
+		if(count==0)
+			throw new NoSuchElementException();
+		return rear.getValue();
 	}
 	
 	public boolean remove(T value)
@@ -93,11 +112,13 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		if(value.equals(front.getValue()))
 		{
 			removeFront();
+			count--;
 			return true;
 		}
 		if(value.equals(rear.getValue()))
 		{
 			removeRear();
+			count--;
 			return true;
 		}
 		while(current!=null)
@@ -106,16 +127,98 @@ public class DoubleLinkedList<T> implements Iterable<T>
 			{
 				current.getPrev().setNext(current.getNext());
 				current.getNext().setPrev(current.getPrev());
+				count--;
 				return true;
 			}
 			current=current.getNext();
 		}
+		return false;
+	}
+
+	@Override
+	public String toString() {
+		String s="[";
+		Node current=front;
+		while(current.getNext()!=null)
+		{
+			s+=current.getValue()+",";
+			current=current.getNext();
+		}
+		s+=current.getValue()+"]";
+		return s;
 	}
 
 	@Override
 	public Iterator<T> iterator()
 	{
 		return null;
+	}
+	
+	private class HashTableIteratorForward implements Iterator<T>
+	{
+		private int expectedCount;
+		private Node current;
+		private int lastIndex;
+		
+		public HashTableIteratorForward(int size)
+		{
+			expectedCount = size;
+			last = null;
+			next = null;
+		}
+		
+		public boolean hasNext()
+		{
+			return next != null;
+		}
+		
+		public T next()
+		{
+			checkForComodification();
+			if(next == null)
+				throw new NoSuchElementException();
+			return next.getNext().getValue();
+		}
+		
+		
+		public void remove()
+		{
+			if(count==0)
+				throw new NoSuchElementException();
+			Node current=front;
+			if(front=next)
+			{
+				removeFront();
+				count--;
+				return true;
+			}
+			if(value.equals(rear.getValue()))
+			{
+				removeRear();
+				count--;
+				return true;
+			}
+			while(current!=null)
+			{
+				if(current.getValue().equals(value))
+				{
+					current.getPrev().setNext(current.getNext());
+					current.getNext().setPrev(current.getPrev());
+					count--;
+					return true;
+				}
+				current=current.getNext();
+			}
+			return false;
+			count--;
+			expectedCount--;
+		}
+		
+		public void checkForComodification()
+		{
+			if(count != expectedCount)
+				throw new ConcurrentModificationException();
+		}
 	}
 
 }
