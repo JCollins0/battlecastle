@@ -31,4 +31,88 @@ public class PhysicsRect extends PhysicsPoly {
 	{
 		return getCorners()[0];
 	}
+	
+	public int getWidth()
+	{
+		return (int)(getCorners()[1].XExact() - getCorners()[0].XExact());
+	}
+	
+	public int getHeight()
+	{
+		return (int) (getCorners()[2].YExact() - getCorners()[0].YExact());
+	}
+	
+	public Vector getLeftHighest()
+	{
+		int highestY = Integer.MIN_VALUE;
+		int lowestX = Integer.MAX_VALUE;
+		for(Vector v : getCorners())
+		{
+			lowestX = Math.min(lowestX, v.XPoint());
+			highestY = Math.max(highestY, v.YPoint());
+		}
+		
+		for(Vector v : getCorners())
+		{
+			if(v.YPoint() == highestY)
+			{
+				if(v.XPoint() == lowestX)
+				{
+					return v;
+				}
+			}
+		}
+		
+		//not the same point use the one to left with same hight
+		
+		
+		return null;
+	}
+	
+	public Vector getRightHighest()
+	{
+		int highestY = Integer.MIN_VALUE;
+		int highestX = Integer.MIN_VALUE;
+		for(Vector v : getCorners())
+		{
+			highestX = Math.max(highestX, v.XPoint());
+			highestY = Math.max(highestY, v.YPoint());
+		}
+		
+		for(Vector v : getCorners())
+		{
+			if(v.YPoint() == highestY)
+			{
+				if(v.XPoint() == highestX)
+				{
+					return v;
+				}
+			}
+		}
+		//not the same point use the one to right with same hight
+		
+		return null;
+	}
+	
+	//create get leftHighest and rightHighest
+	public void tick()
+	{
+		super.tick();
+		if(getLeftHighest().YPoint() > 786 + getHeight()) //move from bottom to top
+		{
+			moveTo(getLeftHighest().XPoint(), 0-getHeight());
+		}
+		if(getLeftHighest().XPoint() > 1024 + getWidth()) //move from right to left
+		{
+			moveTo(0-getWidth(), getLeftHighest().YPoint());
+		}
+		if(getLeftHighest().XPoint() < 0 - getWidth()) //move from left to right
+		{
+			moveTo(1024, getLeftHighest().YPoint());
+		}
+		if(getRightHighest().YPoint() < 0 - getHeight()) //move from top to bottom
+		{
+			moveTo(getTopLeft().XPoint(), 786);
+		}
+	}
 }

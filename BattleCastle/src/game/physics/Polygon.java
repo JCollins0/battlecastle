@@ -101,6 +101,12 @@ public class Polygon
 		}
 	}
 	
+	public void moveTo(int x, int y)
+	{
+		Vector v = corners[0];
+		move(new Vector(x-v.XExact(),y-v.YExact()));
+	}
+	
 	public void calculateArea()
 	{
 		//area of polygon: A=(.5)((x0*y1+x1*y2+x2*y0)-(y0*x1+y1*x2+y2*x0))
