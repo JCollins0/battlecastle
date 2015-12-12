@@ -261,7 +261,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		tutorialObjectList.add(downKey);
 		tutorialObjectList.add(dashKey);
 		
-		volumeSlider = new MenuSlider(300, 400, 256, 64, 0, 50,
+		volumeSlider = new MenuSlider(300, 400, 256, 64, -10, 10, 0,
 				MenuSliderType.VOLUME, GameState.INFO);
 		
 		sliderList.add(volumeSlider);
@@ -548,6 +548,15 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		for(MenuTextField field : menuTextFieldList)
 			if (field.isSelected())
 				ret = field;
+		return ret;
+	}
+	
+	public MenuSlider getSlider(MenuSliderType type)
+	{
+		MenuSlider ret = null;
+		for(MenuSlider slider : sliderList)
+			if (slider.getType().equals(type))
+				ret = slider;
 		return ret;
 	}
 	

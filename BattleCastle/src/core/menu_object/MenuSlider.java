@@ -1,6 +1,7 @@
 package core.menu_object;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -17,14 +18,20 @@ public class MenuSlider {
 	private Slider slider;
 	private boolean selected;
 	private ArrayList<GameState> visibleStates;
+	private MenuSliderType type;
 	private static final BufferedImage bar_image = Utility.loadImage(ImageFilePaths.SLIDER_BAR);
 	private static final BufferedImage slider_image = Utility.loadImage(ImageFilePaths.SLIDER);
+	private static final Font textFont = new Font("Courier New", Font.BOLD, 20);
 	
-	public MenuSlider(int x, int y, int width, int height, int min, int max,MenuSliderType type, GameState... visibleStates)
+	public MenuSlider(int x, int y, int width, int height, int min, int max, int startValue,MenuSliderType type, GameState... visibleStates)
 	{		
 		this.visibleStates= new ArrayList<GameState>();
-		bounds = new Rectangle(x,y,width,height);
-		slider = new Slider(x,y,width / (max-min) ,height,min, max,this);
+		bounds = new Rectangle(x,y,width+2*(width/Math.abs(min-max)),height);
+		slider = new Slider(x,y,width ,height,min, max,this);
+		if(startValue < min || startValue > max)
+			startValue = Math.min(Math.max(min,startValue),max);
+		slider.setValue(startValue);
+		this.type = type;
 		for(int i = 0; i < visibleStates.length; i++)
 			this.visibleStates.add(visibleStates[i]);
 	}
@@ -38,7 +45,8 @@ public class MenuSlider {
 	{
 		g.drawImage(bar_image, bounds.x, bounds.y, bounds.width, bounds.height, null);
 		slider.render(g);
-		g.drawString(slider.getValue() + "", bounds.x + bounds.width/2, bounds.y);
+		g.setFont(textFont);
+		g.drawString(slider.getValue() + "", bounds.x + bounds.width/2 - g.getFontMetrics(textFont).charWidth('a') * (slider.getValue()+"").length()/2, bounds.y + bounds.height/2 + g.getFontMetrics(textFont).getHeight()/4);
 	}
 	
 	public boolean isSelected() {
@@ -75,6 +83,11 @@ public class MenuSlider {
 		slider.update(x);
 	}
 	
+
+	public MenuSliderType getType() {
+		return type;
+	}
+	
 	private class Slider{
 		
 		private Rectangle bounds;
@@ -86,7 +99,7 @@ public class MenuSlider {
 		public Slider(int x, int y, int width, int height, int min, int max, MenuSlider slider)
 		{
 			updateIncrement = (double)width / Math.abs(min-max);
-			bounds = new Rectangle(x,y,Math.max(1,width),height);
+			bounds = new Rectangle(x,y,(int)Math.max(1,updateIncrement),height);
 			this.min = min;
 			this.max = max;
 			bar = slider;
@@ -98,7 +111,7 @@ public class MenuSlider {
 				value = min;
 			else if(value > max)
 				value = max;
-			if(bounds.x > bar.bounds.x+bar.bounds.width)
+			if(bounds.x > bar.bounds.x+bar.bounds.width - bounds.width)
 				bounds.x = bar.bounds.x+bar.bounds.width-bounds.width;
 			if(bounds.x < bar.bounds.x)
 				bounds.x = bar.bounds.x;
@@ -106,16 +119,17 @@ public class MenuSlider {
 		
 		public void update(int x)
 		{
-			if(x >= bar.bounds.x && x <= bar.bounds.x + bar.bounds.width)
+			if(x >= bar.bounds.x && x <= bar.bounds.x + bar.bounds.width - bounds.width)
 			{
 				bounds.x = x;
 				
 			}else if(x <= bar.bounds.x)
 			{
 				bounds.x = bar.bounds.x;
-			}else if(x >= bar.bounds.x + bar.bounds.width)
-				bounds.x = bar.bounds.x + bar.bounds.width;
-			setValue((int)(Math.abs(bar.bounds.x-bounds.x)/(double)bar.bounds.width * max ) );
+			}else if(x >= bar.bounds.x + bar.bounds.width - bounds.width)
+				bounds.x = bar.bounds.x + bar.bounds.width- bounds.width;
+			this.value = ((int) (updateIncrement/Math.pow(updateIncrement,2)*(bounds.x-bar.bounds.x)+min));
+		//	setValue((int)((bar.bounds.x-bounds.x-bounds.width)/(double)bar.bounds.width * max ) );
 		}
 		
 		public void render(Graphics g)
@@ -136,9 +150,12 @@ public class MenuSlider {
 		}
 
 		public void setValue(int value) {
-			//bounds.x = (int)(  bar.bounds.x +  Math.abs(value-min) * updateIncrement);
 			this.value = value;
+			int x = (int) ( bar.bounds.x + ( ( getValue() - min) * (Math.pow(updateIncrement, 2) / updateIncrement) ) * (bar.bounds.width+2*updateIncrement)/bar.bounds.width );
+			if(x <= bar.bounds.x + bar.bounds.width)
+				bounds.x = x;
 		}
 		
 	}
+
 }
