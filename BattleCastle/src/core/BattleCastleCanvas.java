@@ -1,5 +1,9 @@
 package core;
 
+import game.Game;
+import game.object.GameMap;
+import game.object.MapType;
+
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
@@ -8,23 +12,18 @@ import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 
+import utility.ConfigLoader;
+import utility.Utility;
+
 import com.esotericsoftware.kryonet.Client;
 
-import core.constants.ConfigConstants;
 import core.constants.DataConstants;
 import core.constants.ImageFilePaths;
 import core.constants.Keys;
@@ -32,16 +31,13 @@ import core.menu_object.MapSelectionObject;
 import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
 import core.menu_object.MenuLabel;
+import core.menu_object.MenuSlider;
+import core.menu_object.MenuSliderType;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
 import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
 import core.menu_object.TutorialObject;
-import game.Game;
-import game.object.GameMap;
-import game.object.MapType;
-import utility.ConfigLoader;
-import utility.Utility;
 
 public class BattleCastleCanvas extends Canvas implements Runnable{
 
@@ -71,6 +67,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private ArrayList<MenuTextField> menuTextFieldList;
 	private ArrayList<MenuButton> menuButtonList;
 	private ArrayList<MenuLabel> menuLabelList;
+	private ArrayList<MenuSlider> sliderList;
 	private static MenuTextField serverIPField, userNameField;;
 	private MenuButton hostGame, joinGame, connectToServer,
 					   continueToGame, backButton, levelEditor,
@@ -79,6 +76,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private MenuLabel userNameLabel, serverIPLabel;
 	private TutorialObject leftMouse, upKey, downKey, leftKey, rightKey, dashKey;
 	private ServerSelectionBox serverSelectionBox;
+	private MenuSlider volumeSlider;
 	
 	private boolean running;
 	private boolean searchingForServers;
@@ -116,6 +114,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuTextFieldList = new ArrayList<MenuTextField>();
 		menuLabelList = new ArrayList<MenuLabel>();
 		tutorialObjectList = new ArrayList<TutorialObject>();
+		sliderList = new ArrayList<MenuSlider>();
 		
 		serverIPField = new MenuTextField(100, 350, 500, 100,
 				MenuTextFieldType.SERVER_IP_FIELD,
@@ -261,6 +260,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		tutorialObjectList.add(rightKey);
 		tutorialObjectList.add(downKey);
 		tutorialObjectList.add(dashKey);
+		
+		volumeSlider = new MenuSlider(300, 400, 256, 64, 0, 50,
+				MenuSliderType.VOLUME, GameState.INFO);
+		
+		sliderList.add(volumeSlider);
 		
 		running = true;
 		
@@ -433,6 +437,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			for(MenuButton menuButton : menuButtonList)
 				if(menuButton.isVisibleAtState(currentState) )
 					menuButton.render(b);
+			for(MenuSlider menuSlider : sliderList)
+				if(menuSlider.isVisibleAtState(currentState))
+					menuSlider.render(b);
 			break;
 		}
 		
@@ -473,6 +480,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		for(TutorialObject tutorialObject : tutorialObjectList)
 			if(tutorialObject.isVisibleAtState(currentState))
 				tutorialObject.tick();
+		for(MenuSlider menuSlider : sliderList)
+			if(menuSlider.isVisibleAtState(currentState))
+				menuSlider.tick();
 		
 		if(game != null)
 			game.tick();
@@ -526,6 +536,10 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	public ArrayList<MenuTextField> getMenuTextFields()
 	{
 		return menuTextFieldList;
+	}
+	
+	public ArrayList<MenuSlider> getSliderBars() {
+		return sliderList;
 	}
 	
 	public MenuTextField getSelectedMenuTextField()

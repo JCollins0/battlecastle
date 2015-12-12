@@ -42,6 +42,8 @@ public class ImageFilePaths {
 				SERVER_IP_LABEL = MENU_OBJECT + "server_ip",
 				SERVER_SELECT_BOX = MENU_OBJECT + "server_select_box",
 				SERVER_CHOICE = MENU_OBJECT + "server_choice",
+				SLIDER_BAR  = MENU_OBJECT + "slider_bar",
+				SLIDER = MENU_OBJECT + "slider",
 				TITLE = MENU + "title",
 				MENU_BACKGROUND_IMAGE = MENU + "background",
 				MAP_1_BACKGROUND = MAP_1 + "map1",

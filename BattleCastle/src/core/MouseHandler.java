@@ -10,18 +10,16 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
 import core.menu_object.MapSelectionObject;
 import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
+import core.menu_object.MenuSlider;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
 import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
 import editor.EditorFrame;
 import game.Game;
-import game.object.MapType;
 import game.player.BattleCastleUser;
 
 public class MouseHandler implements MouseMotionListener, MouseListener, MouseWheelListener {
@@ -249,6 +247,16 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 				}
 			}
 			
+			ArrayList<MenuSlider> sliderList = canvasref.getSliderBars();
+			for(MenuSlider slider : sliderList)
+			{
+				if(slider.isHoverOver(mouse))
+				{
+					slider.setSelected(true);
+				}else
+					slider.setSelected(false);
+			}
+			
 			
 			break;
 		}
@@ -271,7 +279,35 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 
 	@Override
 	public void mouseDragged(MouseEvent e) {
-
+		mouse = e.getPoint();
+		switch( canvasref.getCurrentState())
+		{
+		case GAMEPLAY:
+			break;
+		case INFO:
+			
+			ArrayList<MenuSlider> sliderList = canvasref.getSliderBars();
+			for(MenuSlider slider : sliderList)
+			{
+				if(slider.isSelected())
+				{
+					slider.update(mouse.x);
+				}
+			}
+			
+			break;
+		case INPUT_USER_NAME:
+			break;
+		case JOIN_SERVER:
+			break;
+		case MAIN_MENU:
+			break;
+		case SELECT_MAP:
+			break;
+		default:
+			break;
+		
+		}
 	}
 
 	@Override

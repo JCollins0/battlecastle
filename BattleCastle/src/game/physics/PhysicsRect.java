@@ -63,8 +63,26 @@ public class PhysicsRect extends PhysicsPoly {
 			}
 		}
 		
-		//not the same point use the one to left with same hight
+		//not the same point use the one to left with same height
+		lowestX = Integer.MAX_VALUE;
+		for(Vector v : getCorners())
+		{
+			if(v.YPoint() == highestY)
+			{
+				lowestX = Math.min(lowestX, v.XPoint());
+			}
+		}
 		
+		for(Vector v : getCorners())
+		{
+			if(v.YPoint() == highestY)
+			{
+				if(v.XPoint() == lowestX)
+				{
+					return v;
+				}
+			}
+		}	
 		
 		return null;
 	}
@@ -89,7 +107,27 @@ public class PhysicsRect extends PhysicsPoly {
 				}
 			}
 		}
-		//not the same point use the one to right with same hight
+		//not the same point use the one to right with same height
+		highestX = Integer.MIN_VALUE;
+		for(Vector v : getCorners())
+		{
+			if(v.YPoint() == highestY)
+			{
+				highestX = Math.max(highestX, v.XPoint());
+			}
+		}
+		
+		for(Vector v : getCorners())
+		{
+			if(v.YPoint() == highestY)
+			{
+				if(v.XPoint() == highestX)
+				{
+					return v;
+				}
+			}
+		}
+		
 		
 		return null;
 	}

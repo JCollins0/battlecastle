@@ -17,7 +17,7 @@ public class Arrow extends PhysicsRect{
 	private BufferedImage image;
 	private String imagePath;
 	private double graphicsRotationTheta;
-	public static final double MASS = 500, DRAGC = 1.05;
+	public static final double MASS = 10, DRAGC = 1.05;
 	static int setDistance = 10;
 	
 	public Arrow(int x, int y, double theta, double graphicsTheta, Vector velocity, double torque, Player player, String imagePath, String ID) {
