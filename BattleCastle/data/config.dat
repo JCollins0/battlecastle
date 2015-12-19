@@ -2,7 +2,7 @@
 #   GENERAL CONFIG OPTIONS   #
 ##############################
 last_ip:10.118.40.251
-user_name:Jonatha
+user_name:Jonathan
 debug:false
 ##############################################
 #######         KEY BINDINGS         #########
@@ -17,3 +17,7 @@ jump_key:W
 right_key:D
 down_key:S
 dash_key:F
+##############################
+#   Volume range (0-100)     #
+##############################
+volume_level:34

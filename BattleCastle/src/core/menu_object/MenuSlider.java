@@ -88,6 +88,18 @@ public class MenuSlider {
 		return type;
 	}
 	
+	public void setValue(int startValue)
+	{
+		if(startValue < slider.getMin() || startValue > slider.getMax())
+			startValue = Math.min(Math.max(slider.getMax(),startValue),slider.getMax());
+		slider.setValue(startValue);
+	}
+	
+	public int getValue()
+	{
+		return slider.getValue();
+	}
+	
 	private class Slider{
 		
 		private Rectangle bounds;

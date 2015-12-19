@@ -31,12 +31,23 @@ public class Player extends PhysicsRect{
 	private int arrowCount;
 	private String uuid;
 	private String imageFilePath;
+	private boolean falling = true;
 	
+	
+	/**
+	 * constructs a default player no image
+	 * @param uuid the id of the player
+	 */
 	public Player(String uuid)
 	{
 		this((BufferedImage)null,uuid);
 	}
 	
+	/**
+	 * constructs a player with given image and id
+	 * @param image the image to display
+	 * @param uuid the id of the player
+	 */
 	public Player(BufferedImage image, String uuid)
 	{
 		super(0, 0, WIDTH, HEIGHT,0, null, ANG_VEL, MASS, DRAG_C);
@@ -46,32 +57,37 @@ public class Player extends PhysicsRect{
 		arrowStorage = new ArrayList<Arrow>();
 		for(int i = 0; i < 100; i++)
 			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
-//		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
-//		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
-//		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
-//		arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 	}
 	
+	/**
+	 * constructs a player with given image path and id
+	 * @param imageFileName the imagepath to the image
+	 * @param uuid id of the player
+	 */
 	public Player(String imageFileName,String uuid)
 	{
 		this(Utility.loadImage(imageFileName), uuid);
 		this.imageFilePath = imageFileName;
 	}
-		
+	
+	/**
+	 * updates player
+	 */
 	public void tick()
 	{
-		super.tick();
+		if(falling)
+			super.tick();
 		if(currentArrow == null && arrowStorage.size() > 0)
 			currentArrow= arrowStorage.get(0);
 		else if(arrowStorage.size() > 0)
 		{
 			fixArrows(2,MouseHandler.mouse.x, MouseHandler.mouse.y);
 		}
-		
-//		System.out.println(getVelocity());
 	}
 	
-	
+	/**
+	 * draws player to screen
+	 */
 	public void render(Graphics g)
 	{			
 		if(image != null)
@@ -91,17 +107,29 @@ public class Player extends PhysicsRect{
 		
 	}
 	
+	/**
+	 * moves (top left of) player to specified x and y
+	 * @param x the x value on screen
+	 * @param y the y value on screen
+	 */
 	public void setLocation(int x, int y)
 	{
 		move(new Vector(x,y));
-//		System.out.println("WHAT?");
 	}
 	
+	/**
+	 * Sets location of player given a point
+	 * @param p the Point of top left of player on screen
+	 */
 	public void setLocation(Point p)
 	{
 		setLocation(p.x,p.y);
 	}
-
+	
+	/**
+	 * Sets Horizontal Velocity of player
+	 * @param vX the horizontal velocity value
+	 */
 	public void setvX(double vX) {
 		if(vX == 0)
 		{
@@ -110,19 +138,31 @@ public class Player extends PhysicsRect{
 			setVelocity(getVelocity().vectorAdd(new Vector(vX-getVelocity().XExact(),0)));
 	}
 
+	/**
+	 * Sets Vertical Velocity of player
+	 * @param vY the vertical velocity value
+	 */
 	public void setvY(double vY) {
 		setVelocity(getVelocity().vectorAdd(new Vector(0,vY-getVelocity().YExact())));
 	}
-
+	
+	/**
+	 * gets player unique id;
+	 * @return player id
+	 */
 	public String getUUID() {
 		return uuid;
 	}
-	//Temp used to not have errors
+	
+	//TODO:: REMOVE Temp used to not have errors with interactive tile 
 	public Rectangle getBounds()
 	{
 		return null;
 	}
 	
+	/**
+	 * tests for player equality
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof Player)
@@ -132,6 +172,12 @@ public class Player extends PhysicsRect{
 		return false;
 	}
 	
+	/**
+	 * Used to center and rotate arrow on player
+	 * @param num the index in the arrow array to fix
+	 * @param x the x position of the mouse
+	 * @param y the y position of the mouse
+	 */
 	public void fixArrows(int num, int x, int y)
 	{
 		double theta = Math.atan2((getCenter().YPoint()-y),(getCenter().XPoint()-x));
@@ -144,18 +190,10 @@ public class Player extends PhysicsRect{
 		
 	}
 	
-	public void fixArrow(int x, int y)
-	{
-		double theta = Math.atan2((getCenter().YPoint()-y),(getCenter().XPoint()-x));
-		
-		if(currentArrow == null && arrowStorage.size() > 0)
-			currentArrow= arrowStorage.get(0);
-		else if(arrowStorage.size() > 0)
-		{
-			currentArrow.fix(theta);
-		}
-	}
-	
+	/**
+	 * used to 'launch an arrow'
+	 * @return arrow to be removed, null if none left to fire
+	 */
 	public Arrow removeArrow()
 	{
 		if(arrowStorage.size() > 0)
@@ -166,11 +204,19 @@ public class Player extends PhysicsRect{
 		return null;
 	}
 	
+	/**
+	 * used to send location data to other client
+	 * @return
+	 */
 	public String getPlayerInformation()
 	{
 		return String.format("X:%d Y:%d W:%d H:%d", getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT);
 	}
-
+	
+	/**
+	 * turns object into string to send over network
+	 * @return string representation of object
+	 */
 	public String stringify()
 	{
 		return String.format("ImageFile:%s,X:%d,Y:%d,W:%d,H:%d",
@@ -179,6 +225,10 @@ public class Player extends PhysicsRect{
 					);
 	}
 	
+	/**
+	 * decodes a string representation of object
+	 * @param s the string representation of the object
+	 */
 	public void decode(String s)
 	{
 		String[] items = s.split(",");

@@ -1,11 +1,24 @@
 package game;
 
+import game.message.Message;
+import game.message.MessageType;
+import game.object.GameMap;
+import game.object.MapType;
+import game.physics.CollisionDetector;
+import game.physics.Polygon;
+import game.player.Arrow;
+import game.player.BattleCastleUser;
+import game.player.Player;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -21,13 +34,6 @@ import core.HostType;
 import core.KeyHandler;
 import core.KeyPress;
 import core.constants.ImageFilePaths;
-import game.message.Message;
-import game.message.MessageType;
-import game.object.GameMap;
-import game.object.MapType;
-import game.player.Arrow;
-import game.player.BattleCastleUser;
-import game.player.Player;
 
 public class Game {
 	
@@ -44,6 +50,8 @@ public class Game {
 	private Player[] playerList;
 	private ConcurrentHashMap<String,Arrow> arrows;
 	
+	private CollisionDetector collideDetect;
+	
 	private String myUUID;
 	private GameMap gameMap;
 	private static final int MIN_PLAYERS = 1;
@@ -55,6 +63,7 @@ public class Game {
 		playerList = new Player[4];
 		playerMap = new TreeMap<String, BattleCastleUser>();
 		arrows = new ConcurrentHashMap<String,Arrow>();
+		collideDetect = new CollisionDetector();
 
 		if(hostType == HostType.SERVER)
 		{
@@ -263,6 +272,11 @@ public class Game {
 					{
 						arrow.tick();
 					}
+					
+					List<Arrow> plist = Collections.list(Collections.enumeration(arrows.values()));
+					List<Polygon> list = new ArrayList<Polygon>();
+					list.addAll(plist);
+					collideDetect.broadCheck(list);
 				}
 			}
 		}else if(hostType == HostType.CLIENT)

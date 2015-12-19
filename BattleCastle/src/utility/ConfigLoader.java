@@ -34,6 +34,13 @@ public class ConfigLoader {
 					"##############################################"
 				};
 	
+	private static final String[] sliderHeading = 
+				{
+					"##############################",
+					"#   Volume range (0-100)     #",
+					"##############################"
+				};
+	
 	
 	
 	public static void loadConfig()
@@ -85,6 +92,11 @@ public class ConfigLoader {
 					if(keyVal.length > 1)
 						Keys.DASH = Keys.getKeyFromConfigString(keyVal[1].trim());
 					break;
+				case ConfigConstants.VOLUME_LEVEL:
+					if(keyVal.length > 1)
+						BattleCastleCanvas.getVolumeSlider().setValue(Integer.parseInt(keyVal[1].trim()));
+					break;
+					
 				}
 			}
 			reader.close();
@@ -109,6 +121,10 @@ public class ConfigLoader {
 				writer.println(ConfigConstants.RIGHT_KEY + ":");
 				writer.println(ConfigConstants.DOWN_KEY + ":");
 				writer.println(ConfigConstants.DASH_KEY + ":");
+				
+				for(int i = 0; i < sliderHeading.length; i++)
+					writer.println(sliderHeading[i]);
+				writer.println(ConfigConstants.VOLUME_LEVEL + ":");
 				
 				writer.close();
 			} catch (FileNotFoundException e1) {
@@ -137,6 +153,10 @@ public class ConfigLoader {
 			writer.println(String.format("%s:%s", ConfigConstants.RIGHT_KEY, Keys.getKeyConfigString(Keys.RIGHT)));
 			writer.println(String.format("%s:%s", ConfigConstants.DOWN_KEY,  Keys.getKeyConfigString(Keys.DOWN)));
 			writer.println(String.format("%s:%s", ConfigConstants.DASH_KEY,  Keys.getKeyConfigString(Keys.DASH)));
+			
+			for(int i = 0; i < sliderHeading.length; i++)
+				writer.println(sliderHeading[i]);
+			writer.println(String.format("%s:%d", ConfigConstants.VOLUME_LEVEL, BattleCastleCanvas.getVolumeSlider().getValue()));
 			
 			writer.close();
 		}catch(Exception ex)

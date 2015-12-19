@@ -12,6 +12,7 @@ import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.lang.invoke.VolatileCallSite;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,9 +75,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 					   refreshLanServers, infoButton;
 	private MapSelectionObject map1,map2,map3;
 	private MenuLabel userNameLabel, serverIPLabel;
-	private TutorialObject leftMouse, upKey, downKey, leftKey, rightKey, dashKey;
+	private TutorialObject leftMouse, upKey, downKey, leftKey, rightKey, dashKey, screenShotKey;
 	private ServerSelectionBox serverSelectionBox;
-	private MenuSlider volumeSlider;
+	private static MenuSlider volumeSlider;
 	
 	private boolean running;
 	private boolean searchingForServers;
@@ -222,6 +223,12 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuLabelList.add(userNameLabel);
 		menuLabelList.add(serverIPLabel);
 		
+		volumeSlider = new MenuSlider(300, 400, 256, 64, 0, 100, 0,
+				MenuSliderType.VOLUME, GameState.INFO);
+		
+		sliderList.add(volumeSlider);
+		
+		
 		//read in data from config.dat; maybe encrypt/decrypt data...
 		ConfigLoader.loadConfig();
 				
@@ -254,17 +261,20 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				10, "Dash Key", false, GameState.INFO);
 		dashKey.setText(Keys.getKeyConfigString(Keys.DASH));
 		
+		screenShotKey = new TutorialObject(686,99,64,64,
+				Utility.loadBufferedList(ImageFilePaths.KEY_PRESS, 64, 64),
+				10, "Screenshot", false, GameState.INFO);
+		screenShotKey.setText("F2");
+		
 		tutorialObjectList.add(leftMouse);
 		tutorialObjectList.add(upKey);
 		tutorialObjectList.add(leftKey);
 		tutorialObjectList.add(rightKey);
 		tutorialObjectList.add(downKey);
 		tutorialObjectList.add(dashKey);
+		tutorialObjectList.add(screenShotKey);
 		
-		volumeSlider = new MenuSlider(300, 400, 256, 64, -10, 10, 0,
-				MenuSliderType.VOLUME, GameState.INFO);
 		
-		sliderList.add(volumeSlider);
 		
 		running = true;
 		
@@ -274,6 +284,10 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		backgroundImage = Utility.loadImage(ImageFilePaths.MENU_BACKGROUND_IMAGE);
 	}
 	
+	/**
+	 * Resizes map selection objects depending on number of levels
+	 * @param objs the list of possible maps
+	 */
 	private void fixMapSelectionObjects(ArrayList<MapSelectionObject> objs)
 	{
 		int size = objs.size();
@@ -326,6 +340,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		}
 	}
 	
+	/**
+	 * returns # of rows and columns for map selection screen
+	 * @param size the number of levels
+	 * @return a point with x as columns and y as rows
+	 */
 	private Point getRowsCols(int size)
 	{
 		Point p = new Point();
@@ -358,6 +377,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		return serverIPField;
 	}
 	
+	public static MenuSlider getVolumeSlider()
+	{
+		return volumeSlider;
+	}
+	
 	private ArrayList<MapSelectionObject> getMapSelectionSubset()
 	{
 		ArrayList<MapSelectionObject> obj = new ArrayList<MapSelectionObject>();
@@ -369,7 +393,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		return obj;
 	}
 	
-	
+	/**
+	 * Draws everything to screen
+	 */
 	public void render()
 	{
 		BufferStrategy bs = getBufferStrategy();
@@ -463,6 +489,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		bs.show();
 	}
 	
+	/**
+	 * updates everything 
+	 */
 	public void tick()
 	{
 
@@ -488,6 +517,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			game.tick();
 	}
 	
+	/**
+	 * main thread
+	 */
 	@Override
 	public void run() 
 	{
@@ -507,6 +539,10 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		}
 	}
 	
+	/**
+	 * decides how to initialize game
+	 * @param host t/f if hosting game
+	 */
 	public void setGame(boolean host)
 	{
 		

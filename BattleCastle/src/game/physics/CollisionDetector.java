@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 import java.util.TreeMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CollisionDetector
 {
@@ -69,7 +70,7 @@ public class CollisionDetector
 			String delete=sortAndSweep.pollFirstEntry().getValue();
 			if(delete.contains("E"))
 			{
-				int n=Integer.parseInt(delete.substring(1));
+				int n=Integer.parseInt(delete.substring(1));				
 				Iterator<Integer> itr=active.iterator();
 				while(itr.hasNext())
 				{
@@ -162,10 +163,10 @@ public class CollisionDetector
 		int temp=index;
 		if(index==i)
 			temp=-1;
-		v0=corners[++temp];
+		v0=corners[++temp < corners.length ? temp : 0];
 		if(index==0)
 			temp=i;
-		v1=corners[--temp];
+		v1=corners[--temp >= 0 ? temp : corners.length-1];
 		
 		
 		l=maxProj.vectorSub(v1);
