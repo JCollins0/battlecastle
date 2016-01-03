@@ -51,25 +51,25 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	public static final double time_Step = 1.0/GAME_FRAMES;
 	
 	private static BufferedImage buffer;
-	public static boolean debug;
+
 	public static Font defaultFont;
 	
 	private GameState currentState;
 	private Game game;
 	private MouseHandler mouseHandler;
 	private KeyHandler keyHandler;
+	private ConfigLoader configLoader;
 	private BufferedImage title_image;
 	private BufferedImage screenShotImage;
 	private BufferedImage backgroundImage;
 	private TreeMap<String, GameMap> customLevels;
 	private ArrayList<Error> error_messages;
-	
 	private ArrayList<TutorialObject> tutorialObjectList;
 	private ArrayList<MenuTextField> menuTextFieldList;
 	private ArrayList<MenuButton> menuButtonList;
 	private ArrayList<MenuLabel> menuLabelList;
 	private ArrayList<MenuSlider> sliderList;
-	private static MenuTextField serverIPField, userNameField;;
+	private MenuTextField serverIPField, userNameField;;
 	private MenuButton hostGame, joinGame, connectToServer,
 					   continueToGame, backButton, levelEditor,
 					   refreshLanServers, infoButton;
@@ -77,10 +77,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private MenuLabel userNameLabel, serverIPLabel;
 	private TutorialObject leftMouse, upKey, downKey, leftKey, rightKey, dashKey, screenShotKey;
 	private ServerSelectionBox serverSelectionBox;
-	private static MenuSlider volumeSlider;
+	private MenuSlider volumeSlider;
 	
 	private boolean running;
 	private boolean searchingForServers;
+	public boolean debug;
 	
 	public BattleCastleCanvas()
 	{
@@ -98,6 +99,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		defaultFont = buffer.getGraphics().getFont();
 		
 		currentState = GameState.MAIN_MENU;
+		
+		configLoader = new ConfigLoader(this);
 		
 		mouseHandler = new MouseHandler(this);
 		keyHandler = new KeyHandler(this);
@@ -230,7 +233,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		
 		
 		//read in data from config.dat; maybe encrypt/decrypt data...
-		ConfigLoader.loadConfig();
+		configLoader.loadConfig();
 				
 		leftMouse = new TutorialObject(64, 64, 64, 128,
 				Utility.loadBufferedList(ImageFilePaths.LEFT_MOUSE_CLICK, 64, 128),
@@ -367,17 +370,22 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		return p;
 	}
 	
-	public static MenuTextField getUserNameField()
+	public ConfigLoader getConfigLoader()
+	{
+		return configLoader;
+	}
+	
+	public MenuTextField getUserNameField()
 	{
 		return userNameField;
 	}
 	
-	public static MenuTextField getServerIpField()
+	public MenuTextField getServerIpField()
 	{
 		return serverIPField;
 	}
 	
-	public static MenuSlider getVolumeSlider()
+	public MenuSlider getVolumeSlider()
 	{
 		return volumeSlider;
 	}

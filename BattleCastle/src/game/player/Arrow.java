@@ -11,7 +11,7 @@ import utility.Utility;
 
 public class Arrow extends PhysicsRect{
 
-	public static final int WIDTH = 32, HEIGHT = 16;
+	public static final int WIDTH = 48, HEIGHT = 24;
 	private Player shotByPlayer;
 	private String ID = "";
 	private BufferedImage image;
@@ -105,7 +105,7 @@ public class Arrow extends PhysicsRect{
 	{
 		int vX = (int) (setDistance * Math.cos(graphicsRotationTheta));
 		int vY = (int) (setDistance * Math.sin(graphicsRotationTheta));
-		setVelocity(new Vector(-vX,-vY));
+		setVelocity(new Vector(vX,vY));
 		
 	}
 	
@@ -130,7 +130,7 @@ public class Arrow extends PhysicsRect{
 	
 		double velX = getVelocity().XExact();
 		double velY = getVelocity().YExact();
-		rotateTo(Math.toDegrees(Math.atan2(-velY,-velX)));
+		rotateTo(Math.toDegrees(Math.atan2(velY,velX)));
 		
 		if(graphicsRotationTheta - theta < 0)
 		{

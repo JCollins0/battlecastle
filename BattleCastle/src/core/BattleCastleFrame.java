@@ -89,7 +89,7 @@ public class BattleCastleFrame extends JFrame {
 						game.stopServer();
 					}
 					
-					ConfigLoader.saveConfig();
+					game_canvas.getConfigLoader().saveConfig();
 				}
 				
 				System.exit(0);

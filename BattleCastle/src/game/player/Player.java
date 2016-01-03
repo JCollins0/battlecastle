@@ -180,7 +180,7 @@ public class Player extends PhysicsRect{
 	 */
 	public void fixArrows(int num, int x, int y)
 	{
-		double theta = Math.atan2((getCenter().YPoint()-y),(getCenter().XPoint()-x));
+		double theta = Math.atan2((y-getCenter().YPoint()),(x-getCenter().XPoint()));
 		
 		for(int i = 0; i < num & i < arrowStorage.size(); i++)
 		{

@@ -134,14 +134,6 @@ public class Game {
 							{
 								playerList[playerNum].setvY(2);
 							}
-//							if(num[1].equals(KeyPress.RIGHT_U.getText()))
-//							{
-//								playerList[playerNum].setvX(0);
-//							}
-//							if(num[1].equals(KeyPress.LEFT_U.getText()))
-//							{
-//								playerList[playerNum].setvX( 0);
-//							}
 							
 						}else if(type.equals(MessageType.UPDATE_ARROW.toString()))
 						{
@@ -432,12 +424,15 @@ public class Game {
 	{
 		for(int i = 0; i < KeyHandler.presses.size(); i++)
 		{
-			if(i < KeyHandler.presses.size())
-			{	
+			try{
 				Message message = new Message(MessageType.MOVE_PLAYER,
 					playerMap.get(myUUID).getPlayerNumber() + "=" + KeyHandler.presses.get(i).getText() );
 				gameClient.sendTCP(message);
+			}catch(Exception e)
+			{
+				canvasRef.addError(new Error("Error Updating Player [Game.class -Line 429]",300));
 			}
+			
 		}
 		
 		KeyHandler.presses.remove(KeyPress.LEFT_U);
@@ -456,11 +451,11 @@ public class Game {
 		{
 			arrow.addVelocity();
 			arrows.put(arrow.getID(), arrow);
-			for(Arrow a : arrows.values())
-			{
-				Message message = new Message(MessageType.UPDATE_ARROW, a.getID() + "=" + a.stringify());
+//			for(Arrow a : arrows.values())
+//			{
+				Message message = new Message(MessageType.UPDATE_ARROW, arrow.getID() + "=" + arrow.stringify());
 				gameClient.sendTCP(message);
-			}
+//			}
 		}
 	}
 	

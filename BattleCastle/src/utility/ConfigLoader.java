@@ -42,8 +42,13 @@ public class ConfigLoader {
 				};
 	
 	
+	private BattleCastleCanvas canvasref;
 	
-	public static void loadConfig()
+	public ConfigLoader(BattleCastleCanvas canvasref) {
+		this.canvasref = canvasref;
+	}
+
+	public void loadConfig()
 	{
 		try
 		{
@@ -63,15 +68,15 @@ public class ConfigLoader {
 				{
 				case ConfigConstants.LAST_SERVER :
 					if(keyVal.length > 1)
-						BattleCastleCanvas.getServerIpField().setText(keyVal[1].trim());
+						canvasref.getServerIpField().setText(keyVal[1].trim());
 					break;
 				case ConfigConstants.USER:
 					if(keyVal.length > 1)
-						BattleCastleCanvas.getUserNameField().setText(keyVal[1].trim());
+						canvasref.getUserNameField().setText(keyVal[1].trim());
 					break;
 				case ConfigConstants.DEBUG:
 					if(keyVal.length > 1)
-						BattleCastleCanvas.debug = Boolean.parseBoolean(keyVal[1].trim());
+						canvasref.debug = Boolean.parseBoolean(keyVal[1].trim());
 					break;
 				case ConfigConstants.JUMP_KEY:
 					if(keyVal.length > 1)
@@ -94,7 +99,7 @@ public class ConfigLoader {
 					break;
 				case ConfigConstants.VOLUME_LEVEL:
 					if(keyVal.length > 1)
-						BattleCastleCanvas.getVolumeSlider().setValue(Integer.parseInt(keyVal[1].trim()));
+						canvasref.getVolumeSlider().setValue(Integer.parseInt(keyVal[1].trim()));
 					break;
 					
 				}
@@ -133,7 +138,7 @@ public class ConfigLoader {
 		}
 	}
 	
-	public static void saveConfig()
+	public void saveConfig()
 	{
 		try
 		{
@@ -142,9 +147,9 @@ public class ConfigLoader {
 			
 			for(int i = 0; i < generalHeading.length; i++)
 				writer.println(generalHeading[i]);
-			writer.println(String.format("%s:%s", ConfigConstants.LAST_SERVER, BattleCastleCanvas.getServerIpField().getText()));
-			writer.println(String.format("%s:%s", ConfigConstants.USER, BattleCastleCanvas.getUserNameField().getText()));
-			writer.println(String.format("%s:%s", ConfigConstants.DEBUG, String.valueOf(BattleCastleCanvas.debug)));
+			writer.println(String.format("%s:%s", ConfigConstants.LAST_SERVER, canvasref.getServerIpField().getText()));
+			writer.println(String.format("%s:%s", ConfigConstants.USER, canvasref.getUserNameField().getText()));
+			writer.println(String.format("%s:%s", ConfigConstants.DEBUG, String.valueOf(canvasref.debug)));
 			
 			for(int i = 0; i < keyBindingHeading.length; i++)
 				writer.println(keyBindingHeading[i]);				
@@ -156,7 +161,7 @@ public class ConfigLoader {
 			
 			for(int i = 0; i < sliderHeading.length; i++)
 				writer.println(sliderHeading[i]);
-			writer.println(String.format("%s:%d", ConfigConstants.VOLUME_LEVEL, BattleCastleCanvas.getVolumeSlider().getValue()));
+			writer.println(String.format("%s:%d", ConfigConstants.VOLUME_LEVEL, canvasref.getVolumeSlider().getValue()));
 			
 			writer.close();
 		}catch(Exception ex)
