@@ -45,7 +45,7 @@ public class ImageFilePaths {
 				SLIDER_BAR  = MENU_OBJECT + "slider_bar",
 				SLIDER = MENU_OBJECT + "slider",
 				TITLE = MENU + "title",
-				MENU_BACKGROUND_IMAGE = MENU + "background",
+				MENU_BACKGROUND_IMAGE = MENU + "background00",
 				MAP_1_BACKGROUND = MAP_1 + "map1",
 				MAP_2_BACKGROUND = MAP_2 + "map2",
 				MAP_3_BACKGROUND = MAP_3 + "map3",
