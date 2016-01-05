@@ -136,21 +136,38 @@ public class PhysicsRect extends PhysicsPoly {
 	public void tick()
 	{
 		super.tick();
-		if(getLeftHighest().YPoint() > 786 + getHeight()) //move from bottom to top
+		if(getVelocity().YPoint() < 0) //going up
 		{
-			moveTo(getLeftHighest().XPoint(), 0-getHeight());
-		}
-		if(getLeftHighest().XPoint() > 1024 + getWidth()) //move from right to left
+			if(getRightHighest().YPoint() < 0 - getHeight()) //move from top to bottom
+			{
+				moveTo(getLeftHighest().XPoint(), 786);
+			}
+			
+		}else if (getVelocity().YPoint() >= 0) //going down
 		{
-			moveTo(0-getWidth(), getLeftHighest().YPoint());
+			if(getLeftHighest().YPoint() > 786 + getHeight()) //move from bottom to top
+			{
+				moveTo(getLeftHighest().XPoint(), 0-getHeight());
+			}
+			
 		}
-		if(getLeftHighest().XPoint() < 0 - getWidth()) //move from left to right
+		
+		if(getVelocity().XPoint() < 0) //going left
 		{
-			moveTo(1024, getLeftHighest().YPoint());
-		}
-		if(getRightHighest().YPoint() < 0 - getHeight()) //move from top to bottom
+			if(getLeftHighest().XPoint() < 0) //move from left to right
+			{
+				moveTo(1024, getLeftHighest().YPoint());
+			}
+			
+		}else if(getVelocity().XPoint() >= 0) //going right
 		{
-			moveTo(getTopLeft().XPoint(), 786);
+			if(getLeftHighest().XPoint() > 1024 + getWidth()) //move from right to left
+			{
+				moveTo(0-getWidth(), getLeftHighest().YPoint());
+			}
 		}
+		
+		
+		
 	}
 }

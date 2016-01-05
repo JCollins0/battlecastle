@@ -54,7 +54,7 @@ public class ImageFilePaths {
 				LEFT_MOUSE_CLICK = TUTORIAL_OBJECT + "left_mouse_click",
 				KEY_PRESS = TUTORIAL_OBJECT + "key_press",
 				TEMP_PLAYER = PLAYER + "temp_player",
-				ARROW = WEAPON + "arrow",
+				ARROW = WEAPON + "red_arrow",
 				TRASH = EDITOR + "trash",
 				CHECK = EDITOR + "check",
 				SAVE = EDITOR + "save",
