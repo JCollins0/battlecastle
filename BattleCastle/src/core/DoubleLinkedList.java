@@ -151,33 +151,33 @@ public class DoubleLinkedList<T> implements Iterable<T>
 	@Override
 	public Iterator<T> iterator()
 	{
-		return null;
+		return new IteratorForward(count);
 	}
 	
-	private class HashTableIteratorForward implements Iterator<T>
+	private class IteratorForward implements Iterator<T>
 	{
 		private int expectedCount;
 		private Node current;
-		private int lastIndex;
 		
-		public HashTableIteratorForward(int size)
+		public IteratorForward(int size)
 		{
 			expectedCount = size;
-			last = null;
-			next = null;
+			current=front;
 		}
 		
 		public boolean hasNext()
 		{
-			return next != null;
+			return current != null;
 		}
 		
 		public T next()
 		{
 			checkForComodification();
-			if(next == null)
+			if(current == null)
 				throw new NoSuchElementException();
-			return next.getNext().getValue();
+			T value=current.getValue();
+			current=current.getNext();
+			return value;
 		}
 		
 		
@@ -186,30 +186,20 @@ public class DoubleLinkedList<T> implements Iterable<T>
 			if(count==0)
 				throw new NoSuchElementException();
 			Node current=front;
-			if(front=next)
+			if(front==current)
 			{
 				removeFront();
 				count--;
-				return true;
 			}
-			if(value.equals(rear.getValue()))
+			if(current==rear)
 			{
 				removeRear();
 				count--;
-				return true;
 			}
-			while(current!=null)
-			{
-				if(current.getValue().equals(value))
-				{
-					current.getPrev().setNext(current.getNext());
-					current.getNext().setPrev(current.getPrev());
-					count--;
-					return true;
-				}
-				current=current.getNext();
-			}
-			return false;
+			current.getPrev().setNext(current.getNext());
+			current.getNext().setPrev(current.getPrev());
+			count--;
+			current=current.getNext();
 			count--;
 			expectedCount--;
 		}

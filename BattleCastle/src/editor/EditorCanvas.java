@@ -10,12 +10,14 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Scanner;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
+import core.DoubleLinkedList;
 import core.GameTimer;
 import core.constants.DataConstants;
 import core.constants.ImageFileDimensions;
@@ -117,6 +119,16 @@ public class EditorCanvas extends Canvas implements Runnable{
 		addMouseMotionListener(mouseHandler);
 		addMouseListener(mouseHandler);
 		addKeyListener(keyHandler);
+		
+		DoubleLinkedList<String> thingybob=new DoubleLinkedList<String>();
+		thingybob.addFront("heyo");
+		thingybob.addFront("yeah");
+		thingybob.addFront("lmao");
+		Iterator<String> iter=thingybob.iterator();
+		while(iter.hasNext())
+		{
+			System.out.println(iter.next());
+		}
 	}
 	
 	public void render()
