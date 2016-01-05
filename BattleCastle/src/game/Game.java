@@ -474,6 +474,7 @@ public class Game {
 			}
 		}
 		
+		System.out.println("NO UUID FOUND FOR PLAYER: " + p);
 		return null;
 	}
 	
