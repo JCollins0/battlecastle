@@ -78,6 +78,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private TutorialObject leftMouse, upKey, downKey, leftKey, rightKey, dashKey, screenShotKey;
 	private ServerSelectionBox serverSelectionBox;
 	private MenuSlider volumeSlider;
+	private ArrayList<BufferedImage> backgroundImageList;
 	
 	private boolean running;
 	private boolean searchingForServers;
@@ -284,7 +285,12 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		if(debug)
 			System.out.println("DEBUGGING...");
 		
-		backgroundImage = Utility.loadImage(ImageFilePaths.MENU_BACKGROUND_IMAGE);
+		backgroundImageList = new ArrayList<BufferedImage>();
+		backgroundImageList.add(Utility.loadImage(ImageFilePaths.MENU_BACKGROUND_IMAGE_0));
+		backgroundImageList.add(Utility.loadImage(ImageFilePaths.MENU_BACKGROUND_IMAGE_1));
+		backgroundImageList.add(Utility.loadImage(ImageFilePaths.MENU_BACKGROUND_IMAGE_2));
+		backgroundImage = backgroundImageList.get(0);
+		
 	}
 	
 	/**
@@ -401,6 +407,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		return obj;
 	}
 	
+	int bgf = 1500;
+	int bgfc = 0;
+	int alpha = 0;
+	int alphaInc = 1;
+	int bgilc = 0;
 	/**
 	 * Draws everything to screen
 	 */
@@ -430,6 +441,38 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		case MAIN_MENU:
 			//draw background image;
 			b.drawImage(backgroundImage, 0, 0, BattleCastleFrame.GAME_SIZE.width, BattleCastleFrame.GAME_SIZE.height,null);
+			
+			if(bgfc != bgf)
+			{
+				bgfc++;
+			}else
+			{
+				if(alpha+alphaInc >= 256)
+					alphaInc = -1;
+				if(alpha+alphaInc <= -1)
+					alphaInc = 1;
+				
+				alpha+= alphaInc;
+				
+				if(alpha == 255)
+				{
+					bgilc++;
+					if(bgilc >= backgroundImageList.size())
+					{
+						bgilc = 0;
+						//System.out.println("Changing to original image");
+					}
+					backgroundImage = backgroundImageList.get(bgilc);
+					//System.out.println("Changing to next image");
+				}
+
+				b.setColor(new Color(0,0,0,alpha));
+				b.fillRect(0, 0, BattleCastleFrame.GAME_SIZE.width, BattleCastleFrame.GAME_SIZE.height);
+				
+				if(alphaInc < 0 && alpha == 0)
+					bgfc = 0;
+			}
+			
 			
 			b.setColor(Color.RED);
 			b.setFont(Error.ERROR_FONT);
