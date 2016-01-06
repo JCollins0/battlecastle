@@ -144,8 +144,13 @@ public class Game {
 								String[] items = id[1].split(",");
 								System.out.println("hello");
 								System.out.println(Arrays.toString(items));
-								arrows.put(uuid, new Arrow(Integer.parseInt(items[1].split(":")[1]),Integer.parseInt(items[2].split(":")[1]),Double.parseDouble(items[3].split(":")[1]),
-										Double.parseDouble(items[4].split(":")[1]),null,0,playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],items[0].split(":")[1],uuid));
+								arrows.put(uuid,
+										new Arrow(
+												Integer.parseInt(items[1].split(":")[1]),Integer.parseInt(items[2].split(":")[1]),
+												Double.parseDouble(items[3].split(":")[1]), Double.parseDouble(items[4].split(":")[1]),
+												null,0, playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],
+												items[0].split(":")[1],uuid
+												));
 							}
 							
 							Message mess = new Message(MessageType.UPDATE_ARROW, arrows.get(uuid).getID() + "=" + arrows.get(uuid).stringify());
@@ -182,6 +187,8 @@ public class Game {
 					playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
 					playerList[user.getPlayerNumber()] = new Player(user.getUUID());
 					
+					System.out.println(Arrays.toString(playerList));
+					
 				}else if(object instanceof Message)
 				{
 					Message messageOb = (Message)object;
@@ -202,8 +209,12 @@ public class Game {
 						if(arrows.get(uid)==null)
 						{
 							String[] items = id[1].split(",");
-							arrows.put(uid, new Arrow(Integer.parseInt(items[1].split(":")[1]),Integer.parseInt(items[2].split(":")[1]),Double.parseDouble(items[3].split(":")[1]),
-									Double.parseDouble(items[4].split(":")[1]),null,0,playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],items[0].split(":")[1],uid));
+							arrows.put(uid, new Arrow(
+									Integer.parseInt(items[1].split(":")[1]),Integer.parseInt(items[2].split(":")[1]),
+									Double.parseDouble(items[3].split(":")[1]), Double.parseDouble(items[4].split(":")[1]),
+									null,0,playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],
+									items[0].split(":")[1],uid)
+									);
 						}
 						
 					}
@@ -468,7 +479,7 @@ public class Game {
 	{
 		for(String s : playerMap.keySet())
 		{
-			if(playerMap.get(s).equals(p))
+			if(playerMap.get(s).getUUID().equals(p.getUUID()))
 			{
 				return s;
 			}

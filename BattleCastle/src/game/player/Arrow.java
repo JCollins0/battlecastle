@@ -20,7 +20,11 @@ public class Arrow extends PhysicsRect{
 	public static final double MASS = 10, DRAGC = 1.05;
 	static int setDistance = 10;
 	
-	public Arrow(int x, int y, double theta, double graphicsTheta, Vector velocity, double torque, Player player, String imagePath, String ID) {
+	public Arrow(int x, int y,
+				 double theta, double graphicsTheta,
+				 Vector velocity, double torque, Player player,
+				 String imagePath, String ID) {
+		
 		super(x, y, WIDTH, HEIGHT, theta, velocity, torque, MASS,DRAGC);
 		this.shotByPlayer = player;
 		this.image = Utility.loadImage(imagePath);
