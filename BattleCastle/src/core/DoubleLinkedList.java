@@ -54,7 +54,9 @@ public class DoubleLinkedList<T> implements Iterable<T>
 			rear=front=new Node(value,null,null);
 		else
 		{
-			front=new Node(value,front,null);
+			Node temp = new Node(value,front,null);
+			front.setPrev(temp);
+			front = temp;
 		}
 		count++;
 	}
@@ -65,7 +67,9 @@ public class DoubleLinkedList<T> implements Iterable<T>
 			rear=front=new Node(value,null,null);
 		else
 		{
-			rear=new Node(value,null,rear);
+			Node temp = new Node(value,null,rear);
+			rear.setNext(temp);
+			rear = temp;
 		}
 		count++;
 	}
@@ -151,7 +155,7 @@ public class DoubleLinkedList<T> implements Iterable<T>
 	@Override
 	public Iterator<T> iterator()
 	{
-		return new IteratorForward(count);
+		return new IteratorForward();
 	}
 	
 	private class IteratorForward implements Iterator<T>
@@ -159,25 +163,24 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		private int expectedCount;
 		private Node current;
 		
-		public IteratorForward(int size)
+		public IteratorForward()
 		{
-			expectedCount = size;
-			current=front;
+			expectedCount = count;
+			current=new Node(null,front,null);
 		}
 		
 		public boolean hasNext()
 		{
-			return current != null;
+			return current.getNext() != null;
 		}
 		
 		public T next()
 		{
 			checkForComodification();
-			if(current == null)
+			if(current.getNext() == null)
 				throw new NoSuchElementException();
-			T value=current.getValue();
 			current=current.getNext();
-			return value;
+			return current.getValue();
 		}
 		
 		
@@ -185,22 +188,23 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		{
 			if(count==0)
 				throw new NoSuchElementException();
-			Node current=front;
 			if(front==current)
 			{
 				removeFront();
-				count--;
+				current.setNext(front);
 			}
-			if(current==rear)
+			else if(current==rear)
 			{
 				removeRear();
+				current=rear;
+			}
+			else
+			{
+				current.getPrev().setNext(current.getNext());
+				current.getNext().setPrev(current.getPrev());
+				current=current.getPrev();// fixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 				count--;
 			}
-			current.getPrev().setNext(current.getNext());
-			current.getNext().setPrev(current.getPrev());
-			count--;
-			current=current.getNext();
-			count--;
 			expectedCount--;
 		}
 		

@@ -124,11 +124,15 @@ public class EditorCanvas extends Canvas implements Runnable{
 		thingybob.addFront("heyo");
 		thingybob.addFront("yeah");
 		thingybob.addFront("lmao");
+		int gg=0;
 		Iterator<String> iter=thingybob.iterator();
 		while(iter.hasNext())
 		{
 			System.out.println(iter.next());
+			if(gg++==1)
+				iter.remove();
 		}
+		System.out.println(thingybob.toString());
 	}
 	
 	public void render()
