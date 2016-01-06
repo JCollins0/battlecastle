@@ -46,9 +46,9 @@ public class Arrow extends PhysicsRect{
 	public String stringify()
 	{
 		String format = "ImageFile:%s,Corner0X:%d,Corner0Y:%d,Theta:%f,MyTheta:%f,"+
-						"PlayerID:%s";
+						"PlayerID:%s,VELOCITYX:%f,VELOCITYY:%f";
 		String s=String.format(format,imagePath, getCorners()[0].XPoint(), getCorners()[0].YPoint()
-				, theta, graphicsRotationTheta, shotByPlayer.getUUID());
+				, theta, graphicsRotationTheta, shotByPlayer.getUUID(), getVelocity().XExact(), getVelocity().YExact());
 		return s;
 	}
 	

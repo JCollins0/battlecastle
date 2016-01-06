@@ -6,6 +6,7 @@ import game.object.GameMap;
 import game.object.MapType;
 import game.physics.CollisionDetector;
 import game.physics.Polygon;
+import game.physics.Vector;
 import game.player.Arrow;
 import game.player.BattleCastleUser;
 import game.player.Player;
@@ -148,7 +149,7 @@ public class Game {
 										new Arrow(
 												Integer.parseInt(items[1].split(":")[1]),Integer.parseInt(items[2].split(":")[1]),
 												Double.parseDouble(items[3].split(":")[1]), Double.parseDouble(items[4].split(":")[1]),
-												null,0, playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],
+												new Vector(Double.parseDouble(items[6].split(":")[1]), Double.parseDouble(items[7].split(":")[1]) ),0, playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],
 												items[0].split(":")[1],uuid
 												));
 							}
@@ -212,7 +213,7 @@ public class Game {
 							arrows.put(uid, new Arrow(
 									Integer.parseInt(items[1].split(":")[1]),Integer.parseInt(items[2].split(":")[1]),
 									Double.parseDouble(items[3].split(":")[1]), Double.parseDouble(items[4].split(":")[1]),
-									null,0,playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],
+									new Vector(Double.parseDouble(items[6].split(":")[1]), Double.parseDouble(items[7].split(":")[1]) ),0,playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],
 									items[0].split(":")[1],uid)
 									);
 						}

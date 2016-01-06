@@ -154,7 +154,7 @@ public class PhysicsRect extends PhysicsPoly {
 		
 		if(getVelocity().XPoint() < 0) //going left
 		{
-			if(getLeftHighest().XPoint() < 0) //move from left to right
+			if(getLeftHighest().XPoint() < 0 - getWidth()) //move from left to right
 			{
 				moveTo(1024, getLeftHighest().YPoint());
 			}
