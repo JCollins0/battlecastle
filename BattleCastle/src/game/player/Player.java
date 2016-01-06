@@ -53,10 +53,11 @@ public class Player extends PhysicsRect{
 		super(0, 0, WIDTH, HEIGHT,0, null, ANG_VEL, MASS, DRAG_C);
 		//GRAVITY = 0;
 		this.image = image;
-		
+		this.uuid = uuid;
 		arrowStorage = new ArrayList<Arrow>();
 		for(int i = 0; i < 100; i++)
 			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
+		
 	}
 	
 	/**

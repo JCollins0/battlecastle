@@ -2,7 +2,7 @@
 #   GENERAL CONFIG OPTIONS   #
 ##############################
 last_ip:10.118.40.251
-user_name:Skylar
+user_name:jonathan
 debug:false
 ##############################################
 #######         KEY BINDINGS         #########
