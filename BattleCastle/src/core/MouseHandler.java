@@ -10,6 +10,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 
+import utility.AudioHandler;
+import utility.AudioHandler.SOUND;
 import core.menu_object.MapSelectionObject;
 import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
@@ -35,6 +37,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		System.out.println(e.getPoint());
+		AudioHandler.playSound(SOUND.MENU_SELECT);
 	}
 
 	@Override

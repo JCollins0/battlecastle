@@ -1,6 +1,5 @@
 package utility;
 
-import java.applet.Applet;
 import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -10,13 +9,14 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JOptionPane;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 
-import core.constants.DataConstants;
 import editor.Tile;
 
 public class Utility {
@@ -34,9 +34,11 @@ public class Utility {
 	    }
     }
 
-    public static AudioClip loadAudio(String name) {
+    public static Clip loadAudio(String name) {
     	try{
-    		return Applet.newAudioClip(Utility.class.getResource("resources/" + name));
+    		Clip clip = AudioSystem.getClip();
+    		clip.open(AudioSystem.getAudioInputStream(new File("resources/audio/" + name + ".wav")));
+    		return clip;
     	}catch(Exception ioException)
     	{
 	    	JOptionPane.showMessageDialog(null, "Error reading audio file!", "Utility", JOptionPane.ERROR_MESSAGE);

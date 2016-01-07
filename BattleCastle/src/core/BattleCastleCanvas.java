@@ -12,7 +12,6 @@ import java.awt.Point;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.lang.invoke.VolatileCallSite;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +19,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 
+import utility.AudioHandler;
 import utility.ConfigLoader;
 import utility.Utility;
 
@@ -59,6 +59,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private MouseHandler mouseHandler;
 	private KeyHandler keyHandler;
 	private ConfigLoader configLoader;
+	private AudioHandler audioHandler;
 	private BufferedImage title_image;
 	private BufferedImage screenShotImage;
 	private BufferedImage backgroundImage;
@@ -109,6 +110,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		addMouseListener(mouseHandler);
 		addMouseWheelListener(mouseHandler);
 		addKeyListener(keyHandler);
+		
+		audioHandler = new AudioHandler();
 		
 		title_image = Utility.loadImage(ImageFilePaths.TITLE);
 		

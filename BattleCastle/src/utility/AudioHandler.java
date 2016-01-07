@@ -1,18 +1,27 @@
 package utility;
 
-import java.applet.AudioClip;
 import java.util.ArrayList;
 
 import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.Mixer;
 import javax.sound.sampled.Port;
 
+import core.constants.AudioFilePaths;
+
 public class AudioHandler {
 
-	private static AudioClip[] gameSounds;
-	private static int numberOfSoundClips = 0;
+	
+	public enum SOUND
+	{
+		MENU_SELECT,
+		MENU_MUSIC
+	}
+	
+	private static Clip[] gameSounds;
+	private static int numberOfSoundClips = SOUND.values().length;
 	
 	public static boolean muted;
 	
@@ -20,15 +29,24 @@ public class AudioHandler {
 	{
 		muted = false;
 		
+		loadSounds();
 		init();
+		loopSound(SOUND.MENU_MUSIC);
+	}
+	
+	private static void loadSounds()
+	{
+		gameSounds = new Clip[numberOfSoundClips];
+		gameSounds[SOUND.MENU_SELECT.ordinal()] = Utility.loadAudio(AudioFilePaths.MENU_SELECTED);
+		gameSounds[SOUND.MENU_MUSIC.ordinal()] = Utility.loadAudio(AudioFilePaths.MENU_MUSIC);
 	}
 		
 	public static void playSound(SOUND sound)
 	{
 		if(sound.ordinal() >= gameSounds.length || muted)
 			return;
-		
-		gameSounds[sound.ordinal()].play();
+		gameSounds[sound.ordinal()].setFramePosition(0);
+		gameSounds[sound.ordinal()].start();
 	}
 	
 	public static void loopSound(SOUND sound)
@@ -36,7 +54,7 @@ public class AudioHandler {
 		if(sound.ordinal() >= gameSounds.length || muted)
 			return;
 		
-		gameSounds[sound.ordinal()].loop();
+		gameSounds[sound.ordinal()].loop(Clip.LOOP_CONTINUOUSLY);;
 	}
 	
 	public static void stopSound(SOUND sound)
@@ -53,11 +71,6 @@ public class AudioHandler {
 		{
 			gameSounds[i].stop();
 		}
-	}
-	
-	public enum SOUND
-	{
-		
 	}
 	
 	/*
