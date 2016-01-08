@@ -31,7 +31,7 @@ public class AudioHandler {
 		
 		loadSounds();
 		init();
-		loopSound(SOUND.MENU_MUSIC);
+		//loopSound(SOUND.MENU_MUSIC);
 	}
 	
 	private static void loadSounds()

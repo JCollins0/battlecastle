@@ -280,7 +280,7 @@ public class Game {
 					List<Arrow> plist = Collections.list(Collections.enumeration(arrows.values()));
 					List<Polygon> list = new ArrayList<Polygon>();
 					list.addAll(plist);
-					collideDetect.broadCheck(list);
+				//	collideDetect.broadCheck(list);
 				}
 			}
 		}else if(hostType == HostType.CLIENT)
