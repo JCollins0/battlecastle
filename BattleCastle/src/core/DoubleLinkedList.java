@@ -158,6 +158,11 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		return new IteratorForward();
 	}
 	
+	public Iterator<T> iteratorb()
+	{
+		return new IteratorBackward();
+	}
+	
 	private class IteratorForward implements Iterator<T>
 	{
 		private int expectedCount;
@@ -191,7 +196,7 @@ public class DoubleLinkedList<T> implements Iterable<T>
 			if(front==current)
 			{
 				removeFront();
-				current.setNext(front);
+				current=front;
 			}
 			else if(current==rear)
 			{
@@ -200,9 +205,68 @@ public class DoubleLinkedList<T> implements Iterable<T>
 			}
 			else
 			{
+				Node temp=current;
 				current.getPrev().setNext(current.getNext());
 				current.getNext().setPrev(current.getPrev());
-				current=current.getPrev();// fixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+				current=temp.getPrev();
+				count--;
+			}
+			expectedCount--;
+		}
+		
+		public void checkForComodification()
+		{
+			if(count != expectedCount)
+				throw new ConcurrentModificationException();
+		}
+	}
+	
+	private class IteratorBackward implements Iterator<T>
+	{
+		private int expectedCount;
+		private Node current;
+		
+		public IteratorBackward()
+		{
+			expectedCount = count;
+			current=new Node(null,null,rear);
+		}
+		
+		public boolean hasNext()
+		{
+			return current.getPrev() != null;
+		}
+		
+		public T next()
+		{
+			checkForComodification();
+			if(current.getPrev() == null)
+				throw new NoSuchElementException();
+			current=current.getPrev();
+			return current.getValue();
+		}
+		
+		
+		public void remove()
+		{
+			if(count==0)
+				throw new NoSuchElementException();
+			if(front==current)
+			{
+				removeFront();
+				current=front;
+			}
+			else if(current==rear)
+			{
+				removeRear();
+				current=rear;
+			}
+			else
+			{
+				Node temp=current;
+				current.getPrev().setNext(current.getNext());
+				current.getNext().setPrev(current.getPrev());
+				current=temp.getNext();
 				count--;
 			}
 			expectedCount--;

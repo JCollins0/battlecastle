@@ -33,7 +33,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 	private static final int TOOLS_Y=768;
 	private static final int BOTTOM_Y=768;
 
-	protected ArrayList<Tile> list,tools,tileAdder,editor;
+	protected DoubleLinkedList<Tile> list;
+	protected ArrayList<Tile> tools,tileAdder,editor;
 	private static BufferedImage buffer;
 	private int tileAdderX,tileAdderY;
 	private boolean running, bottom, grid,drawMouseLoc;
@@ -77,7 +78,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		
 		list=readSave();
 		if(list==null)
-			list=new ArrayList<Tile>();
+			list=new DoubleLinkedList<Tile>();
 		tileAdderY=800;
 		
 		tools=new ArrayList<Tile>();
@@ -120,19 +121,6 @@ public class EditorCanvas extends Canvas implements Runnable{
 		addMouseListener(mouseHandler);
 		addKeyListener(keyHandler);
 		
-		DoubleLinkedList<String> thingybob=new DoubleLinkedList<String>();
-		thingybob.addFront("heyo");
-		thingybob.addFront("yeah");
-		thingybob.addFront("lmao");
-		int gg=0;
-		Iterator<String> iter=thingybob.iterator();
-		while(iter.hasNext())
-		{
-			System.out.println(iter.next());
-			if(gg++==1)
-				iter.remove();
-		}
-		System.out.println(thingybob.toString());
 	}
 	
 	public void render()
@@ -201,9 +189,9 @@ public class EditorCanvas extends Canvas implements Runnable{
 		bs.show();
 	}
 	
-	private ArrayList<Tile> readSave()
+	private DoubleLinkedList<Tile> readSave()
 	{
-		ArrayList<Tile> temp = new ArrayList<Tile>();
+		DoubleLinkedList<Tile> temp = new DoubleLinkedList<Tile>();
 		Scanner reader=null;
 		JSONParser parser=new JSONParser();
 		try
@@ -213,7 +201,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 			JSONArray ja = (JSONArray)parser.parse(reader.nextLine());
 			for(int i = 0;i<ja.size();i++)
 			{
-				temp.add(Tile.decodeJSON((JSONObject)ja.get(i)));
+				temp.addFront(Tile.decodeJSON((JSONObject)ja.get(i)));
 			}
 		}
 		catch (Exception e)
@@ -232,7 +220,12 @@ public class EditorCanvas extends Canvas implements Runnable{
 	public void save()
 	{
 		JSONArray temp=new JSONArray();
-		temp.addAll(list);
+		//temp.addAll(list);
+		Iterator<Tile> iter=list.iterator();
+		while(iter.hasNext())
+		{
+			temp.add(iter.next());
+		}
 //		System.out.println(temp);
 		PrintWriter printer=null;
 		try
@@ -299,7 +292,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		for(i=0;i<tools.size()&&!tools.get(i).contains(mouse);i++);
 		switch(i)
 		{
-		case 0:list.add(new Tile(0,0,32,32));break;
+		case 0:list.addFront(new Tile(0,0,32,32));break;
 		case 1:save();break;
 		default:break;
 		}
@@ -310,7 +303,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		int i;
 		for(i=0;i<tileAdder.size()&&!tileAdder.get(i).contains(mouse);i++);
 		if(i<tileAdder.size())
-			list.add(tileAdder.get(i).copy());
+			list.addFront(tileAdder.get(i).copy());
 	}
 	
 	protected void checkEditorClicked(Point mouse)
