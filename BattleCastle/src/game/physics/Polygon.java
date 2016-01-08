@@ -5,10 +5,7 @@ import java.awt.Graphics;
 
 
 public class Polygon
-{
-	
-	int i;
-	
+{	
 	private double area=-1;
 	
 	private Vector[] corners;
@@ -32,7 +29,7 @@ public class Polygon
 	{
 		corners=new Vector[xPoints.length];
 		axes=new Vector[xPoints.length];
-		for(i=0;i<xPoints.length;i++)
+		for(int i=0;i<xPoints.length;i++)
 			corners[i]=new Vector(xPoints[i],yPoints[i]);
 		calculateArea();
 		rotate(theta,null);
@@ -45,7 +42,7 @@ public class Polygon
 		Vector centroid=new Vector(0,0);
 		double signedArea=0;
 		double partialSignedArea=0;
-		i=0;
+		int i=0;
 		
 		for(;i<count-1;i++)
 		{
@@ -82,7 +79,7 @@ public class Polygon
 			//set axis
 		}
 		//System.out.println(center.X()+"-"+center.Y());
-		for(i=0;i<count;i++)
+		for(int i=0;i<count;i++)
 			corners[i]=corners[i].vectorRotate(angle, axis);
 	}
 	
@@ -95,7 +92,7 @@ public class Polygon
 	
 	public void move(Vector pos)
 	{
-		for(i=0;i<count;i++)
+		for(int i=0;i<count;i++)
 		{
 			corners[i]=corners[i].vectorAdd(pos);
 		}
@@ -111,7 +108,7 @@ public class Polygon
 	{
 		//area of polygon: A=(.5)((x0*y1+x1*y2+x2*y0)-(y0*x1+y1*x2+y2*x0))
 		double sum=0;
-		i=0;
+		int i=0;
 		for(;i<count-1;i++)
 		{
 			sum+=corners[i].vectorCross(corners[i+1]);
@@ -172,7 +169,8 @@ public class Polygon
 	
 	public Vector[] getAxes()
 	{
-		for(i=0;i<count-1;i++)
+		int i=0;
+		for(;i<count-1;i++)
 		{
 			axes[i]=corners[i].vectorSub(corners[i+1]).getNormal();
 			//axes[i]=corners[i].getNormal();

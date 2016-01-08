@@ -10,8 +10,6 @@ public class PhysicsPoly extends Polygon
 	private Vector acceleration;
 	private Vector velocity;
 	
-	int i;
-	
 	private double angularVelocity;
 	private double inertiaAboutCenter;
 	
@@ -54,8 +52,8 @@ public class PhysicsPoly extends Polygon
 		double mag;
 		double top=0;
 		double bot=0;
-		i=0;
-		for(;i<corners.length-1;i++)
+		
+		for(int i = 0;i<corners.length-1;i++)
 		{
 			mag=corners[i].vectorSub(corners[0]).vectorLengthCross(corners[i+1].vectorSub(corners[0]));
 			top+=mag*(corners[i].vectorSub(corners[0]).vectotDot(corners[i].vectorSub(corners[0]))+corners[i].vectorSub(corners[0]).vectotDot(corners[i+1].vectorSub(corners[0]))+corners[i+1].vectorSub(corners[0]).vectotDot(corners[i+1].vectorSub(corners[0])));
@@ -117,7 +115,6 @@ public class PhysicsPoly extends Polygon
 	{
 		//move the thing-start Verlet integration
 		super.move(velocity.vectorScale(BattleCastleCanvas.time_Step).vectorAdd(acceleration.vectorScale(Math.pow(BattleCastleCanvas.time_Step, 2)*.5)).vectorScale(100));//last scale makes the meters per pixel into centimeters per pixel
-		
 		//calculate the forces on the object
 		Vector netForce=new Vector(0,(int)(mass*GRAVITY));// force of gravity
 		calculateArea();

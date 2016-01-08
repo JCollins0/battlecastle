@@ -5,16 +5,14 @@ import game.physics.Vector;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import utility.Utility;
 import core.MouseHandler;
 import core.constants.ImageFilePaths;
-import utility.Utility;
 
 public class Player extends PhysicsRect{
 	

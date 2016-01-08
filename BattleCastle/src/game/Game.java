@@ -218,6 +218,21 @@ public class Game {
 									);
 						}
 						
+					}else if(type.equals(MessageType.MOVE_ARROW.toString()))
+					{
+						
+						if(hostType == HostType.CLIENT){
+							String[] id = messageArr[1].split("=");
+							String uuid = id[0];
+							Arrow updateThis = arrows.get(uuid);
+							if(updateThis != null)
+							{
+								updateThis.decode(id[1]);	
+							}else
+							{
+								System.out.println("THE ARROW IS NULL: " + uuid);
+							}
+						}
 					}
 					
 				}
@@ -275,6 +290,8 @@ public class Game {
 					for(Arrow arrow : arrows.values())
 					{
 						arrow.tick();
+						Message message = new Message(MessageType.MOVE_ARROW,arrow.getID() + "=" + arrow.stringify());
+						gameServer.sendToAllTCP(message);
 					}
 					
 					List<Arrow> plist = Collections.list(Collections.enumeration(arrows.values()));
@@ -283,19 +300,20 @@ public class Game {
 				//	collideDetect.broadCheck(list);
 				}
 			}
-		}else if(hostType == HostType.CLIENT)
-		{
-			if(canvasRef.getCurrentState() == GameState.GAMEPLAY)
-			{
-				if(playerMap.size() >= MIN_PLAYERS)
-				{					
-					for(Arrow arrow : arrows.values())
-					{
-						arrow.tick();
-					}
-				}
-			}
 		}
+//		else if(hostType == HostType.CLIENT)
+//		{
+//			if(canvasRef.getCurrentState() == GameState.GAMEPLAY)
+//			{
+//				if(playerMap.size() >= MIN_PLAYERS)
+//				{					
+//					for(Arrow arrow : arrows.values())
+//					{
+//						arrow.tick();
+//					}
+//				}
+//			}
+//		}
 		
 		updateMyPlayer();
 	}

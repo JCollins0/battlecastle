@@ -64,19 +64,17 @@ public class Arrow extends PhysicsRect{
 			String[] key_value = item.split(":");
 			switch(key_value[0])
 			{
-			case "ImageFile":
-				if(image == null)
-					image = Utility.loadImage(key_value[1]);
+//			case "ImageFile":
+//				if(image == null)
+//					image = Utility.loadImage(key_value[1]);
+//				break;
+			case "Corner0X": moveTo(Integer.parseInt(key_value[1]), getCorners()[0].YPoint());
 				break;
-			case "Corner0X":
+			case "Corner0Y": moveTo(getCorners()[0].XPoint(),Integer.parseInt(key_value[1]));
 				break;
-			case "Corner0Y":
+			case "Theta": theta = Double.parseDouble(key_value[1]);
 				break;
-			case "Theta":
-				break;
-			case "MyTheta":
-				break;
-			case "PlayerID":
+			case "MyTheta": graphicsRotationTheta = Double.parseDouble(key_value[1]);
 				break;
 			}
 			
@@ -141,6 +139,14 @@ public class Arrow extends PhysicsRect{
 		}else
 		{
 			graphicsRotationTheta= -Math.toRadians((graphicsRotationTheta - theta));
+		}
+				
+//		System.out.println("MY LOCATION: " + Arrays.toString(getCorners()));
+//		System.out.println("MY VELOCITY: " + getVelocity());
+//		System.out.println("-------");
+		if(getVelocity().XPoint() > -1 && getVelocity().XPoint() < 1)
+		{
+			getVelocity().setX(0);
 		}
 	}
 	

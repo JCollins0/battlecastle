@@ -7,7 +7,8 @@ public enum MessageType {
 	SELECT_MAP("select_map"),
 	UPDATE_PLAYER("update_player"),
 	MOVE_PLAYER("move_player"),
-	UPDATE_ARROW("update_arrow");
+	UPDATE_ARROW("update_arrow"),
+	MOVE_ARROW("move_arrow");
 	
 	private String value;
 	MessageType()

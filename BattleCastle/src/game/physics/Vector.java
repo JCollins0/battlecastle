@@ -104,6 +104,17 @@ public class Vector {
 		return y;
 	}
 	
+	
+	public void setX(double x) 
+	{
+		this.x = x;
+	}
+
+	public void setY(double y) 
+	{
+		this.y = y;
+	}
+
 	public void render(Graphics g)
 	{
 		g.setColor(Color.LIGHT_GRAY);
@@ -122,7 +133,7 @@ public class Vector {
 	
 	@Override
 	public String toString() {
-		return String.format("X: %f,Y: %f",XExact(),YExact());
+		return "[X: " + x + ", Y: " + y + "]";
 	}
 
 }
