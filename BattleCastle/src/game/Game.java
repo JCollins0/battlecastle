@@ -317,6 +317,14 @@ public class Game {
 //				}
 //			}
 //		}
+		for(int i = 0; i < playerList.length; i++)
+			if(playerList[i] != null)
+			{
+				playerList[i].tick();
+				System.out.println( "Player: " + i + " " + playerList[i].getCurrentArrow());
+			}
+		
+		
 		
 		updateMyPlayer();
 	}
@@ -463,7 +471,7 @@ public class Game {
 				gameClient.sendTCP(message);
 			}catch(Exception e)
 			{
-				canvasRef.addError(new Error("Error Updating Player [Game.class -Line 429]",300));
+				canvasRef.addError(new Error("Error Updating Player [Game.class -Line 466]",300));
 			}
 			
 		}

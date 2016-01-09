@@ -251,7 +251,10 @@ public class Player extends PhysicsRect{
 				break;
 			case "Arrow": 
 					if(1 < key_value.length && currentArrow != null)
+					{
+						
 						currentArrow.decode(key_value[1]);
+					}
 				break;
 				
 			}
@@ -263,6 +266,11 @@ public class Player extends PhysicsRect{
 	@Override
 	public String toString() {
 		return String.format("%s[ID:%s]", this.getClass().getName(), uuid);
+	}
+	
+	public Arrow getCurrentArrow()
+	{
+		return currentArrow;
 	}
 }
 

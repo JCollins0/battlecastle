@@ -64,10 +64,10 @@ public class Arrow extends PhysicsRect{
 			String[] key_value = item.split(":");
 			switch(key_value[0])
 			{
-//			case "ImageFile":
-//				if(image == null)
-//					image = Utility.loadImage(key_value[1]);
-//				break;
+			case "ImageFile":
+				if(image == null)
+					image = Utility.loadImage(key_value[1]);
+				break;
 			case "Corner0X": moveTo(Integer.parseInt(key_value[1]), getCorners()[0].YPoint());
 				break;
 			case "Corner0Y": moveTo(getCorners()[0].XPoint(),Integer.parseInt(key_value[1]));
@@ -166,5 +166,9 @@ public class Arrow extends PhysicsRect{
 		return ID;
 	}
 	
+	public String toString()
+	{
+		return stringify();
+	}
 	
 }
