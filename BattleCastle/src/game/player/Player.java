@@ -132,6 +132,11 @@ public class Player extends PhysicsRect{
 		mouseLocation = p;
 	}
 	
+	public Point getMouseLocation()
+	{
+		return mouseLocation;
+	}
+	
 	/**
 	 * Sets Horizontal Velocity of player
 	 * @param vX the horizontal velocity value
