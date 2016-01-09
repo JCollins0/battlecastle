@@ -249,7 +249,9 @@ public class Player extends PhysicsRect{
 				break;
 			case "S": //used in animation?
 				break;
-			case "Arrow": currentArrow.decode(key_value[1]);
+			case "Arrow": 
+					if(1 < key_value.length && currentArrow != null)
+						currentArrow.decode(key_value[1]);
 				break;
 				
 			}
