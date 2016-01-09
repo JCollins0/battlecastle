@@ -220,7 +220,7 @@ public class Player extends PhysicsRect{
 	{
 		return String.format("ImageFile#%s<X#%d<Y#%d<W#%d<H#%d<Arrow#%s",
 					imageFilePath,
-					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT,currentArrow.stringify()
+					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT, (currentArrow != null ? currentArrow.stringify() : "")
 					);
 	}
 	
