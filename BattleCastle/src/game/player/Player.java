@@ -55,7 +55,7 @@ public class Player extends PhysicsRect{
 		arrowStorage = new ArrayList<Arrow>();
 		for(int i = 0; i < 100; i++)
 			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
-		
+		currentArrow = arrowStorage.get(0);
 	}
 	
 	/**
@@ -252,8 +252,12 @@ public class Player extends PhysicsRect{
 			case "Arrow": 
 					if(1 < key_value.length && currentArrow != null)
 					{
-						
 						currentArrow.decode(key_value[1]);
+						//fixArrows(2, MouseHandler.mouse.x, MouseHandler.mouse.y);
+					}else
+					{
+						if(currentArrow == null && arrowStorage.size() > 0)
+							currentArrow= arrowStorage.get(0);
 					}
 				break;
 				
