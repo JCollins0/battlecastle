@@ -218,9 +218,9 @@ public class Player extends PhysicsRect{
 	 */
 	public String stringify()
 	{
-		return String.format("ImageFile:%s,X:%d,Y:%d,W:%d,H:%d",
+		return String.format("ImageFile:%s,X:%d,Y:%d,W:%d,H:%d,Arrow:%s",
 					imageFilePath,
-					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT
+					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT,currentArrow.stringify()
 					);
 	}
 	
