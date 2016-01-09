@@ -23,6 +23,7 @@ import core.menu_object.ServerSelectionBox;
 import editor.EditorFrame;
 import game.Game;
 import game.player.BattleCastleUser;
+import game.player.Player;
 
 public class MouseHandler implements MouseMotionListener, MouseListener, MouseWheelListener {
 
@@ -321,10 +322,14 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 		switch( canvasref.getCurrentState())
 		{
 		case GAMEPLAY:
-			canvasref.getGame().getMyPlayer().setMouseLocation(mouse);
+			Player player = canvasref.getGame().getMyPlayer();
+			
+			if(player != null)
+				player.setMouseLocation(mouse);
 			if(canvasref.getGame().getHostType().equals( HostType.CLIENT) )
 			{
 				canvasref.getGame().sendMouseLocation();
+				System.out.println("Sending mosue location");
 			}
 			break;
 		case SELECT_MAP:
