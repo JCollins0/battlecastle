@@ -253,7 +253,7 @@ public class Player extends PhysicsRect{
 					if(1 < key_value.length && currentArrow != null)
 					{
 						currentArrow.decode(key_value[1]);
-						//fixArrows(2, MouseHandler.mouse.x, MouseHandler.mouse.y);
+						fixArrows(2, MouseHandler.mouse.x, MouseHandler.mouse.y);
 					}else
 					{
 						if(currentArrow == null && arrowStorage.size() > 0)
