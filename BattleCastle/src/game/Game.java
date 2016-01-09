@@ -320,7 +320,6 @@ public class Game {
 		for(int i = 0; i < playerList.length; i++)
 			if(playerList[i] != null)
 			{
-				playerList[i].tick();
 				System.out.println( "Player: " + i + " " + playerList[i].getCurrentArrow());
 			}
 		
