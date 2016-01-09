@@ -78,12 +78,12 @@ public class Player extends PhysicsRect{
 	{
 		if(falling)
 			super.tick();
-		if(currentArrow == null && arrowStorage.size() > 0)
-			currentArrow= arrowStorage.get(0);
-		else if(arrowStorage.size() > 0)
-		{
-			fixArrows(2,MouseHandler.mouse.x, MouseHandler.mouse.y);
-		}
+//		if(currentArrow == null && arrowStorage.size() > 0)
+//			currentArrow= arrowStorage.get(0);
+//		else if(arrowStorage.size() > 0)
+//		{
+//			fixArrows(2,MouseHandler.mouse.x, MouseHandler.mouse.y);
+//		}
 	}
 	
 	/**
@@ -225,9 +225,9 @@ public class Player extends PhysicsRect{
 	 */
 	public String stringify()
 	{
-		return String.format("ImageFile#%s<X#%d<Y#%d<W#%d<H#%d<Arrow#%s<MouseX#%d<MouseY#%d",
+		return String.format("ImageFile#%s<X#%d<Y#%d<W#%d<H#%d<MouseX#%d<MouseY#%d<Arrow#%s",
 					imageFilePath,
-					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT, (currentArrow != null ? currentArrow.stringify() : ""), mouseLocation.x, mouseLocation.y
+					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT,  mouseLocation.x, mouseLocation.y, (currentArrow != null ? currentArrow.stringify() : "")
 					);
 	}
 	
