@@ -30,6 +30,7 @@ public class Player extends PhysicsRect{
 	private String uuid;
 	private String imageFilePath;
 	private boolean falling = true;
+	private Point mouseLocation;
 	
 	
 	/**
@@ -56,6 +57,7 @@ public class Player extends PhysicsRect{
 		for(int i = 0; i < 100; i++)
 			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 		currentArrow = arrowStorage.get(0);
+		mouseLocation = MouseHandler.mouse;
 	}
 	
 	/**
@@ -123,6 +125,11 @@ public class Player extends PhysicsRect{
 	public void setLocation(Point p)
 	{
 		setLocation(p.x,p.y);
+	}
+	
+	public void setMouseLocation(Point p)
+	{
+		mouseLocation = p;
 	}
 	
 	/**
@@ -218,9 +225,9 @@ public class Player extends PhysicsRect{
 	 */
 	public String stringify()
 	{
-		return String.format("ImageFile#%s<X#%d<Y#%d<W#%d<H#%d<Arrow#%s",
+		return String.format("ImageFile#%s<X#%d<Y#%d<W#%d<H#%d<Arrow#%s<MouseX#%d<MouseY#%d",
 					imageFilePath,
-					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT, (currentArrow != null ? currentArrow.stringify() : "")
+					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT, (currentArrow != null ? currentArrow.stringify() : ""), mouseLocation.x, mouseLocation.y
 					);
 	}
 	
@@ -253,13 +260,18 @@ public class Player extends PhysicsRect{
 					if(1 < key_value.length && currentArrow != null)
 					{
 						currentArrow.decode(key_value[1]);
-						fixArrows(2, MouseHandler.mouse.x, MouseHandler.mouse.y);
+						fixArrows(2, mouseLocation.x, mouseLocation.y);
 					}else
 					{
 						if(currentArrow == null && arrowStorage.size() > 0)
 							currentArrow= arrowStorage.get(0);
 					}
 				break;
+			case "MouseX":
+				mouseLocation.x = Integer.parseInt(key_value[1]);
+				break;
+			case "MouseY":
+				mouseLocation.y = Integer.parseInt(key_value[1]);
 				
 			}
 		}
