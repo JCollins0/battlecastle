@@ -322,6 +322,10 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 		{
 		case GAMEPLAY:
 			canvasref.getGame().getMyPlayer().setMouseLocation(mouse);
+			if(canvasref.getGame().getHostType() == HostType.CLIENT)
+			{
+				canvasref.getGame().sendMouseLocation();
+			}
 			break;
 		case SELECT_MAP:
 			

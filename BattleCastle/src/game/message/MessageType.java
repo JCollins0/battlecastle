@@ -8,7 +8,8 @@ public enum MessageType {
 	UPDATE_PLAYER("update_player"),
 	MOVE_PLAYER("move_player"),
 	UPDATE_ARROW("update_arrow"),
-	MOVE_ARROW("move_arrow");
+	MOVE_ARROW("move_arrow"),
+	UPDATE_MOUSE_LOC("upadte_mouse_loc");
 	
 	private String value;
 	MessageType()

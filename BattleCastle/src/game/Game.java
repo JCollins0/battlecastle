@@ -34,6 +34,7 @@ import core.GameState;
 import core.HostType;
 import core.KeyHandler;
 import core.KeyPress;
+import core.MouseHandler;
 import core.constants.ImageFilePaths;
 
 public class Game {
@@ -160,6 +161,11 @@ public class Game {
 							Message mess = new Message(MessageType.UPDATE_ARROW, arrows.get(uuid).getID() + "=" + arrows.get(uuid).stringify());
 							gameServer.sendToAllTCP(mess);
 							
+						}else if(type.equals(MessageType.UPDATE_MOUSE_LOC))
+						{
+							String[] id = messageArr[1].split("=");
+							int playerNum = Integer.parseInt(id[0]);
+							playerList[playerNum].decode(id[1]);
 						}
 					}
 				}
@@ -470,13 +476,19 @@ public class Game {
 				gameClient.sendTCP(message);
 			}catch(Exception e)
 			{
-				canvasRef.addError(new Error("Error Updating Player [Game.class -Line 466]",300));
+				canvasRef.addError(new Error("Error Updating Player [Game.class]",300));
 			}
 			
 		}
 		
 		KeyHandler.presses.remove(KeyPress.LEFT_U);
 		KeyHandler.presses.remove(KeyPress.RIGHT_U);
+	}
+	
+	public void sendMouseLocation() {
+		Message message = new Message(MessageType.UPDATE_MOUSE_LOC,
+				playerMap.get(myUUID).getPlayerName() + "=" + String.format("MouseX#%d<MouseY#%d",MouseHandler.mouse.x,MouseHandler.mouse.y) );
+		gameClient.sendTCP(message);
 	}
 	
 	/**
@@ -552,6 +564,8 @@ public class Game {
 		if(gameClient != null)
 			gameClient.stop();
 	}
+
+	
 	
 	
 }
