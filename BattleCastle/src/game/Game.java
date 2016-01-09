@@ -487,7 +487,7 @@ public class Game {
 	
 	public void sendMouseLocation() {
 		Message message = new Message(MessageType.UPDATE_MOUSE_LOC,
-				playerMap.get(myUUID).getPlayerName() + "=" + String.format("MouseX#%d<MouseY#%d",MouseHandler.mouse.x,MouseHandler.mouse.y) );
+				playerMap.get(myUUID).getPlayerNumber() + "=" + String.format("MouseX#%d<MouseY#%d",MouseHandler.mouse.x,MouseHandler.mouse.y) );
 		gameClient.sendTCP(message);
 	}
 	
