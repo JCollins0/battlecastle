@@ -207,10 +207,10 @@ public class Player extends PhysicsRect{
 	 * used to send location data to other client
 	 * @return
 	 */
-	public String getPlayerInformation()
-	{
-		return String.format("X:%d Y:%d W:%d H:%d", getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT);
-	}
+//	public String getPlayerInformation()
+//	{
+//		return String.format("X:%d Y:%d W:%d H:%d", getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT);
+//	}
 	
 	/**
 	 * turns object into string to send over network
@@ -218,7 +218,7 @@ public class Player extends PhysicsRect{
 	 */
 	public String stringify()
 	{
-		return String.format("ImageFile:%s,X:%d,Y:%d,W:%d,H:%d,Arrow:%s",
+		return String.format("ImageFile#%s<X#%d<Y#%d<W#%d<H#%d<Arrow#%s",
 					imageFilePath,
 					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT,currentArrow.stringify()
 					);
@@ -230,10 +230,10 @@ public class Player extends PhysicsRect{
 	 */
 	public void decode(String s)
 	{
-		String[] items = s.split(",");
+		String[] items = s.split("<");
 		for(String item : items)
 		{
-			String[] key_value = item.split(":");
+			String[] key_value = item.split("#");
 			switch(key_value[0])
 			{
 			case "ImageFile":
