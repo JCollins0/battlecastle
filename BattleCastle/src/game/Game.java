@@ -161,13 +161,13 @@ public class Game {
 							Message mess = new Message(MessageType.UPDATE_ARROW, arrows.get(uuid).getID() + "=" + arrows.get(uuid).stringify());
 							gameServer.sendToAllTCP(mess);
 							
-						}else if(type.equals(MessageType.UPDATE_MOUSE_LOC))
+						}else if(type.equals(MessageType.UPDATE_MOUSE_LOC.toString()))
 						{
 							String[] id = messageArr[1].split("=");
 							int playerNum = Integer.parseInt(id[0]);
 							playerList[playerNum].decode(id[1]);
-							System.out.println("recieved new mouse location " + id[1]);
-							System.out.println("player location is " + playerList[playerNum].getMouseLocation());
+//							System.out.println("recieved new mouse location " + id[1]);
+//							System.out.println("player location is " + playerList[playerNum].getMouseLocation());
 						}
 					}
 				}
