@@ -103,6 +103,9 @@ public class Game {
 						int playerNum = playerMap.size()-1;
 						playerMap.get(user.getUUID()).setPlayerNumber(playerNum);
 						System.out.println(playerMap);
+						
+						canvasRef.addPlayerFace(user.getPlayerName(), ImageFilePaths.CHECK); //TODO: Change to acutal face of player depending on player number
+						
 						for(String uuid : playerMap.keySet())
 						{
 							gameServer.sendToAllTCP(playerMap.get(uuid));

@@ -191,6 +191,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 						{
 							canvasref.getGame().stopServer();
 							canvasref.getGame().stopClient();
+							canvasref.clearFaces();
 						}
 					
 					}
@@ -228,6 +229,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 						{
 							canvasref.getGame().stopServer();
 							canvasref.getGame().stopClient();
+							canvasref.clearFaces();
 						}
 					
 					}

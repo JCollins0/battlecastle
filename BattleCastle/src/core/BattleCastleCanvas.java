@@ -81,6 +81,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private MenuSlider volumeSlider;
 	private ArrayList<BufferedImage> backgroundImageList;
 	
+	private ArrayList<MenuLabel> playerFaces;
+	
 	private boolean running;
 	private boolean searchingForServers;
 	public boolean debug;
@@ -294,6 +296,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		backgroundImageList.add(Utility.loadImage(ImageFilePaths.MENU_BACKGROUND_IMAGE_2));
 		backgroundImage = backgroundImageList.get(0);
 		
+		playerFaces = new ArrayList<MenuLabel>();
+		
 	}
 	
 	/**
@@ -502,6 +506,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				if(menuButton.isVisibleAtState(currentState) )
 					menuButton.render(b);
 			
+			//draw player faces here
+			for(MenuLabel playerFace : playerFaces)
+				if(playerFace.isVisibleAtState(currentState))
+					playerFace.render(b);
+			
 			break;
 		case GAMEPLAY:
 			
@@ -608,6 +617,19 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			
 			searchForLanServers();
 		}
+	}
+	
+	private int pfdx = 256;
+	public void addPlayerFace(String playerName, String imagePath)
+	{
+		MenuLabel playerFace = new MenuLabel(pfdx+=32+128,700,32,32,Utility.loadImage(imagePath),playerName,GameState.SELECT_MAP);
+		playerFaces.add(playerFace);
+	}
+	
+	public void clearFaces()
+	{
+		playerFaces.clear();
+		this.pfdx = 256;
 	}
 	
 	public GameState getCurrentState()
