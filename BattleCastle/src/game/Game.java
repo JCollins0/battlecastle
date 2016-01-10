@@ -165,7 +165,8 @@ public class Game {
 						{
 							String[] id = messageArr[1].split("=");
 							int playerNum = Integer.parseInt(id[0]);
-							playerList[playerNum].decode(id[1]);
+							if(playerList[playerNum] != null)
+								playerList[playerNum].decode(id[1]);
 //							System.out.println("recieved new mouse location " + id[1]);
 //							System.out.println("player location is " + playerList[playerNum].getMouseLocation());
 						}

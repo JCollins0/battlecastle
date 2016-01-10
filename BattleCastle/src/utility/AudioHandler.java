@@ -27,7 +27,7 @@ public class AudioHandler {
 	
 	public AudioHandler()
 	{
-		muted = true;
+		muted = false;
 		
 		loadSounds();
 		init();
