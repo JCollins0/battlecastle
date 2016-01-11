@@ -80,7 +80,6 @@ public class DoubleLinkedList<T> implements Iterable<T>
 			throw new NoSuchElementException();
 		T temp=front.getValue();
 		front=front.getNext();
-		count--;
 		return temp;
 	}
 	
@@ -97,7 +96,6 @@ public class DoubleLinkedList<T> implements Iterable<T>
 			throw new NoSuchElementException();
 		T temp=rear.getValue();
 		rear=rear.getPrev();
-		count--;
 		return temp;
 	}
 	
@@ -137,6 +135,27 @@ public class DoubleLinkedList<T> implements Iterable<T>
 			current=current.getNext();
 		}
 		return false;
+	}
+	
+	public void linkToFront(T value)
+	{
+		Node n=front;
+		while(n!=null&&!n.value.equals(value))
+			n=n.next;
+		if(n==null)
+			throw new NoSuchElementException();
+		if(n==rear)
+		{
+			addFront(removeRear());
+			count--;
+		}
+		else if(n!=front)
+		{
+			n.getPrev().setNext(n.getNext());
+			n.getNext().setPrev(n.getPrev());
+			addFront(n.value);
+			count--;
+		}
 	}
 
 	@Override
@@ -196,11 +215,13 @@ public class DoubleLinkedList<T> implements Iterable<T>
 			if(front==current)
 			{
 				removeFront();
+				count--;
 				current=front;
 			}
 			else if(current==rear)
 			{
 				removeRear();
+				count--;
 				current=rear;
 			}
 			else
@@ -254,11 +275,13 @@ public class DoubleLinkedList<T> implements Iterable<T>
 			if(front==current)
 			{
 				removeFront();
+				count--;
 				current=front;
 			}
 			else if(current==rear)
 			{
 				removeRear();
+				count--;
 				current=rear;
 			}
 			else

@@ -151,8 +151,11 @@ public class EditorCanvas extends Canvas implements Runnable{
 			}
 		}
 		
-		for(Tile t:list)
-			t.draw(b);
+		Iterator<Tile> backit=list.iteratorb();
+		while(backit.hasNext())
+		{
+			backit.next().draw(b);
+		}
 		
 		
 			
@@ -247,6 +250,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 	public void selectTile(Tile t)
 	{
 		current=t;
+		list.linkToFront(t);
 	}
 	
 	public void deselectTile()
