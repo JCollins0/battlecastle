@@ -133,7 +133,7 @@ public class CollisionDetector
 			}
 		}
 		
-		System.out.println(minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
+		System.out.println("COLLIDE DETECT: " + minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
 		FindPointOfCollision(a,b);
 		return true;
 	}

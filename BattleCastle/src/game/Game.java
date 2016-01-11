@@ -309,7 +309,9 @@ public class Game {
 					List<Arrow> plist = Collections.list(Collections.enumeration(arrows.values()));
 					List<Polygon> list = new ArrayList<Polygon>();
 					list.addAll(plist);
-				//	collideDetect.broadCheck(list);
+					for(int i = 0; i < playerList.length && playerList[i] != null; i++)
+						list.add(playerList[i]);
+					collideDetect.broadCheck(list);
 				}
 			}
 		}

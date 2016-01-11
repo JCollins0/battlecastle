@@ -54,7 +54,7 @@ public class Player extends PhysicsRect{
 		this.image = image;
 		this.uuid = uuid;
 		arrowStorage = new ArrayList<Arrow>();
-		for(int i = 0; i < 100; i++)
+		for(int i = 0; i < 10; i++)
 			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 		currentArrow = arrowStorage.get(0);
 		mouseLocation = MouseHandler.mouse;
