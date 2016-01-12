@@ -1,7 +1,6 @@
 package editor;
 
 import java.awt.Graphics;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Writer;
@@ -12,9 +11,10 @@ import org.json.simple.JSONStreamAware;
 import org.json.simple.JSONValue;
 
 import core.constants.ImageFilePaths;
+import game.physics.Polygon;
 import utility.Utility;
 
-public class Tile extends Rectangle implements JSONStreamAware
+public class Tile extends Polygon implements JSONStreamAware
 {
 
 	/**
