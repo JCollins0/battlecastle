@@ -1,6 +1,7 @@
 package game.player;
 
 import game.physics.PhysicsRect;
+import game.physics.Polygon;
 import game.physics.Vector;
 
 import java.awt.Graphics;
@@ -19,6 +20,7 @@ public class Arrow extends PhysicsRect{
 	private double graphicsRotationTheta;
 	public static final double MASS = 10, DRAGC = 1.05;
 	static int setDistance = 10;
+	private Polygon headCollision;
 	
 	public Arrow(int x, int y,
 				 double theta, double graphicsTheta,
@@ -31,6 +33,7 @@ public class Arrow extends PhysicsRect{
 		this.imagePath = imagePath;
 		this.graphicsRotationTheta = graphicsTheta;
 		this.ID = ID;
+		headCollision = new Polygon(WIDTH-10,y,10,24);
 	}
 	
 	
@@ -169,6 +172,11 @@ public class Arrow extends PhysicsRect{
 	public String toString()
 	{
 		return stringify();
+	}
+	
+	@Override
+	public Polygon getCollisionBounds() {
+		return headCollision;
 	}
 	
 }

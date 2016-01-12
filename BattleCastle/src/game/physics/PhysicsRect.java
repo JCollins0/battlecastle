@@ -169,8 +169,5 @@ public class PhysicsRect extends PhysicsPoly {
 				moveTo(0-getWidth(), getCorners()[0].YPoint());
 			}
 		}
-		
-		
-		
 	}
 }

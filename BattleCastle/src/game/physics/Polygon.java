@@ -25,6 +25,11 @@ public class Polygon
 		rotate(theta,null);
 	}*/
 	
+	public Polygon(int x, int y, int width, int height)
+	{
+		this(new int[]{x,x+width,x+width,x},new int[]{y,y,y+height,y+height},0);
+	}
+	
 	public Polygon(int[] xPoints,int[] yPoints,double theta)
 	{
 		corners=new Vector[xPoints.length];
@@ -212,6 +217,11 @@ public class Polygon
 		for(;i<count-1;i++)
 			g.drawLine(corners[i].XPoint(), corners[i].YPoint(), corners[i+1].XPoint(), corners[i+1].YPoint());
 		g.drawLine(corners[i].XPoint(), corners[i].YPoint(), corners[0].XPoint(), corners[0].YPoint());
+	}
+	
+	public Polygon getCollisionBounds()
+	{
+		return this;
 	}
 
 }
