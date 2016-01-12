@@ -134,7 +134,16 @@ public class CollisionDetector
 		}
 		
 		System.out.println("COLLIDE DETECT: " + minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
-		FindPointOfCollision(a,b);
+		if(a instanceof PhysicsPoly)
+		{
+			((PhysicsPoly) a).setVelocity(new Vector(0,0));
+			a.move(minimal);
+		}
+		if(b instanceof PhysicsPoly)
+		{
+			((PhysicsPoly) b).setVelocity(new Vector(0,0));
+		}
+		//FindPointOfCollision(a,b);
 		return true;
 	}
 	
