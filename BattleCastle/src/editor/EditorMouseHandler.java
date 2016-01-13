@@ -80,7 +80,7 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 		{
 			if(mouse.y>=768)
 			{
-				canvasref.list.remove(dragging);
+				canvasref.list.removeFront();
 				canvasref.deselectTile();
 			}
 			else

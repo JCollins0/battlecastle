@@ -201,10 +201,13 @@ public class EditorCanvas extends Canvas implements Runnable{
 		{
 			reader=new Scanner(new FileInputStream(DataConstants.CURRENT_LEVEL));
 			//System.out.println(reader.nextLine());
-			JSONArray ja = (JSONArray)parser.parse(reader.nextLine());
-			for(int i = 0;i<ja.size();i++)
+			if(reader.hasNext())
 			{
-				temp.addFront(Tile.decodeJSON((JSONObject)ja.get(i)));
+				JSONArray ja = (JSONArray)parser.parse(reader.nextLine());
+				for(int i = 0;i<ja.size();i++)
+				{
+					temp.addFront(Tile.decodeJSON((JSONObject)ja.get(i)));
+				}
 			}
 		}
 		catch (Exception e)
