@@ -4,7 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 import java.util.TreeMap;
-import java.util.concurrent.ConcurrentHashMap;
+
+import game.player.Arrow;
 
 public class CollisionDetector
 {
@@ -47,6 +48,7 @@ public class CollisionDetector
 	
 	double overlap;
 	//ArrayList<Integer> ranges
+	Polygon ac, bc; // collision polygons
 	
 	int i;
 
@@ -94,15 +96,18 @@ public class CollisionDetector
 	private boolean SATCheck(Polygon a,Polygon b)
 	{
 		//System.out.println("sat");
-		axes1=a.getAxes();
-		axes2=b.getAxes();
+		ac = a.getCollisionBounds();
+		bc = b.getCollisionBounds();
+		
+		axes1=ac.getAxes();
+		axes2=bc.getAxes();
 		
 		//loop over axes1
 		for(i=0;i<axes1.length;i++)
 		{
 			axis=axes1[i];
-			p1.project(a,axis);
-			p2.project(b,axis);
+			p1.project(ac,axis);
+			p2.project(bc,axis);
 			
 			if(!p1.overlap(p2))
 			{
@@ -119,8 +124,8 @@ public class CollisionDetector
 		for(i=0;i<axes2.length;i++)
 		{
 			axis=axes2[i];
-			p1.project(a,axis);
-			p2.project(b,axis);
+			p1.project(ac,axis);
+			p2.project(bc,axis);
 			
 			if(!p1.overlap(p2))
 			{
@@ -136,8 +141,13 @@ public class CollisionDetector
 		System.out.println("COLLIDE DETECT: " + minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
 		if(a instanceof PhysicsPoly)
 		{
-			((PhysicsPoly) a).setVelocity(new Vector(0,0));
-			a.move(minimal);
+			//((PhysicsPoly) a).setVelocity(new Vector(0,0));
+			if(a instanceof Arrow)
+			{
+				a.move(minimal.getNormal().vectorScale(overlap));
+				((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
+			}
+			((PhysicsPoly) a).getAcceleration().vectotDot(minimal.getNormal());
 		}
 		if(b instanceof PhysicsPoly)
 		{

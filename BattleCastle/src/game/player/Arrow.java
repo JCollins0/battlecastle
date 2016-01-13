@@ -23,9 +23,7 @@ public class Arrow extends PhysicsRect{
 	public static final double MASS = 10, DRAGC = 1.05;
 	static int setDistance = 10;
 	private PhysicsPoly headCollision;
-	private double hctheta;
-	private double hcgtheta;
-	
+
 	public Arrow(int x, int y,
 				 double theta, double graphicsTheta,
 				 Vector velocity, double torque, Player player,
@@ -93,14 +91,13 @@ public class Arrow extends PhysicsRect{
 	 */
 	public void render(Graphics g)
 	{
-//		super.render(g);
-		
+		super.render(g);
+		headCollision.render(g);
 		Graphics2D g2d = (Graphics2D)g;
 		
 		g2d.translate(getTopLeft().XPoint() , getTopLeft().YPoint() );
 		g2d.rotate(graphicsRotationTheta);
 		g2d.drawImage(image, 0 , 0, WIDTH, HEIGHT, null);
-		headCollision.render(g2d);
 		g2d.rotate(-graphicsRotationTheta);
 		g2d.translate(-(getTopLeft().XPoint() ),-( getTopLeft().YPoint()));
 		
@@ -133,25 +130,37 @@ public class Arrow extends PhysicsRect{
 	public void fix(double theta)
 	{
 		move(new Vector(shotByPlayer.getCenter().XPoint()-getCenter().XPoint(),shotByPlayer.getCenter().YPoint()-getCenter().YPoint()));
-		//headCollision.move(new Vector(getCorners()[1].XPoint()-10-headCollision.getCenter().XPoint(),getCorners()[1].YPoint()-headCollision.getCenter().YPoint()));
-		headCollision.rotateTo(Math.toDegrees(theta));
 		rotateTo(Math.toDegrees(theta));
 		this.graphicsRotationTheta = theta;
-		System.out.println("-----------\n" + Arrays.toString(getCorners()) + "\n" + Arrays.toString(headCollision.getCorners()) + "\n----------\n");
+		
+		hcrnrs = headCollision.getCorners();
+		hcrnrs[0] = getCorners()[1].vectorAdd(new Vector(-10*Math.cos(theta),-10*Math.sin(theta)));
+		hcrnrs[1] = getCorners()[1];
+		hcrnrs[2] = getCorners()[2];
+		hcrnrs[3] = getCorners()[2].vectorAdd(new Vector(-10*Math.cos(theta),-10 * Math.sin(theta)));
+		
 	}
-	
+	Vector[] hcrnrs;
 	/**
 	 * updates arrow
 	 */
 	public void tick()
 	{
 		super.tick();
-		headCollision.tick();
 		double velX = getVelocity().XExact();
 		double velY = getVelocity().YExact();
 		double angle = Math.toDegrees(Math.atan2(velY,velX));
 		rotateTo(angle);
-		headCollision.rotateTo(angle);
+		
+		hcrnrs = headCollision.getCorners();
+		hcrnrs[0] = getCorners()[1].vectorAdd(new Vector(-10*Math.cos(Math.toRadians(theta)),-10*Math.sin(Math.toRadians(theta) )));
+		hcrnrs[1] = getCorners()[1];
+		hcrnrs[2] = getCorners()[2];
+		hcrnrs[3] = getCorners()[2].vectorAdd(new Vector(-10*Math.cos(Math.toRadians(theta)),-10 * Math.sin(Math.toRadians(theta))));
+		
+//		System.out.println("ANGLE OF ROTATION: "  +theta);
+//		System.out.println("-----------\n" + Arrays.toString(getCorners()) + "\n" + Arrays.toString(headCollision.getCorners()) + "\n----------\n");
+		
 		
 		if(graphicsRotationTheta - theta < 0)
 		{
@@ -167,7 +176,6 @@ public class Arrow extends PhysicsRect{
 		if(getVelocity().XPoint() > -1 && getVelocity().XPoint() < 1)
 		{
 			getVelocity().setX(0);
-			headCollision.getVelocity().setX(0);
 		}
 	}
 	

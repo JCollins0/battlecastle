@@ -58,6 +58,7 @@ public class Player extends PhysicsRect{
 			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 		currentArrow = arrowStorage.get(0);
 		mouseLocation = MouseHandler.mouse;
+		GRAVITY = 0;
 	}
 	
 	/**
