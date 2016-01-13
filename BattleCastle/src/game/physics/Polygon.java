@@ -2,6 +2,7 @@ package game.physics;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Point;
 
 
 public class Polygon
@@ -224,4 +225,13 @@ public class Polygon
 		return this;
 	}
 
+	public boolean contains(Point p)
+	{
+		return contains(p.x,p.y);
+	}
+	
+	public boolean contains(int x, int y)
+	{
+		return (x >= corners[0].XPoint() && x <= corners[1].XPoint() ) && (y >= corners[0].YPoint() && y <= corners[2].YPoint()); 
+	}
 }

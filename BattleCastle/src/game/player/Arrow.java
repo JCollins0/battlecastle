@@ -1,5 +1,6 @@
 package game.player;
 
+import game.physics.PhysicsPoly;
 import game.physics.PhysicsRect;
 import game.physics.Polygon;
 import game.physics.Vector;
@@ -7,6 +8,7 @@ import game.physics.Vector;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 import utility.Utility;
 
@@ -20,7 +22,9 @@ public class Arrow extends PhysicsRect{
 	private double graphicsRotationTheta;
 	public static final double MASS = 10, DRAGC = 1.05;
 	static int setDistance = 10;
-	private Polygon headCollision;
+	private PhysicsPoly headCollision;
+	private double hctheta;
+	private double hcgtheta;
 	
 	public Arrow(int x, int y,
 				 double theta, double graphicsTheta,
@@ -33,7 +37,7 @@ public class Arrow extends PhysicsRect{
 		this.imagePath = imagePath;
 		this.graphicsRotationTheta = graphicsTheta;
 		this.ID = ID;
-		headCollision = new Polygon(WIDTH-10,y,10,24);
+		headCollision = new PhysicsPoly(x,y,10,24,theta,velocity,torque,MASS,DRAGC);
 	}
 	
 	
@@ -96,10 +100,18 @@ public class Arrow extends PhysicsRect{
 		g2d.translate(getTopLeft().XPoint() , getTopLeft().YPoint() );
 		g2d.rotate(graphicsRotationTheta);
 		g2d.drawImage(image, 0 , 0, WIDTH, HEIGHT, null);
+		headCollision.render(g2d);
 		g2d.rotate(-graphicsRotationTheta);
 		g2d.translate(-(getTopLeft().XPoint() ),-( getTopLeft().YPoint()));
 		
-		//System.out.println( (getTopLeft().XPoint() + WIDTH/2 - HEIGHT/2) + " " +  (getTopLeft().YPoint() + HEIGHT/2 - WIDTH/2) );
+//		
+//		g2d.translate(headCollision.getTopLeft().XPoint() , headCollision.getTopLeft().YPoint() );
+//		g2d.rotate(graphicsRotationTheta);
+//		
+//		//g2d.drawImage(image, 0 , 0, WIDTH, HEIGHT, null);
+//		g2d.rotate(-graphicsRotationTheta);
+//		g2d.translate(-(headCollision.getTopLeft().XPoint() ),-( headCollision.getTopLeft().YPoint()));
+//		//System.out.println( (getTopLeft().XPoint() + WIDTH/2 - HEIGHT/2) + " " +  (getTopLeft().YPoint() + HEIGHT/2 - WIDTH/2) );
 		
 	}
 	
@@ -121,9 +133,11 @@ public class Arrow extends PhysicsRect{
 	public void fix(double theta)
 	{
 		move(new Vector(shotByPlayer.getCenter().XPoint()-getCenter().XPoint(),shotByPlayer.getCenter().YPoint()-getCenter().YPoint()));
+		//headCollision.move(new Vector(getCorners()[1].XPoint()-10-headCollision.getCenter().XPoint(),getCorners()[1].YPoint()-headCollision.getCenter().YPoint()));
+		headCollision.rotateTo(Math.toDegrees(theta));
 		rotateTo(Math.toDegrees(theta));
 		this.graphicsRotationTheta = theta;
-		//System.out.println(Arrays.toString(getCorners()));
+		System.out.println("-----------\n" + Arrays.toString(getCorners()) + "\n" + Arrays.toString(headCollision.getCorners()) + "\n----------\n");
 	}
 	
 	/**
@@ -132,9 +146,12 @@ public class Arrow extends PhysicsRect{
 	public void tick()
 	{
 		super.tick();
+		headCollision.tick();
 		double velX = getVelocity().XExact();
 		double velY = getVelocity().YExact();
-		rotateTo(Math.toDegrees(Math.atan2(velY,velX)));
+		double angle = Math.toDegrees(Math.atan2(velY,velX));
+		rotateTo(angle);
+		headCollision.rotateTo(angle);
 		
 		if(graphicsRotationTheta - theta < 0)
 		{
@@ -150,6 +167,7 @@ public class Arrow extends PhysicsRect{
 		if(getVelocity().XPoint() > -1 && getVelocity().XPoint() < 1)
 		{
 			getVelocity().setX(0);
+			headCollision.getVelocity().setX(0);
 		}
 	}
 	

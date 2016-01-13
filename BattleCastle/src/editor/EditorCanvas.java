@@ -316,10 +316,20 @@ public class EditorCanvas extends Canvas implements Runnable{
 		for(i=0;i<editor.size()&&!editor.get(i).contains(mouse);i++);
 		switch(i)
 		{
-		case 0:current.width+=32;break;
-		case 1:if(current.width!=32)current.width-=32;break;
-		case 2:current.height+=32;break;
-		case 3:if(current.height!=32)current.height-=32;break;
+		case 0:
+			current.setWidth(current.getWidth()+32);
+			break;
+		case 1:
+			if(current.getWidth()!=32)
+				current.setWidth(current.getWidth()-32);
+			break;
+		case 2:
+			current.setHeight(current.getHeight()+32);
+			break;
+		case 3:
+			if(current.getHeight()!=32)
+				current.setHeight(current.getHeight()-32);
+			break;
 		default:break;
 		}
 		if(current!=null)
@@ -328,13 +338,13 @@ public class EditorCanvas extends Canvas implements Runnable{
 	
 	protected void snapToGrid(Tile t)
 	{
-		int x=t.x;
-		int y=t.y;
+		int x=t.getX();
+		int y=t.getY();
 		int width;
 		int height;
 		if(x>992)
 			x=992;
-		else if(x<32-(width=t.width))
+		else if(x<32-(width=t.getWidth()))
 		{
 			x=32-width;
 		}
@@ -344,7 +354,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 			x+=32-(x%32);
 		if(y>736)
 			y=736;
-		else if(y<32-(height=t.height))
+		else if(y<32-(height=t.getHeight()))
 		{
 			y=32-height;
 		}
@@ -352,7 +362,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 			y-=y%32;
 		else
 			y+=32-(y%32);
-		t.setLocation(x, y);
+		t.moveTo(x, y);
 	}
 	
 }

@@ -28,6 +28,9 @@ public class Tile extends Polygon implements JSONStreamAware
 
 	private static BufferedImage[] check;
 	private static State[] still;
+	
+	//TODO: REMOVE THESE
+	private int width, height, x, y;
 
 	static
 	{
@@ -52,10 +55,11 @@ public class Tile extends Polygon implements JSONStreamAware
 
 	public Tile(int x,int y,int width,int height,String picText,int imageX,int imageY,String statesText)
 	{
-		this.x=x;
-		this.y=y;
-		this.width=width;
-		this.height=height;
+		super(x,y,width,height);
+//		this.x=x;
+//		this.y=y;
+//		this.width=width;
+//		this.height=height;
 		this.picText=picText;
 		this.imageX=imageX;
 		this.imageY=imageY;
@@ -119,9 +123,41 @@ public class Tile extends Polygon implements JSONStreamAware
 //			this.y=768;
 //	}
 
+	public int getWidth()
+	{
+		return getCorners()[1].XPoint()-getCorners()[0].XPoint();
+	}
+	
+	public int getHeight()
+	{
+		return Math.abs(getCorners()[3].YPoint() - getCorners()[0].YPoint());
+	}
+	
+	public void setWidth(int width)
+	{
+		getCorners()[1].setX(getCorners()[0].XPoint() + width);
+		getCorners()[2].setX(getCorners()[0].XPoint() + width);
+	}
+	
+	public void setHeight(int height)
+	{
+		getCorners()[2].setY(getCorners()[0].YPoint() + height);
+		getCorners()[3].setY(getCorners()[0].YPoint() + height);
+	}
+	
+	public int getX()
+	{
+		return getCorners()[0].XPoint();
+	}
+	
+	public int getY()
+	{
+		return getCorners()[0].YPoint();
+	}
+	
 	public void draw(Graphics g)
 	{
-		g.drawImage(pics[animation], x, y, width, height, null);
+		g.drawImage(pics[animation], getX(), getY(), getWidth() , getHeight(), null);
 //		System.out.println(picText + " " + animation + " " + currentState + " " + x + " " + y);
 	}
 
@@ -136,13 +172,13 @@ public class Tile extends Polygon implements JSONStreamAware
 	public Tile copy()
 	{
 //		return new Tile(0, 0, width, height, picText, imageX, imageY, statesText);
-		return new Tile(0, 0, width, height, picText, imageX, imageY, "0-1");
+		return new Tile(0, 0, getWidth(), getHeight(), picText, imageX, imageY, "0-1");
 	}
 
 	public String stringify()
 	{
 		return String.format("X:%d,Y:%d,W:%d,H:%d,A:%d",
-				x,y,width,height,animation);
+				getX(),getY(),getWidth(),getHeight(),animation);
 	}
 
 	public void execute(String s)
@@ -172,10 +208,10 @@ public class Tile extends Polygon implements JSONStreamAware
 	@Override
 	public void writeJSONString(Writer out) throws IOException {
 		LinkedHashMap obj=new LinkedHashMap();
-		obj.put("x",new Integer(x));
-		obj.put("y",new Integer(y));
-		obj.put("width",new Integer(width));
-		obj.put("height",new Integer(height));
+		obj.put("x",new Integer(getX()));
+		obj.put("y",new Integer(getY()));
+		obj.put("width",new Integer(getWidth()));
+		obj.put("height",new Integer(getHeight()));
 		obj.put("picText",picText);
 		obj.put("imageX",imageX);
 		obj.put("imageY", imageY);

@@ -23,16 +23,16 @@ public class InteractiveTile extends Tile
 	
 	public void interact(Player p)
 	{
-		interacting=p.getBounds().intersects(this);
+//		interacting=p.getBounds().intersects(this);
 	}
 	
 	public void draw(Graphics g)
 	{
-		g.drawImage(pics[animation], x, y, width, height, null);
+		g.drawImage(pics[animation], getX(), getY(), getWidth(), getHeight(), null);
 		if(interacting)
 		{
 			g.setColor(Color.YELLOW);
-			g.fillRect(x,y,width,height);
+			g.fillRect(getX(),getY(),getWidth(),getHeight());
 		}
 	}
 

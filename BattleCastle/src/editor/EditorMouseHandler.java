@@ -1,5 +1,7 @@
 package editor;
 
+import game.physics.Vector;
+
 import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -29,7 +31,8 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 		mouse=arg0.getPoint();
 		//System.out.println(current);
 		if(dragging!=null)
-			dragging.setLocation(mouse.x-tx, mouse.y-ty);
+//			dragging.setLocation(mouse.x-tx, mouse.y-ty);
+			dragging.moveTo(mouse.x-tx,mouse.y-ty);
 	}
 
 	@Override
@@ -61,8 +64,8 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 			if(t.contains(mouse)&&dragging==null)
 			{
 				dragging=t;
-				tx=mouse.x-t.x;
-				ty=mouse.y-t.y;
+				tx=mouse.x-t.getX();
+				ty=mouse.y-t.getY();
 				canvasref.selectTile(t);
 			}
 		}
