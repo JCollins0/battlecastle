@@ -21,7 +21,7 @@ public class Player extends PhysicsRect{
 	public static final int ARROW_SPEED = 8;
 	public static final double MASS = 10;
 	public static final double ANG_VEL = 0;
-	public static final double DRAG_C = 2;
+	public static final double DRAG_C = 10;
 	
 	private BufferedImage image;
 	private ArrayList<Arrow> arrowStorage;

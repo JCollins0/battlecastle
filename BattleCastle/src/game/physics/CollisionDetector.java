@@ -138,7 +138,7 @@ public class CollisionDetector
 			}
 		}
 		
-		System.out.println("COLLIDE DETECT: " + minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
+		System.out.println("COLLIDE DETECT: " + a.getClass() + ", " + minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
 		if(a instanceof PhysicsPoly)
 		{
 			//((PhysicsPoly) a).setVelocity(new Vector(0,0));
@@ -151,7 +151,13 @@ public class CollisionDetector
 		}
 		if(b instanceof PhysicsPoly)
 		{
-			((PhysicsPoly) b).setVelocity(new Vector(0,0));
+			//((PhysicsPoly) a).setVelocity(new Vector(0,0));
+			if(b instanceof Arrow)
+			{
+				b.move(minimal.getNormal().vectorScale(overlap));
+				((PhysicsPoly) b).setVelocity(((PhysicsPoly) b).getVelocity().vectorScale(-1));
+			}
+			//((PhysicsPoly) a).getAcceleration().vectotDot(minimal.getNormal());
 		}
 		//FindPointOfCollision(a,b);
 		return true;
