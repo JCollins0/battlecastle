@@ -169,7 +169,7 @@ public class Game {
 								playerList[playerNum].decode(id[1]);
 //							System.out.println("recieved new mouse location " + id[1]);
 //							System.out.println("player location is " + playerList[playerNum].getMouseLocation());
-						}else if(type.equals(MessageType.PERFORM_ACTION))
+						}else if(type.equals(MessageType.PERFORM_ACTION.toString()))
 						{
 							String[] mess = messageArr[1].split("=");
 							switch(mess[0])
@@ -177,7 +177,6 @@ public class Game {
 							case "launch_a":
 								
 								int playerNum = Integer.parseInt(mess[1]);
-								
 								launchArrow(playerList[playerNum]);
 								
 								break;
