@@ -252,6 +252,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 	
 	public void selectTile(Tile t)
 	{
+		System.out.println(t);
 		current=t;
 		list.linkToFront(t);
 	}

@@ -76,6 +76,7 @@ public class DoubleLinkedList<T> implements Iterable<T>
 	
 	public T removeFront()
 	{
+		System.out.println(count);
 		if(count==0)
 			throw new NoSuchElementException();
 		T temp=front.getValue();
@@ -151,27 +152,8 @@ public class DoubleLinkedList<T> implements Iterable<T>
 	
 	public void linkToFront(T value)
 	{
-		Node n=front;
-		while(n!=null&&!n.value.equals(value))
-			n=n.next;
-		if(n==null)
-			throw new NoSuchElementException();
-		
-		else if(n!=front)
-		{
-			if(n==rear)
-			{
-				addFront(removeRear());
-				count--;
-			}
-			else
-			{
-				n.getPrev().setNext(n.getNext());
-				n.getNext().setPrev(n.getPrev());
-				addFront(n.value);
-				count--;
-			}
-		}
+		remove(value);
+		addFront(value);
 	}
 
 	@Override
