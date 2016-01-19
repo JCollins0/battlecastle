@@ -169,6 +169,19 @@ public class Game {
 								playerList[playerNum].decode(id[1]);
 //							System.out.println("recieved new mouse location " + id[1]);
 //							System.out.println("player location is " + playerList[playerNum].getMouseLocation());
+						}else if(type.equals(MessageType.PERFORM_ACTION))
+						{
+							String[] mess = messageArr[1].split("=");
+							switch(mess[0])
+							{
+							case "launch_a":
+								
+								int playerNum = Integer.parseInt(mess[1]);
+								
+								launchArrow(playerList[playerNum]);
+								
+								break;
+							}
 						}
 					}
 				}
@@ -315,27 +328,6 @@ public class Game {
 				}
 			}
 		}
-//		else if(hostType == HostType.CLIENT)
-//		{
-//			if(canvasRef.getCurrentState() == GameState.GAMEPLAY)
-//			{
-//				if(playerMap.size() >= MIN_PLAYERS)
-//				{					
-//					for(Arrow arrow : arrows.values())
-//					{
-//						arrow.tick();
-//					}
-//				}
-//			}
-//		}
-
-//		for(int i = 0; i < playerList.length; i++)
-//			if(playerList[i] != null)
-//			{
-//				System.out.println( "Player: " + i + " " + playerList[i].getCurrentArrow());
-//			}
-		
-		
 		
 		updateMyPlayer();
 	}
@@ -502,19 +494,51 @@ public class Game {
 	 */
 	public void launchArrow()
 	{
-		Player player = getMyPlayer();
-		Arrow arrow = player.removeArrow();
 		
-		if(arrow != null)
-		{
-			arrow.addVelocity();
-			arrows.put(arrow.getID(), arrow);
-//			for(Arrow a : arrows.values())
+		launchArrow(getMyPlayer());
+		
+		
+//		if(hostType == HostType.SERVER)
+//		{
+//			Player player = getMyPlayer();
+//			Arrow arrow = player.removeArrow();
+//			
+//			if(arrow != null)
 //			{
+//				arrow.addVelocity();
+//				arrows.put(arrow.getID(), arrow);
+//				Message message = new Message(MessageType.UPDATE_ARROW, arrow.getID() + "=" + arrow.stringify());
+//				gameClient.sendTCP(message);
+//			}
+//		}else
+//		{
+//			Message message = new Message(MessageType.PERFORM_ACTION, "launch_a" + "=" +getMyUser().getPlayerNumber() );
+//			gameClient.sendTCP(message);
+//		}
+		
+	}
+	
+	public void launchArrow(Player player)
+	{
+		
+		if(hostType == HostType.SERVER)
+		{
+			Arrow arrow = player.removeArrow();
+			
+			if(arrow != null)
+			{
+				arrow.addVelocity();
+				arrows.put(arrow.getID(), arrow);
 				Message message = new Message(MessageType.UPDATE_ARROW, arrow.getID() + "=" + arrow.stringify());
 				gameClient.sendTCP(message);
-//			}
+			}
+		}else
+		{
+			Message message = new Message(MessageType.PERFORM_ACTION, "launch_a" + "=" +getMyUser().getPlayerNumber() );
+			gameClient.sendTCP(message);
+			getMyPlayer().removeArrow();
 		}
+		
 	}
 	
 	/**

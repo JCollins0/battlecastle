@@ -133,6 +133,8 @@ public class GameMap {
 		return null;
 	}
 	
+	
+	
 	public static GameMap map1, map2, map3;
 	
 	static
