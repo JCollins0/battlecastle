@@ -521,7 +521,7 @@ public class Game {
 	public void launchArrow(Player player)
 	{
 		
-		if(hostType == HostType.SERVER)
+		if(hostType.equals(HostType.SERVER))
 		{
 			Arrow arrow = player.removeArrow();
 			
