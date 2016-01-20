@@ -1,20 +1,17 @@
 package core.menu_object;
 
-import game.object.MapType;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
 
-import utility.Utility;
 import core.GameState;
+import game.object.MapType;
+import utility.Utility;
 
 public class MapSelectionObject extends MenuButton {
 	

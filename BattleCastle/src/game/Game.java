@@ -55,7 +55,7 @@ public class Game {
 	private CollisionDetector collideDetect;
 	
 	private String myUUID;
-	private GameMap gameMap;
+	private GameMap gameMap, gameMapLoader;
 	private static final int MIN_PLAYERS = 1;
 	
 	public Game(BattleCastleCanvas canvasRef, HostType hostType)
@@ -76,6 +76,8 @@ public class Game {
 		if(hostType == HostType.CLIENT)
 			startClient();
 		System.setProperty("java.net.preferIPv4Stack" , "true");
+		
+		gameMapLoader = new GameMap();
 	}
 
 	/**
@@ -222,7 +224,7 @@ public class Game {
 					String type = messageArr[0].trim();
 					if(type.equals(MessageType.SELECT_MAP.toString()))
 					{
-						gameMap = GameMap.map1;//new GameMap(messageArr[1].trim());
+						gameMap = gameMapLoader.getByType(messageArr[1].trim());//new GameMap(messageArr[1].trim());
 					}else if(type.equals(MessageType.UPDATE_PLAYER.toString()))
 					{
 						String[] num = messageArr[1].split("=");
@@ -439,8 +441,8 @@ public class Game {
 		}
 		else
 		{
-			gameMap = GameMap.map1;//new GameMap(mapType.getBackground());
-
+			gameMap = gameMapLoader.getByType(mapType.getBackground());//new GameMap(mapType.getBackground());
+			
 			//load players and then send to clients
 			for(int i = 0; i < playerMap.size(); i++)
 			{

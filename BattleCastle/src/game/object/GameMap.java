@@ -6,14 +6,18 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
 
-import utility.Utility;
+import com.esotericsoftware.reflectasm.shaded.org.objectweb.asm.Type;
+
 import core.constants.ImageFilePaths;
 import core.constants.LevelTileData;
 import editor.Tile;
+import utility.Utility;
 
 public class GameMap {
 	
@@ -105,7 +109,7 @@ public class GameMap {
 
 	public String toString()
 	{
-		return "";
+		return imageName + "";
 	}
 	
 	public void loadLevelData(String filePath)
@@ -133,14 +137,58 @@ public class GameMap {
 		return null;
 	}
 	
-	
-	
-	public static GameMap map1, map2, map3;
-	
-	static
+	public GameMap getByType(String type)
 	{
-		map1 = new GameMap(ImageFilePaths.MAP_1_BACKGROUND, new Point[]{new Point(10,10),new Point(10,10),new Point(10,10),new Point(10,10)}, LevelTileData.MAP_1_DATA);
-		map2 = new GameMap(ImageFilePaths.MAP_2_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()}, LevelTileData.MAP_1_DATA);
-		map3 = new GameMap(ImageFilePaths.MAP_3_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()}, LevelTileData.MAP_1_DATA);
+		Field[] fields = GameMap.class.getFields();
+		int count = 0;
+		for(Field f : fields)
+		{
+//			System.out.println(f.getName());
+			//System.out.println(f.getType().toString());
+			count++;
+		}
+		
+		GameMap[] fieldSubSet = new GameMap[count];
+		for(int i = 0; i < fields.length; i++)
+		{
+			//System.out.println(GameMap.class.getCanonicalName());
+			//System.out.println(fields[i].getType().getCanonicalName().toString());
+			if(GameMap.class.getCanonicalName().toString().equals(fields[i].getType().getCanonicalName().toString()));
+				try {
+					Field f = this.getClass().getField(fields[i].getName());
+					fieldSubSet[--count] = (GameMap) f.get(this);
+//					System.out.println( ((GameMap)f.get(this)).toString());
+					
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (NoSuchFieldException e) {
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					e.printStackTrace();
+				}
+		}
+		
+		System.out.println(Arrays.toString(fieldSubSet));
+		
+		for(int i = 0; i < fieldSubSet.length; i++)
+		{
+//			System.out.println(type.getBackground());
+//			System.out.println(fieldSubSet[i].imageName);
+//			
+			if(fieldSubSet[i].imageName.equals(type))
+			{
+//				System.out.println(fieldSubSet[i].imageName);
+				return fieldSubSet[i];
+			}
+		}
+		
+		return null;
 	}
+	
+	public static GameMap map1 = new GameMap(ImageFilePaths.MAP_1_BACKGROUND, new Point[]{new Point(10,10),new Point(10,10),new Point(10,10),new Point(10,10)}, LevelTileData.MAP_1_DATA)
+			, map2= new GameMap(ImageFilePaths.MAP_2_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()}, LevelTileData.MAP_1_DATA)
+			, map3 = new GameMap(ImageFilePaths.MAP_3_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()}, LevelTileData.MAP_1_DATA);
+	
 }
