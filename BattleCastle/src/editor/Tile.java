@@ -165,7 +165,7 @@ public class Tile extends Polygon implements JSONStreamAware
 	{
 		if(animation++>=pics.length-1)
 			animation=0;
-		if(states[currentState].increment(this))
+		if(states[currentState].increment())
 			currentState=(currentState+1)%states.length;
 	}
 
@@ -177,8 +177,8 @@ public class Tile extends Polygon implements JSONStreamAware
 
 	public String stringify()
 	{
-		return String.format("X:%d,Y:%d,W:%d,H:%d,A:%d",
-				getX(),getY(),getWidth(),getHeight(),animation);
+		return String.format("X:%d,Y:%d,W:%d,H:%d,S:%d,A:%d",
+				getX(),getY(),getWidth(),getHeight(),statesText,animation);
 	}
 
 	public void execute(String s)

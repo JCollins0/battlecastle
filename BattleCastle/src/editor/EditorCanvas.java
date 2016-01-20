@@ -206,6 +206,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 				JSONArray ja = (JSONArray)parser.parse(reader.nextLine());
 				for(int i = 0;i<ja.size();i++)
 				{
+					System.out.println(ja);//something wrong
 					temp.addFront(Tile.decodeJSON((JSONObject)ja.get(i)));
 				}
 			}
@@ -252,7 +253,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 	
 	public void selectTile(Tile t)
 	{
-		System.out.println(t);
+		//System.out.println(t);
 		current=t;
 		list.linkToFront(t);
 	}
@@ -265,7 +266,10 @@ public class EditorCanvas extends Canvas implements Runnable{
 	public void tick()
 	{
 		for(Tile t:list)
+		{
 			t.tick();
+			System.out.println(t);
+		}
 		if(bottom)
 		{
 			for(Tile t:tools)

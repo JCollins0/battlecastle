@@ -47,7 +47,7 @@ public class State
 		}
 	}
 	
-	public boolean increment(Tile t)//boolean true indicates the change of state
+	public boolean increment()//boolean true indicates the change of state
 	{
 		if(continual)
 		{

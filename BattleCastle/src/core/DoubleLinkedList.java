@@ -76,7 +76,7 @@ public class DoubleLinkedList<T> implements Iterable<T>
 	
 	public T removeFront()
 	{
-		System.out.println(count);
+		//System.out.println(count);
 		if(count==0)
 			throw new NoSuchElementException();
 		T temp=front.getValue();
