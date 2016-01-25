@@ -192,7 +192,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		bs.show();
 	}
 	
-	private DoubleLinkedList<Tile> readSave()
+	public static DoubleLinkedList<Tile> readSave()
 	{
 		DoubleLinkedList<Tile> temp = new DoubleLinkedList<Tile>();
 		Scanner reader=null;
@@ -206,8 +206,10 @@ public class EditorCanvas extends Canvas implements Runnable{
 				JSONArray ja = (JSONArray)parser.parse(reader.nextLine());
 				for(int i = 0;i<ja.size();i++)
 				{
-					System.out.println(ja);//something wrong
+					//System.out.println(ja);//something wrong
 					temp.addFront(Tile.decodeJSON((JSONObject)ja.get(i)));
+					//temp.peekFront().createStates();
+					//System.out.println(Tile.decodeJSON((JSONObject)ja.get(i))+"    hi");
 				}
 			}
 		}
@@ -268,7 +270,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		for(Tile t:list)
 		{
 			t.tick();
-			System.out.println(t);
+			//System.out.println(t);
 		}
 		if(bottom)
 		{

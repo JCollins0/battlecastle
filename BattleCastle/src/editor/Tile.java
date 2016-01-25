@@ -41,7 +41,7 @@ public class Tile extends Polygon implements JSONStreamAware
 	public static Tile decodeJSON(JSONObject j)
 	{
 		if(j.size()==8)
-			return new Tile((int)(long)j.get("x"),(int)(long)j.get("y"),(int)(long)j.get("width"),(int)(long)j.get("height"),(String)j.get("picText"),(int)(long)j.get("imageX"),(int)(long)j.get("imageY"),(String)j.get("statesText"));
+			return new Tile((int)(long)j.get("x"),(int)(long)j.get("y"),(int)(long)j.get("width"),(int)(long)j.get("height"),(String)j.get("picText"),(int)(long)j.get("imageX"),(int)(long)j.get("imageY"),(String)j.get("statestext"));
 		return null;
 	}
 
@@ -163,10 +163,11 @@ public class Tile extends Polygon implements JSONStreamAware
 
 	public void tick()
 	{
+		super.tick();
 		if(animation++>=pics.length-1)
 			animation=0;
-		if(states[currentState].increment())
-			currentState=(currentState+1)%states.length;
+		if(states[currentState].increment(this))
+			currentState=(++currentState)%states.length;
 	}
 
 	public Tile copy()
@@ -177,7 +178,7 @@ public class Tile extends Polygon implements JSONStreamAware
 
 	public String stringify()
 	{
-		return String.format("X:%d,Y:%d,W:%d,H:%d,S:%d,A:%d",
+		return String.format("X:%d,Y:%d,W:%d,H:%d,S:%s,A:%d",
 				getX(),getY(),getWidth(),getHeight(),statesText,animation);
 	}
 
