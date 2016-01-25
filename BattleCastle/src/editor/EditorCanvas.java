@@ -22,6 +22,7 @@ import core.GameTimer;
 import core.constants.DataConstants;
 import core.constants.ImageFileDimensions;
 import core.constants.ImageFilePaths;
+import core.constants.LevelTileData;
 
 public class EditorCanvas extends Canvas implements Runnable{
 
@@ -76,7 +77,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		grid=true;
 		drawMouseLoc=true;
 		
-		list=readSave(DataConstants.CURRENT_LEVEL);
+		list=readSave(LevelTileData.MAP_1_DATA);
 		if(list==null)
 			list=new DoubleLinkedList<Tile>();
 		tileAdderY=800;
@@ -230,7 +231,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 	{
 		JSONArray temp=new JSONArray();
 		//temp.addAll(list);
-		Iterator<Tile> iter=list.iterator();
+		Iterator<Tile> iter=list.iteratorb();
 		while(iter.hasNext())
 		{
 			temp.add(iter.next());
@@ -239,7 +240,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		PrintWriter printer=null;
 		try
 		{
-			printer=new PrintWriter(new FileOutputStream(DataConstants.CURRENT_LEVEL));
+			printer=new PrintWriter(new FileOutputStream(LevelTileData.MAP_1_DATA));
 			temp.writeJSONString(printer);
 		}
 		catch (Exception e)
