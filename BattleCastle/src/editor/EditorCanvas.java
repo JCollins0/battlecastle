@@ -76,7 +76,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		grid=true;
 		drawMouseLoc=true;
 		
-		list=readSave();
+		list=readSave(DataConstants.CURRENT_LEVEL);
 		if(list==null)
 			list=new DoubleLinkedList<Tile>();
 		tileAdderY=800;
@@ -192,14 +192,14 @@ public class EditorCanvas extends Canvas implements Runnable{
 		bs.show();
 	}
 	
-	public static DoubleLinkedList<Tile> readSave()
+	public static DoubleLinkedList<Tile> readSave(String filePath)
 	{
 		DoubleLinkedList<Tile> temp = new DoubleLinkedList<Tile>();
 		Scanner reader=null;
 		JSONParser parser=new JSONParser();
 		try
 		{
-			reader=new Scanner(new FileInputStream(DataConstants.CURRENT_LEVEL));
+			reader=new Scanner(new FileInputStream(filePath));
 			//System.out.println(reader.nextLine());
 			if(reader.hasNext())
 			{
