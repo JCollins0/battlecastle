@@ -9,13 +9,16 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 
 import com.esotericsoftware.reflectasm.shaded.org.objectweb.asm.Type;
 
+import core.DoubleLinkedList;
 import core.constants.ImageFilePaths;
 import core.constants.LevelTileData;
+import editor.EditorCanvas;
 import editor.Tile;
 import utility.Utility;
 
@@ -24,7 +27,7 @@ public class GameMap {
 	private BufferedImage background;
 	private Point[] playerStartLocations;
 	private String imageName;
-	private ArrayList<Tile> tiles;
+	private DoubleLinkedList<Tile> tiles;
 	
 	public GameMap()
 	{
@@ -48,7 +51,7 @@ public class GameMap {
 		this.imageName = imageName;
 		this.playerStartLocations = playerLocations;
 		if(tileData != null && !tileData.equals(""))
-			tiles = Utility.readLevelSaveFromFile(tileData);
+			tiles = EditorCanvas.readSave(tileData);
 	}
 	
 	public void render(Graphics g)
@@ -57,21 +60,28 @@ public class GameMap {
 			g.drawImage(background, 0, 0, null);
 		
 		if(tiles != null)
-			for(int i = 0; i < tiles.size(); i++)
+		{	
+			Iterator<Tile> it = tiles.iteratorb();
+			while(it.hasNext())
 			{
-				tiles.get(i).draw(g);
-				//System.out.println("Drawing Tiles");
+				Tile t = it.next();
+				t.draw(g);
 			}
+		}
 		
 	}
 	
 	public void tick()
 	{
 		if(tiles != null)
-			for(int i = 0; i < tiles.size(); i++)
+		{
+			Iterator<Tile> it = tiles.iterator();
+			while(it.hasNext())
 			{
-				tiles.get(i).tick();
+				Tile t = it.next();
+				t.tick();
 			}
+		}
 	}
 	
 	public String getImageName() {
@@ -115,7 +125,7 @@ public class GameMap {
 	public void loadLevelData(String filePath)
 	{
 		//JOptionPane.showMessageDialog(null, data);
-		tiles = Utility.readLevelSaveFromFile(filePath);
+		tiles = EditorCanvas.readSave(filePath);
 		//System.out.println(tiles);
 	}
 	

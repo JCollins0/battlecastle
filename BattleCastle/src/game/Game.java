@@ -58,6 +58,11 @@ public class Game {
 	private GameMap gameMap, gameMapLoader;
 	private static final int MIN_PLAYERS = 1;
 	
+	/**
+	 * Initialize Game class
+	 * @param canvasRef the reference to the Canvas class
+	 * @param hostType either Server or Client
+	 */
 	public Game(BattleCastleCanvas canvasRef, HostType hostType)
 	{
 		this.canvasRef = canvasRef;
@@ -87,13 +92,13 @@ public class Game {
 	{
 		
 		try {
-			serverIP = InetAddress.getLocalHost();
-			gameServer = new Server(65536, 16384);
-			gameServer.getKryo().setRegistrationRequired(false);
+			serverIP = InetAddress.getLocalHost(); //sets the server ip to the local host because hosting
+			gameServer = new Server(65536, 16384); //creates a new server with server buffers
+			gameServer.getKryo().setRegistrationRequired(false); //skips having to register classes to send over network
 			
-			gameServer.start();
-			gameServer.bind(SERVER_PORT,SERVER_UDP);
-			gameServer.addListener(new Listener() {
+			gameServer.start(); //starts the server
+			gameServer.bind(SERVER_PORT,SERVER_UDP); //binds the port numbers for TCP and UDP
+			gameServer.addListener(new Listener() {  //used to recieve messages
 				public void received (Connection connection, Object object) {
 					if (object instanceof BattleCastleUser) {
 						
@@ -258,6 +263,20 @@ public class Game {
 							{
 								System.out.println("THE ARROW IS NULL: " + uuid);
 							}
+						}
+					}else if(type.equals(MessageType.PERFORM_ACTION.toString()))
+					{
+						String[] mess = messageArr[1].split("=");
+						switch(mess[0])
+						{
+						case "remove_a":
+							
+							if(getHostType().equals(HostType.CLIENT))
+							{
+								int playerNum = Integer.parseInt(mess[1]);
+								playerList[playerNum].removeArrow();
+							}
+							break;
 						}
 					}
 					
@@ -484,6 +503,10 @@ public class Game {
 		KeyHandler.presses.remove(KeyPress.RIGHT_U);
 	}
 	
+	/**
+	 * sends mouse x,y coordinates to the server to point the player
+	 * arrow to the correct point
+	 */
 	public void sendMouseLocation() {
 		Message message = new Message(MessageType.UPDATE_MOUSE_LOC,
 				playerMap.get(myUUID).getPlayerNumber() + "=" + String.format("MouseX#%d<MouseY#%d",MouseHandler.mouse.x,MouseHandler.mouse.y) );
@@ -495,30 +518,13 @@ public class Game {
 	 */
 	public void launchArrow()
 	{
-		
-		launchArrow(getMyPlayer());
-		
-		
-//		if(hostType == HostType.SERVER)
-//		{
-//			Player player = getMyPlayer();
-//			Arrow arrow = player.removeArrow();
-//			
-//			if(arrow != null)
-//			{
-//				arrow.addVelocity();
-//				arrows.put(arrow.getID(), arrow);
-//				Message message = new Message(MessageType.UPDATE_ARROW, arrow.getID() + "=" + arrow.stringify());
-//				gameClient.sendTCP(message);
-//			}
-//		}else
-//		{
-//			Message message = new Message(MessageType.PERFORM_ACTION, "launch_a" + "=" +getMyUser().getPlayerNumber() );
-//			gameClient.sendTCP(message);
-//		}
-		
+		launchArrow(getMyPlayer());		
 	}
 	
+	/**
+	 * sends arrow information to server given a player
+	 * @param player the player that launched the arrow
+	 */
 	public void launchArrow(Player player)
 	{
 		
@@ -532,6 +538,8 @@ public class Game {
 				arrows.put(arrow.getID(), arrow);
 				Message message = new Message(MessageType.UPDATE_ARROW, arrow.getID() + "=" + arrow.stringify());
 				gameClient.sendTCP(message);
+				message = new Message(MessageType.PERFORM_ACTION, "remove_a" + "=" +getMyUser().getPlayerNumber() );
+				gameServer.sendToAllTCP(message);
 			}
 		}else
 		{
