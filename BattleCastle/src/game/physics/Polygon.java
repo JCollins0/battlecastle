@@ -1,4 +1,4 @@
-package game.physics;
+package game.physics;// you are working on screen wrap!
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -206,7 +206,16 @@ public class Polygon
 		return count;
 	}
 	
-	public void tick()
+	public void tick()//dimensions are 1024 by 786
+	{
+		for(Vector v:corners)
+		{
+			if(v.XPoint()<0||v.XPoint()>1024)
+				cloneX();
+		}
+	}
+	
+	public void cloneX()
 	{
 		
 	}

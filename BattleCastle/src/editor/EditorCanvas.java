@@ -309,6 +309,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		{
 		case 0:list.addFront(new Tile(0,0,32,32));break;
 		case 1:save();break;
+		case 2:list.addFront(current.copy());break;
 		default:break;
 		}
 	}

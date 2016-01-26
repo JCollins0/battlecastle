@@ -142,7 +142,7 @@ public class PhysicsPoly extends Polygon
 		
 		
 		//wrap screen
-		
+		/*
 		if(getVelocity().YPoint() < 0) //going up
 		{
 			if(getRightHighest().YPoint() < 0 - getHeight()) //move from top to bottom
@@ -175,6 +175,7 @@ public class PhysicsPoly extends Polygon
 				moveTo(0-getWidth(), getCorners()[0].YPoint());
 			}
 		}
+		*/
 	}
 	
 	public Vector getAcceleration()
