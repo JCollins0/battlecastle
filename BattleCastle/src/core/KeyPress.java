@@ -9,7 +9,8 @@ public enum KeyPress {
 	LEFT_U("*left-up*"),
 	RIGHT_U("*right-up*"),
 	JUMP_U("*jump-up*"),
-	DOWN_U("*down-up*");
+	DOWN_U("*down-up*"),
+	DASH("*dash*");
 	
 	private String s;
 	

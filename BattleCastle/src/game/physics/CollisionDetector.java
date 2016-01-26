@@ -144,16 +144,20 @@ public class CollisionDetector
 			//((PhysicsPoly) a).setVelocity(new Vector(0,0));
 			if(a instanceof Arrow)
 			{
+				
+				System.out.println("Minimal.X is non-zero: " + minimal.getNormal() );
+				
 				a.move(minimal.getNormal().vectorScale(overlap));
 				((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
 			}
-			((PhysicsPoly) a).getAcceleration().vectotDot(minimal.getNormal());
+		//	((PhysicsPoly) a).getAcceleration().vectotDot(minimal.getNormal());
 		}
 		if(b instanceof PhysicsPoly)
 		{
 			//((PhysicsPoly) a).setVelocity(new Vector(0,0));
 			if(b instanceof Arrow)
 			{
+				System.out.println("Minimal.X is non-zero: " + minimal.getNormal() );
 				b.move(minimal.getNormal().vectorScale(overlap));
 				((PhysicsPoly) b).setVelocity(((PhysicsPoly) b).getVelocity().vectorScale(-1));
 			}

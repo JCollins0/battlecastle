@@ -100,7 +100,7 @@ public class Game {
 			gameServer.bind(SERVER_PORT,SERVER_UDP); //binds the port numbers for TCP and UDP
 			gameServer.addListener(new Listener() {  //used to recieve messages
 				public void received (Connection connection, Object object) {
-					if (object instanceof BattleCastleUser) {
+					if (object instanceof BattleCastleUser) { //for registering users
 						
 						BattleCastleUser user = (BattleCastleUser)object;
 						System.out.println("Recieved user: " + user);
@@ -130,32 +130,36 @@ public class Game {
 							String[] num = messageArr[1].split("=");
 							//System.out.println("NUM: " + num[1]);
 							int playerNum = Integer.parseInt(num[0]);
-							if(num[1].equals(KeyPress.RIGHT_D.getText()))
+							if(num[1].equals(KeyPress.RIGHT_D.getText())) //move player right
 							{
 								playerList[playerNum].setvX(2);
 							}
-							if(num[1].equals(KeyPress.LEFT_D.getText()))
+							if(num[1].equals(KeyPress.LEFT_D.getText())) //move player left
 							{
 								playerList[playerNum].setvX(-2);
 							}
-							if(num[1].equals(KeyPress.JUMP_D.getText()))
+							if(num[1].equals(KeyPress.JUMP_D.getText())) //move player up
 							{
 								playerList[playerNum].setvY(-2);
 							}
-							if(num[1].equals(KeyPress.DOWN_D.getText()))
+							if(num[1].equals(KeyPress.DOWN_D.getText())) //move player down
 							{
 								playerList[playerNum].setvY(2);
 							}
+							if(num[1].equals(KeyPress.DASH.getText())) //make player dash
+							{
+								
+							}
 							
-						}else if(type.equals(MessageType.UPDATE_ARROW.toString()))
+						}else if(type.equals(MessageType.UPDATE_ARROW.toString())) //update location of an arrow
 						{
 							String[] id = messageArr[1].split("=");
 							String uuid = id[0];
 							if(arrows.get(uuid)== null)
 							{
 								String[] items = id[1].split(",");
-								System.out.println("hello");
-								System.out.println(Arrays.toString(items));
+//								System.out.println("hello");
+//								System.out.println(Arrays.toString(items));
 								arrows.put(uuid,
 										new Arrow(
 												Integer.parseInt(items[1].split(":")[1]),Integer.parseInt(items[2].split(":")[1]),
@@ -168,7 +172,7 @@ public class Game {
 							Message mess = new Message(MessageType.UPDATE_ARROW, arrows.get(uuid).getID() + "=" + arrows.get(uuid).stringify());
 							gameServer.sendToAllTCP(mess);
 							
-						}else if(type.equals(MessageType.UPDATE_MOUSE_LOC.toString()))
+						}else if(type.equals(MessageType.UPDATE_MOUSE_LOC.toString())) //update mouse location of a player
 						{
 							String[] id = messageArr[1].split("=");
 							int playerNum = Integer.parseInt(id[0]);
@@ -176,12 +180,12 @@ public class Game {
 								playerList[playerNum].decode(id[1]);
 //							System.out.println("recieved new mouse location " + id[1]);
 //							System.out.println("player location is " + playerList[playerNum].getMouseLocation());
-						}else if(type.equals(MessageType.PERFORM_ACTION.toString()))
+						}else if(type.equals(MessageType.PERFORM_ACTION.toString())) //perform specific actions (actions that don't occur every tick
 						{
 							String[] mess = messageArr[1].split("=");
 							switch(mess[0])
 							{
-							case "launch_a":
+							case "launch_a": //launching arrow from client player
 								
 								int playerNum = Integer.parseInt(mess[1]);
 								launchArrow(playerList[playerNum]);
@@ -202,14 +206,14 @@ public class Game {
 	 */
 	public void startClient()
 	{
-		gameClient = new Client(65536, 16384);
-		gameClient.getKryo().setRegistrationRequired(false);
-		gameClient.start();
-		gameClient.addListener(new Listener(){
+		gameClient = new Client(65536, 16384); //create a new client with buffer sizes
+		gameClient.getKryo().setRegistrationRequired(false); //allows classes to be passed over network without registering them
+		gameClient.start(); //starts the client
+		gameClient.addListener(new Listener(){ //adds listener to accept object packets
 			
 			public void received (Connection connection, Object object) {
 //					System.out.println("CLIENT RECEIVED OBJECT - " + object.toString());
-				if (object instanceof BattleCastleUser)
+				if (object instanceof BattleCastleUser) //registering users on the client
 				{
 					BattleCastleUser user = (BattleCastleUser)object;
 					if(playerMap.get( user.getUUID() ) == null)
@@ -221,20 +225,20 @@ public class Game {
 					
 					System.out.println(Arrays.toString(playerList));
 					
-				}else if(object instanceof Message)
+				}else if(object instanceof Message) //Receiving things that happen every tick
 				{
 					Message messageOb = (Message)object;
 					String message = messageOb.toString();
 					String[] messageArr = message.split(Message.SEPARATOR);
 					String type = messageArr[0].trim();
-					if(type.equals(MessageType.SELECT_MAP.toString()))
+					if(type.equals(MessageType.SELECT_MAP.toString())) //sends which map the server picked
 					{
 						gameMap = gameMapLoader.getByType(messageArr[1].trim());//new GameMap(messageArr[1].trim());
-					}else if(type.equals(MessageType.UPDATE_PLAYER.toString()))
+					}else if(type.equals(MessageType.UPDATE_PLAYER.toString())) //updates player location client side
 					{
 						String[] num = messageArr[1].split("=");
 						playerList[Integer.parseInt(num[0])].decode(num[1]);
-					}else if(type.equals(MessageType.UPDATE_ARROW.toString()))
+					}else if(type.equals(MessageType.UPDATE_ARROW.toString())) //initializes arrow location client side
 					{
 						String[] id = messageArr[1].split("=");
 						String uid = id[0];
@@ -249,7 +253,7 @@ public class Game {
 									);
 						}
 						
-					}else if(type.equals(MessageType.MOVE_ARROW.toString()))
+					}else if(type.equals(MessageType.MOVE_ARROW.toString())) //moves arrow on client side
 					{
 						
 						if(hostType == HostType.CLIENT){
@@ -264,12 +268,12 @@ public class Game {
 								System.out.println("THE ARROW IS NULL: " + uuid);
 							}
 						}
-					}else if(type.equals(MessageType.PERFORM_ACTION.toString()))
+					}else if(type.equals(MessageType.PERFORM_ACTION.toString())) //perform specific action
 					{
 						String[] mess = messageArr[1].split("=");
 						switch(mess[0])
 						{
-						case "remove_a":
+						case "remove_a": //remove server player arrow from client side users
 							
 							if(getHostType().equals(HostType.CLIENT))
 							{

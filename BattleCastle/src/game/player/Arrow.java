@@ -23,7 +23,8 @@ public class Arrow extends PhysicsRect{
 	public static final double MASS = 10, DRAGC = 1.05;
 	static int setDistance = 10;
 	private PhysicsPoly headCollision;
-
+	private static final int HEAD_COLL_W = 30; //10
+	
 	public Arrow(int x, int y,
 				 double theta, double graphicsTheta,
 				 Vector velocity, double torque, Player player,
@@ -35,7 +36,7 @@ public class Arrow extends PhysicsRect{
 		this.imagePath = imagePath;
 		this.graphicsRotationTheta = graphicsTheta;
 		this.ID = ID;
-		headCollision = new PhysicsPoly(x,y,10,24,theta,velocity,torque,MASS,DRAGC);
+		headCollision = new PhysicsPoly(x,y,HEAD_COLL_W,24,theta,velocity,torque,MASS,DRAGC);
 	}
 	
 	
@@ -134,10 +135,10 @@ public class Arrow extends PhysicsRect{
 		this.graphicsRotationTheta = theta;
 		
 		hcrnrs = headCollision.getCorners();
-		hcrnrs[0] = getCorners()[1].vectorAdd(new Vector(-10*Math.cos(theta),-10*Math.sin(theta)));
+		hcrnrs[0] = getCorners()[1].vectorAdd(new Vector(-HEAD_COLL_W*Math.cos(theta),-HEAD_COLL_W*Math.sin(theta)));
 		hcrnrs[1] = getCorners()[1];
 		hcrnrs[2] = getCorners()[2];
-		hcrnrs[3] = getCorners()[2].vectorAdd(new Vector(-10*Math.cos(theta),-10 * Math.sin(theta)));
+		hcrnrs[3] = getCorners()[2].vectorAdd(new Vector(-HEAD_COLL_W*Math.cos(theta),-HEAD_COLL_W * Math.sin(theta)));
 		
 	}
 	Vector[] hcrnrs;
@@ -153,10 +154,10 @@ public class Arrow extends PhysicsRect{
 		rotateTo(angle);
 		
 		hcrnrs = headCollision.getCorners();
-		hcrnrs[0] = getCorners()[1].vectorAdd(new Vector(-10*Math.cos(Math.toRadians(theta)),-10*Math.sin(Math.toRadians(theta) )));
+		hcrnrs[0] = getCorners()[1].vectorAdd(new Vector(-HEAD_COLL_W*Math.cos(Math.toRadians(theta)),-HEAD_COLL_W*Math.sin(Math.toRadians(theta) )));
 		hcrnrs[1] = getCorners()[1];
 		hcrnrs[2] = getCorners()[2];
-		hcrnrs[3] = getCorners()[2].vectorAdd(new Vector(-10*Math.cos(Math.toRadians(theta)),-10 * Math.sin(Math.toRadians(theta))));
+		hcrnrs[3] = getCorners()[2].vectorAdd(new Vector(-HEAD_COLL_W*Math.cos(Math.toRadians(theta)),-HEAD_COLL_W * Math.sin(Math.toRadians(theta))));
 		
 //		System.out.println("ANGLE OF ROTATION: "  +theta);
 //		System.out.println("-----------\n" + Arrays.toString(getCorners()) + "\n" + Arrays.toString(headCollision.getCorners()) + "\n----------\n");
