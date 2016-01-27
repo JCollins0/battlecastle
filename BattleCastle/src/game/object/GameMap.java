@@ -129,6 +129,10 @@ public class GameMap {
 		//System.out.println(tiles);
 	}
 	
+	public DoubleLinkedList<Tile> getTiles() {
+		return tiles;
+	}
+	
 	public Point getPlayerStartPoint(int playerNum) {
 		if(playerStartLocations == null)
 		{

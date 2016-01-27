@@ -1,16 +1,5 @@
 package game;
 
-import game.message.Message;
-import game.message.MessageType;
-import game.object.GameMap;
-import game.object.MapType;
-import game.physics.CollisionDetector;
-import game.physics.Polygon;
-import game.physics.Vector;
-import game.player.Arrow;
-import game.player.BattleCastleUser;
-import game.player.Player;
-
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.IOException;
@@ -29,6 +18,7 @@ import com.esotericsoftware.kryonet.Listener;
 import com.esotericsoftware.kryonet.Server;
 
 import core.BattleCastleCanvas;
+import core.DoubleLinkedList;
 import core.Error;
 import core.GameState;
 import core.HostType;
@@ -36,6 +26,17 @@ import core.KeyHandler;
 import core.KeyPress;
 import core.MouseHandler;
 import core.constants.ImageFilePaths;
+import editor.Tile;
+import game.message.Message;
+import game.message.MessageType;
+import game.object.GameMap;
+import game.object.MapType;
+import game.physics.CollisionDetector;
+import game.physics.Polygon;
+import game.physics.Vector;
+import game.player.Arrow;
+import game.player.BattleCastleUser;
+import game.player.Player;
 
 public class Game {
 	
@@ -344,7 +345,12 @@ public class Game {
 					}
 					
 					List<Arrow> plist = Collections.list(Collections.enumeration(arrows.values()));
+					DoubleLinkedList<Tile> tlist = gameMap.getTiles();
 					List<Polygon> list = new ArrayList<Polygon>();
+					
+					for(Tile t : tlist)
+						list.add(t);
+				
 					list.addAll(plist);
 					for(int i = 0; i < playerList.length && playerList[i] != null; i++)
 						list.add(playerList[i]);

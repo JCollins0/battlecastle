@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Stack;
 import java.util.TreeMap;
 
+import editor.Tile;
 import game.player.Arrow;
 
 public class CollisionDetector
@@ -175,6 +176,29 @@ public class CollisionDetector
 				((PhysicsPoly) b).setVelocity(((PhysicsPoly) b).getVelocity().vectorScale(-1));
 			}
 			//((PhysicsPoly) a).getAcceleration().vectotDot(minimal.getNormal());
+		}
+		
+		if(a instanceof Tile)
+		{
+			if(b instanceof PhysicsPoly)
+			{
+				
+				System.out.println("Minimal.X is non-zero: " + minimal.vectorScale(overlap) );
+				
+				b.move(minimal.vectorScale(overlap));
+				((PhysicsPoly) b).setVelocity(((PhysicsPoly) b).getVelocity().vectorScale(-1));
+			}
+		}
+		if(b instanceof Tile)	
+		{
+			if(a instanceof PhysicsPoly)
+			{
+				
+				System.out.println("Minimal.X is non-zero: " + minimal.vectorScale(overlap) );
+				
+				a.move(minimal.vectorScale(overlap));
+				((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
+			}
 		}
 		
 		FindPointOfCollision(a,b);
