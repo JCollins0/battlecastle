@@ -46,7 +46,7 @@ public class CollisionDetector
 	
 	boolean flip;
 	
-	double overlap;
+	double overlap = Double.MAX_VALUE;
 	//ArrayList<Integer> ranges
 	Polygon ac, bc; // collision polygons
 	
@@ -102,6 +102,8 @@ public class CollisionDetector
 		axes1=ac.getAxes();
 		axes2=bc.getAxes();
 		
+		overlap = Double.MAX_VALUE;
+		
 		//loop over axes1
 		for(i=0;i<axes1.length;i++)
 		{
@@ -115,8 +117,13 @@ public class CollisionDetector
 			}
 			else
 			{
-				overlap=p1.getOverlap(p2);
-				minimal=axis;
+				double small = p1.getOverlap(p2);
+				if(small < overlap)
+				{
+					overlap= small;
+					minimal=axis;
+				}
+				
 			}
 		}
 		
@@ -127,16 +134,22 @@ public class CollisionDetector
 			p1.project(ac,axis);
 			p2.project(bc,axis);
 			
-			if(!p1.overlap(p2))
+			if(!p2.overlap(p1))
 			{
 				return false;
 			}
 			else
 			{
-				overlap=p1.getOverlap(p2);
-				minimal=axis;
+				double small = p1.getOverlap(p2);
+				if(small < overlap)
+				{
+					overlap= small;
+					minimal=axis;
+				}
 			}
 		}
+		
+		minimal.normalize();
 		
 		System.out.println("COLLIDE DETECT: " + a.getClass() + ", " + minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
 		if(a instanceof PhysicsPoly)
@@ -145,9 +158,9 @@ public class CollisionDetector
 			if(a instanceof Arrow)
 			{
 				
-				System.out.println("Minimal.X is non-zero: " + minimal.getNormal() );
+				System.out.println("Minimal.X is non-zero: " + minimal.vectorScale(overlap) );
 				
-				a.move(minimal.getNormal().vectorScale(overlap));
+				a.move(minimal.vectorScale(overlap));
 				((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
 			}
 		//	((PhysicsPoly) a).getAcceleration().vectotDot(minimal.getNormal());
@@ -157,13 +170,17 @@ public class CollisionDetector
 			//((PhysicsPoly) a).setVelocity(new Vector(0,0));
 			if(b instanceof Arrow)
 			{
-				System.out.println("Minimal.X is non-zero: " + minimal.getNormal() );
-				b.move(minimal.getNormal().vectorScale(overlap));
+				System.out.println("Minimal.X is non-zero: " + minimal.vectorScale(overlap) );
+				b.move(minimal.vectorScale(overlap));
 				((PhysicsPoly) b).setVelocity(((PhysicsPoly) b).getVelocity().vectorScale(-1));
 			}
 			//((PhysicsPoly) a).getAcceleration().vectotDot(minimal.getNormal());
 		}
-		//FindPointOfCollision(a,b);
+		
+		FindPointOfCollision(a,b);
+		
+		
+		
 		return true;
 	}
 	
@@ -209,6 +226,8 @@ public class CollisionDetector
 		{
 			e.set(maxProj, l);
 		}
+		
+		System.out.println("MPV_BEST_EDGE: " + e.getMax());
 	}
 	
 	public void findReferenceEdge()

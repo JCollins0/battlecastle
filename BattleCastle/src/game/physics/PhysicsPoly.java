@@ -178,6 +178,10 @@ public class PhysicsPoly extends Polygon
 		*/
 	}
 	
+	public void setAcceleration(Vector acceleration) {
+		this.acceleration = acceleration;
+	}
+	
 	public Vector getAcceleration()
 	{
 		return acceleration;
