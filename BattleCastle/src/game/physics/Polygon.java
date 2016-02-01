@@ -1,4 +1,4 @@
-package game.physics;// you are working on screen wrap!
+package game.physics;
 
 import java.awt.Color;
 import java.awt.Graphics;
