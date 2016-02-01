@@ -86,6 +86,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		Tile addNewTile=new Tile(resetX(),TOOLS_Y,32,32);
 		Tile saveTile=new Tile(getNextX(),TOOLS_Y,32,32,ImageFilePaths.SAVE,ImageFileDimensions.SAVE.x,ImageFileDimensions.SAVE.y,null);
 		Tile cloneTile=new Tile(getNextX(),TOOLS_Y,32,32);
+		//Tile deleteAllTile=new Tile(getNextX())
 		tools.add(addNewTile);
 		tools.add(saveTile);
 		tools.add(cloneTile);

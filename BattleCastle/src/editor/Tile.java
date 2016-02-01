@@ -87,7 +87,7 @@ public class Tile extends Polygon implements JSONStreamAware
 		State[] temp=new State[text.length];
 		for(int i = 0; i<temp.length;i++)
 		{
-			String[] data=text[i].split("-");
+			String[] data=text[i].split("+");
 			if(data.length==1)
 				temp[i]=new State(Integer.parseInt(data[0]));
 			else if(data.length==2)
@@ -173,7 +173,7 @@ public class Tile extends Polygon implements JSONStreamAware
 	public Tile copy()
 	{
 //		return new Tile(0, 0, width, height, picText, imageX, imageY, statesText);
-		return new Tile(0, 0, getWidth(), getHeight(), picText, imageX, imageY, "0-1");
+		return new Tile(0, 0, getWidth(), getHeight(), picText, imageX, imageY, statesText);
 	}
 
 	public String stringify()
