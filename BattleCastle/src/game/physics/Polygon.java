@@ -137,7 +137,7 @@ public class Polygon
 		return corners;
 	}
 	
-	public double getHighestX()
+	public double getHighestX() //rightmost on screen, highest numerically
 	{
 		double n=corners[0].XExact();
 		for(int i=1;i<count;i++)
@@ -146,7 +146,7 @@ public class Polygon
 		return n;
 	}
 	
-	public double getHighestY()
+	public double getHighestY() //lowest on screen, highest numerically
 	{
 		double n=corners[0].YExact();
 		for(int i=1;i<count;i++)
@@ -155,7 +155,7 @@ public class Polygon
 		return n;
 	}
 	
-	public double getLowestX()
+	public double getLowestX() //leftmost on screen, lowest numerically
 	{
 		double n=corners[0].XExact();
 		for(int i=1;i<count;i++)
@@ -164,7 +164,7 @@ public class Polygon
 		return n;
 	}
 	
-	public double getLowestY()
+	public double getLowestY() //highest on screen, lowest numerically
 	{
 		double n=corners[0].YExact();
 		for(int i=1;i<count;i++)
@@ -208,16 +208,30 @@ public class Polygon
 	
 	public void tick()//dimensions are 1024 by 786
 	{
-		for(Vector v:corners)
-		{
-			if(v.XPoint()<0||v.XPoint()>1024)
-				cloneX();
-		}
+		moveX();
 	}
 	
-	public void cloneX()
+	public void moveX()
 	{
-		
+		if((int)getLowestY() > 786)
+		{
+			moveTo(corners[0].XPoint(), (int) (0 - (getHighestY()-getLowestY())));
+		}
+		if((int)getHighestY() < 0)
+		{
+			moveTo(corners[0].XPoint(), (int) (786 - (getHighestY()-getLowestY())));
+		}
+		if((int)getHighestX() < 0)
+		{
+			moveTo((int) (1024), corners[0].YPoint());
+			System.out.println("Wrapping the left");
+		}
+		if((int)getLowestX() > 1024)
+		{
+			moveTo((int) (0 - (getHighestX()-getLowestX())), (int) getHighestY());
+			System.out.println("Wrapping the right");
+		}
+			
 	}
 	
 	public void render(Graphics g)

@@ -86,14 +86,14 @@ public class Player extends PhysicsRect{
 //			fixArrows(2,MouseHandler.mouse.x, MouseHandler.mouse.y);
 //		}
 		
-		if(getCorners()[0].YPoint() > 786)
-		{
-			moveTo(getCorners()[0].XPoint(),getCorners()[0].YPoint()%786);
-		}
-		else if(getCorners()[0].YPoint() < 0)
-		{
-			moveTo(getCorners()[0].XPoint(),786-HEIGHT);
-		}
+//		if(getCorners()[0].YPoint() > 786)
+//		{
+//			moveTo(getCorners()[0].XPoint(),getCorners()[0].YPoint()%786);
+//		}
+//		else if(getCorners()[0].YPoint() < 0)
+//		{
+//			moveTo(getCorners()[0].XPoint(),786-HEIGHT);
+//		}
 	}
 	
 	/**
@@ -105,14 +105,14 @@ public class Player extends PhysicsRect{
 		{
 			g.drawImage(image, getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
 			
-			if(getCorners()[3].YPoint() > 786)
-			{
-				g.drawImage(image, getCorners()[3].XPoint()%1024, getCorners()[3].YPoint()%786-HEIGHT,WIDTH,HEIGHT,null);
-			}else if(getCorners()[0].YPoint() < 0)
-			{
-				g.drawImage(image, getCorners()[3].XPoint()%1024, 786+getCorners()[3].YPoint(),WIDTH,HEIGHT,null);
-				
-			}
+//			if(getCorners()[3].YPoint() > 786)
+//			{
+//				g.drawImage(image, getCorners()[3].XPoint()%1024, getCorners()[3].YPoint()%786-HEIGHT,WIDTH,HEIGHT,null);
+//			}else if(getCorners()[0].YPoint() < 0)
+//			{
+//				g.drawImage(image, getCorners()[3].XPoint()%1024, 786+getCorners()[3].YPoint(),WIDTH,HEIGHT,null);
+//				
+//			}
 			
 		}else
 		{

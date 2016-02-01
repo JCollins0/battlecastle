@@ -118,6 +118,7 @@ public class PhysicsPoly extends Polygon
 
 	public void tick()
 	{
+		super.tick();
 		//move the thing-start Verlet integration
 		super.move(velocity.vectorScale(BattleCastleCanvas.time_Step).vectorAdd(acceleration.vectorScale(Math.pow(BattleCastleCanvas.time_Step, 2)*.5)).vectorScale(100));//last scale makes the meters per pixel into centimeters per pixel
 		//calculate the forces on the object
