@@ -157,14 +157,14 @@ public class Tile extends Polygon implements JSONStreamAware
 	
 	public void draw(Graphics g)
 	{
-		g.drawImage(pics[animation], getX(), getY(), getWidth() , getHeight(), null);
+		g.drawImage(pics[animation/speed], getX(), getY(), getWidth() , getHeight(), null);
 //		System.out.println(picText + " " + animation + " " + currentState + " " + x + " " + y);
 	}
-
+	int speed = 3;
 	public void tick()
 	{
 		super.tick();
-		if(animation++>=pics.length-1)
+		if(animation++>=(pics.length-1)*speed)
 			animation=0;
 		if(states[currentState].increment(this))
 			currentState=(++currentState)%states.length;

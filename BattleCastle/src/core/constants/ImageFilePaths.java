@@ -69,7 +69,8 @@ public class ImageFilePaths {
 				STONE = TILE + "stone",
 				WOOD = TILE + "wood",
 				PRESSURE_PLATE_SPIKES = TILE + "pp_spikes",
-				SPIKES = TILE + "spikes";
+				SPIKES = TILE + "spikes",
+				MULTI_COLOR = TILE + "multi_color";
 
 	
 				

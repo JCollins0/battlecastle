@@ -98,9 +98,11 @@ public class EditorCanvas extends Canvas implements Runnable{
 		Tile addBrickTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.GRAY_BRICK,ImageFileDimensions.GRAY_BRICK.x,ImageFileDimensions.GRAY_BRICK.y,null);
 //		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.STONE,null);
 		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32);
+		Tile multiColor = new Tile(getNextX(), tileAdderY,32,32,ImageFilePaths.MULTI_COLOR,64,64,null);
 		tileAdder.add(addWoodTile);
 		tileAdder.add(addBrickTile);
 		tileAdder.add(addStoneTile);
+		tileAdder.add(multiColor);
 		
 		Tile addChestTile=new Tile(resetX(),getNextY(),32,32,ImageFilePaths.CHEST,ImageFileDimensions.CHEST.x,ImageFileDimensions.CHEST.y,null);
 		tileAdder.add(addChestTile);
