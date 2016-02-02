@@ -95,25 +95,24 @@ public class EditorCanvas extends Canvas implements Runnable{
 		tileAdder=new ArrayList<Tile>();
 //		System.out.println(" Tile Adder " + tileAdderY);
 //		System.exit(0);
-		Tile addWoodTile=new Tile(resetX(),tileAdderY,32,32,ImageFilePaths.WOOD,ImageFileDimensions.WOOD.x,ImageFileDimensions.WOOD.y,null);
-		Tile addBrickTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.GRAY_BRICK,ImageFileDimensions.GRAY_BRICK.x,ImageFileDimensions.GRAY_BRICK.y,null);
-//		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.STONE,null);
-		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32);
-		Tile multiColor = new Tile(getNextX(), tileAdderY,32,32,ImageFilePaths.MULTI_COLOR,64,64,null);
+		Tile addWoodTile=new Tile(resetX(),tileAdderY,32,32,ImageFilePaths.WOOD,ImageFileDimensions.WOOD.x,ImageFileDimensions.WOOD.y,null,true);
+		Tile addBrickTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.GRAY_BRICK,ImageFileDimensions.GRAY_BRICK.x,ImageFileDimensions.GRAY_BRICK.y,null,true);
+//		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.STONE,null,true);
+		Tile multiColor = new Tile(getNextX(), tileAdderY,32,32,ImageFilePaths.MULTI_COLOR,64,64,null,true);
 		tileAdder.add(addWoodTile);
 		tileAdder.add(addBrickTile);
-		tileAdder.add(addStoneTile);
+		//tileAdder.add(addStoneTile);
 		tileAdder.add(multiColor);
 		
-		Tile addChestTile=new Tile(resetX(),getNextY(),32,32,ImageFilePaths.CHEST,ImageFileDimensions.CHEST.x,ImageFileDimensions.CHEST.y,null);
+		Tile addChestTile=new Tile(resetX(),getNextY(),32,32,ImageFilePaths.CHEST,ImageFileDimensions.CHEST.x,ImageFileDimensions.CHEST.y,null,true);
 		tileAdder.add(addChestTile);
 		
 		
 		editor=new ArrayList<Tile>();
-		Tile incrementWidth=new Tile(896,768,32,32,ImageFilePaths.INCWIDTH,ImageFileDimensions.INCWIDTH.x,ImageFileDimensions.INCWIDTH.y,null);
-		Tile decrementWidth=new Tile(896,800,32,32,ImageFilePaths.DECWIDTH,ImageFileDimensions.DECWIDTH.x,ImageFileDimensions.DECWIDTH.y,null);
-		Tile incrementHeight=new Tile(928,768,32,32,ImageFilePaths.INCHEIGHT,ImageFileDimensions.INCHEIGHT.x,ImageFileDimensions.INCHEIGHT.y,null);
-		Tile decrementHeight=new Tile(928,800,32,32,ImageFilePaths.DECHEIGHT,ImageFileDimensions.DECHEIGHT.x,ImageFileDimensions.DECHEIGHT.y,null);
+		Tile incrementWidth=new Tile(896,768,32,32,ImageFilePaths.INCWIDTH,ImageFileDimensions.INCWIDTH.x,ImageFileDimensions.INCWIDTH.y,null,true);
+		Tile decrementWidth=new Tile(896,800,32,32,ImageFilePaths.DECWIDTH,ImageFileDimensions.DECWIDTH.x,ImageFileDimensions.DECWIDTH.y,null,true);
+		Tile incrementHeight=new Tile(928,768,32,32,ImageFilePaths.INCHEIGHT,ImageFileDimensions.INCHEIGHT.x,ImageFileDimensions.INCHEIGHT.y,null,true);
+		Tile decrementHeight=new Tile(928,800,32,32,ImageFilePaths.DECHEIGHT,ImageFileDimensions.DECHEIGHT.x,ImageFileDimensions.DECHEIGHT.y,null,true);
 		editor.add(incrementWidth);
 		editor.add(decrementWidth);
 		editor.add(incrementHeight);

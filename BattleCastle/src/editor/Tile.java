@@ -27,15 +27,15 @@ public class Tile extends Polygon implements JSONStreamAware
 	protected int animation,imageX,imageY,currentState;
 
 	private static BufferedImage[] check;
-	private static State[] still;
+	//private static State[] still;
 	
 	//TODO: REMOVE THESE
-	private int width, height, x, y;
+	//private int width, height, x, y;
 
 	static
 	{
 		check= new BufferedImage[]{(BufferedImage)Utility.loadImage(ImageFilePaths.CHECK)};
-		still=new State[]{new State()};
+		//still=new State[]{new State()};
 	}
 
 	public static Tile decodeJSON(JSONObject j)
@@ -51,6 +51,12 @@ public class Tile extends Polygon implements JSONStreamAware
 
 		picText="";
 		statesText="";
+	}
+	
+	public Tile(int x,int y,int width,int height,String picText,int imageX,int imageY,String statesText,boolean noWrap)
+	{
+		this(x,y,width,height,picText,imageX,imageY,statesText);
+		this.noWrap=noWrap;
 	}
 
 	public Tile(int x,int y,int width,int height,String picText,int imageX,int imageY,String statesText)
@@ -190,13 +196,13 @@ public class Tile extends Polygon implements JSONStreamAware
 			String[] key_value = item.split(":");
 			switch(key_value[0])
 			{
-			case "X": this.x = Integer.parseInt(key_value[1]);
+			case "X":  moveTo(Integer.parseInt(key_value[1]),getY());
 			break;
-			case "Y": this.y = Integer.parseInt(key_value[1]);
+			case "Y":  moveTo(getX(),Integer.parseInt(key_value[1]));
 			break;
-			case "W": this.width = Integer.parseInt(key_value[1]);
+			case "W": setWidth(Integer.parseInt(key_value[1]));
 			break;
-			case "H": this.height = Integer.parseInt(key_value[1]);
+			case "H": setHeight(Integer.parseInt(key_value[1]));
 			break;
 			case "A": this.animation=Integer.parseInt(key_value[1]);
 			break;
