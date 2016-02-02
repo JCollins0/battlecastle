@@ -160,9 +160,12 @@ public class CollisionDetector
 			{
 				
 				System.out.println("Minimal.X is non-zero: " + minimal.vectorScale(overlap) );
+				minimal = minimal.vectorScale(overlap);
+				a.move(minimal);
+				((PhysicsPoly) a).setNormalForce(minimal.getNormal().XExact(), minimal.getNormal().YExact());
+			//	((PhysicsPoly) a).setExternalForce(0,-90);
+//				((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
 				
-				a.move(minimal.vectorScale(overlap));
-				((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
 			}
 		//	((PhysicsPoly) a).getAcceleration().vectotDot(minimal.getNormal());
 		}

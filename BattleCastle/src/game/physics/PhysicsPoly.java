@@ -17,6 +17,8 @@ public class PhysicsPoly extends Polygon
 	//private double dampingC;
 	private double dragC;
 	protected double GRAVITY = 9.8;
+	protected Vector extForce;
+	protected Vector normalForce;
 
 	/*public PhysicsPoly(int x, int y, int width, int height, double theta, Vector velocity, double torque, double mass, double dragC) {
 		super(x, y, width, height,theta);
@@ -48,6 +50,8 @@ public class PhysicsPoly extends Polygon
 		this.angularVelocity=angularVelocity;
 		this.mass=mass;
 		this.dragC=dragC;
+		this.extForce = new Vector();
+		this.normalForce = new Vector(1,1);
 		calculateInertiaRelativeToCentroid();
 	}
 	
@@ -122,9 +126,18 @@ public class PhysicsPoly extends Polygon
 		//move the thing-start Verlet integration
 		super.move(velocity.vectorScale(BattleCastleCanvas.time_Step).vectorAdd(acceleration.vectorScale(Math.pow(BattleCastleCanvas.time_Step, 2)*.5)).vectorScale(100));//last scale makes the meters per pixel into centimeters per pixel
 		//calculate the forces on the object
-		Vector netForce=new Vector(0,(int)(mass*GRAVITY));// force of gravity
+		Vector netForce=new Vector(0,(int)(mass*GRAVITY));// force of gravity //weight
 		calculateArea();
 		netForce=netForce.vectorSub(velocity.vectorScale(1.225*.5*dragC*super.getArea()));//force of drag
+		if(extForce != null)
+		{
+			netForce=netForce.vectorAdd(extForce);
+			extForce.setX(0);
+			extForce.setY(0);
+		}
+		netForce = netForce.vectorMult(normalForce);
+		normalForce.setX(1);
+		normalForce.setY(1);
 		//System.out.println(super.getCenter().X());
 		//netForce=netForce.vectorSub(velocity.vectorScale(dampingC));//force of damping
 		
@@ -177,6 +190,18 @@ public class PhysicsPoly extends Polygon
 			}
 		}
 		*/
+	}
+	
+	public void setNormalForce(double x, double y)
+	{
+		normalForce.setX(x);
+		normalForce.setY(y);
+	}
+	
+	public void setExternalForce(double x, double y)
+	{
+		extForce.setX(x);
+		extForce.setY(y);
 	}
 	
 	public void setAcceleration(Vector acceleration) {

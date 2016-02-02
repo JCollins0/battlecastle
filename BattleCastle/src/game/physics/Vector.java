@@ -34,6 +34,11 @@ public class Vector {
 		return new Vector((x*scalar),(y*scalar));
 	}
 	
+	public Vector vectorMult(Vector v)
+	{
+		return new Vector(x*v.x,y*v.y);
+	}
+	
 	public double vectotDot(Vector a)
 	{
 		return (x*a.x)+(y*a.y);
