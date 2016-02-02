@@ -14,6 +14,7 @@ public class Polygon
 	
 	protected int count;
 	protected double theta;
+	protected boolean noWrap;
 
 	/*public Polygon(int x,int y,int width,int height,double theta)
 	{	
@@ -41,6 +42,12 @@ public class Polygon
 		rotate(theta,null);
 		count=corners.length;
 		this.theta = theta;
+	}
+	
+	public Polygon(int x, int y, int width, int height, boolean noWrap)
+	{
+		this(x,y,width,height);
+		this.noWrap = noWrap;
 	}
 	
 	public Vector getCenter()//uses the summation equation for finding the centroid of a non-self-intersecting closed polygon
@@ -208,31 +215,122 @@ public class Polygon
 	
 	public void tick()//dimensions are 1024 by 786
 	{
-		moveX();
+		if(!noWrap)
+			moveX();
 	}
 	
 	public void moveX()
 	{
 		if((int)getLowestY() > 786)
 		{
-			moveTo(corners[0].XPoint(), (int) (0 - (getHighestY()-getLowestY())));
+			move(new Vector(0,-(786 + getHighestY()-getLowestY())));
 		}
 		if((int)getHighestY() < 0)
 		{
-			moveTo(corners[0].XPoint(), (int) (786 - (getHighestY()-getLowestY())));
+			move(new Vector(0,786 + getHighestY()-getLowestY()));
 		}
 		if((int)getHighestX() < 0)
 		{
-			moveTo((int) (1024), corners[0].YPoint());
-			System.out.println("Wrapping the left");
+			move(new Vector(1024+ (getHighestX()-getLowestX()),0));
+			//System.out.println("Wrapping the left");
 		}
 		if((int)getLowestX() > 1024)
 		{
-			moveTo((int) (0 - (getHighestX()-getLowestX())), (int) getHighestY());
-			System.out.println("Wrapping the right");
+			move(new Vector(-(1024 + (getHighestX()-getLowestX())), 0));
+			//System.out.println("Wrapping the right");
 		}
 			
 	}
+	
+//	public Vector getLeftHighest()
+//	{
+//		int highestY = Integer.MIN_VALUE;
+//		int lowestX = Integer.MAX_VALUE;
+//		for(Vector v : getCorners())
+//		{
+//			lowestX = Math.min(lowestX, v.XPoint());
+//			highestY = Math.max(highestY, v.YPoint());
+//		}
+//		
+//		for(Vector v : getCorners())
+//		{
+//			if(v.YPoint() == highestY)
+//			{
+//				if(v.XPoint() == lowestX)
+//				{
+//					return v;
+//				}
+//			}
+//		}
+//		
+//		//not the same point use the one to left with same height
+//		lowestX = Integer.MAX_VALUE;
+//		for(Vector v : getCorners())
+//		{
+//			if(v.YPoint() == highestY)
+//			{
+//				lowestX = Math.min(lowestX, v.XPoint());
+//			}
+//		}
+//		
+//		for(Vector v : getCorners())
+//		{
+//			if(v.YPoint() == highestY)
+//			{
+//				if(v.XPoint() == lowestX)
+//				{
+//					return v;
+//				}
+//			}
+//		}	
+//		
+//		return null;
+//	}
+//	
+//	public Vector getRightHighest()
+//	{
+//		int highestY = Integer.MIN_VALUE;
+//		int highestX = Integer.MIN_VALUE;
+//		for(Vector v : getCorners())
+//		{
+//			highestX = Math.max(highestX, v.XPoint());
+//			highestY = Math.max(highestY, v.YPoint());
+//		}
+//		
+//		for(Vector v : getCorners())
+//		{
+//			if(v.YPoint() == highestY)
+//			{
+//				if(v.XPoint() == highestX)
+//				{
+//					return v;
+//				}
+//			}
+//		}
+//		//not the same point use the one to right with same height
+//		highestX = Integer.MIN_VALUE;
+//		for(Vector v : getCorners())
+//		{
+//			if(v.YPoint() == highestY)
+//			{
+//				highestX = Math.max(highestX, v.XPoint());
+//			}
+//		}
+//		
+//		for(Vector v : getCorners())
+//		{
+//			if(v.YPoint() == highestY)
+//			{
+//				if(v.XPoint() == highestX)
+//				{
+//					return v;
+//				}
+//			}
+//		}
+//		
+//		
+//		return null;
+//	}
 	
 	public void render(Graphics g)
 	{
