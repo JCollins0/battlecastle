@@ -151,7 +151,8 @@ public class Arrow extends PhysicsRect{
 		double velX = getVelocity().XExact();
 		double velY = getVelocity().YExact();
 		double angle = Math.toDegrees(Math.atan2(velY,velX));
-		rotateTo(angle);
+		if(!(velX == 0 && velY == 0))
+			rotateTo(angle);
 		
 		hcrnrs = headCollision.getCorners();
 		hcrnrs[0] = getCorners()[1].vectorAdd(new Vector(-HEAD_COLL_W*Math.cos(Math.toRadians(theta)),-HEAD_COLL_W*Math.sin(Math.toRadians(theta) )));
@@ -203,7 +204,7 @@ public class Arrow extends PhysicsRect{
 	
 	@Override
 	public Polygon getCollisionBounds() {
-		return headCollision;
+		return this;
 	}
 	
 }

@@ -50,7 +50,6 @@ public class Player extends PhysicsRect{
 	public Player(BufferedImage image, String uuid)
 	{
 		super(0, 0, WIDTH, HEIGHT,0, null, ANG_VEL, MASS, DRAG_C);
-		//GRAVITY = 0;
 		this.image = image;
 		this.uuid = uuid;
 		arrowStorage = new ArrayList<Arrow>();
@@ -58,7 +57,7 @@ public class Player extends PhysicsRect{
 			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
 		currentArrow = arrowStorage.get(0);
 		mouseLocation = MouseHandler.mouse;
-		GRAVITY = 0;
+		//GRAVITY = 0;
 	}
 	
 	/**

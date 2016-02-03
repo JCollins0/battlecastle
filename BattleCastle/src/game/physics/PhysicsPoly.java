@@ -136,8 +136,13 @@ public class PhysicsPoly extends Polygon
 			extForce.setY(0);
 		}
 		netForce = netForce.vectorMult(normalForce);
+		acceleration = acceleration.vectorMult(normalForce);
+		velocity = velocity.vectorMult(normalForce);
 		normalForce.setX(1);
 		normalForce.setY(1);
+		
+		
+		
 		//System.out.println(super.getCenter().X());
 		//netForce=netForce.vectorSub(velocity.vectorScale(dampingC));//force of damping
 		

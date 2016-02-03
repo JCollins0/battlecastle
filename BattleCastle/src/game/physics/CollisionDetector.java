@@ -7,6 +7,7 @@ import java.util.TreeMap;
 
 import editor.Tile;
 import game.player.Arrow;
+import game.player.Player;
 
 public class CollisionDetector
 {
@@ -150,61 +151,86 @@ public class CollisionDetector
 			}
 		}
 		
-		minimal.normalize();
+//		minimal.normalize();
+//		FindPointOfCollision(a,b);
+//		if(flip)
+//		{
+//			minimal.vectorScale(-1);
+//		}
+		
+		if(a.getCenter().vectorDistance(b.getCenter())>a.getCenter().vectorAdd(minimal).vectorDistance(b.getCenter()))
+			overlap*=-1;
 		
 		System.out.println("COLLIDE DETECT: " + a.getClass() + ", " + minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
-		if(a instanceof PhysicsPoly)
+		if(a instanceof Tile)
 		{
 			//((PhysicsPoly) a).setVelocity(new Vector(0,0));
-			if(a instanceof Arrow)
+			if(b instanceof PhysicsPoly)
 			{
-				
+				//minimal = minimal.vector);
 				System.out.println("Minimal.X is non-zero: " + minimal.vectorScale(overlap) );
-				minimal = minimal.vectorScale(overlap);
-				a.move(minimal);
-				((PhysicsPoly) a).setNormalForce(minimal.getNormal().XExact(), minimal.getNormal().YExact());
+				//minimal = minimal;
+				b.move(minimal.vectorScale(Math.round(overlap)));
+				//System.out.println(minimal.getNormal());
+				//((PhysicsPoly)b).setNormalForce(minimal.getNormal().XPoint(), minimal.getNormal().YPoint());
+				((PhysicsPoly)b).setNormalForce(minimal.XPoint(), minimal. YPoint());
 			//	((PhysicsPoly) a).setExternalForce(0,-90);
 //				((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
 				
 			}
 		//	((PhysicsPoly) a).getAcceleration().vectotDot(minimal.getNormal());
 		}
-		if(b instanceof PhysicsPoly)
+		if(b instanceof Tile)
 		{
+			if(a instanceof Arrow)
+			{
+				a.move(minimal.vectorScale(Math.round(overlap)));
+				((PhysicsPoly)a).setNormalForce(0,0);
+			}
 			//((PhysicsPoly) a).setVelocity(new Vector(0,0));
-			if(b instanceof Arrow)
+			else if(a instanceof PhysicsPoly)
 			{
-				System.out.println("Minimal.X is non-zero: " + minimal.vectorScale(overlap) );
-				b.move(minimal.vectorScale(overlap));
-				((PhysicsPoly) b).setVelocity(((PhysicsPoly) b).getVelocity().vectorScale(-1));
+				
+				System.out.println("Minimal scaled with overlap " + minimal.vectorScale(Math.round(overlap)) );
+				//minimal = minimal;
+				
+				a.move(minimal.vectorScale(Math.round(overlap)));
+			//	System.out.println(minimal.getNormal());
+				((PhysicsPoly)a).setNormalForce(minimal.getNormal().XPoint(), minimal.getNormal().YPoint());
+			//	((PhysicsPoly) a).setExternalForce(0,-90);
+//				((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
+				
 			}
-			//((PhysicsPoly) a).getAcceleration().vectotDot(minimal.getNormal());
+		//	((PhysicsPoly) a).getAcceleration().vectotDot(minimal.getNormal());
 		}
 		
-		if(a instanceof Tile)
-		{
-			if(b instanceof PhysicsPoly)
-			{
-				
-				System.out.println("Minimal.X is non-zero: " + minimal.vectorScale(overlap) );
-				
-				b.move(minimal.vectorScale(overlap));
-				((PhysicsPoly) b).setVelocity(((PhysicsPoly) b).getVelocity().vectorScale(-1));
-			}
-		}
-		if(b instanceof Tile)	
-		{
-			if(a instanceof PhysicsPoly)
-			{
-				
-				System.out.println("Minimal.X is non-zero: " + minimal.vectorScale(overlap) );
-				
-				a.move(minimal.vectorScale(overlap));
-				((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
-			}
-		}
 		
-		FindPointOfCollision(a,b);
+		
+		
+//		if(a instanceof Tile)
+//		{
+//			if(b instanceof PhysicsPoly)
+//			{
+//				
+//				System.out.println("Minimal.X is non-zero: " + minimal.vectorScale(overlap) );
+//				
+//				b.move(minimal.vectorScale(overlap));
+//				((PhysicsPoly) b).setVelocity(((PhysicsPoly) b).getVelocity().vectorScale(-1));
+//			}
+//		}
+//		if(b instanceof Tile)	
+//		{
+//			if(a instanceof PhysicsPoly)
+//			{
+//				
+//				System.out.println("Minimal.X is non-zero: " + minimal.vectorScale(overlap) );
+//				
+//				a.move(minimal.vectorScale(overlap));
+//				((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
+//			}
+//		}
+//		
+		
 		
 		
 		
@@ -219,6 +245,7 @@ public class CollisionDetector
 	
 	private void determineMPVandBestEdge(Polygon a,Edge e)
 	{
+	//	findReferenceEdge();
 		corners=a.getCorners();
 		max=corners[0].vectotDot(minimal);
 		index=0;
@@ -255,6 +282,7 @@ public class CollisionDetector
 		}
 		
 		System.out.println("MPV_BEST_EDGE: " + e.getMax());
+		
 	}
 	
 	public void findReferenceEdge()
