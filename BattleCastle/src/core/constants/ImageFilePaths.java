@@ -70,7 +70,8 @@ public class ImageFilePaths {
 				WOOD = TILE + "wood",
 				PRESSURE_PLATE_SPIKES = TILE + "pp_spikes",
 				SPIKES = TILE + "spikes",
-				MULTI_COLOR = TILE + "multi_color";
+				MULTI_COLOR = TILE + "multi_color",
+				DELETE_ALL = TILE + "delete_all";
 
 	
 				

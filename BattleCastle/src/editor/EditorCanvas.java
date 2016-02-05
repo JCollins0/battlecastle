@@ -86,10 +86,11 @@ public class EditorCanvas extends Canvas implements Runnable{
 		Tile addNewTile=new Tile(resetX(),TOOLS_Y,32,32);
 		Tile saveTile=new Tile(getNextX(),TOOLS_Y,32,32,ImageFilePaths.SAVE,ImageFileDimensions.SAVE.x,ImageFileDimensions.SAVE.y,null);
 		Tile cloneTile=new Tile(getNextX(),TOOLS_Y,32,32);
-		//Tile deleteAllTile=new Tile(getNextX())
+		Tile deleteAllTile=new Tile(getNextX(),TOOLS_Y,32,32,ImageFilePaths.DELETE_ALL,ImageFileDimensions.DELETE_ALL.x,ImageFileDimensions.DELETE_ALL.y,null);
 		tools.add(addNewTile);
 		tools.add(saveTile);
 		tools.add(cloneTile);
+		tools.add(deleteAllTile);
 		
 		
 		tileAdder=new ArrayList<Tile>();
@@ -312,6 +313,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		case 0:list.addFront(new Tile(0,0,32,32));break;
 		case 1:save();break;
 		case 2:list.addFront(current.copy());break;
+		case 3:list.clear();
 		default:break;
 		}
 	}

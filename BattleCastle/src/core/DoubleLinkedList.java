@@ -150,6 +150,11 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		return false;
 	}
 	
+	public void clear()
+	{
+		front=rear=null;
+	}
+	
 	public void linkToFront(T value)
 	{
 		remove(value);
