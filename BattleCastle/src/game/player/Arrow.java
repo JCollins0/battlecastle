@@ -204,7 +204,7 @@ public class Arrow extends PhysicsRect{
 	
 	@Override
 	public Polygon getCollisionBounds() {
-		return this;
+		return headCollision;
 	}
 	
 }

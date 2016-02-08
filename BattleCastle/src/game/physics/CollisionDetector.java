@@ -11,6 +11,7 @@ import game.player.Player;
 
 public class CollisionDetector
 {
+	final Vector stopped = new Vector(0,0);
 	
 	Stack<Integer> active=new Stack<Integer>();
 	TreeMap<Double,String> sortAndSweep=new TreeMap<Double,String>();
@@ -61,6 +62,7 @@ public class CollisionDetector
 	
 	public void broadCheck(List<Polygon> poly)
 	{
+		System.out.println("List of Polygons " + poly);
 		sortAndSweep.clear();
 		active.clear();
 		i=0;
@@ -185,6 +187,10 @@ public class CollisionDetector
 						overlap=  Math.ceil(overlap);
 				b.move(minimal.vectorScale(overlap));
 				//System.out.println(minimal.getNormal());
+				if(b instanceof Arrow)
+				{
+					((PhysicsPoly) b).setNormalForce(0, 0);
+				}else
 				//((PhysicsPoly)b).setNormalForce(minimal.getNormal().XPoint(), minimal.getNormal().YPoint());
 				((PhysicsPoly)b).setNormalForce(minimal.getNormal().XPoint(), minimal.getNormal().YPoint());
 			//	((PhysicsPoly) a).setExternalForce(0,-90);
@@ -199,13 +205,13 @@ public class CollisionDetector
 //			if(a.getCenter().vectorDistance(b.getCenter())>a.getCenter().vectorAdd(minimal).vectorDistance(b.getCenter()))
 //				overlap*=-1;
 			
-			if(a instanceof Arrow)
-			{
-				a.move(minimal.vectorScale(Math.round(overlap)));
-				((PhysicsPoly)a).setNormalForce(minimal.XPoint(),minimal.YPoint());
-			}
+//			if(a instanceof Arrow)
+//			{
+//				a.move(minimal.vectorScale(Math.round(overlap)));
+//				((PhysicsPoly)a).setNormalForce(minimal.XPoint(),minimal.YPoint());
+//			}
 			//((PhysicsPoly) a).setVelocity(new Vector(0,0));
-			else if(a instanceof PhysicsPoly)
+			if(a instanceof PhysicsPoly)
 			{
 				
 				System.out.println("Minimal scaled with overlap " + minimal.vectorScale(Math.round(overlap)) );
@@ -217,6 +223,11 @@ public class CollisionDetector
 						overlap=  Math.ceil(overlap);
 				a.move(minimal.vectorScale(overlap));
 				
+				if(a instanceof Arrow)
+				{
+					((PhysicsPoly) a).setNormalForce(0, 0);
+					
+				}else
 			//	System.out.println(minimal.getNormal());
 				((PhysicsPoly)a).setNormalForce(minimal.getNormal().XPoint(), minimal.getNormal().YPoint());
 			//	((PhysicsPoly) a).setExternalForce(0,-90);

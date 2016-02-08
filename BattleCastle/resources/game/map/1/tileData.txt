@@ -1,1 +1,1 @@
-[]
+[{"x":160,"y":128,"width":640,"height":32,"picText":"game\/tile\/multi_color","imageX":64,"imageY":64,"statestext":null},{"x":160,"y":576,"width":640,"height":64,"picText":"game\/tile\/multi_color","imageX":64,"imageY":64,"statestext":null}]

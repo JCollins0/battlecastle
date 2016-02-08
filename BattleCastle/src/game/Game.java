@@ -25,6 +25,7 @@ import core.HostType;
 import core.KeyHandler;
 import core.KeyPress;
 import core.MouseHandler;
+import core.Tree;
 import core.constants.ImageFilePaths;
 import editor.Tile;
 import game.message.Message;
@@ -84,6 +85,11 @@ public class Game {
 		System.setProperty("java.net.preferIPv4Stack" , "true");
 		
 		gameMapLoader = new GameMap();
+		
+		Tree<String, Integer> map = new Tree<String, Integer>();
+		map.add("test", 1);
+		map.add("hello", 3);
+		System.out.println(map.size());
 	}
 
 	/**
@@ -348,9 +354,15 @@ public class Game {
 					DoubleLinkedList<Tile> tlist = gameMap.getTiles();
 					List<Polygon> list = new ArrayList<Polygon>();
 					
+//					System.out.println("Start");
 					for(Tile t : tlist)
+					{
 						list.add(t);
-				
+						
+					}
+//					System.out.println(list);
+//					System.out.println("Finish");
+					
 					list.addAll(plist);
 					for(int i = 0; i < playerList.length && playerList[i] != null; i++)
 						list.add(playerList[i]);
