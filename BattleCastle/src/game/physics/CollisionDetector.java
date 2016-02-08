@@ -155,25 +155,38 @@ public class CollisionDetector
 //		FindPointOfCollision(a,b);
 //		if(flip)
 //		{
-//			minimal.vectorScale(-1);
+//			minimal = minimal.vectorScale(-1);
 //		}
 		
-		if(a.getCenter().vectorDistance(b.getCenter())>a.getCenter().vectorAdd(minimal).vectorDistance(b.getCenter()))
-			overlap*=-1;
+		Vector ac = a.getCenter();
+		Vector bc = b.getCenter();
+		Vector acbc = a instanceof Tile ? bc.vectorSub(ac) : ac.vectorSub(bc);
+		if(minimal.vectotDot(acbc) < 0)
+		{
+			minimal.negate();
+		}
+//		if(b.getCenter().vectorDistance(a.getCenter())<b.getCenter().vectorAdd(minimal).vectorDistance(a.getCenter()))
+//				overlap*=-1;
 		
 		System.out.println("COLLIDE DETECT: " + a.getClass() + ", " + minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
 		if(a instanceof Tile)
 		{
+			
 			//((PhysicsPoly) a).setVelocity(new Vector(0,0));
 			if(b instanceof PhysicsPoly)
 			{
 				//minimal = minimal.vector);
 				System.out.println("Minimal.X is non-zero: " + minimal.vectorScale(overlap) );
 				//minimal = minimal;
-				b.move(minimal.vectorScale(Math.round(overlap)));
+				if(minimal.XPoint() != 0)
+					if(overlap < 0 )
+						overlap = Math.floor(overlap);
+					else
+						overlap=  Math.ceil(overlap);
+				b.move(minimal.vectorScale(overlap));
 				//System.out.println(minimal.getNormal());
 				//((PhysicsPoly)b).setNormalForce(minimal.getNormal().XPoint(), minimal.getNormal().YPoint());
-				((PhysicsPoly)b).setNormalForce(minimal.XPoint(), minimal. YPoint());
+				((PhysicsPoly)b).setNormalForce(minimal.getNormal().XPoint(), minimal.getNormal().YPoint());
 			//	((PhysicsPoly) a).setExternalForce(0,-90);
 //				((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
 				
@@ -182,10 +195,14 @@ public class CollisionDetector
 		}
 		if(b instanceof Tile)
 		{
+			
+//			if(a.getCenter().vectorDistance(b.getCenter())>a.getCenter().vectorAdd(minimal).vectorDistance(b.getCenter()))
+//				overlap*=-1;
+			
 			if(a instanceof Arrow)
 			{
 				a.move(minimal.vectorScale(Math.round(overlap)));
-				((PhysicsPoly)a).setNormalForce(0,0);
+				((PhysicsPoly)a).setNormalForce(minimal.XPoint(),minimal.YPoint());
 			}
 			//((PhysicsPoly) a).setVelocity(new Vector(0,0));
 			else if(a instanceof PhysicsPoly)
@@ -193,8 +210,13 @@ public class CollisionDetector
 				
 				System.out.println("Minimal scaled with overlap " + minimal.vectorScale(Math.round(overlap)) );
 				//minimal = minimal;
+				if(minimal.XPoint() != 0)
+					if(overlap < 0 )
+						overlap = Math.floor(overlap);
+					else
+						overlap=  Math.ceil(overlap);
+				a.move(minimal.vectorScale(overlap));
 				
-				a.move(minimal.vectorScale(Math.round(overlap)));
 			//	System.out.println(minimal.getNormal());
 				((PhysicsPoly)a).setNormalForce(minimal.getNormal().XPoint(), minimal.getNormal().YPoint());
 			//	((PhysicsPoly) a).setExternalForce(0,-90);

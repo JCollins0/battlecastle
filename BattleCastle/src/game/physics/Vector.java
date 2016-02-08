@@ -84,6 +84,18 @@ public class Vector {
 		y/=m;
 	}
 	
+	public void negate()
+	{
+		x = -x;
+		y = -y;
+	}
+	
+	public void absolute()
+	{
+		x=Math.abs(x);
+		y = Math.abs(y);
+	}
+	
 	public double vectorDistance(Vector a)
 	{
 		return Math.sqrt(Math.pow(a.x-x, 2)+Math.pow(a.y-y, 2));
