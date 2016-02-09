@@ -3,18 +3,17 @@ package game.physics;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
-import java.util.TreeMap;
 
+import core.Tree;
 import editor.Tile;
 import game.player.Arrow;
-import game.player.Player;
 
 public class CollisionDetector
 {
 	final Vector stopped = new Vector(0,0);
 	
 	Stack<Integer> active=new Stack<Integer>();
-	TreeMap<Double,String> sortAndSweep=new TreeMap<Double,String>();
+	Tree<Double,String> sortAndSweep=new Tree<Double,String>();
 	
 	double proj;
 	double max;
@@ -62,7 +61,7 @@ public class CollisionDetector
 	
 	public void broadCheck(List<Polygon> poly)
 	{
-		System.out.println("List of Polygons " + poly);
+		//System.out.println("List of Polygons " + poly);
 		sortAndSweep.clear();
 		active.clear();
 		i=0;
@@ -167,9 +166,9 @@ public class CollisionDetector
 		{
 			minimal.negate();
 		}
+		minimal.normalize();
 //		if(b.getCenter().vectorDistance(a.getCenter())<b.getCenter().vectorAdd(minimal).vectorDistance(a.getCenter()))
 //				overlap*=-1;
-		
 		System.out.println("COLLIDE DETECT: " + a.getClass() + ", " + minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
 		if(a instanceof Tile)
 		{
@@ -180,19 +179,20 @@ public class CollisionDetector
 				//minimal = minimal.vector);
 				System.out.println("Minimal.X is non-zero: " + minimal.vectorScale(overlap) );
 				//minimal = minimal;
-				if(minimal.XPoint() != 0)
-					if(overlap < 0 )
-						overlap = Math.floor(overlap);
-					else
-						overlap=  Math.ceil(overlap);
+//				if(minimal.XExact() != 0)
+//					overlap=  Math.ceil(overlap);
+				
+				
 				b.move(minimal.vectorScale(overlap));
 				//System.out.println(minimal.getNormal());
+				System.out.println("Player Velocity " + ((PhysicsPoly) b).getVelocity());
+				((PhysicsPoly) b).setVelocity(stopped);
 				if(b instanceof Arrow)
 				{
 					((PhysicsPoly) b).setNormalForce(0, 0);
 				}else
 				//((PhysicsPoly)b).setNormalForce(minimal.getNormal().XPoint(), minimal.getNormal().YPoint());
-				((PhysicsPoly)b).setNormalForce(minimal.getNormal().XPoint(), minimal.getNormal().YPoint());
+				((PhysicsPoly)b).setNormalForce(minimal.XPoint(), minimal.YPoint());
 			//	((PhysicsPoly) a).setExternalForce(0,-90);
 //				((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
 				
@@ -214,14 +214,13 @@ public class CollisionDetector
 			if(a instanceof PhysicsPoly)
 			{
 				
-				System.out.println("Minimal scaled with overlap " + minimal.vectorScale(Math.round(overlap)) );
+				System.out.println("Minimal scaled with overlap " + minimal.vectorScale(overlap) );
 				//minimal = minimal;
-				if(minimal.XPoint() != 0)
-					if(overlap < 0 )
-						overlap = Math.floor(overlap);
-					else
-						overlap=  Math.ceil(overlap);
+				if(minimal.XExact() != 0)
+					overlap = Math.round(overlap+1);
 				a.move(minimal.vectorScale(overlap));
+				System.out.println("Player Velocity " + ((PhysicsPoly) a).getVelocity());
+				((PhysicsPoly) a).setVelocity(stopped);
 				
 				if(a instanceof Arrow)
 				{
@@ -229,7 +228,7 @@ public class CollisionDetector
 					
 				}else
 			//	System.out.println(minimal.getNormal());
-				((PhysicsPoly)a).setNormalForce(minimal.getNormal().XPoint(), minimal.getNormal().YPoint());
+				((PhysicsPoly)a).setNormalForce(minimal.XPoint(),minimal.YPoint());
 			//	((PhysicsPoly) a).setExternalForce(0,-90);
 //				((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
 				

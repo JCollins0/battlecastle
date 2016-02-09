@@ -21,7 +21,7 @@ public class Tree<K extends Comparable<K>,V> {
 		}else
 		{
 			TreeNode temp = getNextNode(node.key, root);
-			
+//			System.out.println(node + ", Parent Node: " + temp);
 			if(key.compareTo(temp.key ) <= 0)
 				temp.left = node;
 			else
@@ -32,53 +32,40 @@ public class Tree<K extends Comparable<K>,V> {
 	
 	public TreeNode getNextNode(K key, TreeNode temp)
 	{
-		if(temp == null)
+		if(temp.left == null && key.compareTo(temp.key) <= 0)
+			return temp;
+		else if(temp.right == null && key.compareTo(temp.key) >0)
+			return temp;
+		else if(temp != null && key.compareTo(temp.key) <= 0)
+			return getNextNode(key, temp.left);
+		else if(temp != null && key.compareTo(temp.key) > 0)
+			return getNextNode(key, temp.right);
+		else
 			return null;
-		if(key.compareTo(temp.key) <= 0)
-		{
-			TreeNode node = getNextNode(key, temp.left);
-			if(node == null)
-				return temp;
-			else
-				return temp.left;
-		}
-		if(key.compareTo(temp.key) > 0)
-		{
-			TreeNode node = getNextNode(key, temp.right);
-			if(node == null)
-				return temp;
-			else
-				return temp.right;
-		}
-		
-		return null;
 	}
 	
 	public TreeNode pollFirstEntry()
 	{
 		TreeNode temp = root;
-		
+//		System.out.println("ROOT NODE " + root);
 		while(temp.left != null && temp.left.left != null)
 		{
 			temp = temp.left;
-			System.out.println("TEST");
+		//	System.out.println("TEST");
 		}
-		
-		if(temp == root)
+//		System.out.println("Parent of Node being Removed: " + temp);		
+		if(temp == root && temp.left == null)
 		{
-			System.out.println(root);
-			if(temp.right != null)
-			{
-				temp.right.left = root.left;
-				root = temp.right;
-			}
+			//System.out.println(root);
+			root = temp.right;
 			count--;
 			return temp;
 		}else
 		{
 			TreeNode t = temp.left;
 			count--;
-			temp.left = null;
+			temp.left = t.right;
+			//temp.left = null;
 			return t;
 		}
 		
@@ -103,7 +90,6 @@ public class Tree<K extends Comparable<K>,V> {
 	{
 		if(root == null) return "[]";
 		String s = "[";
-		//TODO: toString method for left and right recursive
 		s+=toStringBuilder(root);
 		return s + "]";
 		
@@ -124,7 +110,7 @@ public class Tree<K extends Comparable<K>,V> {
 		}
 	}
 	
-	private class TreeNode
+	public class TreeNode
 	{
 		private K key;
 		private V value;
@@ -139,6 +125,11 @@ public class Tree<K extends Comparable<K>,V> {
 		public String toString()
 		{
 			return "["+key+":"+value+"]";
+		}
+		
+		public V getValue()
+		{
+			return value;
 		}
 	}
 }

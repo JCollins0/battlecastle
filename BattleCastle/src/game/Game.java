@@ -86,13 +86,6 @@ public class Game {
 		System.setProperty("java.net.preferIPv4Stack" , "true");
 		
 		gameMapLoader = new GameMap();
-		
-		Tree<String, Integer> map = new Tree<String, Integer>();
-		for(int i = 0; i < 26; i++)
-			map.put(""+(char)(i%4+65), i);
-		System.out.println(map);
-		System.out.println(map.pollFirstEntry());
-		System.out.println(map);
 	}
 
 	/**

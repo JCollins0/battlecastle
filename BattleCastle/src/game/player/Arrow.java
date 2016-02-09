@@ -23,7 +23,7 @@ public class Arrow extends PhysicsRect{
 	public static final double MASS = 10, DRAGC = 1.05;
 	static int setDistance = 10;
 	private PhysicsPoly headCollision;
-	private static final int HEAD_COLL_W = 10; //10
+	private static final int HEAD_COLL_W = 20; //10
 	
 	public Arrow(int x, int y,
 				 double theta, double graphicsTheta,
