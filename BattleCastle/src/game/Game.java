@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -87,9 +88,11 @@ public class Game {
 		gameMapLoader = new GameMap();
 		
 		Tree<String, Integer> map = new Tree<String, Integer>();
-		map.add("test", 1);
-		map.add("hello", 3);
-		System.out.println(map.size());
+		for(int i = 0; i < 26; i++)
+			map.put(""+(char)(i%4+65), i);
+		System.out.println(map);
+		System.out.println(map.pollFirstEntry());
+		System.out.println(map);
 	}
 
 	/**
