@@ -24,6 +24,9 @@ public class Arrow extends PhysicsRect{
 	static int setDistance = 10;
 	private PhysicsPoly headCollision;
 	private static final int HEAD_COLL_W = 20; //10
+	private boolean rotate = true;
+	public static final int DEFAULT_LAUNCH_COOLDOWN = 20;
+	private int launchCoolDown = 20;
 	
 	public Arrow(int x, int y,
 				 double theta, double graphicsTheta,
@@ -148,10 +151,14 @@ public class Arrow extends PhysicsRect{
 	public void tick()
 	{
 		super.tick();
+		
+		if(launchCoolDown > 0)
+			launchCoolDown--;
+		
 		double velX = getVelocity().XExact();
 		double velY = getVelocity().YExact();
 		double angle = Math.toDegrees(Math.atan2(velY,velX));
-		if(!(velX == 0 && velY == 0))
+		if(!(velX == 0 && velY == 0) && rotate)
 			rotateTo(angle);
 		
 		hcrnrs = headCollision.getCorners();
@@ -163,17 +170,18 @@ public class Arrow extends PhysicsRect{
 //		System.out.println("ANGLE OF ROTATION: "  +theta);
 //		System.out.println("-----------\n" + Arrays.toString(getCorners()) + "\n" + Arrays.toString(headCollision.getCorners()) + "\n----------\n");
 		
-		
-		if(graphicsRotationTheta - theta < 0)
+		if(rotate)
 		{
-			graphicsRotationTheta= Math.toRadians(Math.abs(graphicsRotationTheta - theta));
-		}else
-		{
-			graphicsRotationTheta= -Math.toRadians((graphicsRotationTheta - theta));
-		}
-				
-//		System.out.println("MY LOCATION: " + Arrays.toString(getCorners()));
-//		System.out.println("MY VELOCITY: " + getVelocity());
+			if(graphicsRotationTheta - theta < 0)
+			{
+				graphicsRotationTheta= Math.toRadians(Math.abs(graphicsRotationTheta - theta));
+			}else
+			{
+				graphicsRotationTheta= -Math.toRadians((graphicsRotationTheta - theta));
+			}
+		}		
+		//System.out.println("MY LOCATION: " + Arrays.toString(getCorners()));
+		//System.out.println("MY VELOCITY: " + getVelocity());
 //		System.out.println("-------");
 		if(getVelocity().XPoint() > -1 && getVelocity().XPoint() < 1)
 		{
@@ -202,9 +210,37 @@ public class Arrow extends PhysicsRect{
 		return stringify();
 	}
 	
+	public void setRotate(boolean rotate)
+	{
+		this.rotate=rotate;
+	}
+	
+	public boolean isStuck()
+	{
+		return !rotate;
+	}
+	
+	public void setLaunchCooldown(int lcool)
+	{
+		this.launchCoolDown= lcool;
+	}
+	
+	public int getLaunchCoolDown() {
+		return launchCoolDown;
+	}
+	
 	@Override
 	public Polygon getCollisionBounds() {
 		return headCollision;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Arrow)
+		{
+			return ((Arrow)obj).ID.equals(ID);
+		}
+		return false;
 	}
 	
 }

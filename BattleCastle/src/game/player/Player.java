@@ -214,7 +214,7 @@ public class Player extends PhysicsRect{
 	{
 		double theta = Math.atan2((y-getCenter().YPoint()),(x-getCenter().XPoint()));
 		
-		for(int i = 0; i < num & i < arrowStorage.size(); i++)
+		for(int i = 0; i < num && i < arrowStorage.size(); i++)
 		{
 			Arrow a = arrowStorage.get(i);
 			a.fix(theta);
@@ -234,6 +234,14 @@ public class Player extends PhysicsRect{
 			return arrowStorage.remove(0);
 		}
 		return null;
+	}
+	
+	public void addArrow(Arrow a)
+	{
+		a.moveTo(-64,-64);
+		a.setRotate(true);
+		a.setLaunchCooldown(Arrow.DEFAULT_LAUNCH_COOLDOWN);
+		arrowStorage.add(a);
 	}
 	
 	/**

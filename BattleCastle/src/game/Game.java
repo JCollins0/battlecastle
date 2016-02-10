@@ -73,7 +73,7 @@ public class Game {
 		playerList = new Player[4];
 		playerMap = new TreeMap<String, BattleCastleUser>();
 		arrows = new ConcurrentHashMap<String,Arrow>();
-		collideDetect = new CollisionDetector();
+		collideDetect = new CollisionDetector(this);
 
 		if(hostType == HostType.SERVER)
 		{
@@ -456,6 +456,11 @@ public class Game {
 	 */
 	public BattleCastleUser getMyUser() {
 		return playerMap.get(myUUID);
+	}
+	
+	public Arrow getArrow(Arrow b)
+	{
+		return arrows.remove(b.getID());
 	}
 	
 	/**
