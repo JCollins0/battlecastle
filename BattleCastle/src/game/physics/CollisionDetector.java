@@ -164,7 +164,7 @@ public class CollisionDetector
 			minimal.negate();
 		}
 		minimal.normalize();
-		System.out.println("COLLIDE DETECT: " + a.getClass() + ", " + minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
+	//	System.out.println("COLLIDE DETECT: " + a.getClass() + ", " + minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
 		
 		/*
 		 * Tile collision
@@ -173,7 +173,7 @@ public class CollisionDetector
 		{
 			if(b instanceof PhysicsPoly)
 			{
-				System.out.println("Minimal.X is non-zero: " + minimal.getNormal().YExact() );
+			//	System.out.println("Minimal.X is non-zero: " + minimal.getNormal().YExact() );
 				overlap = Math.ceil(overlap+.45); //round to not clip into tiles
 				
 				b.move(minimal.vectorScale(overlap));
@@ -197,13 +197,13 @@ public class CollisionDetector
 			if(a instanceof PhysicsPoly)
 			{
 				
-				System.out.println("Minimal scaled with overlap " + minimal.vectorScale(overlap) );
+		//		System.out.println("Minimal scaled with overlap " + minimal.vectorScale(overlap) );
 				//minimal = minimal;
 				
 				overlap = Math.ceil(overlap+.45);
 				
 				a.move(minimal.vectorScale(overlap));
-				System.out.println("Player Velocity " + ((PhysicsPoly) a).getVelocity());
+			//	System.out.println("Player Velocity " + ((PhysicsPoly) a).getVelocity());
 				((PhysicsPoly) a).setVelocity(stopped);
 				if(a instanceof Arrow)
 				{
@@ -227,6 +227,8 @@ public class CollisionDetector
 				{
 					Arrow g = gameRef.getArrow((Arrow)b);
 					((Player) a).addArrow(g);
+					
+					System.out.println(g);
 				}
 			}
 		}
@@ -238,6 +240,7 @@ public class CollisionDetector
 				{
 					Arrow g = gameRef.getArrow((Arrow)a);
 					((Player) b).addArrow(g);
+					System.out.println(g);
 				}
 			}
 		}

@@ -241,7 +241,9 @@ public class Player extends PhysicsRect{
 		a.moveTo(-64,-64);
 		a.setRotate(true);
 		a.setLaunchCooldown(Arrow.DEFAULT_LAUNCH_COOLDOWN);
+		a.setNormalForce(1, 1);
 		arrowStorage.add(a);
+		fixArrows(2, mouseLocation.x, mouseLocation.y);
 	}
 	
 	/**
@@ -291,7 +293,7 @@ public class Player extends PhysicsRect{
 			case "S": //used in animation?
 				break;
 			case "Arrow": 
-					if(1 < key_value.length && currentArrow != null)
+					if(key_value.length > 1 && currentArrow != null)
 					{
 						currentArrow.decode(key_value[1]);
 						fixArrows(2, mouseLocation.x, mouseLocation.y);

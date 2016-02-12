@@ -627,6 +627,11 @@ public class Game {
 			gameClient.stop();
 	}
 
+	public ConcurrentHashMap<String,Arrow> getArrows() {
+		// TODO Auto-generated method stub
+		return arrows;
+	}
+
 	
 	
 	
