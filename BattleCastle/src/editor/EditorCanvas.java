@@ -69,8 +69,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 		setBackground(Color.BLACK);
 		buffer=new BufferedImage(EditorFrame.EDITOR_SIZE.width,EditorFrame.EDITOR_SIZE.height,BufferedImage.TYPE_INT_ARGB);
 		
-//		trashIndicator=new Tile(0,BOTTOM_Y,1024,128,ImageFilePaths.TRASH,null);
-		trashIndicator=new Tile(0,BOTTOM_Y,1024,128);
+		trashIndicator=new Tile(0,BOTTOM_Y,1024,128,ImageFilePaths.TRASH,ImageFileDimensions.TRASH.x, ImageFileDimensions.TRASH.y, null, true);
+//		trashIndicator=new Tile(0,BOTTOM_Y,1024,128);
 		
 		running=true;
 		bottom=true;
@@ -84,12 +84,10 @@ public class EditorCanvas extends Canvas implements Runnable{
 		
 		tools=new ArrayList<Tile>();
 		Tile addNewTile=new Tile(resetX(),TOOLS_Y,32,32);
-		Tile saveTile=new Tile(getNextX(),TOOLS_Y,32,32,ImageFilePaths.SAVE,ImageFileDimensions.SAVE.x,ImageFileDimensions.SAVE.y,null);
-		Tile cloneTile=new Tile(getNextX(),TOOLS_Y,32,32);
-		Tile deleteAllTile=new Tile(getNextX(),TOOLS_Y,32,32,ImageFilePaths.DELETE_ALL,ImageFileDimensions.DELETE_ALL.x,ImageFileDimensions.DELETE_ALL.y,null);
+		Tile saveTile=new Tile(getNextX(),TOOLS_Y,32,32,ImageFilePaths.SAVE,ImageFileDimensions.SAVE.x,ImageFileDimensions.SAVE.y,null,true);
+		Tile deleteAllTile=new Tile(getNextX(),TOOLS_Y,32,32,ImageFilePaths.DELETE_ALL,ImageFileDimensions.DELETE_ALL.x,ImageFileDimensions.DELETE_ALL.y,null,true);
 		tools.add(addNewTile);
 		tools.add(saveTile);
-		tools.add(cloneTile);
 		tools.add(deleteAllTile);
 		
 		
@@ -114,10 +112,12 @@ public class EditorCanvas extends Canvas implements Runnable{
 		Tile decrementWidth=new Tile(896,800,32,32,ImageFilePaths.DECWIDTH,ImageFileDimensions.DECWIDTH.x,ImageFileDimensions.DECWIDTH.y,null,true);
 		Tile incrementHeight=new Tile(928,768,32,32,ImageFilePaths.INCHEIGHT,ImageFileDimensions.INCHEIGHT.x,ImageFileDimensions.INCHEIGHT.y,null,true);
 		Tile decrementHeight=new Tile(928,800,32,32,ImageFilePaths.DECHEIGHT,ImageFileDimensions.DECHEIGHT.x,ImageFileDimensions.DECHEIGHT.y,null,true);
+		Tile cloneTile=new Tile(960,800,32,32,ImageFilePaths.CLONE,ImageFileDimensions.CLONE.x,ImageFileDimensions.CLONE.y,null,true);
 		editor.add(incrementWidth);
 		editor.add(decrementWidth);
 		editor.add(incrementHeight);
 		editor.add(decrementHeight);
+		tools.add(cloneTile);
 		
 		mouseHandler = new EditorMouseHandler(this);
 		keyHandler = new EditorKeyHandler(this);
@@ -271,10 +271,11 @@ public class EditorCanvas extends Canvas implements Runnable{
 	
 	public void tick()
 	{
+		int num=0;
 		for(Tile t:list)
 		{
 			t.tick();
-			//System.out.println(t);
+			System.out.println(t+" "+num++);
 		}
 		if(bottom)
 		{
@@ -312,8 +313,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		{
 		case 0:list.addFront(new Tile(0,0,32,32));break;
 		case 1:save();break;
-		case 2:list.addFront(current.copy());break;
-		case 3:list.clear();
+		case 2:list.clear();
 		default:break;
 		}
 	}
@@ -345,6 +345,9 @@ public class EditorCanvas extends Canvas implements Runnable{
 		case 3:
 			if(current.getHeight()!=32)
 				current.setHeight(current.getHeight()-32);
+			break;
+		case 4:if(current!=null)
+					list.addFront(current.copy());
 			break;
 		default:break;
 		}

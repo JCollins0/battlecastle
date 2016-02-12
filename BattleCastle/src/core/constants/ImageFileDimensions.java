@@ -18,7 +18,8 @@ public enum ImageFileDimensions
 	WOOD(),
 	PRESSURE_PLATE_SPIKES(),
 	SPIKES(),
-	DELETE_ALL();
+	DELETE_ALL(),
+	CLONE();
 	
 	ImageFileDimensions(int x,int y)
 	{

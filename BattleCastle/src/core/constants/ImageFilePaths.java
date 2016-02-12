@@ -71,8 +71,8 @@ public class ImageFilePaths {
 				PRESSURE_PLATE_SPIKES = TILE + "pp_spikes",
 				SPIKES = TILE + "spikes",
 				MULTI_COLOR = TILE + "multi_color",
-				DELETE_ALL = TILE + "delete_all";
-
+				DELETE_ALL = TILE + "delete_all",
+				CLONE = EDITOR + "clone";
 	
 				
 		

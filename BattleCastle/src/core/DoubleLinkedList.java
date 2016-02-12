@@ -153,6 +153,7 @@ public class DoubleLinkedList<T> implements Iterable<T>
 	public void clear()
 	{
 		front=rear=null;
+		count=0;
 	}
 	
 	public void linkToFront(T value)
