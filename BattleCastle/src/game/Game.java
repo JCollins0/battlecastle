@@ -1,5 +1,17 @@
 package game;
 
+import editor.Tile;
+import game.message.Message;
+import game.message.MessageType;
+import game.object.GameMap;
+import game.object.MapType;
+import game.physics.CollisionDetector;
+import game.physics.Polygon;
+import game.physics.Vector;
+import game.player.Arrow;
+import game.player.BattleCastleUser;
+import game.player.Player;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.io.IOException;
@@ -8,8 +20,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -26,19 +38,7 @@ import core.HostType;
 import core.KeyHandler;
 import core.KeyPress;
 import core.MouseHandler;
-import core.Tree;
 import core.constants.ImageFilePaths;
-import editor.Tile;
-import game.message.Message;
-import game.message.MessageType;
-import game.object.GameMap;
-import game.object.MapType;
-import game.physics.CollisionDetector;
-import game.physics.Polygon;
-import game.physics.Vector;
-import game.player.Arrow;
-import game.player.BattleCastleUser;
-import game.player.Player;
 
 public class Game {
 	
@@ -388,11 +388,18 @@ public class Game {
 			arrow.render(g);
 		}
 		
-		for(int i = 0; i < KeyHandler.presses.size(); i++)
+		Iterator<KeyPress> kPi = KeyHandler.presses.iterator();
+		int i = 0;
+		while(kPi.hasNext())
 		{
 			g.setColor(Color.darkGray);
-			g.drawString(KeyHandler.presses.get(i).getText(), 100, i * 64 + 15 );
+			g.drawString(kPi.next().getText(), 100, i * 64 + 15 );
+			i++;
 		}
+//		for(int i = 0; i < KeyHandler.presses.size(); i++)
+//		{
+//			
+//		}
 			
 	}
 	

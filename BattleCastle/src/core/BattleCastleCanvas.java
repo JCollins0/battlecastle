@@ -283,7 +283,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		tutorialObjectList.add(dashKey);
 		tutorialObjectList.add(screenShotKey);
 		
-		
+		AudioHandler.setVolume(volumeSlider.getValue()/100.0f);
 		
 		running = true;
 		

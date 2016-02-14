@@ -16,6 +16,7 @@ import core.menu_object.MapSelectionObject;
 import core.menu_object.MenuButton;
 import core.menu_object.MenuButtonType;
 import core.menu_object.MenuSlider;
+import core.menu_object.MenuSliderType;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
 import core.menu_object.ServerChoice;
@@ -298,6 +299,8 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 				if(slider.isSelected())
 				{
 					slider.update(mouse.x);
+					if(slider.getType().equals(MenuSliderType.VOLUME))
+						AudioHandler.setVolume(slider.getValue()/100.0f);
 				}
 			}
 			
