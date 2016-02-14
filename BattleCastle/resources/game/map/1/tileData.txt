@@ -1,1 +1,1 @@
-[]
+[{"x":608,"y":544,"width":480,"height":64,"picText":"game\/tile\/multi_color","imageX":64,"imageY":64,"statestext":null},{"x":-64,"y":544,"width":480,"height":64,"picText":"game\/tile\/multi_color","imageX":64,"imageY":64,"statestext":null},{"x":0,"y":288,"width":480,"height":64,"picText":"game\/tile\/multi_color","imageX":64,"imageY":64,"statestext":null},{"x":544,"y":288,"width":480,"height":64,"picText":"game\/tile\/multi_color","imageX":64,"imageY":64,"statestext":null}]

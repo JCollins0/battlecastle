@@ -117,7 +117,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		editor.add(decrementWidth);
 		editor.add(incrementHeight);
 		editor.add(decrementHeight);
-		tools.add(cloneTile);
+		editor.add(cloneTile);
 		
 		mouseHandler = new EditorMouseHandler(this);
 		keyHandler = new EditorKeyHandler(this);
@@ -283,6 +283,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 				t.tick();
 			for(Tile t:tileAdder)
 				t.tick();
+			for(Tile t:editor)
+				t.tick();
 			trashIndicator.tick();
 		}
 	}
@@ -308,14 +310,15 @@ public class EditorCanvas extends Canvas implements Runnable{
 	protected void checkToolClicked(Point mouse)
 	{
 		int i;
-		for(i=0;i<tools.size()&&!tools.get(i).contains(mouse);i++);
-		switch(i)
-		{
-		case 0:list.addFront(new Tile(0,0,32,32));break;
-		case 1:save();break;
-		case 2:list.clear();
-		default:break;
-		}
+		for(i=0;i<tools.size();i++)
+			if(tools.get(i).contains(mouse))
+				switch(i)
+				{
+				case 0:list.addFront(new Tile(0,0,32,32));break;
+				case 1:save();break;
+				case 2:list.clear();
+				default:break;
+				}
 	}
 	
 	protected void checkTileAdderClicked(Point mouse)
@@ -329,28 +332,29 @@ public class EditorCanvas extends Canvas implements Runnable{
 	protected void checkEditorClicked(Point mouse)
 	{
 		int i;
-		for(i=0;i<editor.size()&&!editor.get(i).contains(mouse);i++);
-		switch(i)
-		{
-		case 0:
-			current.setWidth(current.getWidth()+32);
-			break;
-		case 1:
-			if(current.getWidth()!=32)
-				current.setWidth(current.getWidth()-32);
-			break;
-		case 2:
-			current.setHeight(current.getHeight()+32);
-			break;
-		case 3:
-			if(current.getHeight()!=32)
-				current.setHeight(current.getHeight()-32);
-			break;
-		case 4:if(current!=null)
+		for(i=0;i<editor.size();i++)
+			if(editor.get(i).contains(mouse))
+				switch(i)
+				{
+				case 0:
+					current.setWidth(current.getWidth()+32);
+					break;
+				case 1:
+					if(current.getWidth()!=32)
+						current.setWidth(current.getWidth()-32);
+					break;
+				case 2:
+					current.setHeight(current.getHeight()+32);
+					break;
+				case 3:
+					if(current.getHeight()!=32)
+						current.setHeight(current.getHeight()-32);
+					break;
+				case 4:if(current!=null)
 					list.addFront(current.copy());
-			break;
-		default:break;
-		}
+				break;
+				default:break;
+				}
 		if(current!=null)
 			snapToGrid(current);
 	}

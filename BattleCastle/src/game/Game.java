@@ -74,7 +74,7 @@ public class Game {
 		playerMap = new TreeMap<String, BattleCastleUser>();
 		arrows = new ConcurrentHashMap<String,Arrow>();
 		collideDetect = new CollisionDetector(this);
-
+		
 		if(hostType == HostType.SERVER)
 		{
 			startServer();

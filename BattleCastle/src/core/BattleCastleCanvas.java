@@ -419,6 +419,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	int alpha = 0;
 	int alphaInc = 1;
 	int bgilc = 0;
+	
+	//int processCount=10;
 	/**
 	 * Draws everything to screen
 	 */

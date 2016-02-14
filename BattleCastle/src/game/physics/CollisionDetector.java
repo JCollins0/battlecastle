@@ -187,7 +187,8 @@ public class CollisionDetector
 				}
 				else if(b instanceof Player)
 				{
-					((PhysicsPoly)b).setNormalForce(minimal.getNormal().getNormal().XExact(), minimal.getNormal().getNormal().YExact());
+					((PhysicsPoly)b).setNormalForce(minimal.getNormal().getNormal().getNormal().XExact(), minimal.getNormal().getNormal().getNormal().YExact());
+					//System.out.println("PLAYER OPPOSITE NORMAL " + minimal.getNormal().getNormal().getNormal());
 				}
 				
 			}
