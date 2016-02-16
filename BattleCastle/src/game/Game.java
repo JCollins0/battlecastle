@@ -288,7 +288,7 @@ public class Game {
 							if(getHostType().equals(HostType.CLIENT))
 							{
 								int playerNum = Integer.parseInt(mess[1]);
-								String[] id = mess[2].split("*separator*");
+								String[] id = mess[2].split("separator");
 								String uid = id[0];
 								String[] items = id[1].split(",");
 								
@@ -406,14 +406,14 @@ public class Game {
 			arrow.render(g);
 		}
 		
-		Iterator<KeyPress> kPi = KeyHandler.presses.iterator();
-		int i = 0;
-		while(kPi.hasNext())
-		{
-			g.setColor(Color.darkGray);
-			g.drawString(kPi.next().getText(), 100, i * 64 + 15 );
-			i++;
-		}
+//		Iterator<KeyPress> kPi = KeyHandler.presses.iterator();
+//		int i = 0;
+//		while(kPi.hasNext())
+//		{
+//			g.setColor(Color.darkGray);
+//			g.drawString(kPi.next().getText(), 100, i * 64 + 15 );
+//			i++;
+//		}
 //		for(int i = 0; i < KeyHandler.presses.size(); i++)
 //		{
 //			
@@ -491,7 +491,7 @@ public class Game {
 		Message message = new Message(MessageType.PERFORM_ACTION,
 				"add_arrow_player" + "=" + 
 				playerMap.get(getUUIDFromPlayer(p)).getPlayerNumber() + "=" + 
-				b.getID() + "*separator*" + b.stringify() );
+				b.getID() + "separator" + b.stringify() );
 		
 		gameServer.sendToAllTCP(message);
 	}
