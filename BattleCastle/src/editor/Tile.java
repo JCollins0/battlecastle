@@ -25,6 +25,7 @@ public class Tile extends Polygon implements JSONStreamAware
 	protected BufferedImage[] pics;
 	protected State[] states;
 	protected int animation,imageX,imageY,currentState;
+	protected boolean animateIffMouseOver,mouseIsOver;
 
 	private static BufferedImage[] check;
 	//private static State[] still;
@@ -57,6 +58,12 @@ public class Tile extends Polygon implements JSONStreamAware
 	{
 		this(x,y,width,height,picText,imageX,imageY,statesText);
 		this.noWrap=noWrap;
+	}
+	
+	public Tile(int x,int y,int width,int height,String picText,int imageX,int imageY,String statesText,boolean noWrap,boolean animateIffMouseOver)
+	{
+		this(x,y,width,height,picText,imageX,imageY,statesText,noWrap);
+		this.animateIffMouseOver=animateIffMouseOver;
 	}
 
 	public Tile(int x,int y,int width,int height,String picText,int imageX,int imageY,String statesText)
@@ -112,8 +119,16 @@ public class Tile extends Polygon implements JSONStreamAware
 	{
 		states=s;
 	}
+	
+	public void setMouseIsOver(boolean mouse)
+	{
+		this.mouseIsOver=mouse;
+	}
 
-
+	public boolean getMouseIsOver()
+	{
+		return mouseIsOver;
+	}
 
 //	protected void shift(int x,int y)
 //	{
@@ -170,10 +185,13 @@ public class Tile extends Polygon implements JSONStreamAware
 	public void tick()
 	{
 		super.tick();
-		if(animation++>=(pics.length-1)*speed)
-			animation=0;
-		if(states[currentState].increment(this))
-			currentState=(++currentState)%states.length;
+		if(!animateIffMouseOver||(animateIffMouseOver&&mouseIsOver))
+		{
+			if(animation++>=(pics.length-1)*speed)
+				animation=0;
+			if(states[currentState].increment(this))
+				currentState=(++currentState)%states.length;
+		}
 	}
 
 	public Tile copy()
