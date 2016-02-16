@@ -163,8 +163,8 @@ public class CollisionDetector
 		{
 			minimal.negate();
 		}
-		minimal.normalize();
-	//	System.out.println("COLLIDE DETECT: " + a.getClass() + ", " + minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
+	//	minimal.normalize();
+		System.out.println("COLLIDE DETECT: " + a.getClass() + ", " + minimal.XExact()+" "+minimal.YExact()+"   "+overlap);
 		
 		/*
 		 * Tile collision
