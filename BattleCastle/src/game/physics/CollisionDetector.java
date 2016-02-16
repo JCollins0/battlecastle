@@ -226,10 +226,7 @@ public class CollisionDetector
 			{
 				if(((Arrow) b).getLaunchCoolDown() <= 0 && ((Arrow)b).isStuck())
 				{
-					Arrow g = gameRef.getArrow((Arrow)b);
-					((Player) a).addArrow(g);
-					
-					System.out.println(g);
+					gameRef.addArrowToPlayer((Arrow)b,(Player)a);
 				}
 			}
 		}
@@ -239,9 +236,7 @@ public class CollisionDetector
 			{
 				if(((Arrow) a).getLaunchCoolDown() <= 0 && ((Arrow)a).isStuck())
 				{
-					Arrow g = gameRef.getArrow((Arrow)a);
-					((Player) b).addArrow(g);
-					System.out.println(g);
+					gameRef.addArrowToPlayer((Arrow)a,(Player)b);
 				}
 			}
 		}

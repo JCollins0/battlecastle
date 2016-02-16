@@ -284,6 +284,24 @@ public class Game {
 								playerList[playerNum].removeArrow();
 							}
 							break;
+						case "add_arrow_player":
+							if(getHostType().equals(HostType.CLIENT))
+							{
+								int playerNum = Integer.parseInt(mess[1]);
+								String[] id = mess[2].split("[");
+								String uid = id[0];
+								String[] items = id[1].split(",");
+								
+								
+								playerList[playerNum].addArrow(new Arrow(
+										Integer.parseInt(items[1].split(":")[1]),Integer.parseInt(items[2].split(":")[1]),
+										Double.parseDouble(items[3].split(":")[1]), Double.parseDouble(items[4].split(":")[1]),
+										new Vector(Double.parseDouble(items[6].split(":")[1]), Double.parseDouble(items[7].split(":")[1]) ),0,playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],
+										items[0].split(":")[1],uid)
+										);
+								
+								
+							}
 						}
 					}
 					
@@ -465,9 +483,17 @@ public class Game {
 		return playerMap.get(myUUID);
 	}
 	
-	public Arrow getArrow(Arrow b)
+	public void addArrowToPlayer(Arrow b, Player p)
 	{
-		return arrows.remove(b.getID());
+		p.addArrow(arrows.remove(b.getID()));
+		
+		//send message to client to update number of arrows
+		Message message = new Message(MessageType.PERFORM_ACTION,
+				"add_arrow_player" + "=" + 
+				playerMap.get(getUUIDFromPlayer(p)).getPlayerNumber() + "=" + 
+				b.getID() + "[" + b.stringify() );
+		
+		gameServer.sendToAllTCP(message);
 	}
 	
 	/**
