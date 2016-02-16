@@ -288,7 +288,7 @@ public class Game {
 							if(getHostType().equals(HostType.CLIENT))
 							{
 								int playerNum = Integer.parseInt(mess[1]);
-								String[] id = mess[2].split("[");
+								String[] id = mess[2].split("*separator*");
 								String uid = id[0];
 								String[] items = id[1].split(",");
 								
@@ -491,7 +491,7 @@ public class Game {
 		Message message = new Message(MessageType.PERFORM_ACTION,
 				"add_arrow_player" + "=" + 
 				playerMap.get(getUUIDFromPlayer(p)).getPlayerNumber() + "=" + 
-				b.getID() + "[" + b.stringify() );
+				b.getID() + "*separator*" + b.stringify() );
 		
 		gameServer.sendToAllTCP(message);
 	}
