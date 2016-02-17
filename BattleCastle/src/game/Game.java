@@ -286,17 +286,18 @@ public class Game {
 							break;
 						case "add_arrow_player":
 							if(getHostType().equals(HostType.CLIENT))
-							{
+							{	
 								int playerNum = Integer.parseInt(mess[1]);
 								String[] id = mess[2].split("separator");
 								String uid = id[0];
 								String[] items = id[1].split(",");
 								
+								System.out.printf("player num: %d, arrow id: %s",playerNum,uid);
 								
 								playerList[playerNum].addArrow(new Arrow(
 										Integer.parseInt(items[1].split(":")[1]),Integer.parseInt(items[2].split(":")[1]),
 										Double.parseDouble(items[3].split(":")[1]), Double.parseDouble(items[4].split(":")[1]),
-										new Vector(Double.parseDouble(items[6].split(":")[1]), Double.parseDouble(items[7].split(":")[1]) ),0,playerList[playerMap.get(items[5].split(":")[1]).getPlayerNumber()],
+										new Vector(Double.parseDouble(items[6].split(":")[1]), Double.parseDouble(items[7].split(":")[1]) ),0,playerList[playerNum],
 										items[0].split(":")[1],uid)
 										);
 								
