@@ -25,7 +25,7 @@ public class Tile extends Polygon implements JSONStreamAware
 	protected BufferedImage[] pics;
 	protected State[] states;
 	protected int animation,imageX,imageY,currentState;
-	protected boolean animateIffMouseOver,mouseIsOver;
+	protected boolean animateIffMouseOver,mouseIsOver,reverseAnimate;
 
 	private static BufferedImage[] check;
 	//private static State[] still;
@@ -129,6 +129,16 @@ public class Tile extends Polygon implements JSONStreamAware
 	{
 		return mouseIsOver;
 	}
+	
+	public void setReverseAnimate(boolean reverseAnimate)
+	{
+		if(!this.reverseAnimate&&reverseAnimate)
+			animation<<=1;
+		else if(this.reverseAnimate&&!reverseAnimate)
+			animation>>=1;
+		this.reverseAnimate=reverseAnimate;
+		
+	}
 
 //	protected void shift(int x,int y)
 //	{
@@ -187,8 +197,13 @@ public class Tile extends Polygon implements JSONStreamAware
 		super.tick();
 		if(!animateIffMouseOver||(animateIffMouseOver&&mouseIsOver))
 		{
-			if(animation++>=(pics.length-1)*speed)
-				animation=0;
+			if(reverseAnimate)
+			{
+				if((animation++)>=(pics.length-1)*speed)
+					animation=0;
+			}
+			else if(animation++>=(pics.length-1)*speed)
+					animation=0;
 			if(states[currentState].increment(this))
 				currentState=(++currentState)%states.length;
 		}
