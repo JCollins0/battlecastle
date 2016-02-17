@@ -300,6 +300,8 @@ public class Game {
 										items[0].split(":")[1],uid)
 										);
 								
+								arrows.remove(uid);
+								
 								
 							}
 						}
