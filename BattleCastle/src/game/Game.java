@@ -190,8 +190,11 @@ public class Game {
 							{
 							case "launch_a": //launching arrow from client player
 								
+								
+								
 								int playerNum = Integer.parseInt(mess[1]);
 								launchArrow(playerList[playerNum]);
+								System.out.println("lAunching Arrow fOR plAyer: " + playerNum );
 								
 								break;
 							}
@@ -303,7 +306,7 @@ public class Game {
 								
 								arrows.remove(uid);
 								
-								
+								playerList[playerNum].fixArrows(2, playerList[playerNum].getMouseLocation().x, playerList[playerNum].getMouseLocation().y);
 							}
 						}
 					}
@@ -408,19 +411,6 @@ public class Game {
 		{
 			arrow.render(g);
 		}
-		
-//		Iterator<KeyPress> kPi = KeyHandler.presses.iterator();
-//		int i = 0;
-//		while(kPi.hasNext())
-//		{
-//			g.setColor(Color.darkGray);
-//			g.drawString(kPi.next().getText(), 100, i * 64 + 15 );
-//			i++;
-//		}
-//		for(int i = 0; i < KeyHandler.presses.size(); i++)
-//		{
-//			
-//		}
 			
 	}
 	
