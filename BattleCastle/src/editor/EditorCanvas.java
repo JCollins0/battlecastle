@@ -108,11 +108,11 @@ public class EditorCanvas extends Canvas implements Runnable{
 		
 		
 		editor=new ArrayList<Tile>();
-		Tile incrementWidth=new Tile(896,768,32,32,ImageFilePaths.INCWIDTH,ImageFileDimensions.INCWIDTH.x,ImageFileDimensions.INCWIDTH.y,null,true);
-		Tile decrementWidth=new Tile(896,800,32,32,ImageFilePaths.DECWIDTH,ImageFileDimensions.DECWIDTH.x,ImageFileDimensions.DECWIDTH.y,null,true);
-		Tile incrementHeight=new Tile(928,768,32,32,ImageFilePaths.INCHEIGHT,ImageFileDimensions.INCHEIGHT.x,ImageFileDimensions.INCHEIGHT.y,null,true);
-		Tile decrementHeight=new Tile(928,800,32,32,ImageFilePaths.DECHEIGHT,ImageFileDimensions.DECHEIGHT.x,ImageFileDimensions.DECHEIGHT.y,null,true);
-		Tile cloneTile=new Tile(960,800,32,32,ImageFilePaths.CLONE,ImageFileDimensions.CLONE.x,ImageFileDimensions.CLONE.y,null,true,true);
+		Tile incrementWidth=new Tile(896,768,32,32,ImageFilePaths.INCWIDTH,ImageFileDimensions.INCWIDTH.x,ImageFileDimensions.INCWIDTH.y,null,true,true,true);
+		Tile decrementWidth=new Tile(896,800,32,32,ImageFilePaths.DECWIDTH,ImageFileDimensions.DECWIDTH.x,ImageFileDimensions.DECWIDTH.y,null,true,true,true);
+		Tile incrementHeight=new Tile(928,768,32,32,ImageFilePaths.INCHEIGHT,ImageFileDimensions.INCHEIGHT.x,ImageFileDimensions.INCHEIGHT.y,null,true,true,true);
+		Tile decrementHeight=new Tile(928,800,32,32,ImageFilePaths.DECHEIGHT,ImageFileDimensions.DECHEIGHT.x,ImageFileDimensions.DECHEIGHT.y,null,true,true,true);
+		Tile cloneTile=new Tile(960,800,32,32,ImageFilePaths.CLONE,ImageFileDimensions.CLONE.x,ImageFileDimensions.CLONE.y,null,true,true,true);
 		editor.add(incrementWidth);
 		editor.add(decrementWidth);
 		editor.add(incrementHeight);
