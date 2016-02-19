@@ -1,9 +1,5 @@
 package core;
 
-import game.Game;
-import game.object.GameMap;
-import game.object.MapType;
-
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
@@ -18,10 +14,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
-
-import utility.AudioHandler;
-import utility.ConfigLoader;
-import utility.Utility;
 
 import com.esotericsoftware.kryonet.Client;
 
@@ -39,6 +31,15 @@ import core.menu_object.MenuTextFieldType;
 import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
 import core.menu_object.TutorialObject;
+import game.Game;
+import game.object.GameMap;
+import game.object.MapType;
+import shader.LightShader;
+import shader.Shader;
+import shader.Shader.ShaderType;
+import utility.AudioHandler;
+import utility.ConfigLoader;
+import utility.Utility;
 
 public class BattleCastleCanvas extends Canvas implements Runnable{
 
@@ -86,6 +87,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private boolean running;
 	private boolean searchingForServers;
 	public boolean debug;
+	
+	private Shader light = new LightShader(ShaderType.LIGHT,1024,786);
 	
 	public BattleCastleCanvas()
 	{
@@ -540,6 +543,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				serverSelectionBox.render(b);
 		}
 		
+		light.applyShader(b);
+		
 		Graphics g = bs.getDrawGraphics();
 		
 		g.drawImage(buffer, 0, 0, BattleCastleFrame.GAME_SIZE.width,
@@ -580,6 +585,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		
 		if(game != null)
 			game.tick();
+		
+		light.manipulatePixels();
 	}
 	
 	/**
