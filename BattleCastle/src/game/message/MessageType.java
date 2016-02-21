@@ -10,7 +10,10 @@ public enum MessageType {
 	UPDATE_ARROW("update_arrow"),
 	MOVE_ARROW("move_arrow"),
 	UPDATE_MOUSE_LOC("upadte_mouse_loc"),
-	PERFORM_ACTION("perform_action");
+	PERFORM_ACTION("perform_action"),
+	LAUNCH_ARROW("launch_arrow"),
+	REMOVE_ARROW("remove_arrow"),
+	ADD_ARROW_TO_PLAYER("add_arrow_to_player");
 	
 	private String value;
 	MessageType()

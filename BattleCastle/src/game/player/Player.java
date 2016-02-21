@@ -72,27 +72,58 @@ public class Player extends PhysicsRect{
 	}
 	
 	/**
+	 * Used to center and rotate arrow on player
+	 * @param num the index in the arrow array to fix
+	 * @param x the x position of the mouse
+	 * @param y the y position of the mouse
+	 */
+	public void fixArrows(int num, int x, int y)
+	{
+		double theta = Math.atan2((y-getCenter().YPoint()),(x-getCenter().XPoint()));
+		
+		for(int i = 0; i < num && i < arrowStorage.size(); i++)
+		{
+			Arrow a = arrowStorage.get(i);
+			a.fix(theta);
+		}
+		
+	}
+	
+	/**
+	 * used to 'launch an arrow'
+	 * @return arrow to be removed, null if none left to fire
+	 */
+	public Arrow removeArrow()
+	{
+		if(arrowStorage.size() > 0)
+		{
+			currentArrow = null;
+			return arrowStorage.remove(0);
+		}
+		return null;
+	}
+	
+	/**
+	 * used to pickup arrows
+	 * @param a the arrow
+	 */
+	public void addArrow(Arrow a)
+	{
+		a.moveTo(-64,-64);
+		a.setRotate(true);
+		a.setLaunchCooldown(Arrow.DEFAULT_LAUNCH_COOLDOWN);
+		a.setNormalForce(1, 1);
+		arrowStorage.add(a);
+		fixArrows(2, mouseLocation.x, mouseLocation.y);
+	}
+	
+	/**
 	 * updates player
 	 */
 	public void tick()
 	{
 		if(falling)
 			super.tick();
-//		if(currentArrow == null && arrowStorage.size() > 0)
-//			currentArrow= arrowStorage.get(0);
-//		else if(arrowStorage.size() > 0)
-//		{
-//			fixArrows(2,MouseHandler.mouse.x, MouseHandler.mouse.y);
-//		}
-		
-//		if(getCorners()[0].YPoint() > 786)
-//		{
-//			moveTo(getCorners()[0].XPoint(),getCorners()[0].YPoint()%786);
-//		}
-//		else if(getCorners()[0].YPoint() < 0)
-//		{
-//			moveTo(getCorners()[0].XPoint(),786-HEIGHT);
-//		}
 	}
 	
 	/**
@@ -103,23 +134,11 @@ public class Player extends PhysicsRect{
 		if(image != null)
 		{
 			g.drawImage(image, getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
-			
-//			if(getCorners()[3].YPoint() > 786)
-//			{
-//				g.drawImage(image, getCorners()[3].XPoint()%1024, getCorners()[3].YPoint()%786-HEIGHT,WIDTH,HEIGHT,null);
-//			}else if(getCorners()[0].YPoint() < 0)
-//			{
-//				g.drawImage(image, getCorners()[3].XPoint()%1024, 786+getCorners()[3].YPoint(),WIDTH,HEIGHT,null);
-//				
-//			}
-			
 		}else
 		{
 			g.setColor(Color.cyan);
 			g.fillRect( getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT);
 		}
-		
-		
 		
 		if(currentArrow != null)
 			currentArrow.render(g);	
@@ -127,6 +146,15 @@ public class Player extends PhysicsRect{
 		g.setColor(Color.black);
 		g.drawString(String.format("(%d,%d)",  getCorners()[0].XPoint(), getCorners()[0].YPoint() ),  getCorners()[0].XPoint(), getCorners()[0].YPoint()-5);
 		
+	}
+	
+	/**
+	 * get current held arrow
+	 * @return current held arrow
+	 */
+	public Arrow getCurrentArrow()
+	{
+		return currentArrow;
 	}
 	
 	/**
@@ -205,57 +233,6 @@ public class Player extends PhysicsRect{
 	}
 	
 	/**
-	 * Used to center and rotate arrow on player
-	 * @param num the index in the arrow array to fix
-	 * @param x the x position of the mouse
-	 * @param y the y position of the mouse
-	 */
-	public void fixArrows(int num, int x, int y)
-	{
-		double theta = Math.atan2((y-getCenter().YPoint()),(x-getCenter().XPoint()));
-		
-		for(int i = 0; i < num && i < arrowStorage.size(); i++)
-		{
-			Arrow a = arrowStorage.get(i);
-			a.fix(theta);
-		}
-		
-	}
-	
-	/**
-	 * used to 'launch an arrow'
-	 * @return arrow to be removed, null if none left to fire
-	 */
-	public Arrow removeArrow()
-	{
-		if(arrowStorage.size() > 0)
-		{
-			currentArrow = null;
-			return arrowStorage.remove(0);
-		}
-		return null;
-	}
-	
-	public void addArrow(Arrow a)
-	{
-		a.moveTo(-64,-64);
-		a.setRotate(true);
-		a.setLaunchCooldown(Arrow.DEFAULT_LAUNCH_COOLDOWN);
-		a.setNormalForce(1, 1);
-		arrowStorage.add(a);
-		fixArrows(2, mouseLocation.x, mouseLocation.y);
-	}
-	
-	/**
-	 * used to send location data to other client
-	 * @return
-	 */
-//	public String getPlayerInformation()
-//	{
-//		return String.format("X:%d Y:%d W:%d H:%d", getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT);
-//	}
-	
-	/**
 	 * turns object into string to send over network
 	 * @return string representation of object
 	 */
@@ -263,7 +240,8 @@ public class Player extends PhysicsRect{
 	{
 		return String.format("ImageFile#%s<X#%d<Y#%d<W#%d<H#%d<MouseX#%d<MouseY#%d<Arrow#%s",
 					imageFilePath,
-					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT,  mouseLocation.x, mouseLocation.y, (currentArrow != null ? currentArrow.stringify() : "")
+					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT,
+					mouseLocation.x, mouseLocation.y, (currentArrow != null ? currentArrow.stringify() : "")
 					);
 	}
 	
@@ -318,11 +296,6 @@ public class Player extends PhysicsRect{
 	@Override
 	public String toString() {
 		return String.format("%s[ID:%s]", this.getClass().getName(), uuid);
-	}
-	
-	public Arrow getCurrentArrow()
-	{
-		return currentArrow;
 	}
 }
 

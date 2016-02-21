@@ -88,8 +88,13 @@ public class Game {
 		gameMapLoader = new GameMap();
 	}
 
+	/* ##################
+	 * GAME CLASS METHODS
+	 * ################## 
+	 */
+	
 	/**
-	 * Initializes Server
+ 	 * Initializes Server
 	 */
 	private void startServer()
 	{
@@ -331,16 +336,6 @@ public class Game {
 	}
 	
 	/**
-	 * @param user the user to login to server
-	 */
-	public void sendUserData(BattleCastleUser user)
-	{
-		playerMap.put(user.getUUID(), user);
-		playerMap.get(user.getUUID()).setConnected(true);
-		gameClient.sendTCP(user);
-	}
-	
-	/**
 	 * updates everything
 	 */
 	public void tick()
@@ -414,79 +409,19 @@ public class Game {
 			
 	}
 	
+	/* ######################################
+	 * EVENTS THAT GET SENT TO SERVER/CLIENTS
+	 * ######################################
+	 */
 	
 	/**
-	 * 
-	 * @param ip the String IP of the server to join
+	 * @param user the user to login to server
 	 */
-	public void setServerIP(String ip)
+	public void sendUserData(BattleCastleUser user)
 	{
-		try {
-			serverIP = InetAddress.getByName(ip);
-		} catch (UnknownHostException e) {
-			canvasRef.setCurrentState(GameState.MAIN_MENU);
-			canvasRef.addError(new Error("IP Formatted Incorrectly: " + ip, 300));
-		}
-	}
-	
-	/**
-	 * 
-	 * @param address the InetAddress of the server to join.
-	 */
-	public void setServerIP(InetAddress address)
-	{
-		serverIP = address;
-	}
-	
-	/**
-	 * 
-	 * @return number of players in game
-	 */
-	public int getPlayersInList()
-	{
-		int count = 0;
-		for(int i = 0; i < playerList.length; i++)
-			if(playerList[i] != null)
-				count++;
-		return count;
-	}
-	
-	/**
-	 * 
-	 * @return hosting type (CLIENT or SERVER)
-	 */
-	public HostType getHostType()
-	{
-		return hostType;
-	}
-	
-	/**
-	 * 
-	 * @return this client's player
-	 */
-	public Player getMyPlayer() {
-		return playerList[playerMap.get(myUUID).getPlayerNumber()];
-	}
-	
-	/**
-	 * 
-	 * @return this client's user data
-	 */
-	public BattleCastleUser getMyUser() {
-		return playerMap.get(myUUID);
-	}
-	
-	public void addArrowToPlayer(Arrow b, Player p)
-	{
-		p.addArrow(arrows.remove(b.getID()));
-		
-		//send message to client to update number of arrows
-		Message message = new Message(MessageType.PERFORM_ACTION,
-				"add_arrow_player" + "=" + 
-				playerMap.get(getUUIDFromPlayer(p)).getPlayerNumber() + "=" + 
-				b.getID() + "separator" + b.stringify() );
-		
-		gameServer.sendToAllTCP(message);
+		playerMap.put(user.getUUID(), user);
+		playerMap.get(user.getUUID()).setConnected(true);
+		gameClient.sendTCP(user);
 	}
 	
 	/**
@@ -600,6 +535,107 @@ public class Game {
 	}
 	
 	/**
+	 * adds arrow to player
+	 * @param b the arrow
+	 * @param p the player
+	 */
+	public void addArrowToPlayer(Arrow b, Player p)
+	{
+		p.addArrow(arrows.remove(b.getID()));
+		
+		//send message to client to update number of arrows
+		Message message = new Message(MessageType.PERFORM_ACTION,
+				"add_arrow_player" + "=" + 
+				playerMap.get(getUUIDFromPlayer(p)).getPlayerNumber() + "=" + 
+				b.getID() + "separator" + b.stringify() );
+		
+		gameServer.sendToAllTCP(message);
+	}
+	
+	/* ###########################
+	 * GENERAL GETTERS AND SETTERS
+	 * ###########################
+	 */
+	
+	/**
+	 * Gets the list of arrows currently in game
+	 * @return list of arrows
+	 */
+	public ConcurrentHashMap<String,Arrow> getArrows() {
+		return arrows;
+	}
+	
+	/**
+	 * sets the uuid for this client's player
+	 * @param uuid the uuid to set for this client
+	 */
+	public void setMyUserUUID(String uuid)
+	{
+		myUUID = uuid;
+	}
+	
+	/**
+	 * @return this client
+	 */
+	public Client getClient()
+	{
+		return gameClient;
+	}
+	
+	/**
+	 * 
+	 * @return hosting type (CLIENT or SERVER)
+	 */
+	public HostType getHostType()
+	{
+		return hostType;
+	}
+	
+	/**
+	 * 
+	 * @return this client's player
+	 */
+	public Player getMyPlayer() {
+		return playerList[playerMap.get(myUUID).getPlayerNumber()];
+	}
+	
+	/**
+	 * 
+	 * @return this client's user data
+	 */
+	public BattleCastleUser getMyUser() {
+		return playerMap.get(myUUID);
+	}
+	
+	/**
+	 * 
+	 * @param ip the String IP of the server to join
+	 */
+	public void setServerIP(String ip)
+	{
+		try {
+			serverIP = InetAddress.getByName(ip);
+		} catch (UnknownHostException e) {
+			canvasRef.setCurrentState(GameState.MAIN_MENU);
+			canvasRef.addError(new Error("IP Formatted Incorrectly: " + ip, 300));
+		}
+	}
+	
+	/**
+	 * 
+	 * @param address the InetAddress of the server to join.
+	 */
+	public void setServerIP(InetAddress address)
+	{
+		serverIP = address;
+	}
+	
+	/* ##############
+	 * HELPER METHODS
+	 * ##############
+	 */
+	
+	/**
 	 * 
 	 * @param p Player to get id from
 	 * @return uuid if player exists, null if not
@@ -617,24 +653,25 @@ public class Game {
 		System.out.println("NO UUID FOUND FOR PLAYER: " + p);
 		return null;
 	}
-	
+
 	/**
 	 * 
-	 * @param uuid the uuid to set for this client
+	 * @return number of players in game
 	 */
-	public void setMyUserUUID(String uuid)
+	public int getPlayersInList()
 	{
-		myUUID = uuid;
-	}
-	
-	/**
-	 * @return this client
-	 */
-	public Client getClient()
-	{
-		return gameClient;
+		int count = 0;
+		for(int i = 0; i < playerList.length; i++)
+			if(playerList[i] != null)
+				count++;
+		return count;
 	}
 
+	/* #############
+	 * RESETING GAME
+	 * #############
+	 */
+	
 	/**
 	 * stops the server if hosting
 	 */
@@ -652,14 +689,5 @@ public class Game {
 		if(gameClient != null)
 			gameClient.stop();
 	}
-
-	public ConcurrentHashMap<String,Arrow> getArrows() {
-		// TODO Auto-generated method stub
-		return arrows;
-	}
-
-	
-	
-	
 }
 
