@@ -8,7 +8,6 @@ import game.physics.Vector;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 
 import utility.Utility;
 
@@ -27,6 +26,8 @@ public class Arrow extends PhysicsRect{
 	private boolean rotate = true;
 	public static final int DEFAULT_LAUNCH_COOLDOWN = 20;
 	private int launchCoolDown = 20;
+	
+	public static final String KEY_VALUE_SEPARATOR = ":", ENTRY_SEPARATOR = ",";
 	
 	public Arrow(int x, int y,
 				 double theta, double graphicsTheta,
@@ -54,11 +55,19 @@ public class Arrow extends PhysicsRect{
 	 */
 	public String stringify()
 	{
-		String format = "ImageFile:%s,Corner0X:%d,Corner0Y:%d,Theta:%f,MyTheta:%f,"+
-						"PlayerID:%s,VELOCITYX:%f,VELOCITYY:%f";
-		String s=String.format(format,imagePath, getCorners()[0].XPoint(), getCorners()[0].YPoint()
+		StringBuilder builder = new StringBuilder();
+		builder.append("ImageFile" + KEY_VALUE_SEPARATOR + "%s" + ENTRY_SEPARATOR);
+		builder.append("Corner0X" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
+		builder.append("Corner0Y" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
+		builder.append("Theta" + KEY_VALUE_SEPARATOR + "%f" + ENTRY_SEPARATOR);
+		builder.append("MyTheta" + KEY_VALUE_SEPARATOR + "%f" + ENTRY_SEPARATOR);
+		builder.append("PlayerID" + KEY_VALUE_SEPARATOR + "%s" + ENTRY_SEPARATOR);
+		builder.append("VELOCITYX" + KEY_VALUE_SEPARATOR + "%f" + ENTRY_SEPARATOR);
+		builder.append("VELOCITYY" + KEY_VALUE_SEPARATOR + "%f");
+//		String format = "ImageFile:%s,Corner0X:%d,Corner0Y:%d,Theta:%f,MyTheta:%f,"+
+//						"PlayerID:%s,VELOCITYX:%f,VELOCITYY:%f";
+		return String.format(builder.toString(),imagePath, getCorners()[0].XPoint(), getCorners()[0].YPoint()
 				, theta, graphicsRotationTheta, shotByPlayer.getUUID(), getVelocity().XExact(), getVelocity().YExact());
-		return s;
 	}
 	
 	/**
@@ -67,10 +76,10 @@ public class Arrow extends PhysicsRect{
 	 */
 	public void decode(String text)
 	{
-		String[] items = text.split(",");
+		String[] items = text.split(ENTRY_SEPARATOR);
 		for(String item : items)
 		{
-			String[] key_value = item.split(":");
+			String[] key_value = item.split(KEY_VALUE_SEPARATOR);
 			switch(key_value[0])
 			{
 			case "ImageFile":

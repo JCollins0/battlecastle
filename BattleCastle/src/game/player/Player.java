@@ -1,5 +1,6 @@
 package game.player;
 
+import game.message.Message;
 import game.physics.PhysicsRect;
 import game.physics.Vector;
 
@@ -23,6 +24,8 @@ public class Player extends PhysicsRect{
 	public static final double ANG_VEL = 0;
 	public static final double DRAG_C = 10;
 	
+	public static final String KEY_VALUE_SEPARATOR = "#", ENTRY_SEPARATOR = "<";
+	
 	private BufferedImage image;
 	private ArrayList<Arrow> arrowStorage;
 	private Arrow currentArrow;
@@ -31,6 +34,7 @@ public class Player extends PhysicsRect{
 	private String imageFilePath;
 	private boolean falling = true;
 	private Point mouseLocation;
+	
 	
 	
 	/**
@@ -114,7 +118,7 @@ public class Player extends PhysicsRect{
 		a.setLaunchCooldown(Arrow.DEFAULT_LAUNCH_COOLDOWN);
 		a.setNormalForce(1, 1);
 		arrowStorage.add(a);
-		fixArrows(2, mouseLocation.x, mouseLocation.y);
+		fixArrows(arrowStorage.size(), mouseLocation.x, mouseLocation.y);
 	}
 	
 	/**
@@ -238,7 +242,17 @@ public class Player extends PhysicsRect{
 	 */
 	public String stringify()
 	{
-		return String.format("ImageFile#%s<X#%d<Y#%d<W#%d<H#%d<MouseX#%d<MouseY#%d<Arrow#%s",
+		StringBuilder builder = new StringBuilder();
+		builder.append("ImageFile" + KEY_VALUE_SEPARATOR + "%s" + ENTRY_SEPARATOR);
+		builder.append("X" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
+		builder.append("Y" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
+		builder.append("W" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
+		builder.append("H" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
+		builder.append("MouseX" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
+		builder.append("MouseY" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
+		builder.append("Arrow" + KEY_VALUE_SEPARATOR + "%s");
+//		"ImageFile#%s<X#%d<Y#%d<W#%d<H#%d<MouseX#%d<MouseY#%d<Arrow#%s"
+		return String.format(builder.toString(),
 					imageFilePath,
 					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT,
 					mouseLocation.x, mouseLocation.y, (currentArrow != null ? currentArrow.stringify() : "")
@@ -251,10 +265,10 @@ public class Player extends PhysicsRect{
 	 */
 	public void decode(String s)
 	{
-		String[] items = s.split("<");
+		String[] items = s.split(ENTRY_SEPARATOR);
 		for(String item : items)
 		{
-			String[] key_value = item.split("#");
+			String[] key_value = item.split(KEY_VALUE_SEPARATOR);
 			switch(key_value[0])
 			{
 			case "ImageFile":
