@@ -79,4 +79,13 @@ public class State
 		return true;
 	}
 	
+	public String stringify()
+	{
+		if(paused)
+			return restTime+"";
+		if(continual)
+			return sx+"+"+sy;
+		return dx+"+"+sx+"+"+dy+"+"+sy;
+	}
+	
 }

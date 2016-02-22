@@ -4,6 +4,7 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
 import org.json.simple.JSONObject;
@@ -23,10 +24,12 @@ public class Tile extends Polygon implements JSONStreamAware
 	private static final long serialVersionUID = -5649265101080536323L;
 	protected String picText,statesText;
 	protected BufferedImage[] pics;
-	protected State[] states;
+	protected ArrayList<State> states;
 	protected int animation,imageX,imageY,currentState;
+	protected int speed = 3;
 	protected boolean animateIffMouseOver,mouseIsOver,reverseAnimate,currentlyReversed;
-
+	protected boolean statesActive=true;
+	
 	private static BufferedImage[] check;
 	//private static State[] still;
 	
@@ -98,32 +101,80 @@ public class Tile extends Polygon implements JSONStreamAware
 		this(x,y,width,height,new Image[]{pic},states);
 	}*/
 
-	protected State[] createStates(String s)
+	protected ArrayList<State> createStates(String s)
 	{
 		if(s==null||s.equals(""))
-			return new State[]{new State(0,0)};
-		String[] text=s.split(",");
-		State[] temp=new State[text.length];
-		for(int i = 0; i<temp.length;i++)
 		{
-			String[] data=text[i].split("+");
+			ArrayList<State> temp = new ArrayList<State>();
+			temp.add(new State(0,0));
+			return temp;
+		}
+		String[] text=s.split(",");
+		ArrayList<State> temp=new ArrayList<State>();
+		for(int i = 0; i<text.length;i++)
+		{
+			String[] data=text[i].split("\\+");
 			if(data.length==1)
-				temp[i]=new State(Integer.parseInt(data[0]));
+				temp.add(new State(Integer.parseInt(data[0])));
 			else if(data.length==2)
 			{
-				temp[i]=new State(Integer.parseInt(data[0]),Integer.parseInt(data[1]));
+				temp.add(new State(Integer.parseInt(data[0]),Integer.parseInt(data[1])));
 			}
 			else
 			{
-				temp[i]=new State(Integer.parseInt(data[0]),Integer.parseInt(data[1]),Integer.parseInt(data[2]),Integer.parseInt(data[3]));
+				temp.add(new State(Integer.parseInt(data[0]),Integer.parseInt(data[1]),Integer.parseInt(data[2]),Integer.parseInt(data[3])));
 			}
 		}
 		return temp;
 	}
+	
+	public String makeStatesText()
+	{
+		String temp="";
+		for(State s:states)
+			temp+=s.stringify();
+		return temp;
+	}
 
-	public void setStates(State[] s)
+	public void setStates(ArrayList<State> s)
 	{
 		states=s;
+	}
+	
+	public void addState(State s)
+	{
+		states.add(s);
+	}
+	
+	public State removeState(int index)
+	{
+		return states.remove(index);
+	}
+	
+	public State removeLastState()
+	{
+		return states.remove(states.size()-1);
+	}
+	
+	public ArrayList<State> getStates()
+	{
+		return states;
+	}
+	
+	public void resetStates()
+	{
+		//some more code based on position?????
+		currentState=0;
+	}
+	
+	public boolean getStatesActive()
+	{
+		return statesActive;
+	}
+	
+	public void setStatesActive(boolean statesActive)
+	{
+		this.statesActive=statesActive;
 	}
 	
 	public void setMouseIsOver(boolean mouse)
@@ -146,20 +197,6 @@ public class Tile extends Polygon implements JSONStreamAware
 		
 	}
 
-//	protected void shift(int x,int y)
-//	{
-//		this.x+=x;
-//		this.y+=y;
-//		if(this.x>1024)
-//			this.x=-this.width;
-//		else if(this.x<-this.width)
-//			this.x=1024;
-//		if(this.y>768)
-//			this.y=-this.height;
-//		else if(this.y<-this.height)
-//			this.y=768;
-//	}
-
 	public int getWidth()
 	{
 		return getCorners()[1].XPoint()-getCorners()[0].XPoint();
@@ -170,6 +207,14 @@ public class Tile extends Polygon implements JSONStreamAware
 		return Math.abs(getCorners()[3].YPoint() - getCorners()[0].YPoint());
 	}
 	
+	public int getSpeed() {
+		return speed;
+	}
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+
 	public void setWidth(int width)
 	{
 		getCorners()[1].setX(getCorners()[0].XPoint() + width);
@@ -197,7 +242,7 @@ public class Tile extends Polygon implements JSONStreamAware
 		g.drawImage(pics[animation/speed], getX(), getY(), getWidth() , getHeight(), null);
 //		System.out.println(picText + " " + animation + " " + currentState + " " + x + " " + y);
 	}
-	int speed = 3;
+	
 	public void tick()
 	{
 		super.tick();
@@ -215,8 +260,8 @@ public class Tile extends Polygon implements JSONStreamAware
 				else
 					animation=0;
 			}
-			if(states[currentState].increment(this))
-				currentState=(++currentState)%states.length;
+			if(statesActive&&states.get(currentState).increment(this))
+				currentState=(++currentState)%states.size();
 		}
 	}
 
@@ -266,7 +311,7 @@ public class Tile extends Polygon implements JSONStreamAware
 		obj.put("picText",picText);
 		obj.put("imageX",imageX);
 		obj.put("imageY", imageY);
-		obj.put("statestext",statesText);
+		obj.put("statestext",makeStatesText());
 		JSONValue.writeJSONString(obj, out);
 	}
 

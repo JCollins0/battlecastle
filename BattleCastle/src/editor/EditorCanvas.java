@@ -86,10 +86,11 @@ public class EditorCanvas extends Canvas implements Runnable{
 		Tile addNewTile=new Tile(resetX(),TOOLS_Y,32,32);
 		Tile saveTile=new Tile(getNextX(),TOOLS_Y,32,32,ImageFilePaths.SAVE,ImageFileDimensions.SAVE.x,ImageFileDimensions.SAVE.y,null,true);
 		Tile deleteAllTile=new Tile(getNextX(),TOOLS_Y,32,32,ImageFilePaths.DELETE_ALL,ImageFileDimensions.DELETE_ALL.x,ImageFileDimensions.DELETE_ALL.y,null,true);
+		Tile toggleStatesActive=new Tile(getNextX(),TOOLS_Y,32,32,ImageFilePaths.DELETE_ALL,ImageFileDimensions.DELETE_ALL.x,ImageFileDimensions.DELETE_ALL.y,null,true);
 		tools.add(addNewTile);
 		tools.add(saveTile);
 		tools.add(deleteAllTile);
-		
+		tools.add(toggleStatesActive);
 		
 		tileAdder=new ArrayList<Tile>();
 //		System.out.println(" Tile Adder " + tileAdderY);
@@ -113,11 +114,13 @@ public class EditorCanvas extends Canvas implements Runnable{
 		Tile incrementHeight=new Tile(928,768,32,32,ImageFilePaths.INCHEIGHT,ImageFileDimensions.INCHEIGHT.x,ImageFileDimensions.INCHEIGHT.y,null,true,true,true);
 		Tile decrementHeight=new Tile(928,800,32,32,ImageFilePaths.DECHEIGHT,ImageFileDimensions.DECHEIGHT.x,ImageFileDimensions.DECHEIGHT.y,null,true,true,true);
 		Tile cloneTile=new Tile(960,800,32,32,ImageFilePaths.CLONE,ImageFileDimensions.CLONE.x,ImageFileDimensions.CLONE.y,null,true,true,true);
+		Tile stateAdder=new Tile(960,768,32,32,ImageFilePaths.CLONE,ImageFileDimensions.CLONE.x,ImageFileDimensions.CLONE.y,null,true,true,true);
 		editor.add(incrementWidth);
 		editor.add(decrementWidth);
 		editor.add(incrementHeight);
 		editor.add(decrementHeight);
 		editor.add(cloneTile);
+		editor.add(stateAdder);
 		
 		mouseHandler = new EditorMouseHandler(this);
 		keyHandler = new EditorKeyHandler(this);
@@ -237,7 +240,9 @@ public class EditorCanvas extends Canvas implements Runnable{
 		Iterator<Tile> iter=list.iteratorb();
 		while(iter.hasNext())
 		{
-			temp.add(iter.next());
+			Tile t=iter.next();
+			snapToGrid(t);
+			temp.add(t);
 		}
 //		System.out.println(temp);
 		PrintWriter printer=null;
@@ -267,6 +272,16 @@ public class EditorCanvas extends Canvas implements Runnable{
 	public void deselectTile()
 	{
 		current=null;
+	}
+	
+	public void toggleAllStates()
+	{
+		if(list.peekFront().getStatesActive())
+			for(Tile t:list)
+				t.setStatesActive(false);
+		else
+			for(Tile t:list)
+				t.setStatesActive(true);
 	}
 	
 	public void tick()
@@ -323,7 +338,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 				{
 				case 0:list.addFront(new Tile(0,0,32,32));break;
 				case 1:save();break;
-				case 2:list.clear();
+				case 2:list.clear();break;
+				case 3:toggleAllStates();
 				default:break;
 				}
 	}
@@ -358,8 +374,14 @@ public class EditorCanvas extends Canvas implements Runnable{
 						current.setHeight(current.getHeight()-32);
 					break;
 				case 4:if(current!=null)
-					list.addFront(current.copy());
-				break;
+						list.addFront(current.copy());
+					break;
+				case 5:if(current!=null)
+					{
+						current.removeLastState();
+						current.addState(new State(1,1));
+					}
+					break;
 				default:break;
 				}
 		if(current!=null)
