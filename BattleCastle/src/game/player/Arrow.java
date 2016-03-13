@@ -219,6 +219,11 @@ public class Arrow extends PhysicsRect{
 		return stringify();
 	}
 	
+	public void setPlayer(Player p)
+	{
+		shotByPlayer = p;
+	}
+	
 	public void setRotate(boolean rotate)
 	{
 		this.rotate=rotate;

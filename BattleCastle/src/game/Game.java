@@ -548,7 +548,7 @@ public class Game {
 	 */
 	public void launchArrow(Player player)
 	{
-		
+		System.out.println("Launching Arrow For: " + player);
 		if(hostType.equals(HostType.SERVER))
 		{
 			Arrow arrow = player.removeArrow();
@@ -579,6 +579,7 @@ public class Game {
 	public void addArrowToPlayer(Arrow b, Player p)
 	{
 		p.addArrow(arrows.remove(b.getID()));
+		b.setPlayer(p);
 		
 		//send message to client to update number of arrows
 		Message message = new Message(MessageType.PERFORM_ACTION,
