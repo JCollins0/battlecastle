@@ -85,6 +85,8 @@ public class Player extends PhysicsRect{
 	{
 		double theta = Math.atan2((y-getCenter().YPoint()),(x-getCenter().XPoint()));
 		
+		//System.out.println("Fixing Arrows " + uuid +" : " + "X: " + x + " Y: " + y + " Theta: " + theta);
+		
 		for(int i = 0; i < num && i < arrowStorage.size(); i++)
 		{
 			Arrow a = arrowStorage.get(i);
@@ -102,6 +104,7 @@ public class Player extends PhysicsRect{
 		if(arrowStorage.size() > 0)
 		{
 			currentArrow = null;
+			//System.out.println("GRAPHICS ROTATION = " + arrowStorage.get(0).getGraphicsRotationTheta() + "Draw Coords: " + arrowStorage.get(0).getDrawCoords());
 			return arrowStorage.remove(0);
 		}
 		return null;

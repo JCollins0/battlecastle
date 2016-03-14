@@ -12,7 +12,6 @@ import game.player.Arrow;
 import game.player.BattleCastleUser;
 import game.player.Player;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -20,7 +19,6 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,7 +47,7 @@ public class Game {
 	private Server gameServer;
 	private Client gameClient;
 	private BattleCastleCanvas canvasRef;
-	private HostType hostType;
+	public static HostType hostType;
 	private InetAddress serverIP;
 	private TreeMap<String, BattleCastleUser> playerMap;
 	private Player[] playerList;
@@ -197,7 +195,7 @@ public class Game {
 							{
 								int playerNum = Integer.parseInt(mess[1]);
 								launchArrow(playerList[playerNum]);
-								System.out.println("lAunching Arrow fOR plAyer: " + playerNum );
+							//	System.out.println("lAunching Arrow fOR plAyer: " + playerNum );
 							}
 //							switch(mess[0])
 //							{
@@ -293,6 +291,7 @@ public class Game {
 							if(getHostType().equals(HostType.CLIENT))
 							{
 								int playerNum = Integer.parseInt(mess[1]);
+								System.out.println(playerNum + "'s arrow is actually being removed" );
 								playerList[playerNum].removeArrow();
 							}
 						}else if(mess[0].equals(MessageType.ADD_ARROW_TO_PLAYER.toString()))
@@ -304,17 +303,18 @@ public class Game {
 								String uid = id[0];
 								String[] items = id[1].split(Arrow.ENTRY_SEPARATOR);
 								
-								System.out.printf("player num: %d, arrow id: %s",playerNum,uid);
+								///System.out.printf("player num: %d, arrow id: %s",playerNum,uid);
 								
 								playerList[playerNum].addArrow(new Arrow(
 										Integer.parseInt(items[1].split(Arrow.KEY_VALUE_SEPARATOR)[1]),Integer.parseInt(items[2].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
-										Double.parseDouble(items[3].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[4].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
+										0 , Double.parseDouble(items[4].split(Arrow.KEY_VALUE_SEPARATOR)[1]), //Double.parseDouble(items[3].split(Arrow.KEY_VALUE_SEPARATOR)[1])
 										new Vector(Double.parseDouble(items[6].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[7].split(Arrow.KEY_VALUE_SEPARATOR)[1]) ),
 										0,playerList[playerNum],items[0].split(Arrow.KEY_VALUE_SEPARATOR)[1],uid)
 										);
 								
 								arrows.remove(uid);
 								
+								//System.out.println(playerList[playerNum].stringify());
 								playerList[playerNum].fixArrows(2, playerList[playerNum].getMouseLocation().x, playerList[playerNum].getMouseLocation().y);
 							}
 						}
@@ -548,7 +548,7 @@ public class Game {
 	 */
 	public void launchArrow(Player player)
 	{
-		System.out.println("Launching Arrow For: " + player);
+		//System.out.println("Launching Arrow For: " + player);
 		if(hostType.equals(HostType.SERVER))
 		{
 			Arrow arrow = player.removeArrow();
@@ -559,11 +559,13 @@ public class Game {
 				arrows.put(arrow.getID(), arrow);
 				Message message = new Message(MessageType.UPDATE_ARROW, arrow.getID() + Message.EQUALS_SEPARATOR + arrow.stringify());
 				gameClient.sendTCP(message);
-				message = new Message(MessageType.PERFORM_ACTION, MessageType.REMOVE_ARROW.toString() + Message.EQUALS_SEPARATOR + getMyUser().getPlayerNumber() );
+				message = new Message(MessageType.PERFORM_ACTION, MessageType.REMOVE_ARROW.toString() + Message.EQUALS_SEPARATOR + playerMap.get(getUUIDFromPlayer(player)).getPlayerNumber() );
 				gameServer.sendToAllTCP(message);
 			}
 		}else
 		{
+			System.out.println(getMyUser().getPlayerNumber() + " is supposed to get it removed");
+			System.out.println(playerMap.get(getUUIDFromPlayer(getMyPlayer())).getPlayerNumber() + " is then going to be removed");
 			Message message = new Message(MessageType.PERFORM_ACTION, MessageType.LAUNCH_ARROW.toString() + Message.EQUALS_SEPARATOR + getMyUser().getPlayerNumber() );
 			gameClient.sendTCP(message);
 			getMyPlayer().removeArrow();

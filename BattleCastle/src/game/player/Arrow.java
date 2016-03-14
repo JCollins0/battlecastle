@@ -1,5 +1,6 @@
 package game.player;
 
+import game.Game;
 import game.physics.PhysicsPoly;
 import game.physics.PhysicsRect;
 import game.physics.Polygon;
@@ -9,6 +10,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import core.HostType;
 import utility.Utility;
 
 public class Arrow extends PhysicsRect{
@@ -90,8 +92,8 @@ public class Arrow extends PhysicsRect{
 				break;
 			case "Corner0Y": moveTo(getCorners()[0].XPoint(),Integer.parseInt(key_value[1]));
 				break;
-			case "Theta": theta = Double.parseDouble(key_value[1]);
-				break;
+//			case "Theta": theta = Double.parseDouble(key_value[1]);
+//				break;
 			case "MyTheta": graphicsRotationTheta = Double.parseDouble(key_value[1]);
 				break;
 			}
@@ -104,13 +106,16 @@ public class Arrow extends PhysicsRect{
 	 */
 	public void render(Graphics g)
 	{
-		super.render(g);
-		headCollision.render(g);
+		//super.render(g);
+		//headCollision.render(g);
+		//System.out.println("Drawing Arrow: " + ID + "-:"+stringify());
 		Graphics2D g2d = (Graphics2D)g;
 		
 		g2d.translate(getTopLeft().XPoint() , getTopLeft().YPoint() );
+		//if(Game.hostType != HostType.CLIENT)
 		g2d.rotate(graphicsRotationTheta);
 		g2d.drawImage(image, 0 , 0, WIDTH, HEIGHT, null);
+		//if(Game.hostType != HostType.CLIENT)
 		g2d.rotate(-graphicsRotationTheta);
 		g2d.translate(-(getTopLeft().XPoint() ),-( getTopLeft().YPoint()));
 		
@@ -133,7 +138,6 @@ public class Arrow extends PhysicsRect{
 		int vX = (int) (setDistance * Math.cos(graphicsRotationTheta));
 		int vY = (int) (setDistance * Math.sin(graphicsRotationTheta));
 		setVelocity(new Vector(vX,vY));
-		
 	}
 	
 	/**
@@ -144,7 +148,9 @@ public class Arrow extends PhysicsRect{
 	{
 		move(new Vector(shotByPlayer.getCenter().XPoint()-getCenter().XPoint(),shotByPlayer.getCenter().YPoint()-getCenter().YPoint()));
 		rotateTo(Math.toDegrees(theta));
+		//System.out.println(theta + " " + graphicsRotationTheta);
 		this.graphicsRotationTheta = theta;
+		//System.out.println(graphicsRotationTheta);
 		
 		hcrnrs = headCollision.getCorners();
 		hcrnrs[0] = getCorners()[1].vectorAdd(new Vector(-HEAD_COLL_W*Math.cos(theta),-HEAD_COLL_W*Math.sin(theta)));
