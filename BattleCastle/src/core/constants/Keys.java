@@ -12,6 +12,11 @@ public class Keys {
 							
 	public static final int SCREENSHOT = KeyEvent.VK_F2;
 	
+	/**
+	 * Used to get a numeric value from a string representation
+	 * @param configString the string from the config
+	 * @return the int value
+	 */
 	public static int getKeyFromConfigString(String configString)
 	{
 		switch(configString)
@@ -30,6 +35,11 @@ public class Keys {
 		return -1;
 	}
 	
+	/**
+	 * Used to write string to file
+	 * @param keyCode the value for keybinding 
+	 * @return string representation of keybinding
+	 */
 	public static String getKeyConfigString(int keyCode)
 	{
 		switch(keyCode)

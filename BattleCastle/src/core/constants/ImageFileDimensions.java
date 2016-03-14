@@ -16,6 +16,7 @@ public enum ImageFileDimensions
 	BROWN_BRICK(),
 	STONE(),
 	WOOD(),
+	RAINBOW(64,64),
 	PRESSURE_PLATE_SPIKES(),
 	SPIKES(),
 	DELETE_ALL(),

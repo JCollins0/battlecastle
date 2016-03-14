@@ -36,11 +36,18 @@ public class BattleCastleFrame extends JFrame {
 	public static final Dimension GAME_FRAME = new Dimension(GAME_SIZE.width+5,GAME_SIZE.height+28);
 	
 	public static BattleCastleCanvas game_canvas;
-		
+	
+	/**
+	 * Main method
+	 * @param args command line arguments
+	 */
 	public static void main(String[] args) {
 		new BattleCastleFrame();
 	}
 	
+	/**
+	 * Initialize Frame
+	 */
 	public BattleCastleFrame()
 	{
 		super(String.format("%s v%s",GAME_NAME,GAME_VERSION));
@@ -111,6 +118,9 @@ public class BattleCastleFrame extends JFrame {
 		gameThread.start();
 	}
 	
+	/**
+	 * Initialize canvas
+	 */
 	private void init()
 	{
 		game_canvas = new BattleCastleCanvas();

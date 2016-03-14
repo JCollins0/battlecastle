@@ -6,7 +6,10 @@ import java.util.NoSuchElementException;
 
 public class DoubleLinkedList<T> implements Iterable<T>
 {
-	
+	/**
+	 * Double Linked List for Tiles
+	 * @author Skylar Donlevy
+	 */
 	public class Node
 	{
 		
@@ -37,17 +40,28 @@ public class DoubleLinkedList<T> implements Iterable<T>
 	private Node front,rear;
 	private int count;
 	
+	/**
+	 * Initialize List
+	 */
 	public DoubleLinkedList()
 	{
 		count=0;
 		rear=front=null;
 	}
 	
+	/**
+	 * Get number of elements in the list
+	 * @return
+	 */
 	public int getSize()
 	{
 		return count;
 	}
 	
+	/**
+	 * Adds Value to front of list
+	 * @param value the value to add
+	 */
 	public void addFront(T value)
 	{
 		if(count==0)
@@ -61,6 +75,10 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		count++;
 	}
 	
+	/**
+	 * Adds Value to rear of list
+	 * @param value the value to add
+	 */
 	public void addRear(T value)
 	{
 		if(count==0)
@@ -74,6 +92,10 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		count++;
 	}
 	
+	/**
+	 * Removes the front of the list
+	 * @return the removed value
+	 */
 	public T removeFront()
 	{
 		//System.out.println(count);
@@ -90,6 +112,10 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		return temp;
 	}
 	
+	/**
+	 * Gets the front of list without removing
+	 * @return front of list
+	 */
 	public T peekFront()
 	{
 		if(count==0)
@@ -97,6 +123,10 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		return front.getValue();
 	}
 	
+	/**
+	 * Removes the Rear of the list
+	 * @return the value removed
+	 */
 	public T removeRear()
 	{
 		if(count==0)
@@ -112,6 +142,10 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		return temp;
 	}
 	
+	/**
+	 * Gets the rear of the list without removing
+	 * @return the rear of the list
+	 */
 	public T peekRear()
 	{
 		if(count==0)
@@ -119,6 +153,11 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		return rear.getValue();
 	}
 	
+	/**
+	 * Remove value from list
+	 * @param value the value to remove
+	 * @return True if successful, False if not
+	 */
 	public boolean remove(T value)
 	{
 		if(count==0)
@@ -150,18 +189,28 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		return false;
 	}
 	
+	/**
+	 * Clears the entire list
+	 */
 	public void clear()
 	{
 		front=rear=null;
 		count=0;
 	}
 	
+	/**
+	 * Moves desired value from its position in list to the front
+	 * @param value the value to move
+	 */
 	public void linkToFront(T value)
 	{
 		remove(value);
 		addFront(value);
 	}
 
+	/**
+	 * Returns contents of list as string
+	 */
 	@Override
 	public String toString() {
 		String s="[";
@@ -175,12 +224,20 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		return s;
 	}
 
+	/**
+	 * Gets a iterator for processing forward through list
+	 * @return IteratorForward
+	 */
 	@Override
 	public Iterator<T> iterator()
 	{
 		return new IteratorForward();
 	}
 	
+	/**
+	 * Gets a iterator for processing backward through list
+	 * @return IteratorBackward
+	 */
 	public Iterator<T> iteratorb()
 	{
 		return new IteratorBackward();

@@ -88,8 +88,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private boolean searchingForServers;
 	public boolean debug;
 	
-	private Shader light = new LightShader(ShaderType.LIGHT,1024,786);
+	//private Shader light = new LightShader(ShaderType.LIGHT,1024,786);
 	
+	/**
+	 * Initializes Canvas
+	 */
 	public BattleCastleCanvas()
 	{
 		setPreferredSize(BattleCastleFrame.GAME_SIZE);
@@ -235,7 +238,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuLabelList.add(userNameLabel);
 		menuLabelList.add(serverIPLabel);
 		
-		volumeSlider = new MenuSlider(300, 400, 256, 64, 0, 100, 0,
+		volumeSlider = new MenuSlider(300, 400, 256, 64, 0, 100, 0, ImageFilePaths.VOLUME_LABEL,
 				MenuSliderType.VOLUME, GameState.INFO);
 		
 		sliderList.add(volumeSlider);
@@ -386,26 +389,46 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		return p;
 	}
 	
+	/**
+	 * Gets the Configuration Loader
+	 * @return configLoader
+	 */
 	public ConfigLoader getConfigLoader()
 	{
 		return configLoader;
 	}
 	
+	/**
+	 * Gets the text field for userName input
+	 * @return userNameField
+	 */
 	public MenuTextField getUserNameField()
 	{
 		return userNameField;
 	}
 	
+	/**
+	 * Gets the text field for serverIP input
+	 * @return serverIPField
+	 */
 	public MenuTextField getServerIpField()
 	{
 		return serverIPField;
 	}
 	
+	/**
+	 * Gets the slider for volume control
+	 * @return volumeSlider
+	 */
 	public MenuSlider getVolumeSlider()
 	{
 		return volumeSlider;
 	}
 	
+	/**
+	 * Get MapSelectionObjects from Total Button list
+	 * @return subset of MapSelectionObjects
+	 */
 	private ArrayList<MapSelectionObject> getMapSelectionSubset()
 	{
 		ArrayList<MapSelectionObject> obj = new ArrayList<MapSelectionObject>();
@@ -543,7 +566,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				serverSelectionBox.render(b);
 		}
 		
-		light.applyShader(b);
+		//light.applyShader(b);
 		
 		Graphics g = bs.getDrawGraphics();
 		
@@ -586,7 +609,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		if(game != null)
 			game.tick();
 		
-		light.manipulatePixels();
+		//light.manipulatePixels();
 	}
 	
 	/**
@@ -629,40 +652,72 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	}
 	
 	private int pfdx = 256;
+	/**
+	 * Adds a player connection indicator
+	 * @param playerName the name of the player
+	 * @param imagePath the imagePath to the player icon
+	 */
 	public void addPlayerFace(String playerName, String imagePath)
 	{
 		MenuLabel playerFace = new MenuLabel(pfdx+=32+128,700,32,32,Utility.loadImage(imagePath),playerName,GameState.SELECT_MAP);
 		playerFaces.add(playerFace);
 	}
 	
+	/**
+	 * Removes all connected player indicators
+	 */
 	public void clearFaces()
 	{
 		playerFaces.clear();
 		this.pfdx = 256;
 	}
 	
+	/**
+	 * Gets current game state
+	 * @return the current gameState
+	 */
 	public GameState getCurrentState()
 	{
 		return currentState;
 	}
 
+	/**
+	 * Get list of menuButtons
+	 * @return menuButtonList
+	 */
 	public ArrayList<MenuButton> getMenuButtons(){
 		return menuButtonList;
 	}
 
+	/**
+	 * Sets the current GameState
+	 * @param currentState the desired gameState
+	 */
 	public void setCurrentState(GameState currentState) {
 		this.currentState = currentState;
 	}
 	
+	/**
+	 * Get list of menuTextFields
+	 * @return menuTextFieldList
+	 */
 	public ArrayList<MenuTextField> getMenuTextFields()
 	{
 		return menuTextFieldList;
 	}
 	
+	/**
+	 * Get list of menuSliders
+	 * @return sliderList
+	 */
 	public ArrayList<MenuSlider> getSliderBars() {
 		return sliderList;
 	}
 	
+	/**
+	 * Get the current selected TextField
+	 * @return selected TextField
+	 */
 	public MenuTextField getSelectedMenuTextField()
 	{
 		MenuTextField ret = null;
@@ -672,6 +727,11 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		return ret;
 	}
 	
+	/**
+	 * Get a menu slider based on SliderType
+	 * @param type the slider type
+	 * @return the slider with given type
+	 */
 	public MenuSlider getSlider(MenuSliderType type)
 	{
 		MenuSlider ret = null;
@@ -681,11 +741,20 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		return ret;
 	}
 	
+	/**
+	 * Returns the game instance
+	 * @return the game
+	 */
 	public Game getGame()
 	{
 		return game;
 	}
 
+	/**
+	 * Gets a text field based on type
+	 * @param textFieldType the desired type
+	 * @return the textField with the given type
+	 */
 	public MenuTextField getTextFieldByID(MenuTextFieldType textFieldType) {
 		for(MenuTextField field : menuTextFieldList)
 			if (field.getID() == textFieldType)
@@ -693,6 +762,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		return null;
 	}
 	
+	/**
+	 * Searches the LAN for available servers hosting a game
+	 */
 	public void searchForLanServers()
 	{
 		searchingForServers = true;
@@ -715,10 +787,18 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		}, 1000);
 	}
 
+	/**
+	 * Get the Server Selection Box aka the Box with possible hosts
+	 * @return serverSelectionBox
+	 */
 	public ServerSelectionBox getServerSelectionBox() {
 		return serverSelectionBox;
 	}
 	
+	/**
+	 * Add error to display
+	 * @param error the error to display
+	 */
 	public void addError(Error error)
 	{
 		
@@ -729,20 +809,36 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			
 		error_messages.add(error);
 	}
+	
+	/**
+	 * Find out if this client is searching for hosts
+	 * @return True if searching, False if not
+	 */
 	public boolean isSearchingForServers()
 	{
 		return searchingForServers;
 	}
 	
+	/**
+	 * Get Screenshot Image Buffer
+	 * @return screen shot image
+	 */
 	public BufferedImage getBuffer()
 	{
 		return screenShotImage;
 	}
 
+	/**
+	 * Get Custom Levels
+	 * @return TreeMap<Name, Map> of custom levels
+	 */
 	public TreeMap<String, GameMap> getCustomLevels() {
 		return customLevels;
 	}
 	
+	/**
+	 * Load custom maps
+	 */
 	private void loadMaps()
 	{
 		File directory = new File(DataConstants.LEVELS);

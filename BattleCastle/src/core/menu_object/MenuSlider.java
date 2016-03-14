@@ -1,6 +1,5 @@
 package core.menu_object;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -22,8 +21,9 @@ public class MenuSlider {
 	private static final BufferedImage bar_image = Utility.loadImage(ImageFilePaths.SLIDER_BAR);
 	private static final BufferedImage slider_image = Utility.loadImage(ImageFilePaths.SLIDER);
 	private static final Font textFont = new Font("Courier New", Font.BOLD, 20);
+	private MenuLabel textLabel;
 	
-	public MenuSlider(int x, int y, int width, int height, int min, int max, int startValue,MenuSliderType type, GameState... visibleStates)
+	public MenuSlider(int x, int y, int width, int height, int min, int max, int startValue,String labelTextPath, MenuSliderType type, GameState... visibleStates)
 	{		
 		this.visibleStates= new ArrayList<GameState>();
 		bounds = new Rectangle(x,y,width+2*(width/Math.abs(min-max)),height);
@@ -34,6 +34,7 @@ public class MenuSlider {
 		this.type = type;
 		for(int i = 0; i < visibleStates.length; i++)
 			this.visibleStates.add(visibleStates[i]);
+		textLabel = new MenuLabel(x+width/4, y-32, width/2, 32, Utility.loadImage(labelTextPath), visibleStates[0]);
 	}
 	
 	public void tick()
@@ -45,6 +46,7 @@ public class MenuSlider {
 	{
 		g.drawImage(bar_image, bounds.x, bounds.y, bounds.width, bounds.height, null);
 		slider.render(g);
+		textLabel.render(g);
 		g.setFont(textFont);
 		g.drawString(slider.getValue() + "", bounds.x + bounds.width/2 - g.getFontMetrics(textFont).charWidth('a') * (slider.getValue()+"").length()/2, bounds.y + bounds.height/2 + g.getFontMetrics(textFont).getHeight()/4);
 	}

@@ -28,6 +28,7 @@ public class Arrow extends PhysicsRect{
 	private boolean rotate = true;
 	public static final int DEFAULT_LAUNCH_COOLDOWN = 20;
 	private int launchCoolDown = 20;
+	Vector[] hcrnrs;
 	
 	public static final String KEY_VALUE_SEPARATOR = ":", ENTRY_SEPARATOR = ",";
 	
@@ -159,7 +160,7 @@ public class Arrow extends PhysicsRect{
 		hcrnrs[3] = getCorners()[2].vectorAdd(new Vector(-HEAD_COLL_W*Math.cos(theta),-HEAD_COLL_W * Math.sin(theta)));
 		
 	}
-	Vector[] hcrnrs;
+	
 	/**
 	 * updates arrow
 	 */
@@ -220,40 +221,71 @@ public class Arrow extends PhysicsRect{
 		return ID;
 	}
 	
+	/**
+	 * Returns string representation of object
+	 */
 	public String toString()
 	{
 		return stringify();
 	}
 	
+	/**
+	 * Sets the player who holds this arrow
+	 * @param p the player
+	 */
 	public void setPlayer(Player p)
 	{
 		shotByPlayer = p;
 	}
 	
+	/**
+	 * Sets the arrow rotation property.
+	 * True = arrow can rotate
+	 * False = arrow can't rotate
+	 * @param rotate true or false
+	 */
 	public void setRotate(boolean rotate)
 	{
 		this.rotate=rotate;
 	}
 	
+	/**
+	 * Used to tell if arrow is stuck in a wall
+	 */
 	public boolean isStuck()
 	{
 		return !rotate;
 	}
 	
+	/**
+	 * Sets the cooldown to test for collision
+	 * @param lcool the cooldown time
+	 */
 	public void setLaunchCooldown(int lcool)
 	{
 		this.launchCoolDown= lcool;
 	}
 	
+	/**
+	 * Gets the current launch cooldown for the arrow
+	 * @return the launch cooldown
+	 */
 	public int getLaunchCoolDown() {
 		return launchCoolDown;
 	}
 	
+	/**
+	 * gets collision bounds for the arrow (the tip)
+	 */
 	@Override
 	public Polygon getCollisionBounds() {
 		return headCollision;
 	}
 	
+	/**
+	 * Test if arrow objects are equal
+	 * @return true if ID's are the same, False if not.
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		if(obj instanceof Arrow)

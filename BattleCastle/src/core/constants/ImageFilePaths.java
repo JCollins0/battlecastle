@@ -38,6 +38,7 @@ public class ImageFilePaths {
 				REFRESH_SELECTED = MENU_OBJECT + "refresh_selected",
 				TEXT_FIELD = MENU_OBJECT + "text_field",
 				CURSOR = MENU_OBJECT + "cursor",
+				VOLUME_LABEL = MENU_OBJECT + "volume_lbl",
 				USER_NAME_LABEL = MENU_OBJECT + "user_name",
 				SERVER_IP_LABEL = MENU_OBJECT + "server_ip",
 				SERVER_SELECT_BOX = MENU_OBJECT + "server_select_box",

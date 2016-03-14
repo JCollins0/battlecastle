@@ -20,6 +20,16 @@ public class MapSelectionObject extends MenuButton {
 	private static final Color hoverColor = new Color(100,100,100,128);
 	private String mapName, fileName;
 	
+	/**
+	 * Construct Map Selection Object
+	 * @param x x position
+	 * @param y y position
+	 * @param width with
+	 * @param height height
+	 * @param buttonType type of button
+	 * @param mapType type of map
+	 * @param visibleState state where button is visible
+	 */
 	public MapSelectionObject(int x, int y, int width, int height, MenuButtonType buttonType,
 			MapType mapType, GameState visibleState) {
 		super(x, y, width, height, buttonType, visibleState);
@@ -27,6 +37,16 @@ public class MapSelectionObject extends MenuButton {
 		mapPreview = Utility.loadImage(mapType.getBackground());
 	}
 
+	/**
+	 * Construct Map Selection Object
+	 * @param x x position
+	 * @param y y position
+	 * @param width with
+	 * @param height height
+	 * @param buttonType type of button
+	 * @param mapType type of map
+	 * @param visibleStatesList states where button is visible
+	 */
 	public MapSelectionObject(int x, int y, int width, int height, MenuButtonType buttonType,
 			MapType mapType, GameState[] visibleStatesList) {
 		super(x, y, width, height, buttonType, visibleStatesList);
@@ -34,6 +54,18 @@ public class MapSelectionObject extends MenuButton {
 		mapPreview = Utility.loadImage(mapType.getBackground());
 	}
 	
+	/**
+	 * Construct Map Selection Object
+	 * @param x x position
+	 * @param y y position
+	 * @param width with
+	 * @param height height
+	 * @param buttonType type of button
+	 * @param mapType type of map
+	 * @param fileName Name of level data file
+	 * @param imageName name of background image file
+	 * @param visibleStatesList states where button is visible
+	 */
 	public MapSelectionObject(int x, int y, int width, int height, MenuButtonType buttonType,
 			MapType mapType, String fileName, String imageName, GameState... visibleStatesList)
 	{
@@ -48,6 +80,9 @@ public class MapSelectionObject extends MenuButton {
 		}
 	}
 	
+	/**
+	 * Draw the Map Selection object
+	 */
 	public void render(Graphics g)
 	{
 		if(mapPreview != null)
@@ -68,18 +103,34 @@ public class MapSelectionObject extends MenuButton {
 		
 	}
 
+	/**
+	 * get the name of the map
+	 * @return mapName
+	 */
 	public String getMapName() {
 		return mapName;
 	}
 
+	/**
+	 * Get type MapType 
+	 * @return mapType
+	 */
 	public MapType getMapType(){
 		return map;
 	}
 
+	/**
+	 * Get the fileName for level data
+	 * @return fileName
+	 */
 	public String getFileName() {
 		return fileName;
 	}
 
+	/**
+	 * Sets the fileName for level data
+	 * @param fileName the fileName for level data
+	 */
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}

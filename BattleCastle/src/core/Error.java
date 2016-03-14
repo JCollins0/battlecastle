@@ -13,12 +13,21 @@ public class Error {
 	private int x, y;
 	public static final Font ERROR_FONT = new Font("Arial",Font.BOLD,20);
 	
+	/**
+	 * Constructs a new Error
+	 * @param text the message
+	 * @param timeToDisplay the time delay
+	 */
 	public Error(String text, int timeToDisplay)
 	{
 		this.text = text;
 		this.timeToDisplay = timeToDisplay;
 	}
 	
+	/**
+	 * Draw error on screen
+	 * @param g screen Graphics
+	 */
 	public void render(Graphics g)
 	{
 		g.setFont(ERROR_FONT);
@@ -26,6 +35,9 @@ public class Error {
 		g.drawString(text, x, y);
 	}
 	
+	/**
+	 * Updates error object
+	 */
 	public void tick()
 	{
 		if(!shouldRemove)
@@ -37,26 +49,47 @@ public class Error {
 		}
 	}
 	
+	/**
+	 * Decide if error object has been on screen to long
+	 * @return True if it should be removed, False if not
+	 */
 	public boolean shouldRemove()
 	{
 		return shouldRemove;
 	}
 	
+	/**
+	 * Sets the position of Error Message on screen
+	 * @param x the x position
+	 * @param y the y position
+	 */
 	public void setPosition(int x, int y)
 	{
 		this.x = x;
 		this.y = y;
 	}
 
+	/**
+	 * Get y position on screen
+	 * @return y
+	 */
 	public int getY() {
 		return y;
 	}
 	
+	/**
+	 * Get x position on screen
+	 * @return x
+	 */
 	public int getX()
 	{
 		return x;
 	}
 	
+	/**
+	 * Get text of message
+	 * @return text
+	 */
 	public String getText()
 	{
 		return text;

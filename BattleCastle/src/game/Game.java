@@ -47,7 +47,7 @@ public class Game {
 	private Server gameServer;
 	private Client gameClient;
 	private BattleCastleCanvas canvasRef;
-	public static HostType hostType;
+	private HostType hostType;
 	private InetAddress serverIP;
 	private TreeMap<String, BattleCastleUser> playerMap;
 	private Player[] playerList;

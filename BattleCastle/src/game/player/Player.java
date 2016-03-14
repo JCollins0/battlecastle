@@ -310,6 +310,9 @@ public class Player extends PhysicsRect{
 	
 	private boolean loadedImage = false;
 	
+	/**
+	 * @return class.Name[ID:'id']
+	 */
 	@Override
 	public String toString() {
 		return String.format("%s[ID:%s]", this.getClass().getName(), uuid);

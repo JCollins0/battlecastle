@@ -97,12 +97,17 @@ public class EditorCanvas extends Canvas implements Runnable{
 //		System.exit(0);
 		Tile addWoodTile=new Tile(resetX(),tileAdderY,32,32,ImageFilePaths.WOOD,ImageFileDimensions.WOOD.x,ImageFileDimensions.WOOD.y,null,true);
 		Tile addBrickTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.GRAY_BRICK,ImageFileDimensions.GRAY_BRICK.x,ImageFileDimensions.GRAY_BRICK.y,null,true);
-//		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.STONE,null,true);
-		Tile multiColor = new Tile(getNextX(), tileAdderY,32,32,ImageFilePaths.MULTI_COLOR,64,64,null,true);
+		Tile addStoneTile=new Tile(getNextX(),tileAdderY,32,32,ImageFilePaths.STONE, ImageFileDimensions.STONE.x, ImageFileDimensions.STONE.y, null,true);
+		Tile multiColor = new Tile(getNextX(), tileAdderY,32,32,ImageFilePaths.MULTI_COLOR,ImageFileDimensions.RAINBOW.x, ImageFileDimensions.RAINBOW.y,null,true);
+		Tile brownBrick = new Tile(getNextX(), tileAdderY,32,32,ImageFilePaths.BROWN_BRICK,ImageFileDimensions.BROWN_BRICK.x, ImageFileDimensions.BROWN_BRICK.y,null,true);
+		Tile grayBrick = new Tile(getNextX(), tileAdderY,32,32,ImageFilePaths.GRAY_BRICK,ImageFileDimensions.GRAY_BRICK.x, ImageFileDimensions.GRAY_BRICK.y,null,true);
 		tileAdder.add(addWoodTile);
 		tileAdder.add(addBrickTile);
-		//tileAdder.add(addStoneTile);
+		tileAdder.add(addStoneTile);
 		tileAdder.add(multiColor);
+		tileAdder.add(brownBrick);
+		tileAdder.add(grayBrick);
+		
 		
 		Tile addChestTile=new Tile(resetX(),getNextY(),32,32,ImageFilePaths.CHEST,ImageFileDimensions.CHEST.x,ImageFileDimensions.CHEST.y,null,true);
 		tileAdder.add(addChestTile);
