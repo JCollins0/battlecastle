@@ -291,7 +291,7 @@ public class Game {
 							if(getHostType().equals(HostType.CLIENT))
 							{
 								int playerNum = Integer.parseInt(mess[1]);
-								System.out.println(playerNum + "'s arrow is actually being removed" );
+								//System.out.println(playerNum + "'s arrow is actually being removed" );
 								playerList[playerNum].removeArrow();
 							}
 						}else if(mess[0].equals(MessageType.ADD_ARROW_TO_PLAYER.toString()))
@@ -564,11 +564,11 @@ public class Game {
 			}
 		}else
 		{
-			System.out.println(getMyUser().getPlayerNumber() + " is supposed to get it removed");
-			System.out.println(playerMap.get(getUUIDFromPlayer(getMyPlayer())).getPlayerNumber() + " is then going to be removed");
+			//System.out.println(getMyUser().getPlayerNumber() + " is supposed to get it removed");
+			//System.out.println(playerMap.get(getUUIDFromPlayer(getMyPlayer())).getPlayerNumber() + " is then going to be removed");
 			Message message = new Message(MessageType.PERFORM_ACTION, MessageType.LAUNCH_ARROW.toString() + Message.EQUALS_SEPARATOR + getMyUser().getPlayerNumber() );
 			gameClient.sendTCP(message);
-			getMyPlayer().removeArrow();
+			//getMyPlayer().removeArrow();
 		}
 		
 	}
