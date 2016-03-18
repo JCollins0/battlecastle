@@ -388,11 +388,12 @@ public class Game {
 			//will be handling collision
 			if(canvasRef.getCurrentState() == GameState.GAMEPLAY)
 			{
-				if(gameMap != null)
-					gameMap.tick();
 
 				if(playerMap.size() >= MIN_PLAYERS)
 				{
+					if(gameMap != null)
+						gameMap.tick();
+					
 					for(int i = 0; i < playerList.length; i++)
 						if(playerList[i] != null)
 						{
@@ -429,7 +430,8 @@ public class Game {
 			}
 		}
 		
-		updateMyPlayer();
+		if(playerMap.size() >= MIN_PLAYERS)
+			updateMyPlayer();
 	}
 	
 	/**
