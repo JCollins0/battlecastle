@@ -57,7 +57,10 @@ public class Game {
 	
 	private String myUUID;
 	private GameMap gameMap, gameMapLoader;
-	private static final int MIN_PLAYERS = 1;
+	private static final int MIN_PLAYERS = 2;
+	private boolean mapSelected;
+	private MapType mapType;
+	private String mapName;
 	
 	/**
 	 * Initialize Game class
@@ -124,6 +127,9 @@ public class Game {
 						{
 							gameServer.sendToAllTCP(playerMap.get(uuid));
 						}
+						
+						if(mapSelected)
+							sendMapChoice(mapType, mapName);
 						
 					}else if(object instanceof Message)
 					{
@@ -468,7 +474,8 @@ public class Game {
 	 */
 	public void sendMapChoice(MapType mapType, String mapName)
 	{
-		
+		this.mapType = mapType;
+		this.mapName = mapName;
 		if(mapType.equals(MapType.CUSTOM) )
 		{
 			//JOptionPane.showMessageDialog(null, "loading customLevel" + canvasRef.getCustomLevels().get(mapName));
