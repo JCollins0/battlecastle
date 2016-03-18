@@ -478,6 +478,8 @@ public class Game {
 	{
 		this.mapType = mapType;
 		this.mapName = mapName;
+		mapSelected = true;
+//		System.out.println("T: " + mapType  +  " " + mapName);
 		if(mapType.equals(MapType.CUSTOM) )
 		{
 			//JOptionPane.showMessageDialog(null, "loading customLevel" + canvasRef.getCustomLevels().get(mapName));
