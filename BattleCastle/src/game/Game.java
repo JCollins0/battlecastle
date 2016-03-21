@@ -288,7 +288,16 @@ public class Game {
 								System.out.println("THE ARROW IS NULL: " + uuid);
 							}
 						}
-					}else if(type.equals(MessageType.PERFORM_ACTION.toString())) //perform specific action
+					}else if(type.equals(MessageType.UPDATE_TILE.toString()))
+					{
+						if(hostType == HostType.CLIENT)
+						{
+							String[] id = messageArr[1].split(Message.EQUALS_SEPARATOR);
+							String uuid = id[0];
+							gameMap.getTileByID(uuid).execute(id[1]);
+						}
+					}
+					else if(type.equals(MessageType.PERFORM_ACTION.toString())) //perform specific action
 					{
 						String[] mess = messageArr[1].split(Message.EQUALS_SEPARATOR);
 						
@@ -391,8 +400,7 @@ public class Game {
 
 				if(playerMap.size() >= MIN_PLAYERS)
 				{
-					if(gameMap != null)
-						gameMap.tick();
+					
 					
 					for(int i = 0; i < playerList.length; i++)
 						if(playerList[i] != null)
@@ -407,6 +415,16 @@ public class Game {
 						arrow.tick();
 						Message message = new Message(MessageType.MOVE_ARROW,arrow.getID() + Message.EQUALS_SEPARATOR + arrow.stringify());
 						gameServer.sendToAllTCP(message);
+					}
+					
+					if(gameMap != null)
+					{	
+						gameMap.tick();
+						for(Tile t : gameMap.getTiles())
+						{
+							Message message = new Message(MessageType.UPDATE_TILE, t.getID() + Message.EQUALS_SEPARATOR + t.stringify() );
+							gameServer.sendToAllTCP(message);
+						}
 					}
 					
 					List<Arrow> plist = Collections.list(Collections.enumeration(arrows.values()));

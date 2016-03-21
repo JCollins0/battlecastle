@@ -29,6 +29,7 @@ public class Tile extends Polygon implements JSONStreamAware
 	protected int speed = 3;
 	protected boolean animateIffMouseOver,mouseIsOver,reverseAnimate,currentlyReversed;
 	protected boolean statesActive=true;
+	private String ID;
 	
 	private static BufferedImage[] check;
 	//private static State[] still;
@@ -94,6 +95,7 @@ public class Tile extends Polygon implements JSONStreamAware
 		this.statesText=statesText;
 		this.states=createStates(statesText);
 		currentState=0;
+		ID = Utility.generateRandomUUID(10);
 	}
 
 	/*public Tile(int x,int y,int width,int height,Image pic,State[] states)
@@ -236,6 +238,8 @@ public class Tile extends Polygon implements JSONStreamAware
 	{
 		return getCorners()[0].YPoint();
 	}
+	
+	public String getID() {return ID;}
 	
 	public void draw(Graphics g)
 	{

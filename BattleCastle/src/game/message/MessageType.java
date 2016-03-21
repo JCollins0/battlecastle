@@ -9,6 +9,7 @@ public enum MessageType {
 	MOVE_PLAYER("move_player"),
 	UPDATE_ARROW("update_arrow"),
 	MOVE_ARROW("move_arrow"),
+	UPDATE_TILE("update_tile"),
 	UPDATE_MOUSE_LOC("upadte_mouse_loc"),
 	PERFORM_ACTION("perform_action"),
 	LAUNCH_ARROW("launch_arrow"),

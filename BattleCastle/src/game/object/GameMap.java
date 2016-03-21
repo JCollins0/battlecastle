@@ -133,6 +133,14 @@ public class GameMap {
 		return tiles;
 	}
 	
+	public Tile getTileByID(String id)
+	{
+		for(Tile t : tiles)
+			if(t.getID().equals(id))
+				return t;
+		return null;
+	}
+	
 	public Point getPlayerStartPoint(int playerNum) {
 		if(playerStartLocations == null)
 		{
