@@ -273,8 +273,8 @@ public class Tile extends Polygon implements JSONStreamAware
 
 	public String stringify()
 	{
-		return String.format("X:%d,Y:%d,W:%d,H:%d,S:%s,A:%d",
-				getX(),getY(),getWidth(),getHeight(),statesText,animation);
+		return String.format("X:%d,Y:%d,W:%d,H:%d,A:%d",
+				getX(),getY(),getWidth(),getHeight(),animation);
 	}
 
 	public void execute(String s)
