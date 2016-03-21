@@ -143,6 +143,11 @@ public class Utility {
 		return ID;
     }
     
+    public static String generateID(int num)
+    {
+    	return String.valueOf(num);
+    }
+    
     public static Color randomRGBColor()
     {
     	return new Color((int)(Math.random() * 256), (int)(Math.random() * 256), (int)(Math.random() * 256));
