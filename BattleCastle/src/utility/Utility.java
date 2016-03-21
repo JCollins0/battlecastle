@@ -143,9 +143,12 @@ public class Utility {
 		return ID;
     }
     
-    public static String generateID(int num)
+    public static String generateID(Object... vals)
     {
-    	return String.valueOf(num);
+    	String s = "";
+    	for(Object v : vals)
+    		s+= String.valueOf(v);
+    	return s; 
     }
     
     public static Color randomRGBColor()

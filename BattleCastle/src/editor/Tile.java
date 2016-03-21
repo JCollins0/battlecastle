@@ -95,7 +95,7 @@ public class Tile extends Polygon implements JSONStreamAware
 		this.statesText=statesText;
 		this.states=createStates(statesText);
 		currentState=0;
-		ID = Utility.generateID(x+y+width+height);
+		ID = Utility.generateID(x,y,width,height);
 	}
 
 	/*public Tile(int x,int y,int width,int height,Image pic,State[] states)
