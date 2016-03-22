@@ -219,24 +219,35 @@ public class CollisionDetector
 			}
 		}
 		
-		//Player and Arrow Collision
-		if(a instanceof Player)
+		/* ===========================
+		 * Player and Arrow Collision
+		 * ===========================
+		 */
+		if(a instanceof Player && !((Player)a).isDead() )
 		{
 			if(b instanceof Arrow)
 			{
 				if(((Arrow) b).getLaunchCoolDown() <= 0 && ((Arrow)b).isStuck())
 				{
 					gameRef.addArrowToPlayer((Arrow)b,(Player)a);
+				}else
+				{
+					gameRef.killPlayer((Player)a);
+					((Arrow)b).setVelocity(stopped);
 				}
 			}
 		}
-		if(b instanceof Player)
+		if(b instanceof Player && !((Player)b).isDead())
 		{
 			if(a instanceof Arrow)
 			{
 				if(((Arrow) a).getLaunchCoolDown() <= 0 && ((Arrow)a).isStuck())
 				{
 					gameRef.addArrowToPlayer((Arrow)a,(Player)b);
+				}else
+				{
+					gameRef.killPlayer((Player)b);
+					((Arrow)a).setVelocity(stopped);
 				}
 			}
 		}

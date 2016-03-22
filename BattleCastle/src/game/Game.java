@@ -57,7 +57,7 @@ public class Game {
 	
 	private String myUUID;
 	private GameMap gameMap, gameMapLoader;
-	private static final int MIN_PLAYERS = 2;
+	private static final int MIN_PLAYERS = 1;
 	private boolean mapSelected;
 	private MapType mapType;
 	private String mapName;
@@ -735,7 +735,17 @@ public class Game {
 				count++;
 		return count;
 	}
-
+	
+	public void killPlayer(Player p)
+	{
+		if(p == null) return;
+		
+		int index = playerMap.get(p.getUUID()).getPlayerNumber();
+		playerList[index].setDead(true);
+		
+		System.out.println(p + " is now dead");
+	}
+	
 	/* #############
 	 * RESETING GAME
 	 * #############

@@ -26,7 +26,7 @@ public class Player extends PhysicsRect{
 	
 	public static final String KEY_VALUE_SEPARATOR = "#", ENTRY_SEPARATOR = "<";
 	
-	private BufferedImage image;
+	private BufferedImage image, deadI;
 	private ArrayList<Arrow> arrowStorage;
 	private Arrow currentArrow;
 	private int arrowCount;
@@ -34,7 +34,7 @@ public class Player extends PhysicsRect{
 	private String imageFilePath;
 	private boolean falling = true;
 	private Point mouseLocation;
-	
+	private boolean dead;
 	
 	
 	/**
@@ -62,6 +62,7 @@ public class Player extends PhysicsRect{
 		currentArrow = arrowStorage.get(0);
 		mouseLocation = MouseHandler.mouse;
 		//GRAVITY = 0;
+		deadI = Utility.loadImage(ImageFilePaths.TEMP_PLAYER_DEAD);
 	}
 	
 	/**
@@ -226,6 +227,18 @@ public class Player extends PhysicsRect{
 	{
 		return null;
 	}
+	
+	/**
+	 * Sets player alive status
+	 * @param dead whether the player is dead
+	 */
+	public void setDead(boolean dead) { this.dead = dead;}
+	
+	/**
+	 * gets player death status
+	 * @return is player dead
+	 */
+	public boolean isDead() {return dead;}
 	
 	/**
 	 * tests for player equality

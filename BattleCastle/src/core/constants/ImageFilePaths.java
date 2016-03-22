@@ -55,6 +55,7 @@ public class ImageFilePaths {
 				LEFT_MOUSE_CLICK = TUTORIAL_OBJECT + "left_mouse_click",
 				KEY_PRESS = TUTORIAL_OBJECT + "key_press",
 				TEMP_PLAYER = PLAYER + "temp_player",
+				TEMP_PLAYER_DEAD = PLAYER + "temp_player_dead",
 				ARROW = WEAPON + "red_arrow",
 				TRASH = EDITOR + "trash",
 				CHECK = EDITOR + "check",
@@ -73,7 +74,8 @@ public class ImageFilePaths {
 				SPIKES = TILE + "spikes",
 				MULTI_COLOR = TILE + "multi_color",
 				DELETE_ALL = TILE + "delete_all",
-				CLONE = EDITOR + "clone";
+				CLONE = EDITOR + "clone",
+				STATE_ADDER = EDITOR + "state_adder";
 	
 				
 		
