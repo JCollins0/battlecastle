@@ -742,7 +742,7 @@ public class Game {
 		
 		int index = playerMap.get(p.getUUID()).getPlayerNumber();
 		playerList[index].setDead(true);
-		
+		playerList[index].setImage(playerList[index].getDI());
 		System.out.println(p + " is now dead");
 	}
 	

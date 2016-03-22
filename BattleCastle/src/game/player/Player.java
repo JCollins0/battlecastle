@@ -228,6 +228,17 @@ public class Player extends PhysicsRect{
 		return null;
 	}
 	
+	//TODO:: Change
+	public BufferedImage getDI() {return deadI; }
+	
+    /**
+     * Sets player Image
+     * @param image the image to setTo
+     */
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+
 	/**
 	 * Sets player alive status
 	 * @param dead whether the player is dead
