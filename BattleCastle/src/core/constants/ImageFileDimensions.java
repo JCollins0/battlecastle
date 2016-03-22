@@ -20,7 +20,8 @@ public enum ImageFileDimensions
 	PRESSURE_PLATE_SPIKES(),
 	SPIKES(),
 	DELETE_ALL(),
-	CLONE();
+	CLONE(),
+	STATE_ADDER();
 	
 	ImageFileDimensions(int x,int y)
 	{

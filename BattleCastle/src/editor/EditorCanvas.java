@@ -119,7 +119,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		Tile incrementHeight=new Tile(928,768,32,32,ImageFilePaths.INCHEIGHT,ImageFileDimensions.INCHEIGHT.x,ImageFileDimensions.INCHEIGHT.y,null,true,true,true);
 		Tile decrementHeight=new Tile(928,800,32,32,ImageFilePaths.DECHEIGHT,ImageFileDimensions.DECHEIGHT.x,ImageFileDimensions.DECHEIGHT.y,null,true,true,true);
 		Tile cloneTile=new Tile(960,800,32,32,ImageFilePaths.CLONE,ImageFileDimensions.CLONE.x,ImageFileDimensions.CLONE.y,null,true,true,true);
-		Tile stateAdder=new Tile(960,768,32,32,ImageFilePaths.CLONE,ImageFileDimensions.CLONE.x,ImageFileDimensions.CLONE.y,null,true,true,true);
+		Tile stateAdder=new Tile(960,768,32,32,ImageFilePaths.STATE_ADDER,ImageFileDimensions.STATE_ADDER.x,ImageFileDimensions.STATE_ADDER.y,null,true,true,false);
 		editor.add(incrementWidth);
 		editor.add(decrementWidth);
 		editor.add(incrementHeight);
