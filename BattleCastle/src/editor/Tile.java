@@ -134,8 +134,8 @@ public class Tile extends Polygon implements JSONStreamAware
 	{
 		String temp="";
 		for(State s:states)
-			temp+=s.stringify();
-		return temp;
+			temp+=s.stringify()+",";
+		return temp.substring(0, temp.length()-1);
 	}
 
 	public void setStates(ArrayList<State> s)
