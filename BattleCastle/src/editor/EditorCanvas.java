@@ -384,7 +384,10 @@ public class EditorCanvas extends Canvas implements Runnable{
 				case 5:if(current!=null)
 					{
 						current.removeLastState();
-						current.addState(new State(1,1));
+						current.addState(new State(64,2,0,0));
+						//current.addState(new State(0,0,64,2));
+						current.addState(new State(64,-2,0,0));
+						//current.addState(new State(0,0,64,-2));
 					}
 					break;
 				default:break;

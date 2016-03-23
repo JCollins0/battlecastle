@@ -18,6 +18,7 @@ public class State
 		tx=0;
 		ty=0;
 		v=new Vector(sx,sy);
+		continual=false;
 	}
 	
 	public State(int restTime)//an in between state to pause an object in place for a set time
@@ -63,11 +64,13 @@ public class State
 		{
 			t.move(v);
 			if(tx<dx)
-				tx+=sx;
+				tx+=Math.abs(sx);
 			if(ty<dy)
-				ty+=sy;
+				ty+=Math.abs(sy);
+			System.out.println(tx+" "+ty);
 			if(tx>=dx&&ty>=dy)
 			{
+				tx=ty=0;
 				return true;
 			}
 		}
@@ -76,7 +79,7 @@ public class State
 			if(--restTime==0)
 				return true;
 		}
-		return true;
+		return false;
 	}
 	
 	public String stringify()

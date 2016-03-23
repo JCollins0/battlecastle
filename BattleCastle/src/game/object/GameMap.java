@@ -209,7 +209,7 @@ public class GameMap {
 		return null;
 	}
 	
-	public static GameMap map1 = new GameMap(ImageFilePaths.MAP_1_BACKGROUND, new Point[]{new Point(10,10),new Point(10,10),new Point(10,10),new Point(10,10)}, LevelTileData.MAP_1_DATA)
+	public static GameMap map1 = new GameMap(ImageFilePaths.MAP_1_BACKGROUND, new Point[]{new Point(10,10),new Point(410,10),new Point(710,10),new Point(1010,10)}, LevelTileData.MAP_1_DATA)
 			, map2= new GameMap(ImageFilePaths.MAP_2_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()}, LevelTileData.MAP_1_DATA)
 			, map3 = new GameMap(ImageFilePaths.MAP_3_BACKGROUND, new Point[]{new Point(),new Point(),new Point(),new Point()}, LevelTileData.MAP_1_DATA);
 	
