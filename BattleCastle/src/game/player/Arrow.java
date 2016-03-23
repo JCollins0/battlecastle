@@ -141,6 +141,11 @@ public class Arrow extends PhysicsRect{
 		setVelocity(new Vector(vX,vY));
 	}
 	
+	public void addVelocity(int vx, int vy)
+	{
+		setVelocity(new Vector(vx,vy));
+	}
+	
 	/**
 	 * 
 	 * @param theta the angle to rotate the arrow to

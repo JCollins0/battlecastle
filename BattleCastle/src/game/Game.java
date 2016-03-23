@@ -1,17 +1,5 @@
 package game;
 
-import editor.Tile;
-import game.message.Message;
-import game.message.MessageType;
-import game.object.GameMap;
-import game.object.MapType;
-import game.physics.CollisionDetector;
-import game.physics.Polygon;
-import game.physics.Vector;
-import game.player.Arrow;
-import game.player.BattleCastleUser;
-import game.player.Player;
-
 import java.awt.Graphics;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -20,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -37,6 +26,17 @@ import core.KeyHandler;
 import core.KeyPress;
 import core.MouseHandler;
 import core.constants.ImageFilePaths;
+import editor.Tile;
+import game.message.Message;
+import game.message.MessageType;
+import game.object.GameMap;
+import game.object.MapType;
+import game.physics.CollisionDetector;
+import game.physics.Polygon;
+import game.physics.Vector;
+import game.player.Arrow;
+import game.player.BattleCastleUser;
+import game.player.Player;
 
 public class Game {
 	
@@ -61,6 +61,7 @@ public class Game {
 	private boolean mapSelected;
 	private MapType mapType;
 	private String mapName;
+	private Random random;
 	
 	/**
 	 * Initialize Game class
@@ -87,6 +88,7 @@ public class Game {
 		System.setProperty("java.net.preferIPv4Stack" , "true");
 		
 		gameMapLoader = new GameMap();
+		random = new Random();
 	}
 
 	/* ##################
@@ -142,6 +144,9 @@ public class Game {
 							String[] num = messageArr[1].split(Message.EQUALS_SEPARATOR);
 							//System.out.println("NUM: " + num[1]);
 							int playerNum = Integer.parseInt(num[0]);
+							
+							if(playerList[playerNum].isDead()) return;
+							
 							if(num[1].equals(KeyPress.RIGHT_D.getText())) //move player right
 							{
 								playerList[playerNum].setvX(2);
@@ -575,8 +580,9 @@ public class Game {
 	 * sends arrow information to server given a player
 	 * @param player the player that launched the arrow
 	 */
-	public void launchArrow(Player player)
+	public void launchArrow(Player player, int option)
 	{
+		if(player.isDead()) return;
 		//System.out.println("Launching Arrow For: " + player);
 		if(hostType.equals(HostType.SERVER))
 		{
@@ -584,7 +590,11 @@ public class Game {
 			
 			if(arrow != null)
 			{
-				arrow.addVelocity();
+				switch(option){
+				case 0:	arrow.addVelocity();
+					break;
+				case 1: arrow.addVelocity(-5 + random.nextInt(10), -5 + random.nextInt(10));
+				}
 				arrows.put(arrow.getID(), arrow);
 				Message message = new Message(MessageType.UPDATE_ARROW, arrow.getID() + Message.EQUALS_SEPARATOR + arrow.stringify());
 				gameClient.sendTCP(message);
@@ -601,6 +611,8 @@ public class Game {
 		}
 		
 	}
+	
+	public void launchArrow(Player p) { launchArrow(p,0); }
 	
 	/**
 	 * adds arrow to player
@@ -741,6 +753,13 @@ public class Game {
 		if(p == null) return;
 		
 		int index = playerMap.get(p.getUUID()).getPlayerNumber();
+		
+		while( p.getArrowStorage().size() != 0)
+		{
+			launchArrow(p,1);
+			p.updateCurrentArrowOnDeath();
+		}
+		
 		playerList[index].setDead(true);
 		playerList[index].setImage(playerList[index].getDI());
 		System.out.println(p + " is now dead");

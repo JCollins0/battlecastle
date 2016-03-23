@@ -148,8 +148,9 @@ public class Player extends PhysicsRect{
 			g.fillRect( getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT);
 		}
 		
-		if(currentArrow != null)
-			currentArrow.render(g);	
+		if(!isDead())
+			if(currentArrow != null)
+				currentArrow.render(g);	
 		
 		g.setColor(Color.black);
 		g.drawString(String.format("(%d,%d)",  getCorners()[0].XPoint(), getCorners()[0].YPoint() ),  getCorners()[0].XPoint(), getCorners()[0].YPoint()-5);
@@ -251,6 +252,23 @@ public class Player extends PhysicsRect{
 	 */
 	public boolean isDead() {return dead;}
 	
+	
+	
+	public ArrayList<Arrow> getArrowStorage() {
+		return arrowStorage;
+	}
+
+	public void setArrowStorage(ArrayList<Arrow> arrowStorage) {
+		this.arrowStorage = arrowStorage;
+	}
+	
+	public void updateCurrentArrowOnDeath()
+	{
+		fixArrows(arrowStorage.size(), mouseLocation.x, mouseLocation.y);
+		if(currentArrow == null && arrowStorage.size() > 0)
+			currentArrow= arrowStorage.get(0);
+	}
+
 	/**
 	 * tests for player equality
 	 */
