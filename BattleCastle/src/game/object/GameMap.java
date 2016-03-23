@@ -148,15 +148,9 @@ public class GameMap {
 			return new Point(-64,-64);
 		}
 		
-		switch(playerNum)
-		{
-		case 0: return new Point(10,10);
-		case 1: return new Point(10,10);
-		case 2: return new Point(10,10);
-		case 3: return new Point(10,10);
-		}
+		return playerStartLocations[playerNum];
 		
-		return null;
+		//return null;
 	}
 	
 	public GameMap getByType(String type)
