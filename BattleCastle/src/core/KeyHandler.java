@@ -97,7 +97,9 @@ public class KeyHandler implements KeyListener {
 				remove(KeyPress.RIGHT_U);
 				add(KeyPress.RIGHT_D);
 			}
-						
+			if(keyCode == KeyEvent.VK_R) // reset TODO: assign a (Keys) variable
+				if(canvasref.getGame() != null)
+					canvasref.getGame().reset();
 			break;
 		case SELECT_MAP:
 			break;

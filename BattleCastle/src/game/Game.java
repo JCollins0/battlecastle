@@ -997,6 +997,16 @@ public class Game {
 	 * #############
 	 */
 	
+	public void reset()
+	{
+		for(int i = 0; i < playerList.length; i++)
+		{
+			if(playerList[i] != null)
+				if(playerList[i].isDead())
+					playerList[i].setDead(false);
+		}
+	}
+	
 	/**
 	 * stops the server if hosting
 	 */
