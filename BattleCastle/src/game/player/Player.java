@@ -23,10 +23,19 @@ public class Player extends PhysicsRect{
 	public static final double MASS = 10;
 	public static final double ANG_VEL = 0;
 	public static final double DRAG_C = 10;
+
+	public static final int 
+		STATE_ALIVE = 0,
+		STATE_JUMPING = 1,
+		STATE_DASHING = 2,
+		STATE_DEAD = 3,
+		FACING_RIGHT = 0,
+		FACING_LEFT = 1;
 	
 	public static final String KEY_VALUE_SEPARATOR = "#", ENTRY_SEPARATOR = "<";
 	
 	private BufferedImage image, deadI;
+	private int playerState;
 	private ArrayList<Arrow> arrowStorage;
 	private Arrow currentArrow;
 	private int arrowCount;
@@ -35,6 +44,7 @@ public class Player extends PhysicsRect{
 	private boolean falling = true;
 	private Point mouseLocation;
 	private boolean dead;
+	private boolean loadedImage = false;
 	
 	
 	/**
@@ -157,6 +167,11 @@ public class Player extends PhysicsRect{
 		
 	}
 	
+	/* ===============
+	 * GETTERS-SETTERS
+	 * ===============
+	 */
+	
 	/**
 	 * get current held arrow
 	 * @return current held arrow
@@ -185,11 +200,19 @@ public class Player extends PhysicsRect{
 		setLocation(p.x,p.y);
 	}
 	
+	/**
+	 * Sets mouse location for where player is aiming
+	 * @param p the mouse Point
+	 */
 	public void setMouseLocation(Point p)
 	{
 		mouseLocation = p;
 	}
 	
+	/**
+	 * Gets mouse location for where player is aiming
+	 * @return mouse Point
+	 */
 	public Point getMouseLocation()
 	{
 		return mouseLocation;
@@ -252,16 +275,17 @@ public class Player extends PhysicsRect{
 	 */
 	public boolean isDead() {return dead;}
 	
-	
-	
+	/**
+	 * Gets the Arrow the player is capable of shooting
+	 * @return List<Arrow>
+	 */
 	public ArrayList<Arrow> getArrowStorage() {
 		return arrowStorage;
 	}
-
-	public void setArrowStorage(ArrayList<Arrow> arrowStorage) {
-		this.arrowStorage = arrowStorage;
-	}
 	
+	/**
+	 * Updates arrows to the players location on death
+	 */
 	public void updateCurrentArrowOnDeath()
 	{
 		fixArrows(arrowStorage.size(), mouseLocation.x, mouseLocation.y);
@@ -349,8 +373,7 @@ public class Player extends PhysicsRect{
 			}
 		}
 	}
-	
-	private boolean loadedImage = false;
+
 	
 	/**
 	 * @return class.Name[ID:'id']

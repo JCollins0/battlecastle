@@ -1,5 +1,17 @@
 package game;
 
+import editor.Tile;
+import game.message.Message;
+import game.message.MessageType;
+import game.object.GameMap;
+import game.object.MapType;
+import game.physics.CollisionDetector;
+import game.physics.Polygon;
+import game.physics.Vector;
+import game.player.Arrow;
+import game.player.BattleCastleUser;
+import game.player.Player;
+
 import java.awt.Graphics;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -26,17 +38,6 @@ import core.KeyHandler;
 import core.KeyPress;
 import core.MouseHandler;
 import core.constants.ImageFilePaths;
-import editor.Tile;
-import game.message.Message;
-import game.message.MessageType;
-import game.object.GameMap;
-import game.object.MapType;
-import game.physics.CollisionDetector;
-import game.physics.Polygon;
-import game.physics.Vector;
-import game.player.Arrow;
-import game.player.BattleCastleUser;
-import game.player.Player;
 
 public class Game {
 	
@@ -114,24 +115,25 @@ public class Game {
 					if (object instanceof BattleCastleUser) { //for registering users
 						
 						BattleCastleUser user = (BattleCastleUser)object;
-						System.out.println("Recieved user: " + user);
-						if(playerMap.get( user.getUUID() ) == null)
-						{
-							playerMap.put(user.getUUID(), user);
-						}
-						int playerNum = playerMap.size()-1;
-						playerMap.get(user.getUUID()).setPlayerNumber(playerNum);
-						System.out.println(playerMap);
-						
-						canvasRef.addPlayerFace(user.getPlayerName(), ImageFilePaths.CHECK); //TODO: Change to acutal face of player depending on player number
-						
-						for(String uuid : playerMap.keySet())
-						{
-							gameServer.sendToAllTCP(playerMap.get(uuid));
-						}
-						
-						if(mapSelected)
-							sendMapChoice(mapType, mapName);
+						registerUser(user, false);
+//						System.out.println("Recieved user: " + user);
+//						if(playerMap.get( user.getUUID() ) == null)
+//						{
+//							playerMap.put(user.getUUID(), user);
+//						}
+//						int playerNum = playerMap.size()-1;
+//						playerMap.get(user.getUUID()).setPlayerNumber(playerNum);
+//						System.out.println(playerMap);
+//						
+//						canvasRef.addPlayerFace(user.getPlayerName(), ImageFilePaths.CHECK); //TODO: Change to acutal face of player depending on player number
+//						
+//						for(String uuid : playerMap.keySet())
+//						{
+//							gameServer.sendToAllTCP(playerMap.get(uuid));
+//						}
+//						
+//						if(mapSelected)
+//							sendMapChoice(mapType, mapName);
 						
 					}else if(object instanceof Message)
 					{
@@ -139,84 +141,86 @@ public class Game {
 						String message = messageOb.toString();
 						String[] messageArr = message.split(Message.MESSAGE_TYPE_SEPARATOR);
 						String type = messageArr[0].trim();
-						if(type.equals( MessageType.MOVE_PLAYER.toString()) )
-						{
-							String[] num = messageArr[1].split(Message.EQUALS_SEPARATOR);
-							//System.out.println("NUM: " + num[1]);
-							int playerNum = Integer.parseInt(num[0]);
-							
-							if(playerList[playerNum].isDead()) return;
-							
-							if(num[1].equals(KeyPress.RIGHT_D.getText())) //move player right
-							{
-								playerList[playerNum].setvX(2);
-							}
-							if(num[1].equals(KeyPress.LEFT_D.getText())) //move player left
-							{
-								playerList[playerNum].setvX(-2);
-							}
-							if(num[1].equals(KeyPress.JUMP_D.getText())) //move player up
-							{
-								playerList[playerNum].setvY(-2);
-							}
-							if(num[1].equals(KeyPress.DOWN_D.getText())) //move player down
-							{
-								playerList[playerNum].setvY(2);
-							}
-							if(num[1].equals(KeyPress.DASH.getText())) //make player dash
-							{
-								
-							}
-							
-						}else if(type.equals(MessageType.UPDATE_ARROW.toString())) //update location of an arrow
-						{
-							String[] id = messageArr[1].split(Message.EQUALS_SEPARATOR);
-							String uuid = id[0];
-							if(arrows.get(uuid)== null)
-							{
-								String[] items = id[1].split(Arrow.ENTRY_SEPARATOR);
-//								System.out.println("hello");
-//								System.out.println(Arrays.toString(items));
-								arrows.put(uuid,
-										new Arrow(
-												Integer.parseInt(items[1].split(Arrow.KEY_VALUE_SEPARATOR)[1]),Integer.parseInt(items[2].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
-												Double.parseDouble(items[3].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[4].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
-												new Vector(Double.parseDouble(items[6].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[7].split(Arrow.KEY_VALUE_SEPARATOR)[1]) ),
-												0, playerList[playerMap.get(items[5].split(Arrow.KEY_VALUE_SEPARATOR)[1]).getPlayerNumber()],
-												items[0].split(Arrow.KEY_VALUE_SEPARATOR)[1],uuid
-												));
-							}
-							
-							Message mess = new Message(MessageType.UPDATE_ARROW, arrows.get(uuid).getID() + Message.EQUALS_SEPARATOR + arrows.get(uuid).stringify());
-							gameServer.sendToAllTCP(mess);
-							
-						}else if(type.equals(MessageType.UPDATE_MOUSE_LOC.toString())) //update mouse location of a player
-						{
-							String[] id = messageArr[1].split(Message.EQUALS_SEPARATOR);
-							int playerNum = Integer.parseInt(id[0]);
-							if(playerList[playerNum] != null)
-								playerList[playerNum].decode(id[1]);
-//							System.out.println("recieved new mouse location " + id[1]);
-//							System.out.println("player location is " + playerList[playerNum].getMouseLocation());
-						}else if(type.equals(MessageType.PERFORM_ACTION.toString())) //perform specific actions (actions that don't occur every tick
-						{
-							String[] mess = messageArr[1].split(Message.EQUALS_SEPARATOR);
-							
-							if(mess[0].equals(MessageType.LAUNCH_ARROW.toString()))
-							{
-								int playerNum = Integer.parseInt(mess[1]);
-								launchArrow(playerList[playerNum]);
-							//	System.out.println("lAunching Arrow fOR plAyer: " + playerNum );
-							}
-//							switch(mess[0])
+						processServerMessage(type, messageArr[1]);
+						
+//						if(type.equals( MessageType.MOVE_PLAYER.toString()) )
+//						{
+//							String[] num = messageArr[1].split(Message.EQUALS_SEPARATOR);
+//							//System.out.println("NUM: " + num[1]);
+//							int playerNum = Integer.parseInt(num[0]);
+//							
+//							if(playerList[playerNum].isDead()) return;
+//							
+//							if(num[1].equals(KeyPress.RIGHT_D.getText())) //move player right
 //							{
-//							case "launch_a": //launching arrow from client player
+//								playerList[playerNum].setvX(2);
+//							}
+//							if(num[1].equals(KeyPress.LEFT_D.getText())) //move player left
+//							{
+//								playerList[playerNum].setvX(-2);
+//							}
+//							if(num[1].equals(KeyPress.JUMP_D.getText())) //move player up
+//							{
+//								playerList[playerNum].setvY(-2);
+//							}
+//							if(num[1].equals(KeyPress.DOWN_D.getText())) //move player down
+//							{
+//								playerList[playerNum].setvY(2);
+//							}
+//							if(num[1].equals(KeyPress.DASH.getText())) //make player dash
+//							{
+//								
+//							}
+//							
+//						}else if(type.equals(MessageType.UPDATE_ARROW.toString())) //update location of an arrow
+//						{
+//							String[] id = messageArr[1].split(Message.EQUALS_SEPARATOR);
+//							String uuid = id[0];
+//							if(arrows.get(uuid)== null)
+//							{
+//								String[] items = id[1].split(Arrow.ENTRY_SEPARATOR);
+////								System.out.println("hello");
+////								System.out.println(Arrays.toString(items));
+//								arrows.put(uuid,
+//										new Arrow(
+//												Integer.parseInt(items[1].split(Arrow.KEY_VALUE_SEPARATOR)[1]),Integer.parseInt(items[2].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
+//												Double.parseDouble(items[3].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[4].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
+//												new Vector(Double.parseDouble(items[6].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[7].split(Arrow.KEY_VALUE_SEPARATOR)[1]) ),
+//												0, playerList[playerMap.get(items[5].split(Arrow.KEY_VALUE_SEPARATOR)[1]).getPlayerNumber()],
+//												items[0].split(Arrow.KEY_VALUE_SEPARATOR)[1],uuid
+//												));
+//							}
+//							
+//							Message mess = new Message(MessageType.UPDATE_ARROW, arrows.get(uuid).getID() + Message.EQUALS_SEPARATOR + arrows.get(uuid).stringify());
+//							gameServer.sendToAllTCP(mess);
+//							
+//						}else if(type.equals(MessageType.UPDATE_MOUSE_LOC.toString())) //update mouse location of a player
+//						{
+//							String[] id = messageArr[1].split(Message.EQUALS_SEPARATOR);
+//							int playerNum = Integer.parseInt(id[0]);
+//							if(playerList[playerNum] != null)
+//								playerList[playerNum].decode(id[1]);
+////							System.out.println("recieved new mouse location " + id[1]);
+////							System.out.println("player location is " + playerList[playerNum].getMouseLocation());
+//						}else if(type.equals(MessageType.PERFORM_ACTION.toString())) //perform specific actions (actions that don't occur every tick
+//						{
+//							String[] mess = messageArr[1].split(Message.EQUALS_SEPARATOR);
+//							
+//							if(mess[0].equals(MessageType.LAUNCH_ARROW.toString()))
+//							{
 //								int playerNum = Integer.parseInt(mess[1]);
 //								launchArrow(playerList[playerNum]);
-//								System.out.println("lAunching Arrow fOR plAyer: " + playerNum );
-//								break;
+//							//	System.out.println("lAunching Arrow fOR plAyer: " + playerNum );
 //							}
-						}
+////							switch(mess[0])
+////							{
+////							case "launch_a": //launching arrow from client player
+////								int playerNum = Integer.parseInt(mess[1]);
+////								launchArrow(playerList[playerNum]);
+////								System.out.println("lAunching Arrow fOR plAyer: " + playerNum );
+////								break;
+////							}
+//						}
 					}
 				}
 			});
@@ -240,138 +244,140 @@ public class Game {
 				if (object instanceof BattleCastleUser) //registering users on the client
 				{
 					BattleCastleUser user = (BattleCastleUser)object;
-					if(playerMap.get( user.getUUID() ) == null)
-					{
-						playerMap.put(user.getUUID(), user);
-					}
-					playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
-					playerList[user.getPlayerNumber()] = new Player(user.getUUID());
-					
-					System.out.println(Arrays.toString(playerList));
-					
+					registerUser(user, true);
+//					if(playerMap.get( user.getUUID() ) == null)
+//					{
+//						playerMap.put(user.getUUID(), user);
+//					}
+//					playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
+//					playerList[user.getPlayerNumber()] = new Player(user.getUUID());
+//
+//					System.out.println(Arrays.toString(playerList));
+
 				}else if(object instanceof Message) //Receiving things that happen every tick
 				{
 					Message messageOb = (Message)object;
 					String message = messageOb.toString();
 					String[] messageArr = message.split(Message.MESSAGE_TYPE_SEPARATOR);
 					String type = messageArr[0].trim();
-					if(type.equals(MessageType.SELECT_MAP.toString())) //sends which map the server picked
-					{
-						gameMap = gameMapLoader.getByType(messageArr[1].trim());//new GameMap(messageArr[1].trim());
-					}else if(type.equals(MessageType.UPDATE_PLAYER.toString())) //updates player location client side
-					{
-						String[] num = messageArr[1].split(Message.EQUALS_SEPARATOR);
-						playerList[Integer.parseInt(num[0])].decode(num[1]);
-					}else if(type.equals(MessageType.UPDATE_ARROW.toString())) //initializes arrow location client side
-					{
-						String[] id = messageArr[1].split(Message.EQUALS_SEPARATOR);
-						String uid = id[0];
-						if(arrows.get(uid)==null)
-						{
-							String[] items = id[1].split(Arrow.ENTRY_SEPARATOR);
-							arrows.put(uid, new Arrow(
-									Integer.parseInt(items[1].split(Arrow.KEY_VALUE_SEPARATOR)[1]),Integer.parseInt(items[2].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
-									Double.parseDouble(items[3].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[4].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
-									new Vector(Double.parseDouble(items[6].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[7].split(Arrow.KEY_VALUE_SEPARATOR)[1]) ),
-									0,playerList[playerMap.get(items[5].split(Arrow.KEY_VALUE_SEPARATOR)[1]).getPlayerNumber()],
-									items[0].split(Arrow.KEY_VALUE_SEPARATOR)[1],uid)
-									);
-						}
-						
-					}else if(type.equals(MessageType.MOVE_ARROW.toString())) //moves arrow on client side
-					{
-						
-						if(hostType == HostType.CLIENT){
-							String[] id = messageArr[1].split(Message.EQUALS_SEPARATOR);
-							String uuid = id[0];
-							Arrow updateThis = arrows.get(uuid);
-							if(updateThis != null)
-							{
-								updateThis.decode(id[1]);	
-							}else
-							{
-								System.out.println("THE ARROW IS NULL: " + uuid);
-							}
-						}
-					}else if(type.equals(MessageType.UPDATE_TILE.toString()))
-					{
-						if(hostType == HostType.CLIENT)
-						{
-							String[] id = messageArr[1].split(Message.EQUALS_SEPARATOR);
-							String uuid = id[0];
-							gameMap.getTileByID(uuid).execute(id[1]);
-						}
-					}
-					else if(type.equals(MessageType.PERFORM_ACTION.toString())) //perform specific action
-					{
-						String[] mess = messageArr[1].split(Message.EQUALS_SEPARATOR);
-						
-						if(mess[0].equals(MessageType.REMOVE_ARROW.toString()))
-						{
-							if(getHostType().equals(HostType.CLIENT))
-							{
-								int playerNum = Integer.parseInt(mess[1]);
-								//System.out.println(playerNum + "'s arrow is actually being removed" );
-								playerList[playerNum].removeArrow();
-							}
-						}else if(mess[0].equals(MessageType.ADD_ARROW_TO_PLAYER.toString()))
-						{
-							if(getHostType().equals(HostType.CLIENT))
-							{	
-								int playerNum = Integer.parseInt(mess[1]);
-								String[] id = mess[2].split(Message.ACCENT_SEPARATOR);
-								String uid = id[0];
-								String[] items = id[1].split(Arrow.ENTRY_SEPARATOR);
-								
-								///System.out.printf("player num: %d, arrow id: %s",playerNum,uid);
-								
-								playerList[playerNum].addArrow(new Arrow(
-										Integer.parseInt(items[1].split(Arrow.KEY_VALUE_SEPARATOR)[1]),Integer.parseInt(items[2].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
-										0 , Double.parseDouble(items[4].split(Arrow.KEY_VALUE_SEPARATOR)[1]), //Double.parseDouble(items[3].split(Arrow.KEY_VALUE_SEPARATOR)[1])
-										new Vector(Double.parseDouble(items[6].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[7].split(Arrow.KEY_VALUE_SEPARATOR)[1]) ),
-										0,playerList[playerNum],items[0].split(Arrow.KEY_VALUE_SEPARATOR)[1],uid)
-										);
-								
-								arrows.remove(uid);
-								
-								//System.out.println(playerList[playerNum].stringify());
-								playerList[playerNum].fixArrows(2, playerList[playerNum].getMouseLocation().x, playerList[playerNum].getMouseLocation().y);
-							}
-						}
-						
-//						switch(mess[0])
+					processClientMessage(type, messageArr[1]);
+//					if(type.equals(MessageType.SELECT_MAP.toString())) //sends which map the server picked
+//					{
+//						gameMap = gameMapLoader.getByType(messageArr[1].trim());//new GameMap(messageArr[1].trim());
+//					}else if(type.equals(MessageType.UPDATE_PLAYER.toString())) //updates player location client side
+//					{
+//						String[] num = messageArr[1].split(Message.EQUALS_SEPARATOR);
+//						playerList[Integer.parseInt(num[0])].decode(num[1]);
+//					}else if(type.equals(MessageType.UPDATE_ARROW.toString())) //initializes arrow location client side
+//					{
+//						String[] id = messageArr[1].split(Message.EQUALS_SEPARATOR);
+//						String uid = id[0];
+//						if(arrows.get(uid)==null)
 //						{
-//						case "remove_a": //remove server player arrow from client side users
-//							
+//							String[] items = id[1].split(Arrow.ENTRY_SEPARATOR);
+//							arrows.put(uid, new Arrow(
+//									Integer.parseInt(items[1].split(Arrow.KEY_VALUE_SEPARATOR)[1]),Integer.parseInt(items[2].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
+//									Double.parseDouble(items[3].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[4].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
+//									new Vector(Double.parseDouble(items[6].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[7].split(Arrow.KEY_VALUE_SEPARATOR)[1]) ),
+//									0,playerList[playerMap.get(items[5].split(Arrow.KEY_VALUE_SEPARATOR)[1]).getPlayerNumber()],
+//									items[0].split(Arrow.KEY_VALUE_SEPARATOR)[1],uid)
+//									);
+//						}
+//						
+//					}else if(type.equals(MessageType.MOVE_ARROW.toString())) //moves arrow on client side
+//					{
+//						
+//						if(hostType == HostType.CLIENT){
+//							String[] id = messageArr[1].split(Message.EQUALS_SEPARATOR);
+//							String uuid = id[0];
+//							Arrow updateThis = arrows.get(uuid);
+//							if(updateThis != null)
+//							{
+//								updateThis.decode(id[1]);	
+//							}else
+//							{
+//								System.out.println("THE ARROW IS NULL: " + uuid);
+//							}
+//						}
+//					}else if(type.equals(MessageType.UPDATE_TILE.toString()))
+//					{
+//						if(hostType == HostType.CLIENT)
+//						{
+//							String[] id = messageArr[1].split(Message.EQUALS_SEPARATOR);
+//							String uuid = id[0];
+//							gameMap.getTileByID(uuid).execute(id[1]);
+//						}
+//					}
+//					else if(type.equals(MessageType.PERFORM_ACTION.toString())) //perform specific action
+//					{
+//						String[] mess = messageArr[1].split(Message.EQUALS_SEPARATOR);
+//						
+//						if(mess[0].equals(MessageType.REMOVE_ARROW.toString()))
+//						{
 //							if(getHostType().equals(HostType.CLIENT))
 //							{
 //								int playerNum = Integer.parseInt(mess[1]);
+//								//System.out.println(playerNum + "'s arrow is actually being removed" );
 //								playerList[playerNum].removeArrow();
 //							}
-//							break;
-//						case "add_arrow_player":
+//						}else if(mess[0].equals(MessageType.ADD_ARROW_TO_PLAYER.toString()))
+//						{
 //							if(getHostType().equals(HostType.CLIENT))
 //							{	
 //								int playerNum = Integer.parseInt(mess[1]);
-//								String[] id = mess[2].split("separator");
+//								String[] id = mess[2].split(Message.ACCENT_SEPARATOR);
 //								String uid = id[0];
 //								String[] items = id[1].split(Arrow.ENTRY_SEPARATOR);
 //								
-//								System.out.printf("player num: %d, arrow id: %s",playerNum,uid);
+//								///System.out.printf("player num: %d, arrow id: %s",playerNum,uid);
 //								
 //								playerList[playerNum].addArrow(new Arrow(
 //										Integer.parseInt(items[1].split(Arrow.KEY_VALUE_SEPARATOR)[1]),Integer.parseInt(items[2].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
-//										Double.parseDouble(items[3].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[4].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
+//										0 , Double.parseDouble(items[4].split(Arrow.KEY_VALUE_SEPARATOR)[1]), //Double.parseDouble(items[3].split(Arrow.KEY_VALUE_SEPARATOR)[1])
 //										new Vector(Double.parseDouble(items[6].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[7].split(Arrow.KEY_VALUE_SEPARATOR)[1]) ),
 //										0,playerList[playerNum],items[0].split(Arrow.KEY_VALUE_SEPARATOR)[1],uid)
 //										);
 //								
 //								arrows.remove(uid);
 //								
+//								//System.out.println(playerList[playerNum].stringify());
 //								playerList[playerNum].fixArrows(2, playerList[playerNum].getMouseLocation().x, playerList[playerNum].getMouseLocation().y);
 //							}
 //						}
-					}
+//						
+////						switch(mess[0])
+////						{
+////						case "remove_a": //remove server player arrow from client side users
+////							
+////							if(getHostType().equals(HostType.CLIENT))
+////							{
+////								int playerNum = Integer.parseInt(mess[1]);
+////								playerList[playerNum].removeArrow();
+////							}
+////							break;
+////						case "add_arrow_player":
+////							if(getHostType().equals(HostType.CLIENT))
+////							{	
+////								int playerNum = Integer.parseInt(mess[1]);
+////								String[] id = mess[2].split("separator");
+////								String uid = id[0];
+////								String[] items = id[1].split(Arrow.ENTRY_SEPARATOR);
+////								
+////								System.out.printf("player num: %d, arrow id: %s",playerNum,uid);
+////								
+////								playerList[playerNum].addArrow(new Arrow(
+////										Integer.parseInt(items[1].split(Arrow.KEY_VALUE_SEPARATOR)[1]),Integer.parseInt(items[2].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
+////										Double.parseDouble(items[3].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[4].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
+////										new Vector(Double.parseDouble(items[6].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[7].split(Arrow.KEY_VALUE_SEPARATOR)[1]) ),
+////										0,playerList[playerNum],items[0].split(Arrow.KEY_VALUE_SEPARATOR)[1],uid)
+////										);
+////								
+////								arrows.remove(uid);
+////								
+////								playerList[playerNum].fixArrows(2, playerList[playerNum].getMouseLocation().x, playerList[playerNum].getMouseLocation().y);
+////							}
+////						}
+//					}
 					
 				}
 			}
@@ -717,7 +723,225 @@ public class Game {
 	 */
 	
 	/**
-	 * 
+	 * Register a user on client and server
+	 * @param user the user to register
+	 * @param fromServer True if sent by Server, False if sent by a Client
+	 */
+	public void registerUser(BattleCastleUser user,boolean fromServer)
+	{
+		System.out.println("Recieved user: " + user);
+		if(playerMap.get( user.getUUID() ) == null)
+		{
+			playerMap.put(user.getUUID(), user);
+		}
+		System.out.println(playerMap);
+		
+		if(hostType == HostType.SERVER && !fromServer)
+		{
+			int playerNum = playerMap.size()-1;
+			playerMap.get(user.getUUID()).setPlayerNumber(playerNum);
+			canvasRef.addPlayerFace(user.getPlayerName(), ImageFilePaths.CHECK); //TODO: Change to acutal face of player depending on player number
+
+			for(String uuid : playerMap.keySet())
+			{
+				gameServer.sendToAllTCP(playerMap.get(uuid));
+			}
+
+			if(mapSelected)
+				sendMapChoice(mapType, mapName);
+		}
+
+		playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
+		playerList[user.getPlayerNumber()] = new Player(user.getUUID());
+
+		System.out.println(Arrays.toString(playerList));
+
+		
+	}
+	
+	/**
+	 * Process messages sent to the server
+	 * @param type the messageType (String) to process
+	 * @param restOfMessage the rest of the message
+	 */
+	public void processServerMessage(String type, String restOfMessage )
+	{
+		if(type.equals( MessageType.MOVE_PLAYER.toString()) )
+		{
+			String[] num = restOfMessage.split(Message.EQUALS_SEPARATOR);
+			//System.out.println("NUM: " + num[1]);
+			int playerNum = Integer.parseInt(num[0]);
+			
+			if(playerList[playerNum].isDead()) return;
+			
+			if(num[1].equals(KeyPress.RIGHT_D.getText())) //move player right
+			{
+				playerList[playerNum].setvX(2);
+			}
+			if(num[1].equals(KeyPress.LEFT_D.getText())) //move player left
+			{
+				playerList[playerNum].setvX(-2);
+			}
+			if(num[1].equals(KeyPress.JUMP_D.getText())) //move player up
+			{
+				playerList[playerNum].setvY(-2);
+			}
+			if(num[1].equals(KeyPress.DOWN_D.getText())) //move player down
+			{
+				playerList[playerNum].setvY(2);
+			}
+			if(num[1].equals(KeyPress.DASH.getText())) //make player dash
+			{
+				
+			}
+			
+		}else if(type.equals(MessageType.UPDATE_ARROW.toString())) //update location of an arrow
+		{
+			String[] id = restOfMessage.split(Message.EQUALS_SEPARATOR);
+			String uuid = id[0];
+			if(arrows.get(uuid)== null)
+			{
+				String[] items = id[1].split(Arrow.ENTRY_SEPARATOR);
+//				System.out.println("hello");
+//				System.out.println(Arrays.toString(items));
+				arrows.put(uuid,
+						new Arrow(
+								Integer.parseInt(items[1].split(Arrow.KEY_VALUE_SEPARATOR)[1]),Integer.parseInt(items[2].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
+								Double.parseDouble(items[3].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[4].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
+								new Vector(Double.parseDouble(items[6].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[7].split(Arrow.KEY_VALUE_SEPARATOR)[1]) ),
+								0, playerList[playerMap.get(items[5].split(Arrow.KEY_VALUE_SEPARATOR)[1]).getPlayerNumber()],
+								items[0].split(Arrow.KEY_VALUE_SEPARATOR)[1],uuid
+								));
+			}
+			
+			Message mess = new Message(MessageType.UPDATE_ARROW, arrows.get(uuid).getID() + Message.EQUALS_SEPARATOR + arrows.get(uuid).stringify());
+			gameServer.sendToAllTCP(mess);
+			
+		}else if(type.equals(MessageType.UPDATE_MOUSE_LOC.toString())) //update mouse location of a player
+		{
+			String[] id = restOfMessage.split(Message.EQUALS_SEPARATOR);
+			int playerNum = Integer.parseInt(id[0]);
+			if(playerList[playerNum] != null)
+				playerList[playerNum].decode(id[1]);
+//			System.out.println("recieved new mouse location " + id[1]);
+//			System.out.println("player location is " + playerList[playerNum].getMouseLocation());
+		}else if(type.equals(MessageType.PERFORM_ACTION.toString())) //perform specific actions (actions that don't occur every tick
+		{
+			String[] mess = restOfMessage.split(Message.EQUALS_SEPARATOR);
+			
+			if(mess[0].equals(MessageType.LAUNCH_ARROW.toString()))
+			{
+				int playerNum = Integer.parseInt(mess[1]);
+				launchArrow(playerList[playerNum]);
+			//	System.out.println("lAunching Arrow fOR plAyer: " + playerNum );
+			}
+//			switch(mess[0])
+//			{
+//			case "launch_a": //launching arrow from client player
+//				int playerNum = Integer.parseInt(mess[1]);
+//				launchArrow(playerList[playerNum]);
+//				System.out.println("lAunching Arrow fOR plAyer: " + playerNum );
+//				break;
+//			}
+		}
+	}
+	
+	/**
+	 * Process message sent to a client
+	 * @param type the MessageType as a (String)
+	 * @param restOfMessage the rest of the message to process
+	 */
+	public void processClientMessage(String type, String restOfMessage )
+	{
+		if(type.equals(MessageType.SELECT_MAP.toString())) //sends which map the server picked
+		{
+			gameMap = gameMapLoader.getByType(restOfMessage.trim());//new GameMap(messageArr[1].trim());
+		}else if(type.equals(MessageType.UPDATE_PLAYER.toString())) //updates player location client side
+		{
+			String[] num = restOfMessage.split(Message.EQUALS_SEPARATOR);
+			playerList[Integer.parseInt(num[0])].decode(num[1]);
+		}else if(type.equals(MessageType.UPDATE_ARROW.toString())) //initializes arrow location client side
+		{
+			String[] id = restOfMessage.split(Message.EQUALS_SEPARATOR);
+			String uid = id[0];
+			if(arrows.get(uid)==null)
+			{
+				String[] items = id[1].split(Arrow.ENTRY_SEPARATOR);
+				arrows.put(uid, new Arrow(
+						Integer.parseInt(items[1].split(Arrow.KEY_VALUE_SEPARATOR)[1]),Integer.parseInt(items[2].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
+						Double.parseDouble(items[3].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[4].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
+						new Vector(Double.parseDouble(items[6].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[7].split(Arrow.KEY_VALUE_SEPARATOR)[1]) ),
+						0,playerList[playerMap.get(items[5].split(Arrow.KEY_VALUE_SEPARATOR)[1]).getPlayerNumber()],
+						items[0].split(Arrow.KEY_VALUE_SEPARATOR)[1],uid)
+						);
+			}
+			
+		}else if(type.equals(MessageType.MOVE_ARROW.toString())) //moves arrow on client side
+		{
+			
+			if(hostType == HostType.CLIENT){
+				String[] id = restOfMessage.split(Message.EQUALS_SEPARATOR);
+				String uuid = id[0];
+				Arrow updateThis = arrows.get(uuid);
+				if(updateThis != null)
+				{
+					updateThis.decode(id[1]);	
+				}else
+				{
+					System.out.println("THE ARROW IS NULL: " + uuid);
+				}
+			}
+		}else if(type.equals(MessageType.UPDATE_TILE.toString()))
+		{
+			if(hostType == HostType.CLIENT)
+			{
+				String[] id = restOfMessage.split(Message.EQUALS_SEPARATOR);
+				String uuid = id[0];
+				gameMap.getTileByID(uuid).execute(id[1]);
+			}
+		}
+		else if(type.equals(MessageType.PERFORM_ACTION.toString())) //perform specific action
+		{
+			String[] mess = restOfMessage.split(Message.EQUALS_SEPARATOR);
+			
+			if(mess[0].equals(MessageType.REMOVE_ARROW.toString()))
+			{
+				if(getHostType().equals(HostType.CLIENT))
+				{
+					int playerNum = Integer.parseInt(mess[1]);
+					//System.out.println(playerNum + "'s arrow is actually being removed" );
+					playerList[playerNum].removeArrow();
+				}
+			}else if(mess[0].equals(MessageType.ADD_ARROW_TO_PLAYER.toString()))
+			{
+				if(getHostType().equals(HostType.CLIENT))
+				{	
+					int playerNum = Integer.parseInt(mess[1]);
+					String[] id = mess[2].split(Message.ACCENT_SEPARATOR);
+					String uid = id[0];
+					String[] items = id[1].split(Arrow.ENTRY_SEPARATOR);
+					
+					///System.out.printf("player num: %d, arrow id: %s",playerNum,uid);
+					
+					playerList[playerNum].addArrow(new Arrow(
+							Integer.parseInt(items[1].split(Arrow.KEY_VALUE_SEPARATOR)[1]),Integer.parseInt(items[2].split(Arrow.KEY_VALUE_SEPARATOR)[1]),
+							0 , Double.parseDouble(items[4].split(Arrow.KEY_VALUE_SEPARATOR)[1]), //Double.parseDouble(items[3].split(Arrow.KEY_VALUE_SEPARATOR)[1])
+							new Vector(Double.parseDouble(items[6].split(Arrow.KEY_VALUE_SEPARATOR)[1]), Double.parseDouble(items[7].split(Arrow.KEY_VALUE_SEPARATOR)[1]) ),
+							0,playerList[playerNum],items[0].split(Arrow.KEY_VALUE_SEPARATOR)[1],uid)
+							);
+					
+					arrows.remove(uid);
+					
+					//System.out.println(playerList[playerNum].stringify());
+					playerList[playerNum].fixArrows(2, playerList[playerNum].getMouseLocation().x, playerList[playerNum].getMouseLocation().y);
+				}
+			}
+		}
+	
+	}
+	
+	/**
+	 * Gets uuid from a player
 	 * @param p Player to get id from
 	 * @return uuid if player exists, null if not
 	 */
@@ -730,7 +954,6 @@ public class Game {
 				return s;
 			}
 		}
-		
 		System.out.println("NO UUID FOUND FOR PLAYER: " + p);
 		return null;
 	}
@@ -748,6 +971,10 @@ public class Game {
 		return count;
 	}
 	
+	/**
+	 * Kills an alive player
+	 * @param p the player to kill
+	 */
 	public void killPlayer(Player p)
 	{
 		if(p == null) return;
