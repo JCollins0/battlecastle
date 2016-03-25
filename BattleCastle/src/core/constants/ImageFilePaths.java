@@ -1,5 +1,7 @@
 package core.constants;
 
+import java.lang.reflect.Field;
+
 public class ImageFilePaths {
 	
 	private static final String 
@@ -77,6 +79,23 @@ public class ImageFilePaths {
 				CLONE = EDITOR + "clone",
 				STATE_ADDER = EDITOR + "state_adder";
 	
+	
+	public static String getAbsolutePathFromImageName(String imageName)
+	{
+		try{
+			Field[] fields = ImageFilePaths.class.getFields();
+			for(Field f : fields)
+			{
+				String s = (String)(ImageFilePaths.class.getField(f.getName()).get(f.getName()));
+				if(s.contains(imageName))
+				{
+					System.out.println("Found matching image: " + s );
+					return s;
+				}
+			}
+		}catch(Exception e) {}
+		return "";
+	}
 				
 		
 }

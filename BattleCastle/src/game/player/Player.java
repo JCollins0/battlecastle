@@ -51,29 +51,29 @@ public class Player extends PhysicsRect{
 	 * constructs a default player no image
 	 * @param uuid the id of the player
 	 */
-	public Player(String uuid)
-	{
-		this((BufferedImage)null,uuid);
-	}
+//	public Player(String uuid)
+//	{
+//		this((BufferedImage)null,uuid);
+//	}
 	
 	/**
 	 * constructs a player with given image and id
 	 * @param image the image to display
 	 * @param uuid the id of the player
 	 */
-	public Player(BufferedImage image, String uuid)
-	{
-		super(0, 0, WIDTH, HEIGHT,0, null, ANG_VEL, MASS, DRAG_C);
-		this.image = image;
-		this.uuid = uuid;
-		arrowStorage = new ArrayList<Arrow>();
-		for(int i = 0; i < 10; i++)
-			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
-		currentArrow = arrowStorage.get(0);
-		mouseLocation = MouseHandler.mouse;
-		//GRAVITY = 0;
-		deadI = Utility.loadImage(ImageFilePaths.TEMP_PLAYER_DEAD);
-	}
+//	public Player(BufferedImage image, String uuid)
+//	{
+//		super(0, 0, WIDTH, HEIGHT,0, null, ANG_VEL, MASS, DRAG_C);
+//		this.image = image;
+//		this.uuid = uuid;
+//		arrowStorage = new ArrayList<Arrow>();
+//		for(int i = 0; i < 10; i++)
+//			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
+//		currentArrow = arrowStorage.get(0);
+//		mouseLocation = MouseHandler.mouse;
+//		//GRAVITY = 0;
+//		deadI = Utility.loadImage(ImageFilePaths.TEMP_PLAYER_DEAD);
+//	}
 	
 	/**
 	 * constructs a player with given image path and id
@@ -82,8 +82,19 @@ public class Player extends PhysicsRect{
 	 */
 	public Player(String imageFileName,String uuid)
 	{
-		this(Utility.loadImage(imageFileName), uuid);
+		//this(Utility.loadImage(imageFileName), uuid);
+		super(0, 0, WIDTH, HEIGHT,0, null, ANG_VEL, MASS, DRAG_C);
+		this.image = Utility.loadImage(imageFileName);
+		this.uuid = uuid;
+		arrowStorage = new ArrayList<Arrow>();
+		for(int i = 0; i < 10; i++)
+			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
+		currentArrow = arrowStorage.get(0);
+		mouseLocation = MouseHandler.mouse;
+		//GRAVITY = 0;
+		deadI = Utility.loadImage(ImageFilePaths.TEMP_PLAYER_DEAD);
 		this.imageFilePath = imageFileName;
+		//System.out.println("Loading from filePath" + imageFileName);
 	}
 	
 	/**

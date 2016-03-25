@@ -752,7 +752,7 @@ public class Game {
 		}
 
 		playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
-		playerList[user.getPlayerNumber()] = new Player(user.getUUID());
+		playerList[user.getPlayerNumber()] = new Player(ImageFilePaths.TEMP_PLAYER,user.getUUID()); //TODO Change TEMP PLAYER to whatever player chooses
 
 		System.out.println(Arrays.toString(playerList));
 
