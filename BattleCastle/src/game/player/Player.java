@@ -35,7 +35,7 @@ public class Player extends PhysicsRect{
 	public static final String KEY_VALUE_SEPARATOR = "#", ENTRY_SEPARATOR = "<";
 	
 	private BufferedImage image, deadI;
-	private int playerState;
+	
 	private ArrayList<Arrow> arrowStorage;
 	private Arrow currentArrow;
 	private int arrowCount;
@@ -45,6 +45,14 @@ public class Player extends PhysicsRect{
 	private Point mouseLocation;
 	private boolean dead;
 	private boolean loadedImage = false;
+	/*
+	 * Animation 
+	 */
+	private int playerState = STATE_ALIVE;
+	private BufferedImage[][] images = Utility.loadBufferedMatrix(ImageFilePaths.TEMP_PLAYER_ANIMATED, WIDTH, HEIGHT);
+	private int animation;
+	private int animationCount;
+	private static final int ANIMATION_DELAY= 2;
 	
 	
 	/**
@@ -153,6 +161,17 @@ public class Player extends PhysicsRect{
 	{
 		if(falling)
 			super.tick();
+		
+		animationCount ++;
+		if(animationCount > ANIMATION_DELAY)
+		{
+			animationCount = 0;
+			animation++;
+			if(animation >= images[playerState].length)
+			{
+				animation = 0;
+			}
+		}
 	}
 	
 	/**
@@ -162,7 +181,8 @@ public class Player extends PhysicsRect{
 	{			
 		if(image != null)
 		{
-			g.drawImage(image, getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
+			//g.drawImage(image, getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
+			g.drawImage(images[playerState][animation], getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
 		}else
 		{
 			g.setColor(Color.cyan);

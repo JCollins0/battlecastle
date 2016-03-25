@@ -46,6 +46,20 @@ public class Utility {
     	}
     }
     
+    public static BufferedImage[][] loadBufferedMatrix(String img, int xOffset, int yOffset)
+    {
+    	BufferedImage image = loadImage(img);
+    	BufferedImage[][] mat = new BufferedImage[image.getHeight()/yOffset][image.getWidth()/xOffset];
+    	for (int y = 0; y < image.getHeight(); y += yOffset)
+    	{
+    		for (int x = 0; x < image.getWidth(); x += xOffset)
+    		{
+    			mat[y/yOffset][x/xOffset] = image.getSubimage(x, y, xOffset, yOffset);
+    		}
+    	}
+    	return mat;
+    }
+    
     public static BufferedImage[] loadBufferedArray(String img, int xOffset, int yOffset)
     {
     	BufferedImage image = loadImage(img);

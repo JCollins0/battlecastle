@@ -26,8 +26,8 @@ public class Arrow extends PhysicsRect{
 	private PhysicsPoly headCollision;
 	private static final int HEAD_COLL_W = 20; //10
 	private boolean rotate = true;
-	public static final int DEFAULT_LAUNCH_COOLDOWN = 20;
-	private int launchCoolDown = 20;
+	public static final int DEFAULT_LAUNCH_COOLDOWN = 2; 
+	private int launchCoolDown = DEFAULT_LAUNCH_COOLDOWN;
 	Vector[] hcrnrs;
 	
 	public static final String KEY_VALUE_SEPARATOR = ":", ENTRY_SEPARATOR = ",";
@@ -172,7 +172,8 @@ public class Arrow extends PhysicsRect{
 	public void tick()
 	{
 		super.tick();
-		
+		if(launchCoolDown == 0)
+			System.out.println("ARROW IS NOW ACTIVE");
 		if(launchCoolDown > 0)
 			launchCoolDown--;
 		

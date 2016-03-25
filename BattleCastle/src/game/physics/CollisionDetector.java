@@ -227,13 +227,16 @@ public class CollisionDetector
 		{
 			if(b instanceof Arrow)
 			{
-				if(((Arrow) b).getLaunchCoolDown() <= 0 && ((Arrow)b).isStuck())
+				if(((Arrow) b).getLaunchCoolDown() <= 0 )
 				{
-					gameRef.addArrowToPlayer((Arrow)b,(Player)a);
-				}else
-				{
-					gameRef.killPlayer((Player)a);
-					((Arrow)b).setVelocity(stopped);
+					if(((Arrow)b).isStuck())
+						gameRef.addArrowToPlayer((Arrow)b,(Player)a);
+					else
+					{
+						gameRef.killPlayer((Player)a);
+						((Arrow)b).setVelocity(stopped);
+					}
+						
 				}
 			}
 		}
@@ -241,13 +244,15 @@ public class CollisionDetector
 		{
 			if(a instanceof Arrow)
 			{
-				if(((Arrow) a).getLaunchCoolDown() <= 0 && ((Arrow)a).isStuck())
+				if(((Arrow) a).getLaunchCoolDown() <= 0 )
 				{
-					gameRef.addArrowToPlayer((Arrow)a,(Player)b);
-				}else
-				{
-					gameRef.killPlayer((Player)b);
-					((Arrow)a).setVelocity(stopped);
+					if(((Arrow)a).isStuck())
+						gameRef.addArrowToPlayer((Arrow)a,(Player)b);
+					else
+					{
+						gameRef.killPlayer((Player)b);
+						((Arrow)a).setVelocity(stopped);
+					}
 				}
 			}
 		}
