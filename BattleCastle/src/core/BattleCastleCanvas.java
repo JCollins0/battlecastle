@@ -77,7 +77,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 					   refreshLanServers, infoButton;
 	private MapSelectionObject map1,map2,map3;
 	private MenuLabel userNameLabel, serverIPLabel;
-	private TutorialObject leftMouse, upKey, downKey, leftKey, rightKey, dashKey, screenShotKey;
+	private TutorialObject leftMouse, upKey, downKey, leftKey, rightKey, dashLeftKey, dashRightKey, screenShotKey;
 	private ServerSelectionBox serverSelectionBox;
 	private MenuSlider volumeSlider;
 	private ArrayList<BufferedImage> backgroundImageList;
@@ -271,10 +271,15 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				10, "Move Right", false, GameState.INFO);
 		rightKey.setText(Keys.getKeyConfigString(Keys.RIGHT));
 		
-		dashKey = new TutorialObject(590,99, 64, 64,
+		dashLeftKey = new TutorialObject(260,48, 64, 64,
 				Utility.loadBufferedList(ImageFilePaths.KEY_PRESS, 64, 64),
-				10, "Dash Key", false, GameState.INFO);
-		dashKey.setText(Keys.getKeyConfigString(Keys.DASH));
+				10, "Dash Left Key", false, GameState.INFO);
+		dashLeftKey.setText(Keys.getKeyConfigString(Keys.DASH_L));
+		
+		dashRightKey = new TutorialObject(480,48, 64, 64,
+				Utility.loadBufferedList(ImageFilePaths.KEY_PRESS, 64, 64),
+				10, "Dash Right Key", false, GameState.INFO);
+		dashRightKey.setText(Keys.getKeyConfigString(Keys.DASH_R));
 		
 		screenShotKey = new TutorialObject(686,99,64,64,
 				Utility.loadBufferedList(ImageFilePaths.KEY_PRESS, 64, 64),
@@ -286,7 +291,8 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		tutorialObjectList.add(leftKey);
 		tutorialObjectList.add(rightKey);
 		tutorialObjectList.add(downKey);
-		tutorialObjectList.add(dashKey);
+		tutorialObjectList.add(dashLeftKey);
+		tutorialObjectList.add(dashRightKey);
 		tutorialObjectList.add(screenShotKey);
 		
 		AudioHandler.setVolume(volumeSlider.getValue()/100.0f);

@@ -93,9 +93,13 @@ public class ConfigLoader {
 				case ConfigConstants.DOWN_KEY:
 					if(keyVal.length > 1)
 						Keys.DOWN = Keys.getKeyFromConfigString(keyVal[1].trim());
-				case ConfigConstants.DASH_KEY:
+				case ConfigConstants.DASH_LEFT_KEY:
 					if(keyVal.length > 1)
-						Keys.DASH = Keys.getKeyFromConfigString(keyVal[1].trim());
+						Keys.DASH_L = Keys.getKeyFromConfigString(keyVal[1].trim());
+					break;
+				case ConfigConstants.DASH_RIGHT_KEY:
+					if(keyVal.length > 1)
+						Keys.DASH_R = Keys.getKeyFromConfigString(keyVal[1].trim());
 					break;
 				case ConfigConstants.VOLUME_LEVEL:
 					if(keyVal.length > 1)
@@ -125,7 +129,8 @@ public class ConfigLoader {
 				writer.println(ConfigConstants.JUMP_KEY + ":");
 				writer.println(ConfigConstants.RIGHT_KEY + ":");
 				writer.println(ConfigConstants.DOWN_KEY + ":");
-				writer.println(ConfigConstants.DASH_KEY + ":");
+				writer.println(ConfigConstants.DASH_LEFT_KEY + ":");
+				writer.println(ConfigConstants.DASH_RIGHT_KEY + ":");
 				
 				for(int i = 0; i < sliderHeading.length; i++)
 					writer.println(sliderHeading[i]);
@@ -157,7 +162,8 @@ public class ConfigLoader {
 			writer.println(String.format("%s:%s", ConfigConstants.JUMP_KEY,  Keys.getKeyConfigString(Keys.UP)));
 			writer.println(String.format("%s:%s", ConfigConstants.RIGHT_KEY, Keys.getKeyConfigString(Keys.RIGHT)));
 			writer.println(String.format("%s:%s", ConfigConstants.DOWN_KEY,  Keys.getKeyConfigString(Keys.DOWN)));
-			writer.println(String.format("%s:%s", ConfigConstants.DASH_KEY,  Keys.getKeyConfigString(Keys.DASH)));
+			writer.println(String.format("%s:%s", ConfigConstants.DASH_LEFT_KEY,  Keys.getKeyConfigString(Keys.DASH_L)));
+			writer.println(String.format("%s:%s", ConfigConstants.DASH_RIGHT_KEY,  Keys.getKeyConfigString(Keys.DASH_R)));
 			
 			for(int i = 0; i < sliderHeading.length; i++)
 				writer.println(sliderHeading[i]);

@@ -162,6 +162,8 @@ public class Player extends PhysicsRect{
 		if(falling)
 			super.tick();
 		
+		//System.out.println("P.Velocity.x = " + getVelocity().XExact());
+		
 		animationCount ++;
 		if(animationCount > ANIMATION_DELAY)
 		{
@@ -250,6 +252,21 @@ public class Player extends PhysicsRect{
 	}
 	
 	/**
+	 * Add a certain amount of Horizontal velocity 
+	 * @param vX the amount of H-Velocity to add
+	 */
+	public void addvX(double vX)
+	{
+		if(Math.abs(getVelocity().XExact())> 3)
+		{	
+			//System.out.println("Cannot dash b/c v = " + getVelocity().XExact());
+			return;
+		}
+		
+		setVelocity(getVelocity().vectorSub(getVelocity()).vectorAdd(new Vector(vX,0)));
+	}
+	
+	/**
 	 * Sets Horizontal Velocity of player
 	 * @param vX the horizontal velocity value
 	 */
@@ -258,7 +275,11 @@ public class Player extends PhysicsRect{
 		{
 			setVelocity(getVelocity().vectorSub(new Vector(getVelocity().XExact(),0)));
 		}else
-			setVelocity(getVelocity().vectorAdd(new Vector(vX-getVelocity().XExact(),0)));
+		{
+			if(Math.abs(getVelocity().XExact()) > Math.abs(vX) ) return;
+			double dx = vX-getVelocity().XExact();
+			setVelocity(getVelocity().vectorAdd(new Vector(dx,0)));
+		}
 	}
 
 	/**

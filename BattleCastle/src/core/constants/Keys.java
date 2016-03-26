@@ -8,7 +8,8 @@ public class Keys {
 					  DOWN = KeyEvent.VK_S,
 					  LEFT = KeyEvent.VK_A,
 					  RIGHT = KeyEvent.VK_D,
-					  DASH = KeyEvent.VK_F;
+					  DASH_L = KeyEvent.VK_Q,
+					  DASH_R = KeyEvent.VK_E;
 							
 	public static final int SCREENSHOT = KeyEvent.VK_F2;
 	

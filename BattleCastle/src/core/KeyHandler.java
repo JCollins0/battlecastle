@@ -12,12 +12,16 @@ import javax.imageio.ImageIO;
 
 import core.constants.Keys;
 import core.menu_object.MenuTextField;
-import game.player.Player;
 
 public class KeyHandler implements KeyListener {
 
+	//Canvas reference
 	private BattleCastleCanvas canvasref;
+	
+	//Date Stamp Format
 	private static SimpleDateFormat dateFormat;
+	
+	//Client Key Presses
 	public static ArrayList<KeyPress> presses;
 	
 	static
@@ -30,7 +34,6 @@ public class KeyHandler implements KeyListener {
 	{
 		this.canvasref = canvasref;
 	}
-	
 	
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -96,6 +99,14 @@ public class KeyHandler implements KeyListener {
 				remove(KeyPress.LEFT_U);
 				remove(KeyPress.RIGHT_U);
 				add(KeyPress.RIGHT_D);
+			}
+			if(keyCode == Keys.DASH_L)
+			{
+				add(KeyPress.DASH_L);
+			}
+			if(keyCode == Keys.DASH_R)
+			{
+				add(KeyPress.DASH_R);
 			}
 			if(keyCode == KeyEvent.VK_R) // reset TODO: assign a (Keys) variable
 				if(canvasref.getGame() != null)

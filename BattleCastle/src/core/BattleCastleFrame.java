@@ -30,11 +30,13 @@ public class BattleCastleFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = -412527797459057884L;
 
+	//Game Constants
 	public static final String GAME_NAME = "Battle Castle";
 	public static final String GAME_VERSION = "1.0";
 	public static final Dimension GAME_SIZE = new Dimension(1024,768);
 	public static final Dimension GAME_FRAME = new Dimension(GAME_SIZE.width+5,GAME_SIZE.height+28);
 	
+	//Canvas reference
 	public static BattleCastleCanvas game_canvas;
 	
 	/**
@@ -99,7 +101,7 @@ public class BattleCastleFrame extends JFrame {
 					game_canvas.getConfigLoader().saveConfig();
 				}
 				
-				System.exit(0);
+				//System.exit(0);
 			}
 			
 			@Override

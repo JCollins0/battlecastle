@@ -6,12 +6,14 @@ import java.awt.Graphics;
 
 public class Error {
 
-	
+	//Text
+	public static final Font ERROR_FONT = new Font("Arial",Font.BOLD,20);
 	private String text;
+	private int x, y;
+	
+	//Display Time
 	private boolean shouldRemove;
 	private int timeToDisplay;
-	private int x, y;
-	public static final Font ERROR_FONT = new Font("Arial",Font.BOLD,20);
 	
 	/**
 	 * Constructs a new Error

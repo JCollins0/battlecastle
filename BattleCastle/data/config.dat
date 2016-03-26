@@ -16,7 +16,8 @@ left_key:A
 jump_key:W
 right_key:D
 down_key:S
-dash_key:F
+dash_left_key:Q
+dash_right_key:E
 ##############################
 #   Volume range (0-100)     #
 ##############################

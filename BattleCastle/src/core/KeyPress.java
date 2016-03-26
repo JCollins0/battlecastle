@@ -10,7 +10,8 @@ public enum KeyPress {
 	RIGHT_U("*right-up*"),
 	JUMP_U("*jump-up*"),
 	DOWN_U("*down-up*"),
-	DASH("*dash*");
+	DASH_L("*dash-left*"),
+	DASH_R("*dash-right*");
 	
 	private String s;
 	
@@ -22,5 +23,10 @@ public enum KeyPress {
 	public String getText()
 	{
 		return s;
+	}
+	
+	public String toString()
+	{
+		return "[kp]=" + getText();
 	}
 }

@@ -13,7 +13,8 @@ public class ConfigConstants {
 				LEFT_KEY = "left_key",
 				RIGHT_KEY = "right_key",
 				DOWN_KEY = "down_key",
-				DASH_KEY = "dash_key",
+				DASH_LEFT_KEY = "dash_left_key",
+				DASH_RIGHT_KEY = "dash_right_key",
 				VOLUME_LEVEL = "volume_level";
 	
 			
