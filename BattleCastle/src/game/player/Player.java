@@ -263,7 +263,7 @@ public class Player extends PhysicsRect{
 			return;
 		}
 		
-		setVelocity(getVelocity().vectorSub(getVelocity()).vectorAdd(new Vector(vX,0)));
+		setVelocity(getVelocity().vectorAdd(new Vector(vX,0)));
 	}
 	
 	/**

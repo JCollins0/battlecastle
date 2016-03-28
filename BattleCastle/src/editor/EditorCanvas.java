@@ -34,7 +34,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 	private static final int TOOLS_Y=768;
 	private static final int BOTTOM_Y=768;
 
-	protected DoubleLinkedList<Tile> list;
+	protected DoubleLinkedList<Tile> list,drawingList;
 	protected ArrayList<Tile> tools,tileAdder,editor;
 	private static BufferedImage buffer;
 	private int tileAdderX,tileAdderY;

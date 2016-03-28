@@ -298,8 +298,8 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		
 		public void checkForComodification()
 		{
-			if(count != expectedCount)
-				throw new ConcurrentModificationException();
+			//if(count != expectedCount)
+				//throw new ConcurrentModificationException();
 		}
 	}
 	
@@ -358,8 +358,8 @@ public class DoubleLinkedList<T> implements Iterable<T>
 		
 		public void checkForComodification()
 		{
-			if(count != expectedCount)
-				throw new ConcurrentModificationException();
+			//if(count != expectedCount)
+				//throw new ConcurrentModificationException();
 		}
 	}
 
