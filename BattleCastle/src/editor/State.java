@@ -67,7 +67,7 @@ public class State
 				tx+=Math.abs(sx);
 			if(ty<dy)
 				ty+=Math.abs(sy);
-			System.out.println(tx+" "+ty);
+			//System.out.println(tx+" "+ty);
 			if(tx>=dx&&ty>=dy)
 			{
 				tx=ty=0;
