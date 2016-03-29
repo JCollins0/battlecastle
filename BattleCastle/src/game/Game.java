@@ -588,12 +588,12 @@ public class Game {
 			}
 			if(num[1].equals(KeyPress.DASH_L.getText())) //make player dash left
 			{
-			//	System.out.println("DASHING LEFT");
-				playerList[playerNum].addvX(-10);
+				System.out.println("DASHING LEFT");
+				playerList[playerNum].setvXSync(-10);
 			}
 			if(num[1].equals(KeyPress.DASH_R.getText())) //make player dash right
 			{
-				playerList[playerNum].addvX(10);
+				playerList[playerNum].setvXSync(10);
 			}
 			
 		}else if(type.equals(MessageType.UPDATE_ARROW.toString())) //update location of an arrow

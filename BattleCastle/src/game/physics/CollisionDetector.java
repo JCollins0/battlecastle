@@ -177,7 +177,7 @@ public class CollisionDetector
 				overlap = Math.ceil(overlap+.45); //round to not clip into tiles
 				
 				b.move(minimal.vectorScale(overlap));
-				((PhysicsPoly) b).setVelocity(stopped);
+				//((PhysicsPoly) b).setVelocity(stopped);
 				
 				if(b instanceof Arrow)
 				{
@@ -187,7 +187,7 @@ public class CollisionDetector
 				}
 				else if(b instanceof Player)
 				{
-					((PhysicsPoly)b).setNormalForce(minimal.getNormal().getNormal().getNormal().XExact(), minimal.getNormal().getNormal().getNormal().YExact());
+					((PhysicsPoly)b).setNormalForce(1, minimal.getNormal().getNormal().getNormal().YExact());//set the y normal to 0 to create a wall cling effect
 					//System.out.println("PLAYER OPPOSITE NORMAL " + minimal.getNormal().getNormal().getNormal());
 				}
 				
@@ -205,7 +205,7 @@ public class CollisionDetector
 				
 				a.move(minimal.vectorScale(overlap));
 			//	System.out.println("Player Velocity " + ((PhysicsPoly) a).getVelocity());
-				((PhysicsPoly) a).setVelocity(stopped);
+				//((PhysicsPoly) a).setVelocity(stopped);
 				if(a instanceof Arrow)
 				{
 					((PhysicsPoly)a).setNormalForce(0,0);
@@ -213,7 +213,7 @@ public class CollisionDetector
 					a.move(minimal.vectorScale(-5));
 				}else if(a instanceof Player)
 				{
-					((PhysicsPoly)a).setNormalForce(minimal.getNormal().XExact(),minimal.getNormal().YExact());
+					((PhysicsPoly)a).setNormalForce(1,minimal.getNormal().YExact());//set the y normal to 0 to create a wall cling effect
 				}
 				
 			}

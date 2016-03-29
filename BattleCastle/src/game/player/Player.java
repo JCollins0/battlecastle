@@ -45,6 +45,7 @@ public class Player extends PhysicsRect{
 	private Point mouseLocation;
 	private boolean dead;
 	private boolean loadedImage = false;
+	private double velToSet;
 	/*
 	 * Animation 
 	 */
@@ -162,7 +163,13 @@ public class Player extends PhysicsRect{
 		if(falling)
 			super.tick();
 		
-		//System.out.println("P.Velocity.x = " + getVelocity().XExact());
+		if(velToSet!=0)
+		{
+			setvX(velToSet);
+			velToSet=0;
+		}
+		//if(getVelocity().XExact()!=0)
+			//System.out.println("P.Velocity.x = " + getVelocity().XExact());
 		
 		animationCount ++;
 		if(animationCount > ANIMATION_DELAY)
@@ -280,6 +287,15 @@ public class Player extends PhysicsRect{
 			double dx = vX-getVelocity().XExact();
 			setVelocity(getVelocity().vectorAdd(new Vector(dx,0)));
 		}
+	}
+	
+	/**
+	 * Sets Horizontal Velocity of player based upon the game clock as to avoid variation
+	 * @param vX the horizontal velocity value
+	 */
+	public void setvXSync(double vX)
+	{
+		velToSet=vX;
 	}
 
 	/**
