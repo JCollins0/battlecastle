@@ -13,6 +13,7 @@ import org.json.simple.JSONValue;
 
 import core.constants.ImageFilePaths;
 import game.physics.Polygon;
+import game.physics.Vector;
 import utility.Utility;
 
 public class Tile extends Polygon implements JSONStreamAware
@@ -324,4 +325,10 @@ public class Tile extends Polygon implements JSONStreamAware
 		return stringify();
 	}
 
+	public Vector getStateVel() {
+		if(states.size() != 0)
+			return states.get(currentState).getV();
+		return null;
+	}
+	
 }

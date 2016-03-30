@@ -223,6 +223,21 @@ public class PhysicsPoly extends Polygon
 		return velocity;
 	}
 	
+	/**
+	 * Add a certain amount of Horizontal velocity 
+	 * @param vX the amount of H-Velocity to add
+	 */
+	public void addvX(double vX)
+	{
+		if(Math.abs(getVelocity().XExact())> 3)
+		{	
+			//System.out.println("Cannot dash b/c v = " + getVelocity().XExact());
+			return;
+		}
+		
+		setVelocity(getVelocity().vectorAdd(new Vector(vX,0)));
+	}
+	
 	
 	public Vector getTopLeft()
 	{

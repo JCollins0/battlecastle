@@ -190,7 +190,9 @@ public class CollisionDetector
 					((PhysicsPoly)b).setNormalForce(1, minimal.getNormal().getNormal().getNormal().YExact());//set the y normal to 0 to create a wall cling effect
 					//System.out.println("PLAYER OPPOSITE NORMAL " + minimal.getNormal().getNormal().getNormal());
 				}
-				
+				Vector vel = ((Tile)a).getStateVel();
+				if(vel != null)
+					((PhysicsPoly) b).move(vel.vectorScale(1.5));
 			}
 		}
 		if(b instanceof Tile)
@@ -215,6 +217,10 @@ public class CollisionDetector
 				{
 					((PhysicsPoly)a).setNormalForce(1,minimal.getNormal().YExact());//set the y normal to 0 to create a wall cling effect
 				}
+				
+				Vector vel = ((Tile)b).getStateVel();
+				if(vel != null)
+					((PhysicsPoly) a).move(vel.vectorScale(1.5));
 				
 			}
 		}

@@ -90,5 +90,13 @@ public class State
 			return sx+"+"+sy;
 		return dx+"+"+sx+"+"+dy+"+"+sy;
 	}
+
+	public Vector getV() {
+		return v;
+	}
+
+	public void setV(Vector v) {
+		this.v = v;
+	}
 	
 }
