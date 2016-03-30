@@ -755,13 +755,14 @@ public class Game {
 	 */
 	public String getUUIDFromPlayer(Player p)
 	{
-		for(String s : playerMap.keySet())
-		{
-			if(playerMap.get(s).getUUID().equals(p.getUUID()))
+		if (p != null)
+			for(String s : playerMap.keySet())
 			{
-				return s;
+				if(playerMap.get(s).getUUID().equals(p.getUUID()))
+				{
+					return s;
+				}
 			}
-		}
 		System.out.println("NO UUID FOUND FOR PLAYER: " + p);
 		return null;
 	}
