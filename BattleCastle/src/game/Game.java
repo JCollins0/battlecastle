@@ -660,7 +660,9 @@ public class Game {
 		}else if(type.equals(MessageType.UPDATE_PLAYER.toString())) //updates player location client side
 		{
 			String[] num = restOfMessage.split(Message.EQUALS_SEPARATOR);
-			playerList[Integer.parseInt(num[0])].decode(num[1]);
+			int playerNum = Integer.parseInt(num[0]);
+			if(playerList[playerNum] != null )
+				playerList[playerNum].decode(num[1]);
 		}else if(type.equals(MessageType.UPDATE_ARROW.toString())) //initializes arrow location client side
 		{
 			String[] id = restOfMessage.split(Message.EQUALS_SEPARATOR);
@@ -698,7 +700,12 @@ public class Game {
 			{
 				String[] id = restOfMessage.split(Message.EQUALS_SEPARATOR);
 				String uuid = id[0];
-				gameMap.getTileByID(uuid).execute(id[1]);
+				try{
+					gameMap.getTileByID(uuid).execute(id[1]);
+				}catch(Exception e)
+				{
+					
+				}
 			}
 		}
 		else if(type.equals(MessageType.PERFORM_ACTION.toString())) //perform specific action
