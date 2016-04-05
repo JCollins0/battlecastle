@@ -801,6 +801,25 @@ public class Game {
 		System.out.println(p + " is now dead");
 	}
 	
+	/**
+	 * Determines if round is over when one player or less is alive
+	 * @return True if game over, false if not
+	 */
+	public boolean gameOver()
+	{
+		int deadCount = 0;
+		int aliveCount = 0;
+		for(int i = 0; i < playerList.length; i++) 
+		{
+			if(playerList[i] != null)
+			{
+				deadCount += playerList[i].isDead()? 1:0;
+				aliveCount += playerList[i].isDead() ? 0:1;
+			}
+		}
+		return aliveCount - deadCount <= 1;
+	}
+	
 	/* #############
 	 * RESETING GAME
 	 * #############
