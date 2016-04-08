@@ -56,7 +56,7 @@ public class ImageFilePaths {
 				MAP_3_BACKGROUND = MAP_3 + "map3",
 				LEFT_MOUSE_CLICK = TUTORIAL_OBJECT + "left_mouse_click",
 				KEY_PRESS = TUTORIAL_OBJECT + "key_press",
-				TEMP_PLAYER_ANIMATED = PLAYER + "left_final", //TODO : change
+				TEMP_PLAYER_ANIMATED = PLAYER + "player_sheet", //TODO : change
 				TEMP_PLAYER = PLAYER + "temp_player", //TODO : Change
 				TEMP_PLAYER_DEAD = PLAYER + "temp_player_dead", //TODO : change
 				ARROW = WEAPON + "red_arrow",
