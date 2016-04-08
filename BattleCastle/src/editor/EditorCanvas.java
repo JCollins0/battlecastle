@@ -359,6 +359,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 	
 	protected void checkEditorClicked(Point mouse)
 	{
+		if(current==null)
+			return;
 		int i;
 		for(i=0;i<editor.size();i++)
 			if(editor.get(i).contains(mouse))
@@ -366,34 +368,35 @@ public class EditorCanvas extends Canvas implements Runnable{
 				{
 				case 0:
 					current.setWidth(current.getWidth()+32);
+					snapToGrid(current);
 					break;
 				case 1:
 					if(current.getWidth()!=32)
 						current.setWidth(current.getWidth()-32);
+					snapToGrid(current);
 					break;
 				case 2:
 					current.setHeight(current.getHeight()+32);
+					snapToGrid(current);
 					break;
 				case 3:
 					if(current.getHeight()!=32)
 						current.setHeight(current.getHeight()-32);
+					snapToGrid(current);
 					break;
-				case 4:if(current!=null)
-						list.addFront(current.copy());
+				case 4:
+					list.addFront(current.copy());
+					snapToGrid(current);
 					break;
-				case 5:if(current!=null)
-					{
-						current.removeLastState();
-						current.addState(new State(64,2,0,0));
-						//current.addState(new State(0,0,64,2));
-						current.addState(new State(64,-2,0,0));
-						//current.addState(new State(0,0,64,-2));
-					}
+				case 5:
+					current.removeLastState();
+					current.addState(new State(64,2,0,0));
+					//current.addState(new State(0,0,64,2));
+					current.addState(new State(64,-2,0,0));
+					//current.addState(new State(0,0,64,-2));
 					break;
 				default:break;
 				}
-		if(current!=null)
-			snapToGrid(current);
 	}
 	
 	protected void snapToGrid(Tile t)
@@ -423,6 +426,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		else
 			y+=32-(y%32);
 		t.moveTo(x, y);
+		t.resetStates();
 	}
 	
 }

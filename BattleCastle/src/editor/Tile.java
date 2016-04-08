@@ -167,6 +167,7 @@ public class Tile extends Polygon implements JSONStreamAware
 	public void resetStates()
 	{
 		//some more code based on position?????
+		states.get(currentState).reset();
 		currentState=0;
 	}
 	

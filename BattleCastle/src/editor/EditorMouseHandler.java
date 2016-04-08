@@ -61,7 +61,7 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 	public void mousePressed(MouseEvent arg0) {
 		for(Tile t:canvasref.list)
 		{
-			if(t.contains(mouse)&&dragging==null)
+			if(768>mouse.getY()&&t.contains(mouse)&&dragging==null)
 			{
 				dragging=t;
 				tx=mouse.x-t.getX();
