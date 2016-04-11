@@ -46,6 +46,8 @@ public class Utility {
     	}
     }
     
+    public static final Color ignore_Color = new Color(0x0000ff);
+    
     public static BufferedImage[][] loadBufferedMatrix(String img, int xOffset, int yOffset)
     {
     	BufferedImage image = loadImage(img);

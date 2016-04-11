@@ -335,6 +335,10 @@ public class Game {
 	{
 		for(int i = 0; i < KeyHandler.presses.size(); i++)
 		{
+			if(KeyHandler.presses.get(i).getText().equals(KeyPress.LEFT_D.getText()))
+				getMyPlayer().setPlayerFacing(Player.FACING_LEFT);
+			if(KeyHandler.presses.get(i).getText().equals(KeyPress.RIGHT_D.getText()))
+				getMyPlayer().setPlayerFacing(Player.FACING_RIGHT);
 			try{
 				Message message = new Message(MessageType.MOVE_PLAYER,
 					playerMap.get(myUUID).getPlayerNumber() + Message.EQUALS_SEPARATOR + KeyHandler.presses.get(i).getText() );

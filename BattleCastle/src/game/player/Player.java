@@ -50,6 +50,7 @@ public class Player extends PhysicsRect{
 	 * Animation 
 	 */
 	private int playerState = STATE_ALIVE;
+	private int playerFacing = FACING_RIGHT;
 	private BufferedImage[][] images = Utility.loadBufferedMatrix(ImageFilePaths.TEMP_PLAYER_ANIMATED, WIDTH, HEIGHT);
 	private int animation;
 	private int animationCount;
@@ -181,6 +182,12 @@ public class Player extends PhysicsRect{
 				animation = 0;
 			}
 		}
+		
+		if(getVelocity().XPoint() == 0)
+		{
+			animation = 0;
+			
+		}
 	}
 	
 	/**
@@ -190,8 +197,9 @@ public class Player extends PhysicsRect{
 	{			
 		if(image != null)
 		{
+			System.out.println("playerState: " + playerState + " playerfacing: " + playerFacing);
 			//g.drawImage(image, getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
-			g.drawImage(images[playerState][animation], getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
+			g.drawImage(images[playerState+playerFacing][animation], getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
 		}else
 		{
 			g.setColor(Color.cyan);
@@ -299,6 +307,22 @@ public class Player extends PhysicsRect{
 		return uuid;
 	}
 	
+	public int getPlayerState() {
+		return playerState;
+	}
+
+	public void setPlayerState(int playerState) {
+		this.playerState = playerState;
+	}
+
+	public int getPlayerFacing() {
+		return playerFacing;
+	}
+
+	public void setPlayerFacing(int playerFacing) {
+		this.playerFacing = playerFacing;
+	}
+
 	//TODO:: REMOVE Temp used to not have errors with interactive tile 
 	public Rectangle getBounds()
 	{
@@ -370,13 +394,15 @@ public class Player extends PhysicsRect{
 		builder.append("Y" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
 		builder.append("W" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
 		builder.append("H" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
+		builder.append("S" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
+		builder.append("F" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
 		builder.append("MouseX" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
 		builder.append("MouseY" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
 		builder.append("Arrow" + KEY_VALUE_SEPARATOR + "%s");
 //		"ImageFile#%s<X#%d<Y#%d<W#%d<H#%d<MouseX#%d<MouseY#%d<Arrow#%s"
 		return String.format(builder.toString(),
 					imageFilePath,
-					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT,
+					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT, playerState, playerFacing,
 					mouseLocation.x, mouseLocation.y, (currentArrow != null ? currentArrow.stringify() : "")
 					);
 	}
@@ -404,7 +430,11 @@ public class Player extends PhysicsRect{
 				break;
 			case "Y": move(new Vector(0,Integer.parseInt(key_value[1])-getCorners()[0].YPoint()));
 				break;
-			case "S": //used in animation?
+			case "S": //current state;
+					playerState = Integer.parseInt(key_value[1]);
+				break;
+			case "F": //current direction Facing
+					playerFacing = Integer.parseInt(key_value[1]);
 				break;
 			case "Arrow": 
 					if(key_value.length > 1 && currentArrow != null)
