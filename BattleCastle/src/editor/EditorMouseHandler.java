@@ -64,6 +64,7 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 			if(768>mouse.getY()&&t.contains(mouse)&&dragging==null)
 			{
 				dragging=t;
+				t.setStatesActive(false);
 				tx=mouse.x-t.getX();
 				ty=mouse.y-t.getY();
 				canvasref.selectTile(t);
@@ -87,6 +88,7 @@ public class EditorMouseHandler implements MouseListener, MouseMotionListener, M
 			{
 				canvasref.snapToGrid(dragging);
 			}
+			dragging.setStatesActive(true);
 			dragging=null;
 		}
 	}
