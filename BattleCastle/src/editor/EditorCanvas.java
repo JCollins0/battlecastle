@@ -360,7 +360,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 	protected void checkEditorClicked(Point mouse)
 	{
 		if(current==null)
-			return;
+			throw new NullPointerException();
 		int i;
 		for(i=0;i<editor.size();i++)
 			if(editor.get(i).contains(mouse))
@@ -389,14 +389,18 @@ public class EditorCanvas extends Canvas implements Runnable{
 					snapToGrid(current);
 					break;
 				case 5:
+					stateCreation(current);
+					break;
+				case 6:
 					current.removeLastState();
-					current.addState(new State(64,2,0,0));
-					//current.addState(new State(0,0,64,2));
-					current.addState(new State(64,-2,0,0));
-					//current.addState(new State(0,0,64,-2));
 					break;
 				default:break;
 				}
+	}
+	
+	protected void stateCreation(Tile t)
+	{
+		
 	}
 	
 	protected void snapToGrid(Tile t)

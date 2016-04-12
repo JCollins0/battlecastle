@@ -164,6 +164,11 @@ public class Tile extends Polygon implements JSONStreamAware
 		return states;
 	}
 	
+	public void setToLastState()
+	{
+		currentState=states.size();//set it to the very end of the last state!!!! (math: mult speed by the thing? or just use whatebver the thing is)
+	}
+	
 	public void resetStates()
 	{
 		//some more code based on position?????
