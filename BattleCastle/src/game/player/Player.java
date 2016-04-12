@@ -186,7 +186,8 @@ public class Player extends PhysicsRect{
 		if(getVelocity().XPoint() == 0)
 		{
 			animation = 0;
-			
+			playerState = 0;
+			playerFacing = 2;
 		}
 	}
 	

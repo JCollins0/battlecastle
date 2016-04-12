@@ -1,11 +1,11 @@
 package utility;
 
-import java.applet.AudioClip;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.imageio.ImageIO;
@@ -46,18 +46,29 @@ public class Utility {
     	}
     }
     
-    public static final Color ignore_Color = new Color(0x0000ff);
+    public static final Color ignore_Color = new Color(0xB2978C); //Ignore Color
     
     public static BufferedImage[][] loadBufferedMatrix(String img, int xOffset, int yOffset)
     {
     	BufferedImage image = loadImage(img);
-    	BufferedImage[][] mat = new BufferedImage[image.getHeight()/yOffset][image.getWidth()/xOffset];
+    	BufferedImage[][] mat = new BufferedImage[image.getHeight()/yOffset][];//image.getWidth()/xOffset
+    	List<BufferedImage> temp = new ArrayList<BufferedImage>();
     	for (int y = 0; y < image.getHeight(); y += yOffset)
     	{
     		for (int x = 0; x < image.getWidth(); x += xOffset)
     		{
-    			mat[y/yOffset][x/xOffset] = image.getSubimage(x, y, xOffset, yOffset);
+    			BufferedImage subIm = image.getSubimage(x, y, xOffset, yOffset);
+    			if(subIm.getRGB(0, 0) == ignore_Color.getRGB())
+    			{
+    				System.out.println("Ignoring this image");
+    				break;
+    			}
+    			temp.add(subIm);
+    			//mat[y/yOffset][x/xOffset] = subIm;
     		}
+    		mat[y/yOffset] = new BufferedImage[temp.size()];
+    		temp.toArray(mat[y/yOffset]);
+    		temp.clear();
     	}
     	return mat;
     }
