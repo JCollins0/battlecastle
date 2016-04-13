@@ -38,10 +38,10 @@ public class EditorCanvas extends Canvas implements Runnable{
 	protected ArrayList<Tile> tools,tileAdder,editor;
 	private static BufferedImage buffer;
 	private int tileAdderX,tileAdderY;
-	private boolean running, bottom, grid,drawMouseLoc;
+	private boolean running, bottom, grid,drawMouseLoc,stateCreation;
 	private EditorMouseHandler mouseHandler;
 	private EditorKeyHandler keyHandler;
-	private Tile current,trashIndicator;
+	private Tile current,trashIndicator,stateHelper1,stateHelper2;
 	
 	public EditorCanvas()
 	{
@@ -76,6 +76,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		bottom=true;
 		grid=true;
 		drawMouseLoc=true;
+		stateCreation=false;
 		
 		list=readSave(LevelTileData.MAP_1_DATA);
 		if(list==null)
@@ -188,6 +189,11 @@ public class EditorCanvas extends Canvas implements Runnable{
 				if(mouseHandler.dragging!=null&&mouseHandler.mouse.y>BOTTOM_Y)
 					trashIndicator.draw(b);
 			}
+		}
+		
+		if(stateCreation)
+		{
+			stateHelper1.draw(b);
 		}
 		
 		
@@ -400,6 +406,10 @@ public class EditorCanvas extends Canvas implements Runnable{
 	
 	protected void stateCreation(Tile t)
 	{
+		t.setStatesActive(false);
+		t.setToLastState();
+		stateHelper1=t.copy();
+		stateCreation=true;
 		
 	}
 	

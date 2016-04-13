@@ -23,6 +23,7 @@ public class Tile extends Polygon implements JSONStreamAware
 	 * 
 	 */
 	private static final long serialVersionUID = -5649265101080536323L;
+	
 	protected String picText,statesText;
 	protected BufferedImage[] pics;
 	protected ArrayList<State> states;
@@ -166,7 +167,10 @@ public class Tile extends Polygon implements JSONStreamAware
 	
 	public void setToLastState()
 	{
-		currentState=states.size();//set it to the very end of the last state!!!! (math: mult speed by the thing? or just use whatebver the thing is)
+		for(;currentState<states.size();currentState++)
+		{
+			states.get(currentState).moveToEndPos(this);
+		}
 	}
 	
 	public void resetStates()

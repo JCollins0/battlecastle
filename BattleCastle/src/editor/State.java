@@ -82,6 +82,15 @@ public class State
 		return false;
 	}
 	
+	public void moveToEndPos(Tile t)
+	{
+		if(!(continual||paused))
+		{
+			t.move(new Vector(dx-tx,dy-ty));
+			ty=tx=0;
+		}
+	}
+	
 	public String stringify()
 	{
 		if(paused)
