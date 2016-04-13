@@ -178,7 +178,7 @@ public class Player extends PhysicsRect{
 		{
 			animationCount = 0;
 			animation++;
-			if(animation >= images[playerState].length)
+			if(animation >= images[2*playerState+playerFacing].length)
 			{
 				animation = 0;
 			}
