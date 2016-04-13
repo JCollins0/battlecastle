@@ -71,6 +71,7 @@ public class Game {
 	//Other Objects
 	private Random random;
 	private BattleCastleCanvas canvasRef;
+	private boolean gameOver;
 	
 	/**
 	 * Initialize Game class
@@ -198,49 +199,61 @@ public class Game {
 				if(playerMap.size() >= MIN_PLAYERS)
 				{
 					
-					
-					for(int i = 0; i < playerList.length; i++)
-						if(playerList[i] != null)
+					if(!gameOver)
+					{
+						for(int i = 0; i < playerList.length; i++)
+							if(playerList[i] != null)
+							{
+								playerList[i].tick();
+								Message message = new Message(MessageType.UPDATE_PLAYER,i + Message.EQUALS_SEPARATOR + playerList[i].stringify());
+								gameServer.sendToAllTCP(message);
+							}
+						
+						for(Arrow arrow : arrows.values())
 						{
-							playerList[i].tick();
-							Message message = new Message(MessageType.UPDATE_PLAYER,i + Message.EQUALS_SEPARATOR + playerList[i].stringify());
+							arrow.tick();
+							Message message = new Message(MessageType.MOVE_ARROW,arrow.getID() + Message.EQUALS_SEPARATOR + arrow.stringify());
 							gameServer.sendToAllTCP(message);
 						}
-					
-					for(Arrow arrow : arrows.values())
-					{
-						arrow.tick();
-						Message message = new Message(MessageType.MOVE_ARROW,arrow.getID() + Message.EQUALS_SEPARATOR + arrow.stringify());
-						gameServer.sendToAllTCP(message);
-					}
-					
-					if(gameMap != null)
-					{	
-						gameMap.tick();
-						for(Tile t : gameMap.getTiles())
-						{
-							Message message = new Message(MessageType.UPDATE_TILE, t.getID() + Message.EQUALS_SEPARATOR + t.stringify() );
-							gameServer.sendToAllTCP(message);
+						
+						if(gameMap != null)
+						{	
+							gameMap.tick();
+							for(Tile t : gameMap.getTiles())
+							{
+								Message message = new Message(MessageType.UPDATE_TILE, t.getID() + Message.EQUALS_SEPARATOR + t.stringify() );
+								gameServer.sendToAllTCP(message);
+							}
 						}
-					}
+						
+						List<Arrow> plist = Collections.list(Collections.enumeration(arrows.values()));
+						DoubleLinkedList<Tile> tlist = gameMap.getTiles();
+						List<Polygon> list = new ArrayList<Polygon>();
+						
+//						System.out.println("Start");
+						for(Tile t : tlist)
+						{
+							list.add(t);
+							
+						}
+//						System.out.println(list);
+//						System.out.println("Finish");
+						
+						list.addAll(plist);
+						for(int i = 0; i < playerList.length && playerList[i] != null; i++)
+							list.add(playerList[i]);
+						collideDetect.broadCheck(list);
 					
-					List<Arrow> plist = Collections.list(Collections.enumeration(arrows.values()));
-					DoubleLinkedList<Tile> tlist = gameMap.getTiles();
-					List<Polygon> list = new ArrayList<Polygon>();
-					
-//					System.out.println("Start");
-					for(Tile t : tlist)
+						gameOver();
+					}	
+					else
 					{
-						list.add(t);
+					
+						
 						
 					}
-//					System.out.println(list);
-//					System.out.println("Finish");
 					
-					list.addAll(plist);
-					for(int i = 0; i < playerList.length && playerList[i] != null; i++)
-						list.add(playerList[i]);
-					collideDetect.broadCheck(list);
+					
 				}
 			}
 		}
@@ -255,17 +268,29 @@ public class Game {
 	 */
 	public void render(Graphics g)
 	{
-		if(gameMap != null)
-			gameMap.render(g);
-		
-		for(int i = 0; i < playerList.length; i++)
-			if(playerList[i] != null)
-				playerList[i].render(g);
-		
-		for(Arrow arrow : arrows.values())
-		{
-			arrow.render(g);
+		if(!gameOver){
+			if(gameMap != null)
+				gameMap.render(g);
+
+			for(int i = 0; i < playerList.length; i++)
+				if(playerList[i] != null)
+					playerList[i].render(g);
+
+			for(Arrow arrow : arrows.values())
+			{
+				arrow.render(g);
+			}
 		}
+		else
+		{
+			//Draw score for players
+			for(int i = 0; i < playerList.length; i++)
+				if(playerList[i] != null)
+				{
+					g.fillRect(200 + i * 400,200,200,200);
+				}
+		}
+		
 			
 	}
 	
@@ -821,7 +846,8 @@ public class Game {
 				aliveCount += playerList[i].isDead() ? 0:1;
 			}
 		}
-		return aliveCount - deadCount <= 1;
+		gameOver = aliveCount - deadCount <= MIN_PLAYERS-1;
+		return gameOver;
 	}
 	
 	/* #############
@@ -837,6 +863,7 @@ public class Game {
 				if(playerList[i].isDead())
 					playerList[i].setDead(false);
 		}
+		gameOver = false;
 	}
 	
 	/**

@@ -25,10 +25,10 @@ public class Player extends PhysicsRect{
 	public static final double DRAG_C = 10;
 
 	public static final int 
-		STATE_ALIVE = 0,
-		STATE_JUMPING = 1,
-		STATE_DASHING = 2,
-		STATE_DEAD = 3,
+		STATE_RUNNING = 0,
+		STATE_ALIVE = 1,
+		STATE_DEAD = 2,
+		STATE_JUMPING = 3,
 		FACING_RIGHT = 0,
 		FACING_LEFT = 1;
 	
@@ -46,6 +46,7 @@ public class Player extends PhysicsRect{
 	private boolean dead;
 	private boolean loadedImage = false;
 	private double velToSet;
+	private int score;
 	/*
 	 * Animation 
 	 */
@@ -183,11 +184,15 @@ public class Player extends PhysicsRect{
 			}
 		}
 		
-		if(getVelocity().XPoint() == 0)
+		if(dead)
+		{
+			playerState = STATE_DEAD; 
+		}
+		else if(getVelocity().XPoint() == 0)
 		{
 			animation = 0;
-			playerState = 0;
-			playerFacing = 2;
+			playerState = STATE_ALIVE;
+//			playerFacing = ;
 		}
 	}
 	
@@ -200,7 +205,7 @@ public class Player extends PhysicsRect{
 		{
 			System.out.println("playerState: " + playerState + " playerfacing: " + playerFacing);
 			//g.drawImage(image, getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
-			g.drawImage(images[playerState+playerFacing][animation], getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
+			g.drawImage(images[2*playerState+playerFacing][animation], getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
 		}else
 		{
 			g.setColor(Color.cyan);
@@ -322,6 +327,12 @@ public class Player extends PhysicsRect{
 
 	public void setPlayerFacing(int playerFacing) {
 		this.playerFacing = playerFacing;
+		if(getVelocity().XPoint() != 0)
+		{
+			playerState = STATE_RUNNING;
+			if(animation >= images[2*playerState+playerFacing].length)
+				animation = 0;
+		}
 	}
 
 	//TODO:: REMOVE Temp used to not have errors with interactive tile 
@@ -458,6 +469,14 @@ public class Player extends PhysicsRect{
 		}
 	}
 
+	public void reset()
+	{
+		score = 0;
+	}
+	
+	public int getScore() { return score; }
+	public void addPoint() { score++; }
+	public void setScore(int score) { this.score = score; }
 	
 	/**
 	 * @return class.Name[ID:'id']
