@@ -187,6 +187,7 @@ public class Player extends PhysicsRect{
 		if(dead)
 		{
 			playerState = STATE_DEAD; 
+			animation = 0;
 		}
 		else if(getVelocity().XPoint() == 0)
 		{
@@ -408,13 +409,14 @@ public class Player extends PhysicsRect{
 		builder.append("H" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
 		builder.append("S" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
 		builder.append("F" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
+		builder.append("A" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
 		builder.append("MouseX" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
 		builder.append("MouseY" + KEY_VALUE_SEPARATOR + "%d" + ENTRY_SEPARATOR);
 		builder.append("Arrow" + KEY_VALUE_SEPARATOR + "%s");
 //		"ImageFile#%s<X#%d<Y#%d<W#%d<H#%d<MouseX#%d<MouseY#%d<Arrow#%s"
 		return String.format(builder.toString(),
 					imageFilePath,
-					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT, playerState, playerFacing,
+					getCorners()[0].XPoint(),getCorners()[0].YPoint(),WIDTH,HEIGHT, playerState, playerFacing, animation,
 					mouseLocation.x, mouseLocation.y, (currentArrow != null ? currentArrow.stringify() : "")
 					);
 	}
@@ -448,6 +450,10 @@ public class Player extends PhysicsRect{
 			case "F": //current direction Facing
 					playerFacing = Integer.parseInt(key_value[1]);
 				break;
+			case "A": //current direction Facing
+				animation = Integer.parseInt(key_value[1]);
+				break;
+			
 			case "Arrow": 
 					if(key_value.length > 1 && currentArrow != null)
 					{
