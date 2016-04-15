@@ -316,6 +316,11 @@ public class Player extends PhysicsRect{
 		return uuid;
 	}
 	
+	public int getArrowCount()
+	{
+		return arrowStorage.size();
+	}
+	
 	public int getPlayerState() {
 		return playerState;
 	}

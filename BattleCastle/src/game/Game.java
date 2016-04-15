@@ -1,17 +1,5 @@
 package game;
 
-import editor.Tile;
-import game.message.Message;
-import game.message.MessageType;
-import game.object.GameMap;
-import game.object.MapType;
-import game.physics.CollisionDetector;
-import game.physics.Polygon;
-import game.physics.Vector;
-import game.player.Arrow;
-import game.player.BattleCastleUser;
-import game.player.Player;
-
 import java.awt.Graphics;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -21,6 +9,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,6 +27,17 @@ import core.KeyHandler;
 import core.KeyPress;
 import core.MouseHandler;
 import core.constants.ImageFilePaths;
+import editor.Tile;
+import game.message.Message;
+import game.message.MessageType;
+import game.object.GameMap;
+import game.object.MapType;
+import game.physics.CollisionDetector;
+import game.physics.Polygon;
+import game.physics.Vector;
+import game.player.Arrow;
+import game.player.BattleCastleUser;
+import game.player.Player;
 
 public class Game {
 	
@@ -72,6 +72,8 @@ public class Game {
 	private Random random;
 	private BattleCastleCanvas canvasRef;
 	private boolean gameOver;
+	private int gameOverResetTimer; 
+	private int GAME_OVER_RESET_COUNT = 90;
 	
 	/**
 	 * Initialize Game class
@@ -248,9 +250,14 @@ public class Game {
 					}	
 					else
 					{
+						if(gameOverResetTimer < GAME_OVER_RESET_COUNT)
+							gameOverResetTimer++;
+						else
+						{
+							gameOverResetTimer = 0;
+							reset();
+						}
 					
-						
-						
 					}
 					
 					
@@ -864,6 +871,19 @@ public class Game {
 					playerList[i].setDead(false);
 		}
 		gameOver = false;
+		
+		int numPlayers = playerMap.size();
+		int arrowsMaxPerPlayer = 10;
+		for(int i = 0 ;i < numPlayers; i++)
+		{
+			int playerArrows = playerList[i].getArrowCount();
+			int giveToPlayer = arrowsMaxPerPlayer-playerArrows;
+			Set<String> arrStr = arrows.keySet();
+			for(int j = 0; j < giveToPlayer; j++)
+			{
+				playerList[i].addArrow(arrows.remove(arrStr.iterator().next()));
+			}
+		}			
 	}
 	
 	/**
