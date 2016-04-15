@@ -215,7 +215,9 @@ public class Player extends PhysicsRect{
 		
 		if(!isDead())
 			if(currentArrow != null)
-				currentArrow.render(g);	
+				currentArrow.render(g);
+		
+		assert(false==true) : "Something is wrong";
 		
 		g.setColor(Color.black);
 		g.drawString(String.format("(%d,%d)",  getCorners()[0].XPoint(), getCorners()[0].YPoint() ),  getCorners()[0].XPoint(), getCorners()[0].YPoint()-5);
