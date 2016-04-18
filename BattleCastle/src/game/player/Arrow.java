@@ -244,6 +244,11 @@ public class Arrow extends PhysicsRect{
 		shotByPlayer = p;
 	}
 	
+	public Player getPlayer()
+	{
+		return shotByPlayer;
+	}
+	
 	/**
 	 * Sets the arrow rotation property.
 	 * True = arrow can rotate
@@ -285,6 +290,7 @@ public class Arrow extends PhysicsRect{
 	 */
 	@Override
 	public Polygon getCollisionBounds() {
+		if(isStuck()) return this;
 		return headCollision;
 	}
 	

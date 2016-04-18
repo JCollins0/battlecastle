@@ -238,9 +238,11 @@ public class CollisionDetector
 					if(((Arrow)b).isStuck())
 						gameRef.addArrowToPlayer((Arrow)b,(Player)a);
 					else
-					{
+					{	
+						
 						gameRef.killPlayer((Player)a);
 						((Arrow)b).setVelocity(stopped);
+						((Arrow)b).getPlayer().addPoint();
 					}
 						
 				}
@@ -258,6 +260,7 @@ public class CollisionDetector
 					{
 						gameRef.killPlayer((Player)b);
 						((Arrow)a).setVelocity(stopped);
+						((Arrow)a).getPlayer().addPoint();
 					}
 				}
 			}

@@ -294,7 +294,10 @@ public class Game {
 			for(int i = 0; i < playerList.length; i++)
 				if(playerList[i] != null)
 				{
-					g.fillRect(200 + i * 400,200,200,200);
+					for(int s = 0; s < playerList[i].getScore(); s++)
+					{
+						g.fillRect(64*s+32,64*i+32,32,32);	
+					}
 				}
 		}
 		
