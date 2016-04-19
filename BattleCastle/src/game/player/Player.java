@@ -1,17 +1,20 @@
 package game.player;
 
-import game.message.Message;
 import game.physics.PhysicsRect;
 import game.physics.Vector;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.Arc2D;
+import java.awt.geom.QuadCurve2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import utility.Utility;
+import core.BattleCastleCanvas;
 import core.MouseHandler;
 import core.constants.ImageFilePaths;
 
@@ -20,9 +23,9 @@ public class Player extends PhysicsRect{
 	public static final int HEIGHT = 64;
 	public static final int WIDTH = 32;
 	public static final int ARROW_SPEED = 8;
-	public static final double MASS = 10;
+	public static final double MASS = 20;
 	public static final double ANG_VEL = 0;
-	public static final double DRAG_C = 10;
+	public static final double DRAG_C = 8;
 
 	public static final int 
 		STATE_RUNNING = 0,
@@ -41,6 +44,7 @@ public class Player extends PhysicsRect{
 	private int arrowCount;
 	private String uuid;
 	private String imageFilePath;
+	private boolean jumping = false;
 	private boolean falling = true;
 	private Point mouseLocation;
 	private boolean dead;
@@ -162,7 +166,7 @@ public class Player extends PhysicsRect{
 	 */
 	public void tick()
 	{
-		if(falling)
+		if(falling||jumping)
 			super.tick();
 		
 		if(velToSet!=0)
@@ -188,12 +192,43 @@ public class Player extends PhysicsRect{
 		{
 			playerState = STATE_DEAD; 
 			animation = 0;
+		}else{
+			if(!falling)
+			{
+				if(getVelocity().YPoint() == 0)
+				{
+					falling = true;
+				}
+			}else{
+				if(getVelocity().XPoint() == 0)
+				{
+					animation = 0;
+					playerState = STATE_ALIVE;
+					//			playerFacing = ;
+				}
+			}
 		}
-		else if(getVelocity().XPoint() == 0)
-		{
-			animation = 0;
-			playerState = STATE_ALIVE;
-//			playerFacing = ;
+		//arrow_path.closePath();
+		if(getCurrentArrow() != null){
+			double dc = Math.hypot(getCenter().XPoint()-mouseLocation.x,getCenter().YPoint()-mouseLocation.y);
+			double angle = -Math.atan2(getCenter().YPoint()-mouseLocation.y,mouseLocation.x-getCenter().XPoint());
+			dc = Math.max(dc, Math.cos(Math.PI/4)*612);
+			//System.out.println(s_t + " " + v_t);
+			//System.out.println(angle);
+//			System.out.println(Math.toDegrees(angle));
+//			if(Math.abs(angle) == Math.PI/2) System.out.println("Pi/4");
+			arrow_path.setCurve(
+					getCenter().XPoint(),
+					getCenter().YPoint(), 
+					getCenter().XPoint() + dc * Math.cos(angle),getCenter().YPoint() + dc * Math.sin(angle),
+					getCenter().XPoint() + 2 * dc *Math.cos(angle),
+					getCenter().YPoint()+HEIGHT/2);
+			//arrow_path.setAngleExtent(getCurrentArrow().getGraphicsRotationTheta());
+		//	arrow_path.setAngleStart(0);
+			//arrow_path.setFrame(, , 100, 100);
+//			arrow_path = new Path2D.Double();
+//			arrow_path.moveTo(getCenter().XPoint(), getCenter().YPoint());
+//			arrow_path.curveTo(getCenter().XPoint(), getCenter().YPoint(), mouseLocation.x, mouseLocation.y, getCenter().XPoint()+10*Math.cos(getCurrentArrow().getTheta()), getCenter().YPoint());
 		}
 	}
 	
@@ -204,7 +239,7 @@ public class Player extends PhysicsRect{
 	{			
 		if(image != null)
 		{
-			System.out.println("playerState: " + playerState + " playerfacing: " + playerFacing);
+			//System.out.println("playerState: " + playerState + " playerfacing: " + playerFacing);
 			//g.drawImage(image, getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
 			g.drawImage(images[2*playerState+playerFacing][animation], getCorners()[0].XPoint(), getCorners()[0].YPoint(),WIDTH,HEIGHT,null);
 		}else
@@ -217,12 +252,20 @@ public class Player extends PhysicsRect{
 			if(currentArrow != null)
 				currentArrow.render(g);
 		
-		assert(false==true) : "Something is wrong";
-		
 		g.setColor(Color.black);
 		g.drawString(String.format("(%d,%d)",  getCorners()[0].XPoint(), getCorners()[0].YPoint() ),  getCorners()[0].XPoint(), getCorners()[0].YPoint()-5);
 		
+		Graphics2D g2 = (Graphics2D)g;
+		
+		if(arrow_path != null)
+		{
+			g2.draw(arrow_path);
+		}
+		//g.fillArc(Math.min(mouseLocation.x,getCenter().XPoint()),Math.min(mouseLocation.y, getCenter().YPoint()),400,400,0,90);
+		
 	}
+	
+	QuadCurve2D.Double arrow_path = new QuadCurve2D.Double();
 	
 	/* ===============
 	 * GETTERS-SETTERS
@@ -306,6 +349,7 @@ public class Player extends PhysicsRect{
 	 */
 	public void setvY(double vY) {
 		setVelocity(getVelocity().vectorAdd(new Vector(0,vY-getVelocity().YExact())));
+		//setVelocity(getVelocity().vectorAdd(new Vector(0,vY)));
 	}
 	
 	/**
@@ -372,6 +416,26 @@ public class Player extends PhysicsRect{
 	 */
 	public boolean isDead() {return dead;}
 	
+	public boolean isJumping() {
+		return jumping;
+	}
+
+	
+	public boolean isFalling() {
+		return falling;
+	}
+
+	
+	public void setJumping(boolean jumping) {
+		this.jumping = jumping;
+	}
+
+	
+	public void setFalling(boolean falling) {
+		this.falling = falling;
+	}
+	
+
 	/**
 	 * Gets the Arrow the player is capable of shooting
 	 * @return List<Arrow>
@@ -497,6 +561,11 @@ public class Player extends PhysicsRect{
 	@Override
 	public String toString() {
 		return String.format("%s[ID:%s]", this.getClass().getName(), uuid);
+	}
+
+	
+	public void debugMe() {
+		System.out.println("Velocity: " + getVelocity() + ", Score: " + score + ", Dead: " + dead + ", Falling: " + falling + ", Jumping: " + jumping);		
 	}
 }
 

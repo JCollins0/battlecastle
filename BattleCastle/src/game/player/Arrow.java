@@ -172,8 +172,8 @@ public class Arrow extends PhysicsRect{
 	public void tick()
 	{
 		super.tick();
-		if(launchCoolDown == 0)
-			System.out.println("ARROW IS NOW ACTIVE");
+//		if(launchCoolDown == 0)
+//			System.out.println("ARROW IS NOW ACTIVE");
 		if(launchCoolDown > 0)
 			launchCoolDown--;
 		
@@ -292,6 +292,11 @@ public class Arrow extends PhysicsRect{
 	public Polygon getCollisionBounds() {
 		if(isStuck()) return this;
 		return headCollision;
+	}
+	
+	public double getTheta()
+	{
+		return Math.toRadians(theta);
 	}
 	
 	/**

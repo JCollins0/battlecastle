@@ -604,22 +604,22 @@ public class Game {
 			
 			if(num[1].equals(KeyPress.RIGHT_D.getText())) //move player right
 			{
-			//	System.out.println("VElocity : " + v);
 				playerList[playerNum].setvX(2);
-			//	System.out.println("Add velocity " + v);
 			}
-//			else if(num[1].equals(KeyPress.RIGHT_U.getText()))
-//			{
-//				System.out.println("Setting velocity to 0");
-//				playerList[playerNum].setvX(0);
-//			}
 			if(num[1].equals(KeyPress.LEFT_D.getText())) //move player left
 			{
 				playerList[playerNum].setvX(-2);
 			}
 			if(num[1].equals(KeyPress.JUMP_D.getText())) //move player up
 			{
-				playerList[playerNum].setvY(-2);
+				if(!playerList[playerNum].isJumping())
+				{
+					playerList[playerNum].setNormalForce(1, 1);
+					playerList[playerNum].setExternalForce(0, 0);
+					playerList[playerNum].setvY(-7);
+					playerList[playerNum].setJumping(true);
+					playerList[playerNum].setFalling(false);
+				}
 			}
 			if(num[1].equals(KeyPress.DOWN_D.getText())) //move player down
 			{
@@ -627,7 +627,7 @@ public class Game {
 			}
 			if(num[1].equals(KeyPress.DASH_L.getText())) //make player dash left
 			{
-				System.out.println("DASHING LEFT");
+			//	System.out.println("DASHING LEFT");
 				playerList[playerNum].setvXSync(-10);
 			}
 			if(num[1].equals(KeyPress.DASH_R.getText())) //make player dash right

@@ -188,6 +188,8 @@ public class CollisionDetector
 				else if(b instanceof Player)
 				{
 					((PhysicsPoly)b).setNormalForce(1, minimal.getNormal().getNormal().getNormal().YExact());//set the y normal to 0 to create a wall cling effect
+					((Player)b).setJumping(false);
+					((Player)b).setFalling(true);
 					//System.out.println("PLAYER OPPOSITE NORMAL " + minimal.getNormal().getNormal().getNormal());
 				}
 				Vector vel = ((Tile)a).getStateVel();
@@ -216,6 +218,8 @@ public class CollisionDetector
 				}else if(a instanceof Player)
 				{
 					((PhysicsPoly)a).setNormalForce(1,minimal.getNormal().YExact());//set the y normal to 0 to create a wall cling effect
+					((Player)a).setJumping(false);
+					((Player)a).setFalling(true);
 				}
 				
 				Vector vel = ((Tile)b).getStateVel();

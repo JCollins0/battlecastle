@@ -111,6 +111,9 @@ public class KeyHandler implements KeyListener {
 			if(keyCode == KeyEvent.VK_R) // reset TODO: assign a (Keys) variable
 				if(canvasref.getGame() != null)
 					canvasref.getGame().reset();
+			if(keyCode == KeyEvent.VK_B)
+				canvasref.getGame().getMyPlayer().debugMe(); //TODO: temporary for testing remove this later
+			
 			break;
 		case SELECT_MAP:
 			break;
