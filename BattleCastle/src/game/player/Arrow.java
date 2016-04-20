@@ -205,10 +205,11 @@ public class Arrow extends PhysicsRect{
 		//System.out.println("MY LOCATION: " + Arrays.toString(getCorners()));
 		//System.out.println("MY VELOCITY: " + getVelocity());
 //		System.out.println("-------");
-		if(getVelocity().XPoint() > -1 && getVelocity().XPoint() < 1)
-		{
-			getVelocity().setX(0);
-		}
+		
+//		if(getVelocity().XPoint() > -1 && getVelocity().XPoint() < 1)
+//		{
+//			getVelocity().setX(0);
+//		}
 	}
 	
 	/**

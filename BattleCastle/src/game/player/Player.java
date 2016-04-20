@@ -208,28 +208,7 @@ public class Player extends PhysicsRect{
 				}
 			}
 		}
-		//arrow_path.closePath();
-		if(getCurrentArrow() != null){
-			double dc = Math.hypot(getCenter().XPoint()-mouseLocation.x,getCenter().YPoint()-mouseLocation.y);
-			double angle = -Math.atan2(getCenter().YPoint()-mouseLocation.y,mouseLocation.x-getCenter().XPoint());
-			dc = Math.max(dc, Math.cos(Math.PI/4)*612);
-			//System.out.println(s_t + " " + v_t);
-			//System.out.println(angle);
-//			System.out.println(Math.toDegrees(angle));
-//			if(Math.abs(angle) == Math.PI/2) System.out.println("Pi/4");
-			arrow_path.setCurve(
-					getCenter().XPoint(),
-					getCenter().YPoint(), 
-					getCenter().XPoint() + dc * Math.cos(angle),getCenter().YPoint() + dc * Math.sin(angle),
-					getCenter().XPoint() + 2 * dc *Math.cos(angle),
-					getCenter().YPoint()+HEIGHT/2);
-			//arrow_path.setAngleExtent(getCurrentArrow().getGraphicsRotationTheta());
-		//	arrow_path.setAngleStart(0);
-			//arrow_path.setFrame(, , 100, 100);
-//			arrow_path = new Path2D.Double();
-//			arrow_path.moveTo(getCenter().XPoint(), getCenter().YPoint());
-//			arrow_path.curveTo(getCenter().XPoint(), getCenter().YPoint(), mouseLocation.x, mouseLocation.y, getCenter().XPoint()+10*Math.cos(getCurrentArrow().getTheta()), getCenter().YPoint());
-		}
+	
 	}
 	
 	/**
@@ -254,18 +233,8 @@ public class Player extends PhysicsRect{
 		
 		g.setColor(Color.black);
 		g.drawString(String.format("(%d,%d)",  getCorners()[0].XPoint(), getCorners()[0].YPoint() ),  getCorners()[0].XPoint(), getCorners()[0].YPoint()-5);
-		
-		Graphics2D g2 = (Graphics2D)g;
-		
-		if(arrow_path != null)
-		{
-			g2.draw(arrow_path);
-		}
-		//g.fillArc(Math.min(mouseLocation.x,getCenter().XPoint()),Math.min(mouseLocation.y, getCenter().YPoint()),400,400,0,90);
-		
+			
 	}
-	
-	QuadCurve2D.Double arrow_path = new QuadCurve2D.Double();
 	
 	/* ===============
 	 * GETTERS-SETTERS
