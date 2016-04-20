@@ -65,7 +65,7 @@ public class MenuLabel {
 			g.setFont(TEXT_FONT);
 			g.setColor(Color.black);
 			int dx = bounds.x + bounds.width/2 - g.getFontMetrics(TEXT_FONT).charWidth('a') * text.length()/2;
-			int dy = bounds.y + bounds.height - g.getFontMetrics(TEXT_FONT).getHeight()/2+5;
+			int dy = bounds.y + bounds.height + g.getFontMetrics(TEXT_FONT).getHeight()/2+5;
 
 			g.drawString(text, dx, dy);
 		}

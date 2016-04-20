@@ -1,6 +1,5 @@
 package game.player;
 
-import game.Game;
 import game.physics.PhysicsPoly;
 import game.physics.PhysicsRect;
 import game.physics.Polygon;
@@ -10,27 +9,30 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
-import core.HostType;
 import utility.Utility;
 
 public class Arrow extends PhysicsRect{
 
+	public static final String KEY_VALUE_SEPARATOR = ":", ENTRY_SEPARATOR = ",";
+	
 	public static final int WIDTH = 48, HEIGHT = 24;
+	public static final double MASS = 10, DRAGC = 1.05;
+	
 	private Player shotByPlayer;
 	private String ID = "";
 	private BufferedImage image;
 	private String imagePath;
 	private double graphicsRotationTheta;
-	public static final double MASS = 10, DRAGC = 1.05;
 	static int setDistance = 10;
 	private PhysicsPoly headCollision;
+	Vector[] hcrnrs;
 	private static final int HEAD_COLL_W = 20; //10
 	private boolean rotate = true;
 	public static final int DEFAULT_LAUNCH_COOLDOWN = 2; 
 	private int launchCoolDown = DEFAULT_LAUNCH_COOLDOWN;
-	Vector[] hcrnrs;
 	
-	public static final String KEY_VALUE_SEPARATOR = ":", ENTRY_SEPARATOR = ",";
+	private ArrowType type;	
+	private int tileBounces = 0;
 	
 	public Arrow(int x, int y,
 				 double theta, double graphicsTheta,
@@ -50,6 +52,12 @@ public class Arrow extends PhysicsRect{
 	public Arrow(Player player, String imagePath)
 	{
 		this(player.getCenter().XPoint(),player.getCenter().YPoint(),0,0,null,0,player,imagePath,Utility.generateRandomUUID(20));		
+	}
+	
+	public Arrow(Player player, String imagePath, ArrowType type)
+	{
+		this(player, imagePath);
+		this.type = type;
 	}
 	
 	/**
@@ -109,9 +117,7 @@ public class Arrow extends PhysicsRect{
 	{
 		//super.render(g);
 		//headCollision.render(g);
-		//System.out.println("Drawing Arrow: " + ID + "-:"+stringify());
 		Graphics2D g2d = (Graphics2D)g;
-		
 		g2d.translate(getTopLeft().XPoint() , getTopLeft().YPoint() );
 		//if(Game.hostType != HostType.CLIENT)
 		g2d.rotate(graphicsRotationTheta);
@@ -119,15 +125,6 @@ public class Arrow extends PhysicsRect{
 		//if(Game.hostType != HostType.CLIENT)
 		g2d.rotate(-graphicsRotationTheta);
 		g2d.translate(-(getTopLeft().XPoint() ),-( getTopLeft().YPoint()));
-		
-//		
-//		g2d.translate(headCollision.getTopLeft().XPoint() , headCollision.getTopLeft().YPoint() );
-//		g2d.rotate(graphicsRotationTheta);
-//		
-//		//g2d.drawImage(image, 0 , 0, WIDTH, HEIGHT, null);
-//		g2d.rotate(-graphicsRotationTheta);
-//		g2d.translate(-(headCollision.getTopLeft().XPoint() ),-( headCollision.getTopLeft().YPoint()));
-//		//System.out.println( (getTopLeft().XPoint() + WIDTH/2 - HEIGHT/2) + " " +  (getTopLeft().YPoint() + HEIGHT/2 - WIDTH/2) );
 		
 	}
 	
@@ -295,9 +292,28 @@ public class Arrow extends PhysicsRect{
 		return headCollision;
 	}
 	
-	public double getTheta()
+	public void setArrowType(ArrowType type)
 	{
-		return Math.toRadians(theta);
+		this.type = type;
+	}
+	
+	public ArrowType getArrowType()
+	{
+		return type;
+	}
+	
+	public void bounce()
+	{
+		tileBounces++;
+	}
+	
+	public int getTileBounces() {
+		return tileBounces;
+	}
+	
+	public void reset()
+	{
+		tileBounces = 0;
 	}
 	
 	/**

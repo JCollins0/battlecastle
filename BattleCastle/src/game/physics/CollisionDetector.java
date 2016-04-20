@@ -1,14 +1,16 @@
 package game.physics;
 
+import editor.Tile;
+import game.Game;
+import game.player.Arrow;
+import game.player.ArrowType;
+import game.player.Player;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.Stack;
 
 import core.Tree;
-import editor.Tile;
-import game.Game;
-import game.player.Arrow;
-import game.player.Player;
 
 public class CollisionDetector
 {
@@ -181,9 +183,25 @@ public class CollisionDetector
 				
 				if(b instanceof Arrow)
 				{
-					((PhysicsPoly)b).setNormalForce(0,0);
-					((Arrow) b).setRotate(false);
-					b.move(minimal.vectorScale(-5));
+					switch(((Arrow)b).getArrowType())
+					{
+					case BOUNCE:
+						((PhysicsPoly) b).setVelocity(((PhysicsPoly) b).getVelocity().vectorScale(-1));
+						((Arrow) b).bounce();
+						if(((Arrow) b).getTileBounces() > 4)
+							((Arrow) b).setArrowType(ArrowType.NORMAL);
+//						else
+//							System.out.println(((PhysicsPoly) b).getVelocity());
+						break;
+					case EXPLODE:
+					case NORMAL:
+					default:
+						((PhysicsPoly)b).setNormalForce(0,0);
+						((Arrow) b).setRotate(false);
+						b.move(minimal.vectorScale(-5));
+						break;
+					}
+					
 				}
 				else if(b instanceof Player)
 				{
@@ -212,9 +230,26 @@ public class CollisionDetector
 				//((PhysicsPoly) a).setVelocity(stopped);
 				if(a instanceof Arrow)
 				{
-					((PhysicsPoly)a).setNormalForce(0,0);
-					((Arrow) a).setRotate(false);
-					a.move(minimal.vectorScale(-5));
+					switch(((Arrow)a).getArrowType())
+					{
+					case BOUNCE:
+						((PhysicsPoly) a).setVelocity(((PhysicsPoly) a).getVelocity().vectorScale(-1));
+						((Arrow) a).bounce();
+						if(((Arrow) a).getTileBounces() > 4)
+							((Arrow) a).setArrowType(ArrowType.NORMAL);
+//						else
+//							System.out.println(((PhysicsPoly) a).getVelocity());
+						break;
+					case EXPLODE:
+					case NORMAL:
+					default:
+						((PhysicsPoly)a).setNormalForce(0,0);
+						((Arrow) a).setRotate(false);
+						a.move(minimal.vectorScale(-5));
+						break;
+					}
+					
+					
 				}else if(a instanceof Player)
 				{
 					((PhysicsPoly)a).setNormalForce(1,minimal.getNormal().YExact());//set the y normal to 0 to create a wall cling effect

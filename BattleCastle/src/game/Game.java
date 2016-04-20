@@ -884,7 +884,9 @@ public class Game {
 			Set<String> arrStr = arrows.keySet();
 			for(int j = 0; j < giveToPlayer; j++)
 			{
-				playerList[i].addArrow(arrows.remove(arrStr.iterator().next()));
+				Arrow ar = arrows.remove(arrStr.iterator().next());
+				ar.reset();
+				playerList[i].addArrow(ar);
 			}
 		}			
 	}

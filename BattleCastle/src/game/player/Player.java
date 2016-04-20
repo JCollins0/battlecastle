@@ -5,16 +5,12 @@ import game.physics.Vector;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.geom.Arc2D;
-import java.awt.geom.QuadCurve2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import utility.Utility;
-import core.BattleCastleCanvas;
 import core.MouseHandler;
 import core.constants.ImageFilePaths;
 
@@ -103,7 +99,7 @@ public class Player extends PhysicsRect{
 		this.uuid = uuid;
 		arrowStorage = new ArrayList<Arrow>();
 		for(int i = 0; i < 10; i++)
-			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW));
+			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW,ArrowType.BOUNCE));
 		currentArrow = arrowStorage.get(0);
 		mouseLocation = MouseHandler.mouse;
 		//GRAVITY = 0;
