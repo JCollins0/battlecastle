@@ -1,7 +1,8 @@
 package game.player;
 
 import java.net.InetAddress;
-import java.util.Arrays;
+
+import core.menu_object.PlayerSelectObject.PlayerType;
 
 public class BattleCastleUser {
 	
@@ -11,6 +12,7 @@ public class BattleCastleUser {
 	private String uniqueID;
 	private int playerNum;
 	private boolean connected;
+	private PlayerType type;
 	
 	public BattleCastleUser(){}
 	
@@ -70,6 +72,15 @@ public class BattleCastleUser {
 		return connected;
 	}
 	
+	public void setType(PlayerType type)
+	{
+		this.type = type;
+	}
+	
+	public PlayerType getType()
+	{
+		return type;
+	}
 	
 	@Override
 	public String toString() {

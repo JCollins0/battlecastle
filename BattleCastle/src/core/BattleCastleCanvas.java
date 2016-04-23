@@ -1,5 +1,9 @@
 package core;
 
+import game.Game;
+import game.object.GameMap;
+import game.object.MapType;
+
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
@@ -15,6 +19,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
 
+import utility.AudioHandler;
+import utility.ConfigLoader;
+import utility.Utility;
+
 import com.esotericsoftware.kryonet.Client;
 
 import core.constants.DataConstants;
@@ -28,18 +36,11 @@ import core.menu_object.MenuSlider;
 import core.menu_object.MenuSliderType;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
+import core.menu_object.PlayerSelectObject;
+import core.menu_object.PlayerSelectObject.PlayerType;
 import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
 import core.menu_object.TutorialObject;
-import game.Game;
-import game.object.GameMap;
-import game.object.MapType;
-import shader.LightShader;
-import shader.Shader;
-import shader.Shader.ShaderType;
-import utility.AudioHandler;
-import utility.ConfigLoader;
-import utility.Utility;
 
 public class BattleCastleCanvas extends Canvas implements Runnable{
 
@@ -71,12 +72,14 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	private ArrayList<MenuButton> menuButtonList;
 	private ArrayList<MenuLabel> menuLabelList;
 	private ArrayList<MenuSlider> sliderList;
+	private ArrayList<PlayerSelectObject> playerSelectList;
 	private MenuTextField serverIPField, userNameField;;
 	private MenuButton hostGame, joinGame, connectToServer,
 					   continueToGame, backButton, levelEditor,
 					   refreshLanServers, infoButton;
+	private PlayerSelectObject player_green, player_blue, player_red, player_yellow;
 	private MapSelectionObject map1,map2,map3;
-	private MenuLabel userNameLabel, serverIPLabel;
+	private MenuLabel userNameLabel, serverIPLabel, playerSelectLabel;
 	private TutorialObject leftMouse, upKey, downKey, leftKey, rightKey, dashLeftKey, dashRightKey, screenShotKey;
 	private ServerSelectionBox serverSelectionBox;
 	private MenuSlider volumeSlider;
@@ -131,6 +134,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuLabelList = new ArrayList<MenuLabel>();
 		tutorialObjectList = new ArrayList<TutorialObject>();
 		sliderList = new ArrayList<MenuSlider>();
+		playerSelectList = new ArrayList<PlayerSelectObject>();
 		
 		serverIPField = new MenuTextField(100, 350, 500, 100,
 				MenuTextFieldType.SERVER_IP_FIELD,
@@ -226,6 +230,19 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		menuButtonList.add(levelEditor);
 		menuButtonList.add(refreshLanServers);
 		menuButtonList.add(infoButton);
+		
+		player_green = new PlayerSelectObject(672, 544, 92, 92, PlayerType.GREEN, Utility.loadImage(ImageFilePaths.PLAYER_GREEN_FACE), GameState.INPUT_USER_NAME,GameState.JOIN_SERVER);
+		player_blue = new PlayerSelectObject(672, 640, 92, 92, PlayerType.BLUE, Utility.loadImage(ImageFilePaths.PLAYER_BLUE_FACE), GameState.INPUT_USER_NAME,GameState.JOIN_SERVER);
+		player_yellow = new PlayerSelectObject(768, 544, 92, 92, PlayerType.YELLOW, Utility.loadImage(ImageFilePaths.PLAYER_YELLOW_FACE), GameState.INPUT_USER_NAME,GameState.JOIN_SERVER);
+		player_red = new PlayerSelectObject(768, 640, 92, 92, PlayerType.RED, Utility.loadImage(ImageFilePaths.PLAYER_RED_FACE), GameState.INPUT_USER_NAME,GameState.JOIN_SERVER);
+		
+		playerSelectList.add(player_red);
+		playerSelectList.add(player_green);
+		playerSelectList.add(player_blue);
+		playerSelectList.add(player_yellow);
+		
+		playerSelectLabel = new MenuLabel(862, 544, 64, 192, Utility.loadImage(ImageFilePaths.PLAYER_SELECT_LABEL), GameState.INPUT_USER_NAME,GameState.JOIN_SERVER);
+		menuLabelList.add(playerSelectLabel);
 		
 		userNameLabel = new MenuLabel(250, 150, 200, 50,
 				Utility.loadImage(ImageFilePaths.USER_NAME_LABEL),
@@ -431,6 +448,10 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 		return volumeSlider;
 	}
 	
+	public ArrayList<PlayerSelectObject> getPlayerSelectionObjects(){
+		return playerSelectList;
+	}
+	
 	/**
 	 * Get MapSelectionObjects from Total Button list
 	 * @return subset of MapSelectionObjects
@@ -528,7 +549,9 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 			for(MenuLabel menuLabel : menuLabelList)
 				if(menuLabel.isVisibleAtState(currentState))
 					menuLabel.render(b);
-			
+			for(PlayerSelectObject playerSelect : playerSelectList)
+				if(playerSelect.isVisibleAtState(currentState))
+					playerSelect.render(b);
 			
 		case SELECT_MAP:
 			
@@ -877,6 +900,36 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				customLevels.put(levelname, map);
 			}		
 		}
+	}
+
+	public PlayerType getPlayerTypeFromSelection() {
+		for(int i = 0; i < playerSelectList.size(); i++)
+		{
+			if(playerSelectList.get(i).isSelected())
+				return playerSelectList.get(i).getType();
+		}
+		return playerSelectList.get((int)(Math.random()*playerSelectList.size())).getType();
+	}
+
+	public String getPlayerFacePath(PlayerType type) {
+		switch(type)
+		{
+		case BLUE:  return ImageFilePaths.PLAYER_BLUE_FACE;
+		case GREEN: return ImageFilePaths.PLAYER_GREEN_FACE;
+		case RED:	return ImageFilePaths.PLAYER_RED_FACE;
+		case YELLOW:return ImageFilePaths.PLAYER_YELLOW_FACE;
+		default: return "";		
+		}
+	}
+	
+	public BufferedImage getPlayerFaceFromType(PlayerType type)
+	{
+		for(int i = 0; i < playerSelectList.size(); i++)
+		{
+			if(playerSelectList.get(i).getType().equals(type))
+				return playerSelectList.get(i).getImage();
+		}
+		return null;
 	}
 	
 }

@@ -16,6 +16,7 @@ public class MenuButton{
 	private BufferedImage image, hover_image;
 	private ArrayList<GameState> visibleStates;
 	protected boolean hoverOver;
+	public static final Color grey_hover = new Color(0,0,0,100);
 	
 	public MenuButton(int x, int y, int width, int height, MenuButtonType buttonType,
 			BufferedImage base_image, BufferedImage hover_image, GameState visibleState)
@@ -57,7 +58,16 @@ public class MenuButton{
 		if(image != null)
 		{
 			if(hoverOver)
-				g.drawImage(hover_image, bounds.x, bounds.y,bounds.width, bounds.height, null);
+			{
+				if(hover_image != null)
+					g.drawImage(hover_image, bounds.x, bounds.y,bounds.width, bounds.height, null);
+				else
+				{
+					g.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height,  null);
+					g.setColor(grey_hover);
+					g.fillRect(bounds.x, bounds.y,bounds.width, bounds.height);
+				}
+			}
 			else
 				g.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height,  null);
 		}else
@@ -109,6 +119,10 @@ public class MenuButton{
 	public Rectangle getBounds()
 	{
 		return bounds;
+	}
+	
+	public BufferedImage getImage(){
+		return image;
 	}
 	
 	public boolean isHoverOver(Point p) 

@@ -1,6 +1,7 @@
 package game;
 
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -12,6 +13,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
+
+import jdk.nashorn.internal.runtime.FindProperty;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -294,9 +297,10 @@ public class Game {
 			for(int i = 0; i < playerList.length; i++)
 				if(playerList[i] != null)
 				{
+					g.drawImage(getPlayerFaceFromPlayer(playerList[i]),32,64*i+32,32,32,null);
 					for(int s = 0; s < playerList[i].getScore(); s++)
 					{
-						g.fillRect(64*s+32,64*i+32,32,32);	
+						g.fillRect(64*(s+1)+32,64*i+32,32,32);	
 					}
 				}
 		}
@@ -336,7 +340,7 @@ public class Game {
 			gameMap = canvasRef.getCustomLevels().get(mapName);
 			for(int i = 0; i < playerMap.size(); i++)
 			{
-				playerList[i] = new Player(ImageFilePaths.TEMP_PLAYER,getUUIDFromPlayer(playerList[i]));
+				playerList[i] = new Player(ImageFilePaths.TEMP_PLAYER,getUUIDFromPlayer(playerList[i]),getArrowPathFromPlayer(playerMap.get(getUUIDFromPlayer(playerList[i]))));
 				//playerList[i].setLocation(gameMap.getPlayerStartPoint(i));
 			}
 		}
@@ -347,7 +351,7 @@ public class Game {
 			//load players and then send to clients
 			for(int i = 0; i < playerMap.size(); i++)
 			{
-				playerList[i] = new Player(ImageFilePaths.TEMP_PLAYER,getUUIDFromPlayer(playerList[i]));
+				playerList[i] = new Player(ImageFilePaths.TEMP_PLAYER,getUUIDFromPlayer(playerList[i]),getArrowPathFromPlayer(playerMap.get(getUUIDFromPlayer(playerList[i]))));
 				playerList[i].setLocation(gameMap.getPlayerStartPoint(i));
 			}
 			Message message = new Message(MessageType.SELECT_MAP, mapType.getBackground());
@@ -370,11 +374,12 @@ public class Game {
 	{
 		for(int i = 0; i < KeyHandler.presses.size(); i++)
 		{
-			if(KeyHandler.presses.get(i).getText().equals(KeyPress.LEFT_D.getText()))
-				getMyPlayer().setPlayerFacing(Player.FACING_LEFT);
-			if(KeyHandler.presses.get(i).getText().equals(KeyPress.RIGHT_D.getText()))
-				getMyPlayer().setPlayerFacing(Player.FACING_RIGHT);
 			try{
+				if(KeyHandler.presses.get(i).getText().equals(KeyPress.LEFT_D.getText()))
+					getMyPlayer().setPlayerFacing(Player.FACING_LEFT);
+				if(KeyHandler.presses.get(i).getText().equals(KeyPress.RIGHT_D.getText()))
+					getMyPlayer().setPlayerFacing(Player.FACING_RIGHT);
+
 				Message message = new Message(MessageType.MOVE_PLAYER,
 					playerMap.get(myUUID).getPlayerNumber() + Message.EQUALS_SEPARATOR + KeyHandler.presses.get(i).getText() );
 				gameClient.sendTCP(message);
@@ -567,7 +572,7 @@ public class Game {
 		{
 			int playerNum = playerMap.size()-1;
 			playerMap.get(user.getUUID()).setPlayerNumber(playerNum);
-			canvasRef.addPlayerFace(user.getPlayerName(), ImageFilePaths.CHECK); //TODO: Change to acutal face of player depending on player number
+			canvasRef.addPlayerFace(user.getPlayerName(), canvasRef.getPlayerFacePath(user.getType())); 
 
 			for(String uuid : playerMap.keySet())
 			{
@@ -579,7 +584,7 @@ public class Game {
 		}
 
 		playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
-		playerList[user.getPlayerNumber()] = new Player(ImageFilePaths.TEMP_PLAYER,user.getUUID()); //TODO Change TEMP PLAYER to whatever player chooses
+		playerList[user.getPlayerNumber()] = new Player(ImageFilePaths.TEMP_PLAYER,user.getUUID(),getArrowPathFromPlayer(user)); //TODO Change TEMP PLAYER to whatever player chooses
 
 		System.out.println(Arrays.toString(playerList));
 
@@ -860,6 +865,23 @@ public class Game {
 		return gameOver;
 	}
 	
+	public BufferedImage getPlayerFaceFromPlayer(Player p)
+	{
+		return canvasRef.getPlayerFaceFromType(playerMap.get(getUUIDFromPlayer(p)).getType());
+	}
+	
+	public String getArrowPathFromPlayer(BattleCastleUser user)
+	{
+		switch(user.getType())
+		{
+		case BLUE:  return ImageFilePaths.ARROW_BLUE;
+		case GREEN: return ImageFilePaths.ARROW_GREEN;
+		case RED:	return ImageFilePaths.ARROW_RED;
+		case YELLOW:return ImageFilePaths.ARROW_YELLOW;
+		default: return "";		
+		}
+	}
+	
 	/* #############
 	 * RESETING GAME
 	 * #############
@@ -870,8 +892,11 @@ public class Game {
 		for(int i = 0; i < playerList.length; i++)
 		{
 			if(playerList[i] != null)
+			{
 				if(playerList[i].isDead())
 					playerList[i].setDead(false);
+			}
+					
 		}
 		gameOver = false;
 		

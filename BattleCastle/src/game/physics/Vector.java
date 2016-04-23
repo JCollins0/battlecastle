@@ -39,6 +39,21 @@ public class Vector {
 		return new Vector(x*v.x,y*v.y);
 	}
 	
+	public Vector vectorMultX(double x)
+	{
+		return new Vector(this.x * x, y);
+	}
+	
+	public Vector vectorMultY(double y)
+	{
+		return new Vector(x, this.y * y);
+	}
+	
+	public Vector vectorMultXY(double x, double y)
+	{
+		return new Vector(this.x * x, this.y  * y);
+	}
+	
 	public double vectotDot(Vector a)
 	{
 		return (x*a.x)+(y*a.y);
@@ -88,6 +103,16 @@ public class Vector {
 	{
 		x = -x;
 		y = -y;
+	}
+	
+	public void absoluteX()
+	{
+		x = Math.abs(x);
+	}
+	
+	public void absoluteY()
+	{
+		y = Math.abs(y);
 	}
 	
 	public void absolute()

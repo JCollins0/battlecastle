@@ -47,6 +47,7 @@ public class ImageFilePaths {
 				SERVER_CHOICE = MENU_OBJECT + "server_choice",
 				SLIDER_BAR  = MENU_OBJECT + "slider_bar",
 				SLIDER = MENU_OBJECT + "slider",
+				PLAYER_SELECT_LABEL = MENU_OBJECT + "player_select",
 				TITLE = MENU + "title",
 				MENU_BACKGROUND_IMAGE_0 = MENU + "background00",
 				MENU_BACKGROUND_IMAGE_1 = MENU + "background01",
@@ -59,7 +60,10 @@ public class ImageFilePaths {
 				TEMP_PLAYER_ANIMATED = PLAYER + "player_sheet", //TODO : change
 				TEMP_PLAYER = PLAYER + "temp_player", //TODO : Change
 				TEMP_PLAYER_DEAD = PLAYER + "temp_player_dead", //TODO : change
-				ARROW = WEAPON + "red_arrow",
+				ARROW_RED = WEAPON + "red_arrow",
+				ARROW_BLUE = WEAPON + "blue_arrow",
+				ARROW_GREEN = WEAPON + "green_arrow",
+				ARROW_YELLOW = WEAPON + "yellow_arrow",
 				TRASH = EDITOR + "trash",
 				CHECK = EDITOR + "check",
 				SAVE = EDITOR + "save",
@@ -78,7 +82,11 @@ public class ImageFilePaths {
 				MULTI_COLOR = TILE + "multi_color",
 				DELETE_ALL = TILE + "delete_all",
 				CLONE = EDITOR + "clone",
-				STATE_ADDER = EDITOR + "state_adder";
+				STATE_ADDER = EDITOR + "state_adder",
+				PLAYER_RED_FACE = MENU_OBJECT + "player_red_head",
+				PLAYER_GREEN_FACE = MENU_OBJECT + "player_green_head",
+				PLAYER_BLUE_FACE = MENU_OBJECT + "player_blue_head",
+				PLAYER_YELLOW_FACE = MENU_OBJECT + "player_yellow_head";
 	
 	
 	public static String getAbsolutePathFromImageName(String imageName)

@@ -91,7 +91,7 @@ public class Player extends PhysicsRect{
 	 * @param imageFileName the imagepath to the image
 	 * @param uuid id of the player
 	 */
-	public Player(String imageFileName,String uuid)
+	public Player(String imageFileName,String uuid,String arrowPath)
 	{
 		//this(Utility.loadImage(imageFileName), uuid);
 		super(0, 0, WIDTH, HEIGHT,0, null, ANG_VEL, MASS, DRAG_C);
@@ -99,7 +99,7 @@ public class Player extends PhysicsRect{
 		this.uuid = uuid;
 		arrowStorage = new ArrayList<Arrow>();
 		for(int i = 0; i < 10; i++)
-			arrowStorage.add(new Arrow(this,ImageFilePaths.ARROW,ArrowType.BOUNCE));
+			arrowStorage.add(new Arrow(this,arrowPath,ArrowType.BOUNCE));
 		currentArrow = arrowStorage.get(0);
 		mouseLocation = MouseHandler.mouse;
 		//GRAVITY = 0;
@@ -189,12 +189,21 @@ public class Player extends PhysicsRect{
 			playerState = STATE_DEAD; 
 			animation = 0;
 		}else{
-			if(!falling)
+			if(jumping || (Math.abs(getVelocity().YPoint() )> 1 ) )
 			{
+				
 				if(getVelocity().YPoint() == 0)
 				{
 					falling = true;
+					animation = 0;
 				}
+				if(playerState != STATE_JUMPING)
+				{
+					playerState = STATE_JUMPING;
+					animation = 0;
+				}
+				
+				
 			}else{
 				if(getVelocity().XPoint() == 0)
 				{
@@ -344,7 +353,7 @@ public class Player extends PhysicsRect{
 
 	public void setPlayerFacing(int playerFacing) {
 		this.playerFacing = playerFacing;
-		if(getVelocity().XPoint() != 0)
+		if(getVelocity().XPoint() != 0 && !(jumping || Math.abs((getVelocity().YPoint()))>1))
 		{
 			playerState = STATE_RUNNING;
 			if(animation >= images[2*playerState+playerFacing].length)
@@ -518,6 +527,7 @@ public class Player extends PhysicsRect{
 	
 	public int getScore() { return score; }
 	public void addPoint() { score++; }
+	public void subPoint() {score--;}
 	public void setScore(int score) { this.score = score; }
 	
 	/**
@@ -532,5 +542,6 @@ public class Player extends PhysicsRect{
 	public void debugMe() {
 		System.out.println("Velocity: " + getVelocity() + ", Score: " + score + ", Dead: " + dead + ", Falling: " + falling + ", Jumping: " + jumping);		
 	}
+
 }
 

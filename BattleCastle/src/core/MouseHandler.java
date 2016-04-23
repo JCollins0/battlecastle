@@ -19,6 +19,7 @@ import core.menu_object.MenuSlider;
 import core.menu_object.MenuSliderType;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
+import core.menu_object.PlayerSelectObject;
 import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
 import editor.EditorFrame;
@@ -107,6 +108,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 						MenuTextField name = canvasref.getTextFieldByID(MenuTextFieldType.USERNAME_FIELD);
 						try {
 							BattleCastleUser user = new BattleCastleUser(name.getText(),InetAddress.getLocalHost(),Game.CLIENT_PORT);
+							user.setType(canvasref.getPlayerTypeFromSelection());
 							canvasref.getGame().setMyUserUUID(user.getUUID());
 							canvasref.getGame().sendUserData(user);
 							
@@ -130,6 +132,12 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 				}
 			}
 			
+			ArrayList<PlayerSelectObject> playerSelectList = canvasref.getPlayerSelectionObjects();
+			for(PlayerSelectObject pso : playerSelectList)
+			{
+				pso.isHoverOver(mouse);
+			}
+			
 			ServerSelectionBox selectionBox = canvasref.getServerSelectionBox();
 			ServerChoice choice = selectionBox.getServerChoice(mouse);
 			if(choice != null)
@@ -142,6 +150,8 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 				if(serverIPField != null)
 					serverIPField.setText(choice.getAddress());
 			}
+			
+			
 			
 			break;
 		case INPUT_USER_NAME:
@@ -168,7 +178,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 						try {
 							BattleCastleUser user = new BattleCastleUser(name.getText(),InetAddress.getLocalHost(),Game.CLIENT_PORT);
 							canvasref.getGame().setMyUserUUID(user.getUUID());
-							//System.out.println(user.getAddress());
+							user.setType(canvasref.getPlayerTypeFromSelection());
 							canvasref.getGame().setServerIP(InetAddress.getLocalHost());
 							canvasref.getGame().sendUserData(user);
 							
@@ -198,6 +208,13 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 					
 					}
 				}
+			}
+			
+			
+			playerSelectList = canvasref.getPlayerSelectionObjects();
+			for(PlayerSelectObject pso : playerSelectList)
+			{
+				pso.isHoverOver(mouse);
 			}
 			
 			break;
