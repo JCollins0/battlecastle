@@ -16,12 +16,8 @@ public class BattleMath {
 	
 	public static int Sign(Vector v)
 	{
-		if(v.XPoint() < 0 )
+		if(v.XPoint() != 0 )
 			return -1;
-		else if(v.XPoint()> 0)
-			return 1;
-		else 
-			return Sign(v.YPoint());
-			
+		return 1;
 	}
 }

@@ -61,7 +61,9 @@ public class Game {
 	private TreeMap<String, BattleCastleUser> playerMap;
 	private Player[] playerList;
 	private ConcurrentHashMap<String,Arrow> arrows;
-	
+
+	//Score
+	private PlayerScoreHandler playerScoreHandler;
 	//Collision
 	private CollisionDetector collideDetect;
 	
@@ -70,7 +72,7 @@ public class Game {
 	private boolean mapSelected;
 	private MapType mapType;
 	private String mapName;
-	
+
 	//Other Objects
 	private Random random;
 	private BattleCastleCanvas canvasRef;
@@ -103,6 +105,7 @@ public class Game {
 		
 		System.setProperty("java.net.preferIPv4Stack" , "true");
 		
+		playerScoreHandler = new PlayerScoreHandler(this);
 		gameMapLoader = new GameMap();
 		random = new Random();
 	}
@@ -294,15 +297,16 @@ public class Game {
 		else
 		{
 			//Draw score for players
-			for(int i = 0; i < playerList.length; i++)
-				if(playerList[i] != null)
-				{
-					g.drawImage(getPlayerFaceFromPlayer(playerList[i]),32,64*i+32,32,32,null);
-					for(int s = 0; s < playerList[i].getScore(); s++)
-					{
-						g.fillRect(64*(s+1)+32,64*i+32,32,32);	
-					}
-				}
+			playerScoreHandler.render(g);
+//			for(int i = 0; i < playerList.length; i++)
+//				if(playerList[i] != null)
+//				{
+//					g.drawImage(getPlayerFaceFromPlayer(playerList[i]),32,64*i+32,32,32,null);
+//					for(int s = 0; s < playerList[i].getScore(); s++)
+//					{
+//						g.fillRect(64*(s+1)+32,64*i+32,32,32);	
+//					}
+//				}
 		}
 		
 			
@@ -585,7 +589,7 @@ public class Game {
 
 		playerMap.get(user.getUUID()).setPlayerNumber(user.getPlayerNumber());
 		playerList[user.getPlayerNumber()] = new Player(ImageFilePaths.TEMP_PLAYER,user.getUUID(),getArrowPathFromPlayer(user)); //TODO Change TEMP PLAYER to whatever player chooses
-
+		playerScoreHandler.registerPlayer(playerList[user.getPlayerNumber()]);
 		System.out.println(Arrays.toString(playerList));
 
 		
@@ -808,6 +812,18 @@ public class Game {
 				}
 			}
 		System.out.println("NO UUID FOUND FOR PLAYER: " + p);
+		return null;
+	}
+	
+	public Player getPlayerFromUUID(String uuid)
+	{
+		for(String s : playerMap.keySet())
+		{
+			if(playerMap.get(s).getUUID().equals(uuid))
+			{
+				return playerList[playerMap.get(uuid).getPlayerNumber()];
+			}
+		}
 		return null;
 	}
 

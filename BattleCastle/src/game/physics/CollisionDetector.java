@@ -187,13 +187,16 @@ public class CollisionDetector
 					switch(((Arrow)b).getArrowType())
 					{
 					case BOUNCE:
-						((PhysicsPoly) b).getVelocity().absoluteX();
+						//((PhysicsPoly) b).getVelocity().absoluteX();
+						int nVX = 1 * BattleMath.Sign(minimal);
+						//System.out.println(nVX);
+						
 						((PhysicsPoly) b).setVelocity(
 								
-								((PhysicsPoly) b).getVelocity().vectorMultXY(1,-1)
+								((PhysicsPoly) b).getVelocity().vectorMultXY(nVX,-1)
 						);
 
-						System.out.println(minimal.XExact());
+						//System.out.println(minimal.XExact());
 						
 						((Arrow) b).bounce();
 						if(((Arrow) b).getTileBounces() > 4)
@@ -249,13 +252,15 @@ public class CollisionDetector
 					switch(((Arrow)a).getArrowType())
 					{
 					case BOUNCE:
-						((PhysicsPoly) a).getVelocity().absoluteX();
+						//((PhysicsPoly) a).getVelocity().absoluteX();
+						int nVX = 1 * BattleMath.Sign(minimal);
+						//System.out.println(nVX);
 						((PhysicsPoly) a).setVelocity(
 								
-								((PhysicsPoly) a).getVelocity().vectorMultXY(1,-1)
+								((PhysicsPoly) a).getVelocity().vectorMultXY(nVX,-1)
 						);
 						
-						System.out.println(minimal.XExact());
+					//	System.out.println(minimal.XExact());
 						((Arrow) a).bounce();
 						if(((Arrow) a).getTileBounces() > 4)
 							((Arrow) a).setArrowType(ArrowType.NORMAL);
