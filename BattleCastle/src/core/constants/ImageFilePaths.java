@@ -89,7 +89,8 @@ public class ImageFilePaths {
 				PLAYER_YELLOW_FACE = MENU_OBJECT + "player_yellow_head",
 				SKULL_DARK = PLAYER + "skeleton_head_dark",
 				SKULL = PLAYER + "skeleton_head",
-				SCORE_BANNER = PLAYER + "score_banner";
+				SCORE_BANNER = PLAYER + "score_banner",
+				CROWN = PLAYER + "crown";
 	
 	
 	public static String getAbsolutePathFromImageName(String imageName)

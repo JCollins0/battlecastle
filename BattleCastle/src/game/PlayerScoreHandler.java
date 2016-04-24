@@ -15,9 +15,12 @@ public class PlayerScoreHandler {
 	public static final BufferedImage skullEmpty = Utility.loadImage(ImageFilePaths.SKULL_DARK);
 	public static final BufferedImage skullFilled = Utility.loadImage(ImageFilePaths.SKULL);
 	public static final BufferedImage scoreBanner = Utility.loadImage(ImageFilePaths.SCORE_BANNER);
+	public static final BufferedImage crown = Utility.loadImage(ImageFilePaths.CROWN);
+	
 	public static final int minKillsRequired = 10;
 	public static final int startY = 256;
-	public static final int faceX = 64;
+	public static final int crownX = 48;
+	public static final int faceX = crownX+96;
 	public static final int skullStartX=faceX + 128;
 	public static final int spacingBetweenSkulls = 8;
 	public static final int spacingBetweenPlayers = 8;
@@ -35,7 +38,7 @@ public class PlayerScoreHandler {
 	{
 		if(!players.contains(pl.getUUID()) && !(pl.getUUID().equals("")||pl.getUUID()==null))
 		{	
-			System.out.println("Registering: " + pl.getUUID());
+			System.out.println("Player Score Handler Registering: " + pl.getUUID());
 			players.add(pl.getUUID());
 		
 		}
@@ -69,6 +72,37 @@ public class PlayerScoreHandler {
 				g.drawImage(skullEmpty, 64*(s) + spacingBetweenSkulls * s + skullStartX, i * 64+startY + i * spacingBetweenPlayers, 64,64,null);
 			}
 		}
+		
+		ArrayList<Integer> winIndex = getCurrentWinners();
+		if(winIndex != null)
+		{
+			for(int i = 0; i < winIndex.size(); i++)
+				g.drawImage(crown,crownX,64*i+startY,64,64,null);
+		}
+	}
+	
+	private ArrayList<Integer> getCurrentWinners()
+	{
+		ArrayList<Integer> temp = new ArrayList<Integer>();
+		int maxScore = Integer.MIN_VALUE;
+		for(int i = 0; i < players.size(); i++)
+		{
+			Player p = getPlayer(players.get(i));
+			if(p.getScore() >= maxScore)
+			{
+				maxScore = p.getScore();
+				//System.out.println(maxScore  + " is the maxScore");
+			}
+		}
+		
+		if(maxScore <= 0) return null;
+		
+		for(int i = 0; i < players.size(); i++)
+		{
+			Player p = getPlayer(players.get(i));
+			if(p.getScore() == maxScore) temp.add(i);
+		}
+		return temp;
 	}
 	
 	private Player getPlayer(String uuid)

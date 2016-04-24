@@ -527,7 +527,7 @@ public class Player extends PhysicsRect{
 	
 	public int getScore() { return score; }
 	public void addPoint() { score++; }
-	public void subPoint() {score--;}
+	public void subPoint() { score--; if(score < 0) score=0;}
 	public void setScore(int score) { this.score = score; }
 	
 	/**
