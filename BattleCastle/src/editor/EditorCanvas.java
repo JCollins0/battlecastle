@@ -365,8 +365,6 @@ public class EditorCanvas extends Canvas implements Runnable{
 	
 	protected void checkEditorClicked(Point mouse)
 	{
-		if(current==null)
-			throw new NullPointerException();
 		int i;
 		for(i=0;i<editor.size();i++)
 			if(editor.get(i).contains(mouse))
@@ -409,6 +407,8 @@ public class EditorCanvas extends Canvas implements Runnable{
 		t.setStatesActive(false);
 		t.setToLastState();
 		stateHelper1=t.copy();
+		stateHelper1.moveTo(t.getX(), t.getY());
+		list.addFront(stateHelper1);
 		stateCreation=true;
 		
 	}
