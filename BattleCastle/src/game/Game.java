@@ -257,7 +257,14 @@ public class Game {
 					else
 					{
 						if(gameOverResetTimer < GAME_OVER_RESET_COUNT)
+						{
+							if(gameOverResetTimer == 0) // happens once
+							{
+								Message message = new Message(MessageType.GAME_OVER,"g");
+								gameServer.sendToAllUDP(message);
+							}
 							gameOverResetTimer++;
+						}
 						else
 						{
 							gameOverResetTimer = 0;
@@ -755,6 +762,19 @@ public class Game {
 					
 				}
 			}
+		}else if(type.equals(MessageType.RESET_GAME.toString()))
+		{
+			if(hostType == HostType.CLIENT)
+			{
+				arrows.clear();
+				reset();
+			}
+		}else if(type.equals(MessageType.GAME_OVER.toString()))
+		{
+			if(hostType == HostType.CLIENT)
+			{
+				gameOver = true;
+			}
 		}
 		else if(type.equals(MessageType.PERFORM_ACTION.toString())) //perform specific action
 		{
@@ -916,20 +936,26 @@ public class Game {
 		}
 		gameOver = false;
 		
-		int numPlayers = playerMap.size();
-		int arrowsMaxPerPlayer = 10;
-		for(int i = 0 ;i < numPlayers; i++)
+		if(hostType == HostType.SERVER)
 		{
-			int playerArrows = playerList[i].getArrowCount();
-			int giveToPlayer = arrowsMaxPerPlayer-playerArrows;
-			Set<String> arrStr = arrows.keySet();
-			for(int j = 0; j < giveToPlayer; j++)
+			int numPlayers = playerMap.size();
+			int arrowsMaxPerPlayer = 10;
+			for(int i = 0 ;i < numPlayers; i++)
 			{
-				Arrow ar = arrows.remove(arrStr.iterator().next());
-				ar.reset();
-				playerList[i].addArrow(ar);
-			}
-		}			
+				int playerArrows = playerList[i].getArrowCount();
+				int giveToPlayer = arrowsMaxPerPlayer-playerArrows;
+				Set<String> arrStr = arrows.keySet();
+				for(int j = 0; j < giveToPlayer; j++)
+				{
+					Arrow ar = arrows.remove(arrStr.iterator().next());
+					ar.reset();
+					ar.setPlayer(playerList[i]);
+					playerList[i].addArrow(ar);
+				}
+			}	
+			Message message = new Message(MessageType.RESET_GAME,"r");//TODO: send message to client to reset
+			gameServer.sendToAllUDP(message);
+		}
 	}
 	
 	/**

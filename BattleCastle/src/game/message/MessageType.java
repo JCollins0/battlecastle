@@ -14,7 +14,9 @@ public enum MessageType {
 	PERFORM_ACTION("perform_action"),
 	LAUNCH_ARROW("launch_arrow"),
 	REMOVE_ARROW("remove_arrow"),
-	ADD_ARROW_TO_PLAYER("add_arrow_to_player");
+	ADD_ARROW_TO_PLAYER("add_arrow_to_player"),
+	RESET_GAME("reset_game"),
+	GAME_OVER("game_over");
 	
 	private String value;
 	MessageType()

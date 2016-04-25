@@ -77,7 +77,7 @@ public class PlayerScoreHandler {
 		if(winIndex != null)
 		{
 			for(int i = 0; i < winIndex.size(); i++)
-				g.drawImage(crown,crownX,64*i+startY,64,64,null);
+				g.drawImage(crown,crownX,64*winIndex.get(i)+startY,64,64,null);
 		}
 	}
 	
