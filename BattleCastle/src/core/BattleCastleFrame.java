@@ -1,6 +1,8 @@
 package core;
 
 import java.awt.Dimension;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -91,11 +93,13 @@ public class BattleCastleFrame extends JFrame {
 				
 				if(game_canvas != null)
 				{
+					game_canvas.setRunning(false);
 					Game game = game_canvas.getGame();
 					if(game != null)
 					{
-						game.stopClient();
+						game.disconnect();
 						game.stopServer();
+						game.stopClient();
 					}
 					
 					game_canvas.getConfigLoader().saveConfig();

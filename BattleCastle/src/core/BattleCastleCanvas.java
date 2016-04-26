@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -97,7 +99,7 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 	 * Initializes Canvas
 	 */
 	public BattleCastleCanvas()
-	{
+	{		
 		setPreferredSize(BattleCastleFrame.GAME_SIZE);
 		setMinimumSize(BattleCastleFrame.GAME_SIZE);
 		setMaximumSize(BattleCastleFrame.GAME_SIZE);
@@ -930,6 +932,10 @@ public class BattleCastleCanvas extends Canvas implements Runnable{
 				return playerSelectList.get(i).getImage();
 		}
 		return null;
+	}
+
+	public void setRunning(boolean b) {
+		this.running = b;
 	}
 	
 }

@@ -78,7 +78,7 @@ public class Game {
 	private BattleCastleCanvas canvasRef;
 	private boolean gameOver;
 	private int gameOverResetTimer; 
-	private int GAME_OVER_RESET_COUNT = 90;
+	private int GAME_OVER_RESET_COUNT = 90;	
 	
 	/**
 	 * Initialize Game class
@@ -699,6 +699,9 @@ public class Game {
 //				System.out.println("lAunching Arrow fOR plAyer: " + playerNum );
 //				break;
 //			}
+		}else if(type.equals(MessageType.DISCONNECT_ONE_USER.toString()))
+		{
+			disconnectOneUserServerSide(playerMap.get(restOfMessage));
 		}
 	}
 	
@@ -774,6 +777,18 @@ public class Game {
 			if(hostType == HostType.CLIENT)
 			{
 				gameOver = true;
+			}
+		}else if(type.equals(MessageType.DISCONNECT_ALL_USERS.toString()))
+		{
+			if(hostType == HostType.CLIENT)
+			{
+				disconnectAllUsers();
+			}
+		}else if(type.equals(MessageType.DISCONNECT_ONE_USER.toString()))
+		{
+			if(hostType == HostType.CLIENT)
+			{
+				disconnectOneUserServerSide(playerMap.get(restOfMessage));
 			}
 		}
 		else if(type.equals(MessageType.PERFORM_ACTION.toString())) //perform specific action
@@ -955,6 +970,53 @@ public class Game {
 			}	
 			Message message = new Message(MessageType.RESET_GAME,"r");//TODO: send message to client to reset
 			gameServer.sendToAllUDP(message);
+		}
+	}
+	
+	public void disconnect()
+	{
+		if(hostType == HostType.SERVER)
+			disconnectAllUsers();
+		else
+			disconnectOneUserClientSide(getMyUser());
+	}
+	
+	public void disconnectOneUserServerSide(BattleCastleUser user)
+	{
+		if(hostType == HostType.SERVER){
+			Message message = new Message(MessageType.DISCONNECT_ONE_USER,user.getUUID());
+			gameServer.sendToAllUDP(message);
+		}
+		
+		playerMap.remove(user.getUUID());
+		playerList[user.getPlayerNumber()] = null;
+	}
+	
+	public void disconnectOneUserClientSide(BattleCastleUser user)
+	{
+		Message message = new Message(MessageType.DISCONNECT_ONE_USER,user.getUUID());
+		gameClient.sendUDP(message);
+		
+		clearAllUsers();
+	}
+	
+	public void disconnectAllUsers()
+	{
+		if(hostType == HostType.SERVER){
+			Message message = new Message(MessageType.DISCONNECT_ALL_USERS,"d");
+			gameServer.sendToAllUDP(message);
+		}
+
+		clearAllUsers();
+	}
+	
+	private void clearAllUsers()
+	{
+		playerMap.clear();
+		for(int i = 0; i < playerList.length; i++)
+		{
+			if(playerList[i] != null)
+				playerList[i] = null;
 		}
 	}
 	

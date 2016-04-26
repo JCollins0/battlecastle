@@ -16,7 +16,10 @@ public enum MessageType {
 	REMOVE_ARROW("remove_arrow"),
 	ADD_ARROW_TO_PLAYER("add_arrow_to_player"),
 	RESET_GAME("reset_game"),
-	GAME_OVER("game_over");
+	GAME_OVER("game_over"),
+	DISCONNECT_ALL_USERS("disconnect_all"),
+	DISCONNECT_ONE_USER("disconnect_one");
+	
 	
 	private String value;
 	MessageType()

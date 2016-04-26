@@ -58,6 +58,7 @@ public class PlayerScoreHandler {
 		{
 			Player player = getPlayer(players.get(i));
 			
+			
 			g.drawImage(gameRef.getPlayerFaceFromPlayer(player),faceX,64*i+startY,64,64,null);
 			
 			for(int k = 0; k < player.getScore(); k++)
