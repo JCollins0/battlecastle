@@ -1,6 +1,9 @@
 package core;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyEvent;
@@ -18,6 +21,7 @@ import javax.swing.JFrame;
 
 import core.constants.ConfigConstants;
 import core.constants.DataConstants;
+import core.constants.ImageFilePaths;
 import core.constants.Keys;
 import core.menu_object.MenuTextField;
 import core.menu_object.MenuTextFieldType;
@@ -40,6 +44,7 @@ public class BattleCastleFrame extends JFrame {
 	
 	//Canvas reference
 	public static BattleCastleCanvas game_canvas;
+	public static final Cursor target_cursor = Toolkit.getDefaultToolkit().createCustomCursor(Utility.loadImage(ImageFilePaths.TARGET_CURSOR), new Point(16,16), "target-cursor");
 	
 	/**
 	 * Main method
@@ -65,7 +70,7 @@ public class BattleCastleFrame extends JFrame {
 		setFocusable(false);
 		
 		setIconImage(Utility.loadImage("icon"));
-		
+		setCursor(target_cursor);
 		addWindowListener(new WindowAdapter() {
 			
 			@Override
