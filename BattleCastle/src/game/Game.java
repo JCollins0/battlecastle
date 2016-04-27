@@ -959,16 +959,16 @@ public class Game {
 			{
 				int playerArrows = playerList[i].getArrowCount();
 				int giveToPlayer = arrowsMaxPerPlayer-playerArrows;
-				Set<String> arrStr = arrows.keySet();
+				ArrayList<String> arrStr = new ArrayList<String>(arrows.keySet());
 				for(int j = 0; j < giveToPlayer; j++)
 				{
-					Arrow ar = arrows.remove(arrStr.iterator().next());
+					Arrow ar = arrows.remove(arrStr.remove(0));
 					ar.reset();
 					ar.setPlayer(playerList[i]);
 					playerList[i].addArrow(ar);
 				}
 			}	
-			Message message = new Message(MessageType.RESET_GAME,"r");//TODO: send message to client to reset
+			Message message = new Message(MessageType.RESET_GAME,"r");
 			gameServer.sendToAllUDP(message);
 		}
 	}
