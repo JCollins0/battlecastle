@@ -260,7 +260,18 @@ public class Game {
 						{
 							if(gameOverResetTimer == 0) // happens once
 							{
-								Message message = new Message(MessageType.GAME_OVER,"g");
+								int i = 0;
+								String playerScores = "";
+								for(; i < playerList.length-1; i++)
+								{
+									if(playerList[i] != null)
+										playerScores+=i+"<" + playerList[i].getScore() +"#";
+								}
+								if(playerList[i] != null)
+									playerScores+=i+"<" + playerList[i].getScore();
+
+								
+								Message message = new Message(MessageType.GAME_OVER,playerScores);
 								gameServer.sendToAllUDP(message);
 							}
 							gameOverResetTimer++;
@@ -776,6 +787,15 @@ public class Game {
 		{
 			if(hostType == HostType.CLIENT)
 			{
+				String[] parsed = restOfMessage.split("#");
+				
+				for(int i = 0; i < parsed.length; i++)
+				{
+					String[] index_score = parsed[i].split("<");
+					
+					playerList[Integer.parseInt(index_score[0])].setScore(Integer.parseInt(index_score[1]));
+				}
+				
 				gameOver = true;
 			}
 		}else if(type.equals(MessageType.DISCONNECT_ALL_USERS.toString()))
