@@ -172,12 +172,12 @@ public class EditorCanvas extends Canvas implements Runnable{
 		
 		
 			
+		b.setColor(Color.WHITE);
+		b.fillRect(0, 768, 1024, 128);
 		
-		if(bottom)
+		if(bottom&&!stateCreation)
 		{
 			
-			b.setColor(Color.WHITE);
-			b.fillRect(0, 768, 1024, 128);
 			for(Tile t:tools)
 				t.draw(b);
 			for(Tile t:tileAdder)
@@ -189,6 +189,10 @@ public class EditorCanvas extends Canvas implements Runnable{
 				if(mouseHandler.dragging!=null&&mouseHandler.mouse.y>BOTTOM_Y)
 					trashIndicator.draw(b);
 			}
+		}
+		else if(stateCreation)
+		{
+			editor.get(5).draw(b);
 		}
 		
 		if(stateCreation)
@@ -303,7 +307,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 			t.tick();
 			System.out.println(t+" "+num++);
 		}
-		if(bottom)
+		if(bottom&&!stateCreation)
 		{
 			for(Tile t:tools)
 				t.tick();
@@ -320,6 +324,12 @@ public class EditorCanvas extends Canvas implements Runnable{
 			}
 			trashIndicator.tick();
 		}
+		
+		else if(stateCreation)
+		{
+			
+		}
+		
 	}
 	
 	public void run() 
