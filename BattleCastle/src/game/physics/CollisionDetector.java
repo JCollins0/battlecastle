@@ -218,10 +218,9 @@ public class CollisionDetector
 				{
 					double norm = minimal.getNormal().getNormal().getNormal().YExact();
 					if(((PhysicsPoly) b).getVelocity().XPoint() != 0)
-						norm = 0;						
-					
-					
-					
+						norm = 0;	
+					if(norm == 0)
+						((Player) b).setCling(true);
 					((PhysicsPoly)b).setNormalForce(1, norm );//set the y normal to 0 to create a wall cling effect
 					
 					if(minimal.YExact() <= 0)
@@ -282,6 +281,9 @@ public class CollisionDetector
 					double norm = minimal.getNormal().YExact();
 					if(((PhysicsPoly) a).getVelocity().XPoint() != 0)
 						norm = 0;	
+					if(norm == 0)
+						((Player) a).setCling(true);
+
 					((PhysicsPoly)a).setNormalForce(1,norm);//set the y normal to 0 to create a wall cling effect
 					if(minimal.YExact() <= 0)
 						((Player)a).setJumping(false);

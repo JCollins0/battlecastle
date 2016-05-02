@@ -42,6 +42,7 @@ public class Player extends PhysicsRect{
 	private String imageFilePath;
 	private boolean jumping = false;
 	private boolean falling = true;
+	private boolean clingToWall = false;
 	private Point mouseLocation;
 	private boolean dead;
 	private boolean loadedImage = false;
@@ -214,6 +215,7 @@ public class Player extends PhysicsRect{
 			}
 		}
 	
+		clingToWall = false;
 	}
 	
 	/**
@@ -532,6 +534,9 @@ public class Player extends PhysicsRect{
 	public void addPoint() { score++; }
 	public void subPoint() { score--; if(score < 0) score=0;}
 	public void setScore(int score) { this.score = score; }
+	
+	public void setCling(boolean clinging) {this.clingToWall = clinging;}
+	public boolean isClinging(){return clingToWall;}
 	
 	/**
 	 * @return class.Name[ID:'id']

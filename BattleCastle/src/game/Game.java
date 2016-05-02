@@ -639,7 +639,7 @@ public class Game {
 			}
 			if(num[1].equals(KeyPress.JUMP_D.getText())) //move player up
 			{
-				if(!playerList[playerNum].isJumping())
+				if(!playerList[playerNum].isJumping() && !playerList[playerNum].isClinging())
 				{
 					playerList[playerNum].setNormalForce(1, 1);
 					playerList[playerNum].setExternalForce(0, 0);
