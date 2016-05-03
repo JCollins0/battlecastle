@@ -953,6 +953,11 @@ public class Game {
 		}
 	}
 	
+	public Player[] getPlayerList()
+	{
+		return playerList;
+	}
+	
 	/* #############
 	 * RESETING GAME
 	 * #############

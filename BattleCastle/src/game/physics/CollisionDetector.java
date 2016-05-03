@@ -205,6 +205,24 @@ public class CollisionDetector
 //							System.out.println(((PhysicsPoly) b).getVelocity());
 						break;
 					case EXPLODE:
+						
+						//TODO: explode particles
+						
+						int x = b.getCenter().XPoint(), y=b.getCenter().YPoint();
+						
+						for(int i = 0 ; i < gameRef.getPlayersInList(); i++)
+						{
+							if(gameRef.getPlayerList()[i] != null)
+							{
+								Vector temp = gameRef.getPlayerList()[i].getCenter();
+								if(temp.XPoint() > x - 48 && temp.XPoint() < x+ 48)
+									if(temp.YPoint() > y - 48 && temp.YPoint() <y+48)
+									{
+										gameRef.killPlayer(gameRef.getPlayerList()[i]);
+									}
+							}
+						}
+						
 					case NORMAL:
 					default:
 						((PhysicsPoly)b).setNormalForce(0,0);
@@ -267,6 +285,22 @@ public class CollisionDetector
 //							System.out.println(((PhysicsPoly) a).getVelocity());
 						break;
 					case EXPLODE:
+						
+						int x = a.getCenter().XPoint(), y=a.getCenter().YPoint();
+						
+						for(int i = 0 ; i < gameRef.getPlayersInList(); i++)
+						{
+							if(gameRef.getPlayerList()[i] != null)
+							{
+								Vector temp = gameRef.getPlayerList()[i].getCenter();
+								if(temp.XPoint() > x - 48 && temp.XPoint() < x+ 48)
+									if(temp.YPoint() > y - 48 && temp.YPoint() <y+48)
+									{
+										gameRef.killPlayer(gameRef.getPlayerList()[i]);
+									}
+							}
+						}
+						
 					case NORMAL:
 					default:
 						((PhysicsPoly)a).setNormalForce(0,0);
