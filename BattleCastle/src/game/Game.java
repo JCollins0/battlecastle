@@ -10,11 +10,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
-
-import jdk.nashorn.internal.runtime.FindProperty;
 
 import com.esotericsoftware.kryonet.Client;
 import com.esotericsoftware.kryonet.Connection;
@@ -214,14 +211,14 @@ public class Game {
 							{
 								playerList[i].tick();
 								Message message = new Message(MessageType.UPDATE_PLAYER,i + Message.EQUALS_SEPARATOR + playerList[i].stringify());
-								gameServer.sendToAllTCP(message);
+								gameServer.sendToAllUDP(message);
 							}
 						
 						for(Arrow arrow : arrows.values())
 						{
 							arrow.tick();
 							Message message = new Message(MessageType.MOVE_ARROW,arrow.getID() + Message.EQUALS_SEPARATOR + arrow.stringify());
-							gameServer.sendToAllTCP(message);
+							gameServer.sendToAllUDP(message);
 						}
 						
 						if(gameMap != null)
@@ -230,7 +227,7 @@ public class Game {
 							for(Tile t : gameMap.getTiles())
 							{
 								Message message = new Message(MessageType.UPDATE_TILE, t.getID() + Message.EQUALS_SEPARATOR + t.stringify() );
-								gameServer.sendToAllTCP(message);
+								gameServer.sendToAllUDP(message);
 							}
 						}
 						
@@ -273,6 +270,7 @@ public class Game {
 								
 								Message message = new Message(MessageType.GAME_OVER,playerScores);
 								gameServer.sendToAllUDP(message);
+								playerScoreHandler.updateWinIndex();
 							}
 							gameOverResetTimer++;
 						}
@@ -904,12 +902,12 @@ public class Game {
 		if(p == null) return;
 		
 		int index = playerMap.get(p.getUUID()).getPlayerNumber();
-		
-		while( p.getArrowStorage().size() != 0)
-		{
-			launchArrow(p,1);
-			p.updateCurrentArrowOnDeath();
-		}
+//		
+//		while( p.getArrowStorage().size() != 0)
+//		{
+//			launchArrow(p,1);
+//			p.updateCurrentArrowOnDeath();
+//		}
 		
 		playerList[index].setDead(true);
 		playerList[index].setImage(playerList[index].getDI());
@@ -922,17 +920,15 @@ public class Game {
 	 */
 	public boolean gameOver()
 	{
-		int deadCount = 0;
 		int aliveCount = 0;
 		for(int i = 0; i < playerList.length; i++) 
 		{
 			if(playerList[i] != null)
 			{
-				deadCount += playerList[i].isDead()? 1:0;
 				aliveCount += playerList[i].isDead() ? 0:1;
 			}
 		}
-		gameOver = aliveCount - deadCount <= MIN_PLAYERS-1;
+		gameOver = aliveCount < 1;
 		return gameOver;
 	}
 	
@@ -974,7 +970,7 @@ public class Game {
 			}
 					
 		}
-		gameOver = false;
+		
 		
 		if(hostType == HostType.SERVER)
 		{
@@ -996,6 +992,8 @@ public class Game {
 			Message message = new Message(MessageType.RESET_GAME,"r");
 			gameServer.sendToAllUDP(message);
 		}
+		
+		gameOver = false;
 	}
 	
 	public void disconnect()

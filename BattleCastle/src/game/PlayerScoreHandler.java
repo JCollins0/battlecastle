@@ -28,9 +28,11 @@ public class PlayerScoreHandler {
 	private Game gameRef;
 	
 	private ArrayList<String> players;
+	private ArrayList<Integer> winIndex;
 	
 	public PlayerScoreHandler(Game gameRef){
 		players = new ArrayList<String>();
+		winIndex = new ArrayList<Integer>();
 		this.gameRef = gameRef;
 	}
 	
@@ -74,12 +76,17 @@ public class PlayerScoreHandler {
 			}
 		}
 		
-		ArrayList<Integer> winIndex = getCurrentWinners();
 		if(winIndex != null)
 		{
 			for(int i = 0; i < winIndex.size(); i++)
 				g.drawImage(crown,crownX,64*winIndex.get(i)+startY,64,64,null);
 		}
+		
+	}
+	
+	public void updateWinIndex()
+	{
+		 winIndex = getCurrentWinners();
 	}
 	
 	private ArrayList<Integer> getCurrentWinners()
@@ -89,11 +96,12 @@ public class PlayerScoreHandler {
 		for(int i = 0; i < players.size(); i++)
 		{
 			Player p = getPlayer(players.get(i));
-			if(p.getScore() >= maxScore)
-			{
-				maxScore = p.getScore();
-				//System.out.println(maxScore  + " is the maxScore");
-			}
+			if(p != null)
+				if(p.getScore() >= maxScore)
+				{
+					maxScore = p.getScore();
+					//System.out.println(maxScore  + " is the maxScore");
+				}
 		}
 		
 		if(maxScore <= 0) return null;

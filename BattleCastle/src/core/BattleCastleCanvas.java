@@ -1,16 +1,10 @@
 package core;
 
-import game.Game;
-import game.object.GameMap;
-import game.object.MapType;
-
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -20,10 +14,6 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.TreeMap;
-
-import utility.AudioHandler;
-import utility.ConfigLoader;
-import utility.Utility;
 
 import com.esotericsoftware.kryonet.Client;
 
@@ -43,6 +33,12 @@ import core.menu_object.PlayerSelectObject.PlayerType;
 import core.menu_object.ServerChoice;
 import core.menu_object.ServerSelectionBox;
 import core.menu_object.TutorialObject;
+import game.Game;
+import game.object.GameMap;
+import game.object.MapType;
+import utility.AudioHandler;
+import utility.ConfigLoader;
+import utility.Utility;
 
 public class BattleCastleCanvas extends Canvas implements Runnable{
 
