@@ -930,7 +930,7 @@ public class Game {
 				aliveCount += playerList[i].isDead() ? 0:1;
 			}
 		}
-		gameOver = aliveCount < 1;
+		gameOver = aliveCount <= 1;
 		return gameOver;
 	}
 	
