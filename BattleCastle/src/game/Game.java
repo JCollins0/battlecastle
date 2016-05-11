@@ -38,6 +38,7 @@ import game.physics.Vector;
 import game.player.Arrow;
 import game.player.BattleCastleUser;
 import game.player.Player;
+import utility.AudioHandler;
 
 public class Game {
 	
@@ -431,7 +432,7 @@ public class Game {
 	 */
 	public void launchArrow()
 	{
-		launchArrow(getMyPlayer());		
+		launchArrow(getMyPlayer());	
 	}
 	
 	/**
@@ -453,6 +454,7 @@ public class Game {
 					break;
 				case 1: arrow.addVelocity(-5 + random.nextInt(10), -5 + random.nextInt(10));
 				}
+				AudioHandler.playRandomSound(2,3,4);
 				arrows.put(arrow.getID(), arrow);
 				Message message = new Message(MessageType.UPDATE_ARROW, arrow.getID() + Message.EQUALS_SEPARATOR + arrow.stringify());
 				gameClient.sendTCP(message);

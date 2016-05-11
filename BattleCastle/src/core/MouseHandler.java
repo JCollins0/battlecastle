@@ -40,7 +40,7 @@ public class MouseHandler implements MouseMotionListener, MouseListener, MouseWh
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		System.out.println(e.getPoint());
-		AudioHandler.playSound(SOUND.MENU_SELECT);
+		
 	}
 
 	@Override

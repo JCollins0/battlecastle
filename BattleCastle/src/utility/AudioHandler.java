@@ -17,7 +17,10 @@ public class AudioHandler {
 	public enum SOUND
 	{
 		MENU_SELECT,
-		MENU_MUSIC
+		MENU_MUSIC,
+		WHOOSH1,
+		WHOOSH2,
+		WHOOSH3
 	}
 	
 	private static Clip[] gameSounds;
@@ -31,7 +34,7 @@ public class AudioHandler {
 		
 		loadSounds();
 		init();
-		//loopSound(SOUND.MENU_MUSIC);
+		loopSound(SOUND.MENU_MUSIC);
 	}
 	
 	private static void loadSounds()
@@ -39,6 +42,16 @@ public class AudioHandler {
 		gameSounds = new Clip[numberOfSoundClips];
 		gameSounds[SOUND.MENU_SELECT.ordinal()] = Utility.loadAudio(AudioFilePaths.MENU_SELECTED);
 		gameSounds[SOUND.MENU_MUSIC.ordinal()] = Utility.loadAudio(AudioFilePaths.MENU_MUSIC);
+		gameSounds[SOUND.WHOOSH1.ordinal()] = Utility.loadAudio(AudioFilePaths.WHOOSH_1);
+		gameSounds[SOUND.WHOOSH2.ordinal()] = Utility.loadAudio(AudioFilePaths.WHOOSH_2);
+		gameSounds[SOUND.WHOOSH3.ordinal()] = Utility.loadAudio(AudioFilePaths.WHOOSH_3);
+	}
+	
+	public static void playRandomSound(int... range)
+	{
+		int random = (int) (Math.random() * range.length);
+		
+		playSound(SOUND.values()[range[random]]);
 	}
 		
 	public static void playSound(SOUND sound)
