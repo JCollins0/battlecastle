@@ -11,7 +11,7 @@ import java.awt.image.BufferedImage;
 
 import utility.Utility;
 
-public class Arrow extends PhysicsRect{
+public class Arrow extends PhysicsRect implements Comparable{
 
 	public static final String KEY_VALUE_SEPARATOR = ":", ENTRY_SEPARATOR = ",";
 	
@@ -327,6 +327,14 @@ public class Arrow extends PhysicsRect{
 			return ((Arrow)obj).ID.equals(ID);
 		}
 		return false;
+	}
+
+
+	@Override
+	public int compareTo(Object o) {
+		if(o instanceof Arrow)
+			return this.ID.compareTo(((Arrow)o).ID);
+		return -1;
 	}
 	
 }

@@ -10,7 +10,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.TreeSet;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.esotericsoftware.kryonet.Client;
@@ -64,6 +66,9 @@ public class Game {
 	private PlayerScoreHandler playerScoreHandler;
 	//Collision
 	private CollisionDetector collideDetect;
+	private List<Arrow> plist; //= Collections.list(Collections.enumeration(arrows.values()));
+	private DoubleLinkedList<Tile> tlist; //= gameMap.getTiles();
+	private Set<Polygon> list = new TreeSet<Polygon>();
 	
 	//GameMap
 	private GameMap gameMap, gameMapLoader;
@@ -232,15 +237,16 @@ public class Game {
 							}
 						}
 						
-						List<Arrow> plist = Collections.list(Collections.enumeration(arrows.values()));
-						DoubleLinkedList<Tile> tlist = gameMap.getTiles();
-						List<Polygon> list = new ArrayList<Polygon>();
+//						List<Arrow> plist = Collections.list(Collections.enumeration(arrows.values()));
+//						DoubleLinkedList<Tile> tlist = gameMap.getTiles();
+//						List<Polygon> list = new ArrayList<Polygon>();
+//						
+						plist = Collections.list(Collections.enumeration(arrows.values()));
 						
 //						System.out.println("Start");
 						for(Tile t : tlist)
 						{
 							list.add(t);
-							
 						}
 //						System.out.println(list);
 //						System.out.println("Finish");
@@ -248,7 +254,7 @@ public class Game {
 						list.addAll(plist);
 						for(int i = 0; i < playerList.length && playerList[i] != null; i++)
 							list.add(playerList[i]);
-						collideDetect.broadCheck(list);
+						collideDetect.broadCheck(Collections.list(Collections.enumeration(list)));
 					
 						gameOver();
 					}	
@@ -386,6 +392,7 @@ public class Game {
 				}
 			}
 		}
+		tlist = gameMap.getTiles();
 	}
 	
 	/**
@@ -930,7 +937,7 @@ public class Game {
 				aliveCount += playerList[i].isDead() ? 0:1;
 			}
 		}
-		gameOver = aliveCount <= 1;
+		gameOver = aliveCount < 1;
 		return gameOver;
 	}
 	

@@ -14,7 +14,7 @@ import utility.Utility;
 import core.MouseHandler;
 import core.constants.ImageFilePaths;
 
-public class Player extends PhysicsRect{
+public class Player extends PhysicsRect implements Comparable{
 	
 	public static final int HEIGHT = 64;
 	public static final int WIDTH = 32;
@@ -545,7 +545,13 @@ public class Player extends PhysicsRect{
 	public String toString() {
 		return String.format("%s[ID:%s]", this.getClass().getName(), uuid);
 	}
-
+	
+	public int compareTo(Object o)
+	{
+		if(o instanceof Player)
+			return this.uuid.compareTo(((Player)o).uuid);
+		return -1;
+	}
 	
 	public void debugMe() {
 		System.out.println("Velocity: " + getVelocity() + ", Score: " + score + ", Dead: " + dead + ", Falling: " + falling + ", Jumping: " + jumping);		
