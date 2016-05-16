@@ -418,6 +418,7 @@ public class EditorCanvas extends Canvas implements Runnable{
 		t.setToLastState();
 		stateHelper1=t.copy();
 		stateHelper1.moveTo(t.getX(), t.getY());
+		stateHelper1.setStatesActive(false);
 		list.addFront(stateHelper1);
 		stateCreation=true;
 		

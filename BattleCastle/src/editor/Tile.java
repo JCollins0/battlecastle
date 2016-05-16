@@ -16,7 +16,7 @@ import game.physics.Polygon;
 import game.physics.Vector;
 import utility.Utility;
 
-public class Tile extends Polygon implements JSONStreamAware
+public class Tile extends Polygon implements JSONStreamAware, Comparable<Tile>
 {
 
 	/**
@@ -340,5 +340,12 @@ public class Tile extends Polygon implements JSONStreamAware
 			return states.get(currentState).getV();
 		return null;
 	}
+
+	@Override
+	public int compareTo(Tile o) {
+		return this.ID.compareTo(o.ID);
+	}
+	
+	
 	
 }
