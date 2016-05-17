@@ -225,9 +225,10 @@ public class CollisionDetector
 						
 					case NORMAL:
 					default:
-						((PhysicsPoly)b).setNormalForce(0,0);
+						((PhysicsPoly) b).setVelocity(stopped);
 						((Arrow) b).setRotate(false);
-						b.move(minimal.vectorScale(-5));
+						b.move(minimal.vectorScale(-overlap));
+						((PhysicsPoly)b).setNormalForce(0,0);
 						break;
 					}
 					
@@ -303,9 +304,10 @@ public class CollisionDetector
 						
 					case NORMAL:
 					default:
-						((PhysicsPoly)a).setNormalForce(0,0);
 						((Arrow) a).setRotate(false);
-						a.move(minimal.vectorScale(-5));
+						((PhysicsPoly)a).setVelocity(stopped);
+						a.move(minimal.vectorScale(-overlap));
+						((PhysicsPoly)a).setNormalForce(0,0);
 						break;
 					}
 					

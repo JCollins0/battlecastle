@@ -241,8 +241,8 @@ public class Game {
 //						DoubleLinkedList<Tile> tlist = gameMap.getTiles();
 //						List<Polygon> list = new ArrayList<Polygon>();
 //						
-						plist = Collections.list(Collections.enumeration(arrows.values()));
 						
+						list.addAll(Collections.list(Collections.enumeration(arrows.values())));
 //						System.out.println("Start");
 						for(Tile t : tlist)
 						{
@@ -251,7 +251,7 @@ public class Game {
 //						System.out.println(list);
 //						System.out.println("Finish");
 						
-						list.addAll(plist);
+						//list.addAll(plist);
 						for(int i = 0; i < playerList.length && playerList[i] != null; i++)
 							list.add(playerList[i]);
 						collideDetect.broadCheck(Collections.list(Collections.enumeration(list)));
