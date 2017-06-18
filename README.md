@@ -12,7 +12,7 @@ player movement in order to showcase the clean and quick
 
 #### About
 This project was an undertaking during self study in high school. The game is
-mostly a proof of concept for a network game, practice using the [json file
+mostly a proof of concept for a network game, practice using the [JSON file
 format](https://en.wikipedia.org/wiki/JSON), and a way to become more familiar
 with simple graphical menu design in java.
 ***
@@ -41,5 +41,7 @@ The level editor was designed to allow for easy level creation and customization
 it provides platforms with or without customized movement patterns and textures.
 It lets the user place power-ups in the form of randomized chests. The tile
 manipulation is easy and the animations make for a very interactive experience.
+The level tile objects are saved into a JSON file is read in as all of the
+physics object at runtime.
 
 ![Level Editor Picture](https://raw.githubusercontent.com/JCollins0/battlecastle/master/screenshots/battlecastle_level_editor1.png "Level Editor")
