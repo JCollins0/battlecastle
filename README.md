@@ -1,7 +1,7 @@
 # Battle Castle
 
 Battle Castle is a
-[java based](https://en.wikipedia.org/wiki/Java_(programming_language)
+[Java based](https://en.wikipedia.org/wiki/Java_(programming_language))
 multiplayer game that can be played over a
 [LAN](https://en.wikipedia.org/wiki/Local_area_network). The game allows users
 to take on the roles of different archers in a battle to the death. Since the
